@@ -1,37 +1,53 @@
 <?php
 
-require_once(__DIR__.'/schemadb.action.php');
 
-define("SDB_DEFAULT_NULL",		"YES");
-define("SDB_DEFAULT_TYPE",		"int(10)");
-define("SDB_DEFAULT_DEFAULT",	"");
+define('SCHEMADB_DEFAULT_NULL','YES');
+define('SCHEMADB_DEFAULT_TYPE','int(10)');
+define('SCHEMADB_DEFAULT_DEFAULT','');
+define('SCHEMADB_DEFAULT_KEY','');
+define('SCHEMADB_DEFAULT_EXTRA','');
 
-define("MYSQL_PRIMARY_KEY",		'0-PRIMARY-KEY');
-define("MYSQL_DATE",			'0000-00-00');
-define("MYSQL_DATETIME",		'0000-00-00 00:00:00');
-define("MYSQL_TEXT",			' ');
-
-
-require_once(__DIR__.'/inc/schemadb.diff.php');
-require_once(__DIR__.'/inc/schemadb.desc.php');
-require_once(__DIR__.'/inc/schemadb.class.php');
-require_once(__DIR__.'/inc/schemadb.alter.php');
-require_once(__DIR__.'/inc/schemadb.column.php');
-require_once(__DIR__.'/inc/schemadb.create.php');
-require_once(__DIR__.'/inc/schemadb.define.php');
-require_once(__DIR__.'/inc/schemadb.default.php');
-require_once(__DIR__.'/inc/schemadb.sanitize.php');
+define('MYSQL_PRIMARY_KEY',		'0-PRIMARY-KEY');
+define('MYSQL_DATE',			'0000-00-00');
+define('MYSQL_DATETIME',		'0000-00-00 00:00:00');
+define('MYSQL_TEXT',			' ');
+define('MYSQL_VARCHAR255',		'$-VARCHAR');
 
 
-## 
+## init database connection
 function &schemadb_connect($host,$username,$password,$database,$prefix) {
-	global $ezdb;
+	global $schemadb;
 	
 	## 
-	$ezdb = new ezSQL_mysql($username,$password,$database,$host);
-	$ezdb->prefix = $prefix;
+	$schemadb = new ezSQL_mysql($username,$password,$database,$host);
+	$schemadb->prefix = $prefix;
 	
-	return $ezdb;
+	##
+	return $schemadb;
+}
+
+
+##
+function schemadb_action($method,$sql=NULL) {
+	
+	echo '<div>'.$method.': '.$sql.'</div>';
+	
+	global $schemadb;
+	
+	switch($method) {
+		case "prefix":	return $schemadb->prefix;
+		case "last_id":	return $schemadb->insert_id;
+		
+		case "query":	$return = $schemadb->query($sql); break;
+		case "row":		$return = $schemadb->get_row($sql,ARRAY_A); break;
+		case "results":	$return = $schemadb->get_results($sql,ARRAY_A); break;
+		default:		$return = $schemadb->get_results($sql,ARRAY_A); break;
+	}
+	$error = mysql_error();
+	if ($error) {
+		die('Error: '.$error.'<br/>Query: '.$sql);
+	}
+	return $return;
 }
 
 
@@ -78,6 +94,644 @@ function schemadb_table_update($t,$s) {
 
 
 
+## generate query to align db
+function schemadb_diff($s) {
+	
+	$p = schemadb_action('prefix');	
+	$o = array();
+	
+	foreach($s as $t=>$d) {
+		$q = schemadb_table_diff($p.$t,$d);		
+		if (count($q)>0) {
+			$o = array_merge($o,$q);
+		}
+	}
+	
+	return $o;	
+}
+
+
+## generate query to align table
+function schemadb_table_diff($t,$s) {	
+	
+	## 
+	$s = schemadb_table_define($s);
+	
+	## 
+	$o = array();
+		
+	## test if table exists
+	$e = schemadb_action("row","SHOW TABLES LIKE '{$t}'");
+		
+	if ($e) {
+		$a = schemadb_desc($t);
+		$b = false;
+		$i = false;
+		
+		// test field definition
+		foreach($s as $f=>$d) {			
+			
+			if (is_numeric($f)&&is_string($d)) {
+				$f = $d;
+				$d = array();
+			}
+			
+			//echo "a: $t.$f\n<br/>";								
+			$d = schemadb_sanitize_rule($f,$d,$b);
+			
+			if (isset($a[$f])) {
+				$u = false;			
+				foreach($a[$f] as $k=>$v) {
+					$x = isset($d[$k]); 
+					$h = $x ? $d[$k] : schemadb_default($k);
+					$d[$k] = $h;
+					
+					if ($h!=$v) {
+						$u = true;
+					}
+					
+					#echo "a: $t.$f.$k($v) = [$x] ($h) [$u]\n<br/>";								
+				}
+				if ($u) {
+					if ($d['Key']=='PRI') {
+						$i = true;
+					}
+					$o[] = schemadb_alter_table_change($t,$f,$d);
+				}
+			} else {
+				if ($d['Key']=='PRI') {
+					$i = true;
+				}
+				$o[] = schemadb_alter_table_add($t,$f,$d);
+			}
+			$b = $f;
+		}
+		if ($i) {
+			//$o[] = schemadb_alter_table_drop_primary_key($t);
+		}
+		
+	} else {
+		$o[] = schemadb_create_table($t,$s);		
+	}		
+	
+	return $o;
+}
+
+
+##
+function schemadb_desc($t) {
+	$i = schemadb_action("results","DESC {$t}");
+	$a = array();		
+	$n = 0;
+	$b = false;
+	foreach($i as $j) {		
+		$j["Before"] = $b;		
+		$j["First"]	= $n == 0;
+		$a[$j["Field"]] = $j;					
+		$b = $j["Field"];
+		$n++;
+	}
+	return $a;
+}
+
+
+##
+function schemadb_default($p) {
+	switch ($p) {
+		case "Null":	return SCHEMADB_DEFAULT_NULL;
+		case "Type":	return SCHEMADB_DEFAULT_TYPE;
+		case "Default":	return SCHEMADB_DEFAULT_DEFAULT;			
+	}	
+}
+
+
+##
+function schemadb_column_definition($d) {
+	#
+	/*
+	column_definition:
+    data_type [NOT NULL | NULL] [DEFAULT default_value]
+      [AUTO_INCREMENT] [UNIQUE [KEY] | [PRIMARY] KEY]
+      [COMMENT 'string']
+      [COLUMN_FORMAT {FIXED|DYNAMIC|DEFAULT}]
+      [STORAGE {DISK|MEMORY|DEFAULT}]
+      [reference_definition]	
+	 */
+	$t = isset($d["Type"]) ? $d["Type"] : schemadb_default("Type");
+	$u = isset($d["Null"]) && ($d["Null"]=="NO" || !$d["Null"]) ? 'NOT NULL' : 'NULL';
+	$l = isset($d["Default"]) && $d["Default"] ? "DEFAULT '$d[Default]'" : '';
+	$e = isset($d["Extra"]) ? $d["Extra"] : '';
+	$p = isset($d["Key"])&&$d["Key"]=="PRI" ? 'PRIMARY KEY' : '';
+	$f = isset($d["First"])&&$d["First"] ? 'FIRST' : '';
+	$b = isset($d["Before"])&&$d["Before"] ? 'AFTER '.$d["Before"] : '';
+	$q = "{$t} {$u} {$l} {$e} {$p} {$f} {$b}";
+	return $q;
+}
+
+##
+function schemadb_create_table($n,$s) {
+	
+	$e = array();
+	
+	foreach($s as $f=>$d) {
+		if (is_numeric($f)&&is_string($d)) {
+			$f = $d;
+			$d = array();
+		}		
+		$e[] = $f.' '.schemadb_column_definition($d);
+	}	
+	
+	$e = implode(',',$e);
+	
+	$q = "CREATE TABLE $n ({$e})";
+	
+	return $q;
+}
+
+
+
+##
+function schemadb_alter_table_add($n,$f,$d) {
+	$c = schemadb_column_definition($d);
+	$q = "ALTER TABLE $n ADD  {$f} {$c}";	
+	return $q; 	
+}
+
+##
+function schemadb_alter_table_change($n,$f,$d) {
+	$c = schemadb_column_definition($d);
+	$q = "ALTER TABLE $n CHANGE {$f} {$f} {$c}";	
+	return $q; 
+}
+
+## 
+function schemadb_alter_table_drop_primary_key($n) {
+	$q = "ALTER TABLE $n DROP PRIMARY KEY";
+	return $q;
+}
+
+
+##
+function schemadb_pseudotype_parse($v) {
+	
+	$t = gettype($v);
+	
+	switch ($t) {
+		case 'string':
+			if (preg_match('/^<<[_a-zA-Z][_a-zA-Z0-9]*>>$/i',$v,$d)) {
+				return 'class';
+			} else if (preg_match('/[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9] [0-9][0-9]:[0-9][0-9]:[0-9][0-9]/',$v)) {				
+				return 'datetime';				
+			} else if (preg_match('/[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]/',$v)) {
+				return 'date';				
+			} else if ($v == MYSQL_PRIMARY_KEY) {
+				return 'primary_key';				
+			}
+			return 'string';
+
+		case 'NULL':	
+			return 'string';
+
+		case 'boolean':
+			return 'boolean';
+						
+		case 'integer':
+			return 'integer';
+								
+		case 'array':
+			if ($v && $v == array_values($v)) {
+				return 'array';
+			}			
+	}	
+	
+	return '_column_skema_';
+}
+
+##
+function schemadb_pseudotype_value($v) {
+	
+	$t = schemadb_pseudotype_parse($v);
+	
+	switch($t) {
+		case 'integer'		: return (int) $v;		
+		case 'boolean'		: return (boolean) $v;		
+		case 'primary_key'	: return NULL;
+		case 'string'		: return (string) $v;
+		case 'class'		: return NULL;
+		case 'array'		: return NULL;	
+		case 'date'			: return NULL;
+		case '_column_skema_': return NULL;	
+	}		
+	
+	trigger_error("No PSEUDOTYPE value for '{$t}' => '{$v}'",E_USER_ERROR);		
+}
+
+
+
+
+function schemadb_table_define($s) {
+	
+	$r = array();
+	
+	foreach($s as $f=>$v) {
+		$r[$f] = schemadb_field_define($v);									 
+	}
+	
+	return $r;
+}
+
+
+## build mysql column define rule 
+function schemadb_field_define($v) {
+	
+	$t = schemadb_pseudotype_parse($v);
+	
+	switch ($t) {
+		
+		case 'date'			: 
+			return schemadb_define_rule('date',$v);
+			
+		case 'datetime'		: 
+			return schemadb_define_rule('datetime',$v);
+			
+		case 'primary_key'	:
+			return schemadb_define_rule('int(10)','','NO','PRI','auto_increment');
+			
+		case 'string'		: 
+			return schemadb_define_rule('varchar(255)');	
+
+		case 'boolean'		: 
+			return schemadb_define_rule('tinyint(1)',(int)$v,'NO');	
+
+		case 'integer'		: 
+			return schemadb_define_rule('int(10)',(int)$v,'NO');			
+		
+		case 'array':
+			foreach($v as &$i) {
+				$i = "'".$i."'";
+			}
+			$t = 'enum('.implode(',',$v).')';
+			return schemadb_define_rule($t,'','NO');									
+	}
+	
+	return schemadb_define_rule(
+		isset($v['Type'])		? $v['Type']		: SCHEMADB_DEFAULT_TYPE,
+		isset($v['Default'])	? $v['Default']		: SCHEMADB_DEFAULT_DEFAULT,
+		isset($v['Null'])		? $v['Null']		: SCHEMADB_DEFAULT_NULL,
+		isset($v['Key'])		? $v['Key']			: SCHEMADB_DEFAULT_KEY,
+		isset($v['Extra'])		? $v['Extra']		: SCHEMADB_DEFAULT_EXTRA
+	);
+}
+	
+##
+function schemadb_define_rule($t='int(10)',$d='',$n='',$k='',$e='') {
+	return array(
+		'Type'		=> $t,	
+		'Default'	=> $d,
+		'Null'		=> $n,
+		'Key'		=> $k,
+		'Extra'		=> $e,
+	);		
+}
+
+
+##
+function schemadb_sanitize_rule($f,$d,$b) {		
+	$d["Field"] = $f;
+	$d["Type"]	= isset($d["Type"]) ? $d["Type"] : schemadb_default("Type");
+	$d["Null"]	= isset($d["Null"]) ? ($d["Null"]&&$d["Null"]!='NO' ? 'YES' : 'NO') : 'YES';	
+	$d["Before"] = $b;
+	$d["First"]	 = !$b; 
+	return $d;	
+}
+
+
+
+## static part of sdbClass
+class schedadb_sdbClass_static {
+	
+	//
+	public static $out_of_schema = array(
+		'class',
+		'table',
+		'cache',
+		'out_of_schema',
+	);
+
+	// retrieve table name
+	public static function table() {
+		$p = schemadb_action('prefix');
+		if (isset(static::$table)) {
+			$t = static::$table; 
+		} else if (isset(static::$class)) {
+			$t = static::$class; 
+		} else {
+			$o = new static();
+			$t = get_class($o);			
+		}
+		return $p.$t;
+	}
+	
+	// retrieve static class name
+	public static function klass() {
+		if (isset(static::$class)) {
+			$c = static::$class; 
+		} else {
+			$o = new static();
+			$c = get_class($o);			
+		}
+		return $c;
+	}
+	
+	// load element by primary key
+	public static function load($id) {
+		$t = static::table();
+		$k = static::primary_key();
+		$s = "SELECT * FROM {$t} WHERE {$k}='{$id}' LIMIT 1";
+		$r = schemadb_action('row',$s);
+		$o = static::build($r);
+		return $o;
+	}
+	
+	//
+	public static function dummy() {
+		$c = static::klass();		
+		$o = new $c();
+		return $o;		
+	}
+	
+	// 
+	public static function build($array) {
+		$o = new static();
+		$o->fill($array);
+		return $o;
+	}
+		
+	//
+	public static function all() {
+		$t = self::table();		
+		$s = "SELECT * FROM {$t}";
+		$r = schemadb_action('results',$s);
+		$a = array();
+		foreach($r as $i=>$o) {
+			$a[$i] = self::build($o);
+		}
+		return $a;
+	}
+	
+	//
+	public static function query($query) {
+		$t = self::table();		
+		
+		## where block for the query
+		$w = array();
+		if (isset($query['where'])) {
+			$w[] = $query['where'];
+		}
+		foreach($query as $k=>$v) {
+			if ($k!='sort'&&$k!='where') {
+				$w[] = "{$k}='$v'";
+			}
+		}
+		$w = count($w)>0 ? 'WHERE '.implode(' AND ',$w) : '';
+		
+		## order by block
+		$o = isset($query['sort']) ? 'ORDER BY '.$query['sort'] : '';		
+		
+		## build query
+		$q = "SELECT * FROM {$t} {$w} {$o}";				
+		
+		## fetch res
+		$r = schemadb_action('results',$q);
+		$a = array();
+		foreach($r as $i=>$o) {
+			$a[$i] = self::build($o);
+		}
+		return $a;
+	}
+	
+	//
+	public static function ping($array) {
+		$t = self::table();		
+		$w = array();
+		foreach($array as $k=>$v) {
+			$w[] = "{$k}='{$v}'";			
+		}
+		$w = count($w)>0 ? 'WHERE '.implode(' AND ',$w) : '';
+		$s = "SELECT * FROM {$t} {$w} LIMIT 1";
+		$r = schemadb_action('row',$s);		
+		if ($r) {
+			return self::build($r);
+		}		
+	}
+		
+	//
+	public static function dump() {
+		$a = static::all();
+		echo '<table border=1>';
+		foreach($a as $r) {			
+			echo '<tr>';
+			foreach($r as $f=>$v) {
+				echo '<td>'.$v.'</td>';
+			}				
+			echo '</tr>';
+		}
+		echo '</table>';
+	}
+	
+	// delete element by primary key
+	public static function delete($id) {
+		if ($id>0) {
+			$t = static::table();
+			$k = static::primary_key();
+			$s = "DELETE FROM {$t} WHERE Id='$id'";
+			schemadb_action('query',$s);
+		}		
+	}		
+	
+	
+	## instrospect and retrieve element schema
+	public static function skema() {		
+		$c = static::klass();		
+		$f = get_class_vars($c);
+		$s = array();
+		foreach($f as $k=>$v) {
+			if (!in_array($k,self::$out_of_schema)) {
+				$s[$k] = $v;
+			}
+		}
+		return $s;
+	}
+	
+	
+	// update db table based on class schema
+	public static function schemadb_update() {
+		
+		$t = static::table();		
+		$s = static::skema();
+			
+		if (count($s)>0) {
+			schemadb_table_update($t,$s);
+		}		
+	}
+}
+
+// self methods of sdbClass
+class schemadb_sdbClass extends schedadb_sdbClass_static {
+			
+	// constructor
+	public function __construct() {
+		foreach($this->fields() as $f) {
+			$this->{$f} = schemadb_pseudotype_value($this->{$f});
+		}
+	}
+			
+	// self-store element method
+	public function store() {				
+		static::schemadb_update();	
+		
+		$k = static::primary_key();		
+				
+		if ($k && $this->{$k}>0) {
+			return $this->update();						
+		} else {
+			return $this->insert();			
+		}
+	}
+		
+	// fill field with set parser value from array
+	public function fetch($array) {			
+		
+		foreach($this->fields() as $f) {
+			$this->set($f,$array[$f]);			
+		}
+		
+		$k = $this->primary_key();
+		
+		if ($k) {
+			$this->{$k} = isset($array[$k]) ? (int) $array[$k] : (int)$this->{$k}; 		
+		}				
+	}
+	
+	//
+	public function fill($array) {		
+		foreach($this->fields() as $f) {
+			$this->{$f} = $array[$f];			
+		}
+		
+		$k = $this->primary_key();
+		
+		if ($k) {
+			$this->{$k} = isset($array[$k]) ? (int) $array[$k] : (int)$this->{$k}; 		
+		}	
+	}
+	
+	
+	public function update() {		
+		
+		$k = static::primary_key();
+		$s = array();
+				
+		foreach($this->fields() as $f) {
+			if ($f!=$k) {
+				$v = $this->{$f};
+				$s[] = $f." = '".$v."'";
+			}
+		}
+		$s = implode(',',$s);
+
+		$t = $this->table();
+		$i = $this->{$k};
+		$q = "UPDATE {$t} SET {$s} WHERE {$k}='{$i}'";
+		
+		schemadb_action('query',$q);		
+	}
+	
+	public function insert() {		
+		
+		$c = array();
+		$v = array();
+		$k = static::primary_key();
+		
+		foreach($this->fields() as $f) {
+			if ($f!=$k) {	
+				$a = $this->{$f};
+				$c[] = $f;			
+				$v[] = "'".$a."'";
+			}
+		}
+		
+		$c = implode(',',$c);
+		$v = implode(',',$v);
+		
+		$t = $this->table();
+		$q = "INSERT INTO {$t} ($c) VALUES ($v)";
+			
+		$r = schemadb_action("query",$q);
+		
+		if ($k) {
+			$i = schemadb_action("last_id");	
+			$this->{$k} = $i;
+			return $i;
+		} else {
+			return true;
+		}
+
+	}
+	
+	// return fields names
+	public function fields() {		
+		$c = get_class($this);
+		$f = get_class_vars($c);
+		$a = array();
+		foreach($f as $k=>$v) {
+			if (!in_array($k,self::$out_of_schema)) {
+				$a[] = $k;
+			}
+		}
+		return $a;		
+	}
+			
+	public static function primary_key() {
+		$s = static::skema();		
+		foreach($s as $k=>$v) {			
+			if ($v === MYSQL_PRIMARY_KEY) {
+				return $k;
+			}
+		}
+		return false;
+	}
+	
+	public function get($field) {
+		$m = 'get_parser_'.$field;
+		if (method_exists($this,$m)) {
+			return $this->{$m}($this->{$field});		
+		} else {
+			return $this->{$field};
+		}
+	}
+	
+	public function set($field,$value) {
+		$m = 'set_parser_'.$field;
+		if (method_exists($this,$m)) {
+			$this->{$field} = $this->{$m}($value);
+		} else {
+			$this->{$field} = $value;
+		}
+	}	
+} 
+
+// canonical name
+class sdbClass extends schemadb_sdbClass {
+	// .
+	// .
+	// .
+}
+
+
+function schemadb_debug($flag) {
+	
+}
 
 
 
