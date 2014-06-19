@@ -1,17 +1,48 @@
 <?php
+/*\
+ * 
+ *	Copyright (c) 2014 Bianco Francesco
+ *
+ *	Permission is hereby granted, free of charge, to any person obtaining a copy
+ *	of this software and associated documentation files "schemadb", to deal
+ *	in the Software without restriction, including without limitation the rights
+ *	to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ *	copies of the Software, and to permit persons to whom the Software is
+ *	furnished to do so, subject to the following conditions:
+ *
+ *	The above copyright notice and this permission notice shall be included in
+ *	all copies or substantial portions of the Software.
+ *
+ *	THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ *	IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ *	FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ *	AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ *	LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ *	OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ *	THE SOFTWARE.
+ * 
+\*/
 
 
+## schemadb constants
 define('SCHEMADB_DEFAULT_NULL','YES');
 define('SCHEMADB_DEFAULT_TYPE','int(10)');
 define('SCHEMADB_DEFAULT_DEFAULT','');
 define('SCHEMADB_DEFAULT_KEY','');
 define('SCHEMADB_DEFAULT_EXTRA','');
 
-define('MYSQL_PRIMARY_KEY',		'0-PRIMARY-KEY');
-define('MYSQL_DATE',			'0000-00-00');
-define('MYSQL_DATETIME',		'0000-00-00 00:00:00');
-define('MYSQL_TEXT',			' ');
-define('MYSQL_VARCHAR255',		'$-VARCHAR');
+
+## schemadb mysql constants for rapid fields creation
+define('MYSQL_PRIMARY_KEY','0-PRIMARY-KEY');
+define('MYSQL_DATE','0000-00-00');
+define('MYSQL_DATETIME','0000-00-00 00:00:00');
+define('MYSQL_TEXT',' ');
+define('MYSQL_VARCHAR255','$-VARCHAR');
+
+
+##
+$schemadb = NULL;
+$schemadb_debug = false;
 
 
 ## init database connection
@@ -29,11 +60,15 @@ function &schemadb_connect($host,$username,$password,$database,$prefix) {
 
 ##
 function schemadb_action($method,$sql=NULL) {
+	global $schemadb,$schemadb_debug;
 	
-	echo '<div>'.$method.': '.$sql.'</div>';
-	
-	global $schemadb;
-	
+	if ($schemadb_debug) {
+		echo '<pre style="border:1px solid #9F6000;margin:0 0 1px 0;padding:4px;color:#9F6000;background:#FEEFB3;">';
+		echo '<strong>'.str_pad($method,10,' ',STR_PAD_LEFT).'</strong>: '.$sql."\n";
+		#debug_print_backtrace();
+		echo '</pre>';
+	}
+		
 	switch($method) {
 		case "prefix":	return $schemadb->prefix;
 		case "last_id":	return $schemadb->insert_id;
@@ -319,7 +354,8 @@ function schemadb_pseudotype_value($v) {
 		case 'string'		: return (string) $v;
 		case 'class'		: return NULL;
 		case 'array'		: return NULL;	
-		case 'date'			: return NULL;
+		case 'date'			: return @date('Y-m-d',strtotime(''.$v));
+		case 'datetime'		: return @date('Y-m-d H:i:s',strtotime(''.$v));;
 		case '_column_skema_': return NULL;	
 	}		
 	
@@ -406,39 +442,41 @@ function schemadb_sanitize_rule($f,$d,$b) {
 }
 
 
-
 ## static part of sdbClass
 class schedadb_sdbClass_static {
 	
 	//
-	public static $out_of_schema = array(
+	protected static $proto = array(
+		'proto',
 		'class',
 		'table',
-		'cache',
-		'out_of_schema',
+		'cache',		
 	);
 
 	// retrieve table name
 	public static function table() {
 		$p = schemadb_action('prefix');
-		if (isset(static::$table)) {
+		if (isset(static::$table)) {			
 			$t = static::$table; 
-		} else if (isset(static::$class)) {
+		} else if (isset(static::$class)) {			
 			$t = static::$class; 
-		} else {
-			$o = new static();
-			$t = get_class($o);			
+		} else {			
+			#$o = new static();
+			#$t = get_class($o);			
+			$t = get_called_class();
 		}
 		return $p.$t;
 	}
 	
 	// retrieve static class name
-	public static function klass() {
+	public static function klass() {		
 		if (isset(static::$class)) {
+			echo '1';
 			$c = static::$class; 
 		} else {
-			$o = new static();
-			$c = get_class($o);			
+			#$o = new static();
+			#$c = get_class($o);			
+			$c = get_called_class();			
 		}
 		return $c;
 	}
@@ -556,7 +594,7 @@ class schedadb_sdbClass_static {
 		$f = get_class_vars($c);
 		$s = array();
 		foreach($f as $k=>$v) {
-			if (!in_array($k,self::$out_of_schema)) {
+			if (!in_array($k,self::$proto)) {
 				$s[$k] = $v;
 			}
 		}
@@ -685,7 +723,7 @@ class schemadb_sdbClass extends schedadb_sdbClass_static {
 		$f = get_class_vars($c);
 		$a = array();
 		foreach($f as $k=>$v) {
-			if (!in_array($k,self::$out_of_schema)) {
+			if (!in_array($k,self::$proto)) {
 				$a[] = $k;
 			}
 		}
@@ -730,7 +768,8 @@ class sdbClass extends schemadb_sdbClass {
 
 
 function schemadb_debug($flag) {
-	
+	global $schemadb_debug;
+	$schemadb_debug = $flag;
 }
 
 

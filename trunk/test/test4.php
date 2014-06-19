@@ -10,15 +10,16 @@ $pref = 'test3_';				## table prefix
 schemadb_debug(true);
 schemadb_connect($host,$user,$pass,$name,$pref);
 
-class Junk extends sdbClass {
+class Quarto extends sdbClass {
 	
-	public $id		= MYSQL_PRIMARY_KEY;
-	public $bundle	= array('yes','not','both');
-	public $naty	= false;
-	public $parat	= array('Type'=>'varchar(11)','Default'=>12);
+	#static $class = __CLASS__;
+	#static $table = __CLASS__;
 	
+	public $f1 = 10;
+			
 }
 
-$o = new Junk;
+$o = new Quarto();
 
-$o->store();
+print Quarto::table() .'<br/>';
+
