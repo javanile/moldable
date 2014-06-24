@@ -315,7 +315,7 @@ function schemadb_alter_table_drop_primary_key($n) {
 ##
 function schemadb_pseudotype_parse($v) {
 	
-	$t = gettype($v);
+	$t = gettype($v);	
 	
 	switch ($t) {
 		case 'string':
@@ -338,6 +338,9 @@ function schemadb_pseudotype_parse($v) {
 						
 		case 'integer':
 			return 'integer';
+			
+		case 'double':
+			return 'float';
 								
 		case 'array':
 			if ($v && $v == array_values($v)) {
@@ -358,6 +361,7 @@ function schemadb_pseudotype_value($v) {
 		case 'boolean'		: return (boolean) $v;		
 		case 'primary_key'	: return NULL;
 		case 'string'		: return (string) $v;
+		case 'float'		: return (float) $v;
 		case 'class'		: return NULL;
 		case 'array'		: return NULL;	
 		case 'date'			: return @date('Y-m-d',strtotime(''.$v));
@@ -371,16 +375,6 @@ function schemadb_pseudotype_value($v) {
 
 
 
-function schemadb_table_define($s) {
-	
-	$r = array();
-	
-	foreach($s as $f=>$v) {
-		$r[$f] = schemadb_field_define($v);									 
-	}
-	
-	return $r;
-}
 
 
 ## build mysql column define rule 
@@ -408,6 +402,9 @@ function schemadb_field_define($v) {
 		case 'integer'		: 
 			return schemadb_define_rule('int(10)',(int)$v,'NO');			
 		
+		case 'float'		: 
+			return schemadb_define_rule('float(12,2)',(int)$v,'NO');			
+					
 		case 'array':
 			foreach($v as &$i) {
 				$i = "'".$i."'";
@@ -424,7 +421,9 @@ function schemadb_field_define($v) {
 		isset($v['Extra'])		? $v['Extra']		: SCHEMADB_DEFAULT_EXTRA
 	);
 }
-	
+
+
+
 ##
 function schemadb_define_rule($t='int(10)',$d='',$n='',$k='',$e='') {
 	return array(
@@ -445,6 +444,18 @@ function schemadb_sanitize_rule($f,$d,$b) {
 	$d["Before"] = $b;
 	$d["First"]	 = !$b; 
 	return $d;	
+}
+
+
+##
+function schemadb_table_define($s) {	
+	$r = array();
+	
+	foreach($s as $f=>$v) {
+		$r[$f] = schemadb_field_define($v);									 
+	}
+	
+	return $r;
 }
 
 
@@ -688,6 +699,10 @@ class schemadb_sdbClass extends schedadb_sdbClass_static {
 		foreach($this->fields() as $f) {
 			if ($f!=$k) {
 				$v = $this->{$f};
+				$t = gettype($v);
+				if ($t=='double') {
+					$v = number_format($v,2,'.','');
+				}
 				$s[] = $f." = '".$v."'";
 			}
 		}
@@ -710,6 +725,10 @@ class schemadb_sdbClass extends schedadb_sdbClass_static {
 		foreach($this->fields() as $f) {
 			if ($f!=$k) {	
 				$a = $this->{$f};
+				$t = gettype($a);
+				if ($t=='double') {
+					$a = number_format($a,2,'.','');
+				}
 				$c[] = $f;			
 				$v[] = "'".$a."'";
 			}
