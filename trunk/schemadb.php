@@ -40,6 +40,12 @@ define('MYSQL_TEXT',' ');
 define('MYSQL_VARCHAR255','$-VARCHAR');
 
 
+## usefull mysql func
+function MYSQL_NOW() {
+	return @date('Y-m-d H:i:s');	
+}
+
+
 ##
 $schemadb = NULL;
 $schemadb_debug = false;
@@ -446,6 +452,9 @@ function schemadb_sanitize_rule($f,$d,$b) {
 class schedadb_sdbClass_static {
 	
 	//
+	static $cache = array();
+	
+	//
 	protected static $proto = array(
 		'proto',
 		'class',
@@ -604,13 +613,17 @@ class schedadb_sdbClass_static {
 	
 	// update db table based on class schema
 	public static function schemadb_update() {
-		
-		$t = static::table();		
-		$s = static::skema();
-			
-		if (count($s)>0) {
-			schemadb_table_update($t,$s);
-		}		
+		$c = static::klass();		
+
+		if (!isset(schedadb_sdbClass_static::$cache[$c]['updated'])) {			
+			$t = static::table();		
+			$s = static::skema();
+
+			if (count($s)>0) {
+				schemadb_table_update($t,$s);
+			}		
+			schedadb_sdbClass_static::$cache[$c]['updated'] = time();
+		}
 	}
 }
 
@@ -619,6 +632,8 @@ class schemadb_sdbClass extends schedadb_sdbClass_static {
 			
 	// constructor
 	public function __construct() {
+		static::schemadb_update();	
+
 		foreach($this->fields() as $f) {
 			$this->{$f} = schemadb_pseudotype_value($this->{$f});
 		}
@@ -626,7 +641,6 @@ class schemadb_sdbClass extends schedadb_sdbClass_static {
 			
 	// self-store element method
 	public function store() {				
-		static::schemadb_update();	
 		
 		$k = static::primary_key();		
 				
@@ -666,6 +680,7 @@ class schemadb_sdbClass extends schedadb_sdbClass_static {
 	
 	
 	public function update() {		
+		static::schemadb_update();	
 		
 		$k = static::primary_key();
 		$s = array();
@@ -686,6 +701,7 @@ class schemadb_sdbClass extends schedadb_sdbClass_static {
 	}
 	
 	public function insert() {		
+		static::schemadb_update();	
 		
 		$c = array();
 		$v = array();
