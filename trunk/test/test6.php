@@ -2,29 +2,23 @@
 ini_set('display_errors',true);
 error_reporting(E_ALL);
 
-require_once '../schemadb.php';
+require_once('../schemadb.php');
 
 $host = 'm-04.th.seeweb.it';	## database host 
 $user = 'javanile93298';		## database username
 $pass = 'java90898';			## database password
 $name = 'javanile93298';		## database name	
-$pref = 'd1_';					## table prefix
+$pref = 't6_';					## table prefix
+
+schemadb::debug(true);
 
 schemadb::connect($host,$user,$pass,$name,$pref);
 
 schemadb::apply(array(
-	
-	'TABLE1' => array(
-		'id'		=> MYSQL_PRIMARY_KEY,
-		'valore'	=> true,
-		'number'	=> 10,
-		'title'		=> MYSQL_VARCHAR,	
-		'title2'	=> '%|varchar(200)|%',
-		'cap'		=> array(1,2,3),
-		'rela'		=> '<<People>>',
-	),
+	't1' => array(
+		'f1'
+	),	
+));
 
-)); 
- 
 schemadb::dump();
 

@@ -7,14 +7,10 @@ $pass = 'java90898';			## database password
 $name = 'javanile93298';		## database name	
 $pref = 'test3_';				## table prefix
 
-schemadb_debug(true);
-schemadb_connect($host,$user,$pass,$name,$pref);
+schemadb::connect($host,$user,$pass,$name,$pref);
 
 class Quarto extends sdbClass {
-	
-	#static $class = __CLASS__;
-	#static $table = __CLASS__;
-	
+		
 	public $f1 = 10;
 			
 }
