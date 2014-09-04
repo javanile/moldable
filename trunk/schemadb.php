@@ -25,7 +25,7 @@
 
 
 ## constants
-define('SCHEMADB_DEBUG',false);
+define('SCHEMADB_DEBUG',true);
 
 
 ## schemadb mysql constants for rapid fields creation
@@ -44,9 +44,7 @@ define('MYSQL_FLOAT_14_4','%|float(14,4)|%');
 
 
 ## usefull mysql func
-function MYSQL_NOW() {
-	return @date('Y-m-d H:i:s');	
-}
+function MYSQL_NOW() { return @date('Y-m-d H:i:s');	}
 
 
 ## main class as namespace container
@@ -85,16 +83,16 @@ class schemadb {
 	public static function execute($method,$sql=NULL) {
 	
 		if (SCHEMADB_DEBUG) {
-			echo '<pre style="border:1px solid #9F6000;margin:0 0 1px 0;padding:4px;color:#9F6000;background:#FEEFB3;">';
-			echo '<strong>'.str_pad($method,10,' ',STR_PAD_LEFT).'</strong>: '.$sql."\n";
-			#debug_print_backtrace();
-			echo '</pre>';
+			?>
+			<pre style="border:1px solid #9F6000;margin:0 0 1px 0;padding:4px;color:#9F6000;background:#FEEFB3;">
+			<strong><?=str_pad($method,10,' ',STR_PAD_LEFT)?></strong>: <?=$sql?>			
+			</pre>
+			<?php
 		}
 
 		switch($method) {
 			case 'prefix':	return schemadb::$db->prefix;
 			case 'last_id':	return schemadb::$db->insert_id;
-
 			case 'query':	$return = schemadb::$db->query($sql); break;
 			case 'row':		$return = schemadb::$db->get_row($sql,ARRAY_A); break;
 			case 'results':	$return = schemadb::$db->get_results($sql,ARRAY_A); break;
@@ -156,10 +154,12 @@ class schemadb {
 	## generate query to align db
 	public static function diff($schema,$parse=true) {
 
+		## prepare
 		$s = $parse ? schemadb::schema_parse($schema) : $schema;		
 		$p = schemadb::execute('prefix');	
 		$o = array();
 
+		## loop throu the schema
 		foreach($s as $t=>$d) {
 			$q = schemadb::table_diff($p.$t,$d,false);		
 			if (count($q)>0) {
@@ -167,6 +167,7 @@ class schemadb {
 			}
 		}
 
+		## return estimated sql query
 		return $o;	
 	}
 
@@ -515,23 +516,27 @@ class schemadb {
 ## static part of sdbClass
 class schedadb_sdbClass_static {
 	
-	//
-	static $cache = array();
 	
-	//
+	## bundle to collect info and stored cache
+	static $kache = array();
+	
+	
+	## reserved attributes for schemadb
 	protected static $proto = array(
 		'proto',
 		'class',
 		'table',
-		'cache',		
+		'kache',		
 	);
 
 	
 	## retrieve table name
 	public static function table() {
 		
+		## get prefix
 		$p = schemadb::execute('prefix');
 		
+		## check various possible table-name definition
 		if (isset(static::$table)) {			
 			$t = static::$table; 
 		} else if (isset(static::$class)) {			
@@ -540,23 +545,26 @@ class schedadb_sdbClass_static {
 			$t = get_called_class();
 		}
 		
+		## return complete table name
 		return $p.$t;
 	}
 	
-	// retrieve static class name
-	public static function klass() {		
+	
+	## retrieve static class name
+	public static function klass() {
+		
+		##
 		if (isset(static::$class)) {
-			echo '1';
 			$c = static::$class; 
 		} else {
-			#$o = new static();
-			#$c = get_class($o);			
 			$c = get_called_class();			
 		}
+		
+		
 		return $c;
 	}
 	
-	// load element by primary key
+	## load element by primary key
 	public static function load($id) {
 		$t = static::table();
 		$k = static::primary_key();
@@ -680,25 +688,29 @@ class schedadb_sdbClass_static {
 	## update db table based on class schema
 	public static function schemadb_update() {
 		
+		## get class name
 		$c = static::klass();		
 
-		if (!isset(schedadb_sdbClass_static::$cache[$c]['updated'])) {			
+		## avoid re-update by check the cache
+		if (!isset(schedadb_sdbClass_static::$kache[$c]['updated'])) {			
 			$t = static::table();		
 			$s = static::skema();
 
 			if (count($s)>0) {
 				schemadb::table_update($t,$s);
 			}		
-			schedadb_sdbClass_static::$cache[$c]['updated'] = time();
+			schedadb_sdbClass_static::$kache[$c]['updated'] = time();
 		}
 	}
 	
 }
 
-// self methods of sdbClass
+
+
+## self methods of sdbClass
 class schemadb_sdbClass extends schedadb_sdbClass_static {
 			
-	// constructor
+	## constructor
 	public function __construct() {
 		static::schemadb_update();	
 
