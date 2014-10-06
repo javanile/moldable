@@ -7,16 +7,16 @@ $pass = 'java90898';			## database password
 $name = 'javanile93298';		## database name	
 $pref = 'demo2_';				## table prefix
 
-schemadb_connect($host,$user,$pass,$name,$pref);
+schemadb::connect($host,$user,$pass,$name,$pref);
 
 schemadb_apply(array(
 	
 	'table1' => array(
-		'id' => array(),
+		'id',
 	),
 	
 	'table2' => array(
-		'id' => array(),
+		'id',
 	),
 	
 ));
