@@ -29,18 +29,19 @@ define('SCHEMADB_DEBUG',true);
 
 
 ## schemadb mysql constants for rapid fields creation
-define('MYSQL_PRIMARY_KEY','%|primary-key|%');
+define('MYSQL_PRIMARY_KEY','%|key:primary-key|%');
 define('MYSQL_DATE','0000-00-00');
 define('MYSQL_TIME','00:00:00');
 define('MYSQL_DATETIME','0000-00-00 00:00:00');
-define('MYSQL_TEXT','%|text|%');
-define('MYSQL_VARCHAR','%|varchar(255)|%');
-define('MYSQL_VARCHAR_255','%|varchar(255)|%');
-define('MYSQL_INT','%|int(10)|%');
-define('MYSQL_INT_10','%|int(10)|%');
-define('MYSQL_INT_14','%|int(14)|%');
-define('MYSQL_FLOAT','%|float(14,4)|%');
-define('MYSQL_FLOAT_14_4','%|float(14,4)|%');
+define('MYSQL_TEXT','%|type:text|%');
+define('MYSQL_VARCHAR','%|type:varchar(255)|%');
+define('MYSQL_VARCHAR_80','%|type:varchar(80)|%');
+define('MYSQL_VARCHAR_255','%|type:varchar(255)|%');
+define('MYSQL_INT','%|type:int(10)|%');
+define('MYSQL_INT_10','%|type:int(10)|%');
+define('MYSQL_INT_14','%|type:int(14)|%');
+define('MYSQL_FLOAT','%|type:float(14,4)|%');
+define('MYSQL_FLOAT_14_4','%|type:float(14,4)|%');
 
 
 ## usefull mysql func
@@ -83,11 +84,8 @@ class schemadb {
 	public static function execute($method,$sql=NULL) {
 	
 		if (SCHEMADB_DEBUG) {
-			?>
-			<pre style="border:1px solid #9F6000;margin:0 0 1px 0;padding:4px;color:#9F6000;background:#FEEFB3;">
-			<strong><?=str_pad($method,10,' ',STR_PAD_LEFT)?></strong>: <?=$sql?>			
-			</pre>
-			<?php
+			echo '<pre style="border:1px solid #9F6000;margin:0 0 1px 0;padding:2px;color:#9F6000;background:#FEEFB3;">';
+			echo '<strong>'.str_pad($method,10,' ',STR_PAD_LEFT).'</strong>: '.$sql.'</pre>';			
 		}
 
 		switch($method) {
@@ -458,15 +456,21 @@ class schemadb {
 		switch ($t) {
 			
 			case 'string':
-				if (preg_match('/^\%\|[_a-zA-Z][_a-zA-Z0-9]*>>$/i',$v,$d)) {
-				
-				} else if (preg_match('/^<<[_a-zA-Z][_a-zA-Z0-9]*>>$/i',$v,$d)) {
+				if (preg_match('/^\%\|([a-z]+):(.*)\|\%$/i',$value,$d)) {
+					if ($d[1]=='column') {
+						return 'column';
+					} else if ($d[1]=='reserved') {
+						return $d[2];
+					} else if ($d[1]=='class') {
+						return $d[1];
+					}
+				} else if (preg_match('/^<<[_a-zA-Z][_a-zA-Z0-9]*>>$/i',$value,$d)) {
 					return 'class';
-				} else if (preg_match('/[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9] [0-9][0-9]:[0-9][0-9]:[0-9][0-9]/',$v)) {				
+				} else if (preg_match('/[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9] [0-9][0-9]:[0-9][0-9]:[0-9][0-9]/',$value)) {				
 					return 'datetime';				
-				} else if (preg_match('/[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]/',$v)) {
+				} else if (preg_match('/[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]/',$value)) {
 					return 'date';				
-				} else if ($v == MYSQL_PRIMARY_KEY) {
+				} else if ($value == MYSQL_PRIMARY_KEY) {
 					return 'primary_key';				
 				}
 				return 'string';
@@ -528,14 +532,16 @@ class schemadb {
 	}
 
 	
-	## 
+	## printout database status/info
 	public static function dump() {
 		
+		## describe databse
 		$s = schemadb::desc();
 		
+		## printout
 		echo '<pre>';
 		var_dump($s);
-		echo '</pre>';
+		echo '</pre>';		
 	}
 	
 	

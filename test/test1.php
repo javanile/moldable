@@ -1,6 +1,7 @@
 <?php
 ini_set('display_errors',true);
 error_reporting(E_ALL);
+xdebug_disable();
 
 require_once '../schemadb.php';
 

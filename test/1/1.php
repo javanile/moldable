@@ -1,10 +1,11 @@
 <?php
 ini_set('display_errors',true);
 error_reporting(E_ALL);
+xdebug_disable();
 
 require_once('../../schemadb.php');
 
-$values = array(null,0,1);
+$values = array('%|schema:{Type:"int(2)"}|%','%|class:|%','%|key:primary_key|%');
 
 echo '<table border=1 cellpadding=4><tr><th>Value</th><th>Type</th><th>Column</th></tr>';
 foreach($values as $value) {
