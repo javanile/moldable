@@ -44,7 +44,7 @@ define('MYSQL_FLOAT_14_4','%|float(14,4)|%');
 
 
 ## usefull mysql func
-function MYSQL_NOW() { return @date('Y-m-d H:i:s');	}
+function MYSQL_NOW() { return @date('Y-m-d H:i:s'); }
 
 
 ## main class as namespace container
@@ -189,15 +189,14 @@ class schemadb {
 			$b = false;
 			$i = false;
 
-			// test field definition
+			## test field definition
 			foreach($s as $f=>$d) {			
 
 				if (is_numeric($f)&&is_string($d)) {
 					$f = $d;
 					$d = array();
 				}
-
-				//echo "a: $t.$f\n<br/>";								
+											
 				$d = schemadb::sanitize_column_attributes($f,$d,$b);
 
 				if (isset($a[$f])) {
@@ -305,8 +304,10 @@ class schemadb {
 	##
 	private static function create_table($t,$s) {
 
+		##
 		$e = array();
 
+		## loop throut schema
 		foreach($s as $f=>$d) {
 			if (is_numeric($f)&&is_string($d)) {
 				$f = $d;
@@ -315,18 +316,27 @@ class schemadb {
 			$e[] = $f.' '.schemadb::column_definition($d);
 		}	
 
+		## implode 
 		$e = implode(',',$e);
 
+		## template sql to create table
 		$q = "CREATE TABLE {$t} ({$e})";
 
+		## return the sql
 		return $q;
 	}
 
 
 	##
 	private static function alter_table_add($t,$f,$d) {
+		
+		##
 		$c = schemadb::column_definition($d);
+		
+		##
 		$q = "ALTER TABLE {$t} ADD {$f} {$c}";	
+		
+		##
 		return $q; 	
 	}
 
