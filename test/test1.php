@@ -14,7 +14,7 @@ schemadb::connect($host,$user,$pass,$name,$pref);
 
 schemadb::apply(array(
 	
-	'TABLE1' => array(
+	'table1' => array(
 		'id'		=> MYSQL_PRIMARY_KEY,
 		'valore'	=> true,
 		'number'	=> 10,

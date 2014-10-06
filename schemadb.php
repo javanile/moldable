@@ -301,7 +301,7 @@ class schemadb {
 	}
 
 	
-	##
+	## retrieve sql to create a table
 	private static function create_table($t,$s) {
 
 		##
@@ -341,15 +341,21 @@ class schemadb {
 	}
 
 	
-	##
+	## retrieve sql to alter table definition
 	private static function alter_table_change($t,$f,$d) {
+		
+		##
 		$c = schemadb::column_definition($d);
+		
+		##
 		$q = "ALTER TABLE {$t} CHANGE {$f} {$f} {$c}";	
+		
+		##
 		return $q; 
 	}
 
 	
-	## 
+	## retrive query to remove primary key
 	private static function alter_table_drop_primary_key($t) {
 		$q = "ALTER TABLE {$t} DROP PRIMARY KEY";
 		return $q;
