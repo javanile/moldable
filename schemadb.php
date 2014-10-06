@@ -367,7 +367,7 @@ class schemadb {
 		$r = array();
 
 		foreach($schema as $k=>$v) {
-			$r[$k] = schemadb::table_schema_parse($v);
+			$r[$k] = schemadb::schema_parse_table($v);
 		}
 
 		return $r;
@@ -375,11 +375,11 @@ class schemadb {
 	
 
 	##
-	public static function table_schema_parse($schema) {	
+	public static function schema_parse_table($schema) {	
 		$r = array();
 
 		foreach($schema as $k=>$v) {
-			$r[$k] = schemadb::column_schema_parse($v);									 
+			$r[$k] = schemadb::schema_parse_table_column($v);									 
 		}
 
 		return $r;
@@ -387,49 +387,76 @@ class schemadb {
 	
 	
 	## build mysql column attribute set
-	public static function column_schema_parse($v) {
-
-		$t = schemadb::type_parse($v);
+	public static function schema_parse_table_column($value) {
+		
+		$d = array(
+			'Type'		=> schemadb::$default['COLUMN_ATTRIBUTE']['Type'],
+			'Null'		=> schemadb::$default['COLUMN_ATTRIBUTE']['Null'],
+			'Key'		=> schemadb::$default['COLUMN_ATTRIBUTE']['Key'],
+			'Default'	=> schemadb::$default['COLUMN_ATTRIBUTE']['Default'],
+			'Extra'		=> schemadb::$default['COLUMN_ATTRIBUTE']['Extra'],
+		);
+		
+		$t = schemadb::get_type($value);
 
 		switch ($t) {
 
-			case 'date': 
-				return schemadb::column_attributes('date',$v);
+			case 'date':
+				$d['Type'] = 'date';
+				break;
 
 			case 'datetime': 
-				return schemadb::column_attributes('datetime',$v);
-
+				$d['Type'] = 'datetime';
+				break;
+				
 			case 'primary_key':
-				return schemadb::column_attributes('int(10)','','NO','PRI','auto_increment');
+				$d['Type'] = 'int(10)';
+				$d['Null'] = 'NO';
+				$d['Key'] = 'PRI';
+				$d['Default'] = 'auto_increment';
+				break;	
 
-			case 'string': 
-				return schemadb::column_attributes('varchar(255)');	
+			case 'string':						
+				$d['Type'] = 'varchar(255)';
+				break;
 
 			case 'boolean': 
-				return schemadb::column_attributes('tinyint(1)',(int)$v,'NO');	
-
+				$d['Type'] = 'tinyint(1)';
+				$d['Default'] = (int)$value;
+				$d['Null'] = 'NO';	
+				break;
+				
 			case 'int': 
-				return schemadb::column_attributes('int(10)',(int)$v,'NO');			
-
+				$d['Type'] = 'int(10)';
+				$d['Default'] = (int)$value;
+				$d['Null'] = 'NO';			
+				break;
+				
 			case 'float': 
-				return schemadb::column_attributes('float(12,2)',(int)$v,'NO');			
-
+				$d['Type'] = 'float(12,2)';
+				$d['Default'] = (int)$value;
+				$d['Null'] = 'NO';			
+				break;
+				
 			case 'array':
 				foreach($v as &$i) {
 					$i = "'".$i."'";
 				}
 				$t = 'enum('.implode(',',$v).')';
 				return schemadb::column_attributes($t,'','NO');									
-		}		
+		}
+		
+		return $d;
 	}
 
 	
 	##
-	public static function type_parse($v) {
+	public static function get_type($value) {
 
-		$t = gettype($v);
+		$t = gettype($value);
 
 		switch ($t) {
+			
 			case 'string':
 				if (preg_match('/^\%\|[_a-zA-Z][_a-zA-Z0-9]*>>$/i',$v,$d)) {
 				
@@ -470,7 +497,7 @@ class schemadb {
 	##
 	public static function value_parse($v) {
 
-		$t = schemadb::type_parse($v);
+		$t = schemadb::get_type($v);
 
 		switch($t) {
 			case 'integer'		: return (int) $v;		
@@ -488,18 +515,6 @@ class schemadb {
 		trigger_error("No PSEUDOTYPE value for '{$t}' => '{$v}'",E_USER_ERROR);		
 	}
 	
-			
-	##
-	private static function column_attributes($t='int(10)',$d='',$n='',$k='',$e='') {
-		return array(
-			'Type'		=> $t,	
-			'Default'	=> $d,
-			'Null'		=> $n,
-			'Key'		=> $k,
-			'Extra'		=> $e,
-		);		
-	}
-
 	
 	##
 	private static function sanitize_column_attributes($f,$d,$b) {		
