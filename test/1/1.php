@@ -5,7 +5,7 @@ xdebug_disable();
 
 require_once('../../schemadb.php');
 
-$values = array('%|schema:{Type:"int(2)"}|%','%|class:|%','%|key:primary_key|%');
+$values = array(MYSQL_PRIMARY_KEY);
 
 echo '<table border=1 cellpadding=4><tr><th>Value</th><th>Type</th><th>Column</th></tr>';
 foreach($values as $value) {

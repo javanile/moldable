@@ -29,7 +29,7 @@ define('SCHEMADB_DEBUG',true);
 
 
 ## schemadb mysql constants for rapid fields creation
-define('MYSQL_PRIMARY_KEY','%|key:primary-key|%');
+define('MYSQL_PRIMARY_KEY','%|key:primary_key|%');
 define('MYSQL_DATE','0000-00-00');
 define('MYSQL_TIME','00:00:00');
 define('MYSQL_DATETIME','0000-00-00 00:00:00');
@@ -82,12 +82,19 @@ class schemadb {
 	
 	## 
 	public static function execute($method,$sql=NULL) {
-	
+		
+		## assert the db connection
+		if (schemadb::$db == NULL) {
+			die('schemadb connection not found');
+		}
+		
+		## debug the queries
 		if (SCHEMADB_DEBUG) {
 			echo '<pre style="border:1px solid #9F6000;margin:0 0 1px 0;padding:2px;color:#9F6000;background:#FEEFB3;">';
 			echo '<strong>'.str_pad($method,10,' ',STR_PAD_LEFT).'</strong>: '.$sql.'</pre>';			
 		}
-
+	
+		## select appropriate method
 		switch($method) {
 			case 'prefix':	return schemadb::$db->prefix;
 			case 'last_id':	return schemadb::$db->insert_id;
@@ -174,63 +181,62 @@ class schemadb {
 	public static function table_diff($table,$schema,$parse=true) {	
 
 		## 
-		$s = $parse ? schemadb::table_schema_parse($schema) : $schema;
+		$s = $parse ? schemadb::schema_parse_table($schema) : $schema;
 
 		## 
 		$o = array();
 
 		## test if table exists
 		$e = schemadb::execute('row',"SHOW TABLES LIKE '{$table}'");
+		
+		##
+		if (!$e) {
+			$o[] = schemadb::create_table($table,$s);		
+			return $o;			
+		}
+		
+		## 
+		$a = schemadb::table_desc($table);
+		$b = false;
+		$i = false;
 
-		if ($e) {
-			$a = schemadb::table_desc($table);
-			$b = false;
-			$i = false;
+		## test field definition
+		foreach($s as $f=>$d) {			
+			
+			if (isset($a[$f])) {
 
-			## test field definition
-			foreach($s as $f=>$d) {			
+				$u = false;			
 
-				if (is_numeric($f)&&is_string($d)) {
-					$f = $d;
-					$d = array();
+				foreach($a[$f] as $k=>$v) {
+					$x = isset($d[$k]); 
+					$h = $x ? $d[$k] : schemadb::$default['COLUMN_ATTRIBUTE'][$k];
+					$d[$k] = $h;
+
+					if ($h!=$v) {
+						$u = true;
+					}
+
+					echo "a: $table.$f.$k($v) = [$x] ($h) [$u]\n<br/>";								
 				}
-											
-				$d = schemadb::sanitize_column_attributes($f,$d,$b);
-
-				if (isset($a[$f])) {
-					$u = false;			
-					foreach($a[$f] as $k=>$v) {
-						$x = isset($d[$k]); 
-						$h = $x ? $d[$k] : schemadb::$default['COLUMN_ATTRIBUTE'][$k];
-						$d[$k] = $h;
-
-						if ($h!=$v) {
-							$u = true;
-						}
-
-						#echo "a: $t.$f.$k($v) = [$x] ($h) [$u]\n<br/>";								
-					}
-					if ($u) {
-						if ($d['Key']=='PRI') {
-							$i = true;
-						}
-						$o[] = schemadb::alter_table_change($table,$f,$d);
-					}
-				} else {
+				
+				if ($u) {
 					if ($d['Key']=='PRI') {
 						$i = true;
 					}
-					$o[] = schemadb::alter_table_add($table,$f,$d);
+					$o[] = schemadb::alter_table_change($table,$f,$d);
 				}
-				$b = $f;
+				
+			} else {
+				if ($d['Key']=='PRI') {
+					$i = true;
+				}
+				$o[] = schemadb::alter_table_add($table,$f,$d);
 			}
-			if ($i) {
-				//$o[] = schemadb_alter_table_drop_primary_key($t);
-			}
-
-		} else {
-			$o[] = schemadb::create_table($table,$s);		
-		}		
+			$b = $f;
+		}
+		if ($i) {
+			//$o[] = schemadb_alter_table_drop_primary_key($t);
+		}
 
 		return $o;
 	}
@@ -360,34 +366,39 @@ class schemadb {
 	}
 	
 	
-	##
+	## parse a multi-table schema to sanitize end explod implicit info
 	public static function schema_parse($schema) {	
-		$r = array();
+		$s = array();
 
-		foreach($schema as $k=>$v) {
-			$r[$k] = schemadb::schema_parse_table($v);
+		foreach($schema as $t=>$f) {
+			$s[$t] = schemadb::schema_parse_table($f);
 		}
 
-		return $r;
+		return $s;
 	}
 	
 
-	##
+	## parse table schema to sanitize end explod implicit info
 	public static function schema_parse_table($schema) {	
-		$r = array();
-
-		foreach($schema as $k=>$v) {
-			$r[$k] = schemadb::schema_parse_table_column($v);									 
+		
+		$s = array();
+		$b = false;
+		
+		foreach($schema as $f=>$d) {
+			$s[$f] = schemadb::schema_parse_table_column($f,$d,$b);	
+			$b = $f;
 		}
 
-		return $r;
+		return $s;
 	}
 	
 	
 	## build mysql column attribute set
-	public static function schema_parse_table_column($value) {
+	public static function schema_parse_table_column($field,$value,$before_field) {
 		
+		## default schema of a column
 		$d = array(
+			'Field'		=> $field,
 			'Type'		=> schemadb::$default['COLUMN_ATTRIBUTE']['Type'],
 			'Null'		=> schemadb::$default['COLUMN_ATTRIBUTE']['Null'],
 			'Key'		=> schemadb::$default['COLUMN_ATTRIBUTE']['Key'],
@@ -411,7 +422,7 @@ class schemadb {
 				$d['Type'] = 'int(10)';
 				$d['Null'] = 'NO';
 				$d['Key'] = 'PRI';
-				$d['Default'] = 'auto_increment';
+				$d['Extra'] = 'auto_increment';
 				break;	
 
 			case 'string':						
@@ -457,24 +468,20 @@ class schemadb {
 			
 			case 'string':
 				if (preg_match('/^\%\|([a-z]+):(.*)\|\%$/i',$value,$d)) {
-					if ($d[1]=='column') {
-						return 'column';
-					} else if ($d[1]=='reserved') {
-						return $d[2];
-					} else if ($d[1]=='class') {
-						return $d[1];
-					}
+					switch($d[1]) {
+						case 'key': return $d[2];
+						case 'schema': return 'schema';
+					}					
 				} else if (preg_match('/^<<[_a-zA-Z][_a-zA-Z0-9]*>>$/i',$value,$d)) {
-					return 'class';
+					return 'class';					
 				} else if (preg_match('/[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9] [0-9][0-9]:[0-9][0-9]:[0-9][0-9]/',$value)) {				
-					return 'datetime';				
+					return 'datetime';													
 				} else if (preg_match('/[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]/',$value)) {
-					return 'date';				
-				} else if ($value == MYSQL_PRIMARY_KEY) {
-					return 'primary_key';				
+					return 'date';													
+				} else {;				
+					return 'string';
 				}
-				return 'string';
-
+				
 			case 'NULL':	
 				return 'string';
 
@@ -488,7 +495,7 @@ class schemadb {
 				return 'float';
 
 			case 'array':
-				if ($v && $v == array_values($v)) {
+				if ($value && $value == array_values($value)) {
 					return 'array';
 				} else {
 					return 'column';
@@ -497,14 +504,14 @@ class schemadb {
 		
 	}
 
-	
 	##
-	public static function value_parse($v) {
+	public static function get_value($v) {
 
 		$t = schemadb::get_type($v);
 
 		switch($t) {
-			case 'integer'		: return (int) $v;		
+			
+			case 'int'			: return (int) $v;		
 			case 'boolean'		: return (boolean) $v;		
 			case 'primary_key'	: return NULL;
 			case 'string'		: return (string) $v;
@@ -514,11 +521,13 @@ class schemadb {
 			case 'date'			: return @date('Y-m-d',@strtotime(''.$v));
 			case 'datetime'		: return @date('Y-m-d H:i:s',@strtotime(''.$v));;
 			case 'column'		: return NULL;	
+
 		}		
 			
 		trigger_error("No PSEUDOTYPE value for '{$t}' => '{$v}'",E_USER_ERROR);		
 	}
 	
+	/*
 	
 	##
 	private static function sanitize_column_attributes($f,$d,$b) {		
@@ -530,7 +539,7 @@ class schemadb {
 		$d['First']		= !$b; 
 		return $d;	
 	}
-
+	*/
 	
 	## printout database status/info
 	public static function dump() {
@@ -629,7 +638,7 @@ class schedadb_sdbClass_static {
 	public static function all() {
 		$t = self::table();		
 		$s = "SELECT * FROM {$t}";
-		$r = schemadb_action('results',$s);
+		$r = schemadb::execute('results',$s);
 		$a = array();
 		foreach($r as $i=>$o) {
 			$a[$i] = self::build($o);
@@ -752,7 +761,7 @@ class schemadb_sdbClass extends schedadb_sdbClass_static {
 		static::schemadb_update();	
 
 		foreach($this->fields() as $f) {
-			$this->{$f} = schemadb::value_parse($this->{$f});
+			$this->{$f} = schemadb::get_value($this->{$f});
 		}
 	}
 			
