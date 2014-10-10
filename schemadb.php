@@ -25,7 +25,7 @@
 
 
 ## constants
-define('SCHEMADB_DEBUG',true);
+define('SCHEMADB_DEBUG',false);
 
 
 ## schemadb mysql constants for rapid fields creation
@@ -215,8 +215,10 @@ class schemadb {
 					if ($h!=$v) {
 						$u = true;
 					}
-
-					echo "a: $table.$f.$k($v) = [$x] ($h) [$u]\n<br/>";								
+					
+					if (SCHEMADB_DEBUG) {
+						echo "a: $table.$f.$k($v) = [$x] ($h) [$u]\n<br/>";	
+					}
 				}
 				
 				if ($u) {
@@ -404,6 +406,8 @@ class schemadb {
 			'Key'		=> schemadb::$default['COLUMN_ATTRIBUTE']['Key'],
 			'Default'	=> schemadb::$default['COLUMN_ATTRIBUTE']['Default'],
 			'Extra'		=> schemadb::$default['COLUMN_ATTRIBUTE']['Extra'],
+			'Before'	=> $before_field,
+			'First'		=> !$before_field,
 		);
 		
 		$t = schemadb::get_type($value);
@@ -794,7 +798,9 @@ class schemadb_sdbClass extends schedadb_sdbClass_static {
 	//
 	public function fill($array) {		
 		foreach($this->fields() as $f) {
-			$this->{$f} = $array[$f];			
+			if (isset($array[$f])) {
+				$this->{$f} = $array[$f];		
+			}
 		}
 		
 		$k = $this->primary_key();
