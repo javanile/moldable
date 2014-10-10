@@ -25,7 +25,7 @@
 
 
 ## constants
-define('SCHEMADB_DEBUG',true);
+define('SCHEMADB_DEBUG',false);
 			
 
 ## schemadb mysql constants for rapid fields creation
@@ -694,7 +694,7 @@ class schedadb_sdbClass_static {
 		}
 		$w = count($w)>0 ? 'WHERE '.implode(' AND ',$w) : '';
 		$s = "SELECT * FROM {$t} {$w} LIMIT 1";
-		$r = schemadb_action('row',$s);		
+		$r = schemadb::execute('row',$s);		
 		if ($r) {
 			return self::build($r);
 		}		
