@@ -25,8 +25,8 @@
 
 
 ## constants
-define('SCHEMADB_DEBUG',false);
-
+define('SCHEMADB_DEBUG',true);
+			
 
 ## schemadb mysql constants for rapid fields creation
 define('MYSQL_PRIMARY_KEY','%|key:primary_key|%');
@@ -104,12 +104,13 @@ class schemadb {
 			default:		$return = schemadb::$db->get_results($sql,ARRAY_A); break;
 		}
 		
-		$error = mysql_error();
-		
+		## assert sql error
+		$error = mysql_error();		
 		if ($error) {
 			die('Error: '.$error.'<br/>Query: '.$sql);
 		}
 		
+		## return data
 		return $return;
 	}
 
@@ -237,7 +238,7 @@ class schemadb {
 			$b = $f;
 		}
 		if ($i) {
-			//$o[] = schemadb_alter_table_drop_primary_key($t);
+			array_unshift($o,schemadb::alter_table_drop_primary_key($table));
 		}
 
 		return $o;
@@ -266,19 +267,22 @@ class schemadb {
 	## describe table
 	public static function table_desc($table) {
 		
+		##
 		$i = schemadb::execute('results',"DESC {$table}");
 		$a = array();		
 		$n = 0;
 		$b = false;
 		
+		##
 		foreach($i as $j) {		
-			$j["Before"] = $b;		
-			$j["First"]	= $n == 0;
-			$a[$j["Field"]] = $j;					
-			$b = $j["Field"];
+			$j['Before'] = $b;		
+			$j['First']	= $n == 0;
+			$a[$j['Field']] = $j;					
+			$b = $j['Field'];
 			$n++;
 		}
 		
+		##
 		return $a;
 	}
 
