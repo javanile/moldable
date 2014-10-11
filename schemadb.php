@@ -1,31 +1,31 @@
 <?php
 /*\
  * 
- *	Copyright (c) 2014 Bianco Francesco
+ * Copyright (c) 2014 Bianco Francesco
  *
- *	Permission is hereby granted, free of charge, to any person obtaining a copy
- *	of this software and associated documentation files "schemadb", to deal
- *	in the Software without restriction, including without limitation the rights
- *	to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- *	copies of the Software, and to permit persons to whom the Software is
- *	furnished to do so, subject to the following conditions:
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files "schemadb", to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
  *
- *	The above copyright notice and this permission notice shall be included in
- *	all copies or substantial portions of the Software.
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
  *
- *	THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- *	IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- *	FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- *	AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- *	LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- *	OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
- *	THE SOFTWARE.
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
  * 
 \*/
 
 
 ## constants
-define('SCHEMADB_DEBUG',false);
+define('SCHEMADB_DEBUG',true);   
 			
 
 ## schemadb mysql constants for rapid fields creation
@@ -288,7 +288,7 @@ class schemadb {
 
 
 	##
-	private static function column_definition($d) {
+	private static function column_definition($d,$o=true) {
 		/*\
 		MySQL column_definition: 
 			data_type 
@@ -304,9 +304,12 @@ class schemadb {
 		$l = isset($d["Default"]) && $d["Default"] ? "DEFAULT '$d[Default]'" : '';
 		$e = isset($d["Extra"]) ? $d["Extra"] : '';
 		$p = isset($d["Key"])&&$d["Key"]=="PRI" ? 'PRIMARY KEY' : '';
-		$f = isset($d["First"])&&$d["First"] ? 'FIRST' : '';
-		$b = isset($d["Before"])&&$d["Before"] ? 'AFTER '.$d["Before"] : '';
-		$q = "{$t} {$u} {$l} {$e} {$p} {$f} {$b}";
+		$q = "{$t} {$u} {$l} {$e} {$p}";
+		if ($o) {
+			$f = isset($d["First"])&&$d["First"] ? 'FIRST' : '';
+			$b = isset($d["Before"])&&$d["Before"] ? 'AFTER '.$d["Before"] : '';
+			$q.= " {$f} {$b}";
+		} 		
 		return $q;
 	}
 
@@ -323,7 +326,7 @@ class schemadb {
 				$f = $d;
 				$d = array();
 			}		
-			$e[] = $f.' '.schemadb::column_definition($d);
+			$e[] = $f.' '.schemadb::column_definition($d,false);
 		}	
 
 		## implode 
@@ -687,6 +690,10 @@ class schedadb_sdbClass_static {
 	
 	//
 	public static function ping($array) {
+		
+		//
+		static::schemadb_update();
+		
 		$t = self::table();		
 		$w = array();
 		foreach($array as $k=>$v) {
@@ -698,6 +705,22 @@ class schedadb_sdbClass_static {
 		if ($r) {
 			return self::build($r);
 		}		
+	}
+	
+	##
+	public static function submit($query) {
+		
+		##
+		$o = static::ping($query);
+		
+		##
+		if (!$o) {
+			$o = static::build($query);
+			$o->store();
+		}
+		
+		##
+		return $o;
 	}
 		
 	//
