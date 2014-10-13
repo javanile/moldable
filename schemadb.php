@@ -167,7 +167,7 @@ class schemadb {
 
 		## loop throu the schema
 		foreach($s as $t=>$d) {
-			$q = schemadb::table_diff($p.$t,$d,false);		
+			$q = schemadb::diff_table($p.$t,$d,false);		
 			if (count($q)>0) {
 				$o = array_merge($o,$q);
 			}
@@ -179,13 +179,14 @@ class schemadb {
 
 
 	## generate query to align table
-	public static function table_diff($table,$schema,$parse=true) {	
+	public static function diff_table($table,$schema,$parse=true) {	
 
 		## 
 		$s = $parse ? schemadb::schema_parse_table($schema) : $schema;
 
 		## 
 		$o = array();
+		$z = array();
 
 		## test if table exists
 		$e = schemadb::execute('row',"SHOW TABLES LIKE '{$table}'");
@@ -196,52 +197,69 @@ class schemadb {
 			return $o;			
 		}
 		
-		## 
+		## current table description
 		$a = schemadb::table_desc($table);
+		
+		## alter primary key falg
 		$b = false;
 		$i = false;
 
 		## test field definition
 		foreach($s as $f=>$d) {			
 			
+			if (SCHEMADB_DEBUG) {
+				echo '==== '.$table.'::'.$f.' ===='."\n<br/>";
+			}
+			
+			## check if column exists in current db
 			if (isset($a[$f])) {
 
-				$u = false;			
-
+				## update flag 
+				$u = false;
+				
+				## loop throd current column property
 				foreach($a[$f] as $k=>$v) {
+					
 					$x = isset($d[$k]); 
 					$h = $x ? $d[$k] : schemadb::$default['COLUMN_ATTRIBUTE'][$k];
 					$d[$k] = $h;
 
 					if ($h!=$v) {
 						$u = true;
+						if ($k=='Key' && $v=='PRI') {
+							$b = true;						
+						}					
 					}
-					
-					if (SCHEMADB_DEBUG) {
-						echo "a: $table.$f.$k($v) = [$x] ($h) [$u]\n<br/>";	
-					}
+										
 				}
 				
 				if ($u) {
 					if ($d['Key']=='PRI') {
 						$i = true;
+						$z[] = schemadb::alter_table_change($table,$f,$d);
+					} else {
+						$o[] = schemadb::alter_table_change($table,$f,$d);
 					}
-					$o[] = schemadb::alter_table_change($table,$f,$d);
 				}
 				
 			} else {
+				## add column 
 				if ($d['Key']=='PRI') {
 					$i = true;
+					$z[] = schemadb::alter_table_add($table,$f,$d);
+				} else {
+					$o[] = schemadb::alter_table_add($table,$f,$d);
 				}
-				$o[] = schemadb::alter_table_add($table,$f,$d);
 			}
-			$b = $f;
 		}
-		if ($i) {
-			array_unshift($o,schemadb::alter_table_drop_primary_key($table));
-		}
-
-		return $o;
+		
+		echo '---'.$i.':'.$b.'---\n<br/>';
+		
+		if ($i&&$b || !$i&&$b ) {
+			array_unshift($z,schemadb::alter_table_drop_primary_key($table));
+		} 
+		
+		return array_merge($o,$z);
 	}
 
 
@@ -860,7 +878,7 @@ class schemadb_sdbClass extends schedadb_sdbClass_static {
 		$i = $this->{$k};
 		$q = "UPDATE {$t} SET {$s} WHERE {$k}='{$i}'";
 		
-		schemadb_action('query',$q);		
+		schemadb::execute('query',$q);		
 	}
 	
 	public function insert() {		
