@@ -140,10 +140,10 @@ class schemadb {
 
 
 	## update table via schema
-	public static function table_update($table,$schema) {
+	public static function update_table($table,$schema) {
 
 		## retrive queries
-		$q = schemadb::table_diff($table,$schema);
+		$q = schemadb::diff_table($table,$schema);
 
 		## execute queries
 		if (count($q)>0) {
@@ -198,9 +198,9 @@ class schemadb {
 		}
 		
 		## current table description
-		$a = schemadb::table_desc($table);
+		$a = schemadb::desc_table($table);
 		
-		## alter primary key falg
+		## alter primary key flag
 		$b = false;
 		$i = false;
 
@@ -269,7 +269,7 @@ class schemadb {
 		if (count($l)>0) {
 			foreach($l as $t) {
 				$t = reset($t);
-				$r[$t] = schemadb::table_desc($t);				
+				$r[$t] = schemadb::desc_table($t);				
 			}
 		}
 		
@@ -279,7 +279,7 @@ class schemadb {
 	
 	
 	## describe table
-	public static function table_desc($table) {
+	public static function desc_table($table) {
 		
 		##
 		$i = schemadb::execute('results',"DESC {$table}");
@@ -303,27 +303,23 @@ class schemadb {
 
 	##
 	private static function column_definition($d,$o=true) {
-		/*\
-		MySQL column_definition: 
-			data_type 
-				[NOT NULL | NULL] [DEFAULT default_value]
-				[AUTO_INCREMENT] [UNIQUE [KEY] | [PRIMARY] KEY]
-				[COMMENT 'string']
-				[COLUMN_FORMAT {FIXED|DYNAMIC|DEFAULT}]
-				[STORAGE {DISK|MEMORY|DEFAULT}]
-				[reference_definition]	
-		\*/
+		
+		##
 		$t = isset($d["Type"]) ? $d["Type"] : schemadb::$default['COLUMN_ATTRIBUTE']['Type'];
 		$u = isset($d["Null"]) && ($d["Null"]=="NO" || !$d["Null"]) ? 'NOT NULL' : 'NULL';
 		$l = isset($d["Default"]) && $d["Default"] ? "DEFAULT '$d[Default]'" : '';
 		$e = isset($d["Extra"]) ? $d["Extra"] : '';
 		$p = isset($d["Key"])&&$d["Key"]=="PRI" ? 'PRIMARY KEY' : '';
 		$q = "{$t} {$u} {$l} {$e} {$p}";
+		
+		##
 		if ($o) {
 			$f = isset($d["First"])&&$d["First"] ? 'FIRST' : '';
 			$b = isset($d["Before"])&&$d["Before"] ? 'AFTER '.$d["Before"] : '';
 			$q.= " {$f} {$b}";
-		} 		
+		} 
+		
+		##
 		return $q;
 	}
 
