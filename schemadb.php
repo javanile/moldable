@@ -208,7 +208,7 @@ class schemadb {
 		foreach($s as $f=>$d) {			
 			
 			if (SCHEMADB_DEBUG) {
-				echo '==== '.$table.'::'.$f.' ===='."\n<br/>";
+				//echo '==== '.$table.'::'.$f.' ===='."\n<br/>";
 			}
 			
 			## check if column exists in current db
@@ -219,20 +219,17 @@ class schemadb {
 				
 				## loop throd current column property
 				foreach($a[$f] as $k=>$v) {
-					
-					$x = isset($d[$k]); 
-					$h = $x ? $d[$k] : schemadb::$default['COLUMN_ATTRIBUTE'][$k];
-					$d[$k] = $h;
-
-					if ($h!=$v) {
+										
+					## if have a difference
+					if ($d[$k]!=$v) {
 						$u = true;
 						if ($k=='Key' && $v=='PRI') {
 							$b = true;						
 						}					
-					}
-										
+					}	
 				}
 				
+				## update column				
 				if ($u) {
 					if ($d['Key']=='PRI') {
 						$i = true;
@@ -253,8 +250,7 @@ class schemadb {
 			}
 		}
 		
-		echo '---'.$i.':'.$b.'---\n<br/>';
-		
+		//echo '---'.$i.':'.$b.'---\n<br/>';
 		if ($i&&$b || !$i&&$b ) {
 			array_unshift($z,schemadb::alter_table_drop_primary_key($table));
 		} 
