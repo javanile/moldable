@@ -13,14 +13,13 @@ $pref = 'hh_';		## table prefix
 
 schemadb::connect($host,$user,$pass,$name,$pref);
 
-schemadb::apply([
-	'user' => [
-		'id0'	=> MYSQL_PRIMARY_KEY,
-		'id1'	=> 1,
-		'code'	=> 0,
-		'name'	=> '',
-		'froma' => 'asd'
-	]
-]);
+class People extends sdbClass {
+	
+	public $pid = MYSQL_PRIMARY_KEY;
+	public $name = "";
+	public $surname = "";
+	public $age = 0;
+	
+}
 
-//schemadb::dump();
+People::schemadb_update();

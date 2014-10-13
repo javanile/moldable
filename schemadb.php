@@ -779,14 +779,19 @@ class schedadb_sdbClass_static {
 		$c = static::klass();		
 
 		## avoid re-update by check the cache
-		if (!isset(schedadb_sdbClass_static::$kache[$c]['updated'])) {			
+		if (!isset(static::$kache[$c]['updated'])) {			
+			
+			##
 			$t = static::table();		
 			$s = static::skema();
 
+			##
 			if (count($s)>0) {
-				schemadb::table_update($t,$s);
-			}		
-			schedadb_sdbClass_static::$kache[$c]['updated'] = time();
+				schemadb::update_table($t,$s);
+			}	
+			
+			##
+			static::$kache[$c]['updated'] = time();
 		}
 	}
 	
