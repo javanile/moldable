@@ -404,7 +404,7 @@ class schemadb {
 		$b = false;
 		
 		foreach($schema as $f=>$d) {
-			$s[$f] = schemadb::schema_parse_table_column($f,$d,$b);	
+			$s[$f] = schemadb::schema_parse_table_column($d,$f,$b);	
 			$b = $f;
 		}
 
@@ -413,7 +413,7 @@ class schemadb {
 	
 	
 	## build mysql column attribute set
-	public static function schema_parse_table_column($field,$value,$before_field) {
+	public static function schema_parse_table_column($value,$field=false,$before_field=false) {
 		
 		## default schema of a column
 		$d = array(
@@ -541,26 +541,26 @@ class schemadb {
 	}
 
 	##
-	public static function get_value($v) {
+	public static function get_value($notation) {
 
-		$t = schemadb::get_type($v);
+		$t = schemadb::get_type($notation);
 
 		switch($t) {
 			
-			case 'int'			: return (int) $v;		
-			case 'boolean'		: return (boolean) $v;		
+			case 'int'			: return (int) $notation;		
+			case 'boolean'		: return (boolean) $notation;		
 			case 'primary_key'	: return NULL;
-			case 'string'		: return (string) $v;
-			case 'float'		: return (float) $v;
+			case 'string'		: return (string) $notation;
+			case 'float'		: return (float) $notation;
 			case 'class'		: return NULL;
 			case 'array'		: return NULL;	
-			case 'date'			: return @date('Y-m-d',@strtotime(''.$v));
-			case 'datetime'		: return @date('Y-m-d H:i:s',@strtotime(''.$v));;
+			case 'date'			: return schemadb::parse_date($notation);
+			case 'datetime'		: return schemadb::parse_datetime($notation);
 			case 'column'		: return NULL;	
 
 		}		
 			
-		trigger_error("No PSEUDOTYPE value for '{$t}' => '{$v}'",E_USER_ERROR);		
+		trigger_error("No PSEUDOTYPE value for '{$t}' => '{$notation}'",E_USER_ERROR);		
 	}
 	
 	/*
@@ -592,6 +592,24 @@ class schemadb {
 				$r = $o->{$k};
 				break;
 		}
+	}
+	
+	## printout database status/info
+	public static function parse_date($date) {
+		if ($date!='0000-00-00') {
+			return @date('Y-m-d',@strtotime(''.$date));
+		} else {
+			return null;
+		} 			
+	}
+	
+	## printout database status/info
+	public static function parse_datetime($datetime) {
+		if ($date!='0000-00-00 00:00:00') {
+			return @date('Y-m-d H:i:s',@strtotime(''.$datetime));
+		} else {
+			return null;
+		} 			
 	}
 	
 	
@@ -676,9 +694,11 @@ class schedadb_sdbClass_static {
 	}
 		
 	## 
-	public static function build($array) {
+	public static function build($data=null) {
 		$o = new static();
-		$o->fill($array);
+		if ($data) {
+			$o->fill($data);
+		}	
 		return $o;
 	}
 		
@@ -878,10 +898,9 @@ class schedadb_sdbClass_static {
 }
 
 
-
 ## self methods of sdbClass
 class schemadb_sdbClass extends schedadb_sdbClass_static {
-			
+	
 	## constructor
 	public function __construct() {
 		

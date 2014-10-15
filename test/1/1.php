@@ -5,12 +5,14 @@ xdebug_disable();
 
 require_once('../../schemadb.php');
 
-$values = array(MYSQL_PRIMARY_KEY);
+$values = array(MYSQL_DATE);
 
-echo '<table border=1 cellpadding=4><tr><th>Value</th><th>Type</th><th>Column</th></tr>';
+echo '<table border=1 cellpadding=4><tr><th>Annotation</th><th>Value</th><th>Type</th><th>Column</th></tr>';
 foreach($values as $value) {
 	echo '<tr><td>';
 	var_dump($value); 
+	echo '</td><td>';
+	echo schemadb::get_value($value);
 	echo '</td><td><strong>';
 	echo schemadb::get_type($value);
 	echo '</strong></td><td><pre>';
