@@ -25,7 +25,7 @@
 
 
 ## constants
-define('SCHEMADB_DEBUG',true);   
+define('SCHEMADB_DEBUG',false);   
 			
 
 ## schemadb mysql constants for rapid fields creation
@@ -772,10 +772,14 @@ class schedadb_sdbClass_static {
 		$w = array();
 		
 		##
+		if (isset($query['where'])) {
+			$w[] = $query['where'];
+			unset($query['where']);
+		}
+		
+		##
 		foreach($query as $k=>$v) {
-			if (!is_array($v)) {
-				$w[] = "{$k}='{$v}'";
-			}
+			$w[] = "{$k}='$v'";			
 		}
 		
 		##
@@ -816,16 +820,15 @@ class schedadb_sdbClass_static {
 	
 	##
 	public static function update($query) {
-		
+				
 		##
 		$o = static::build($query);
 		$o->store_update();
 		
 		##
 		return $o;
-	}
-	
-	
+	}	
+		
 	##
 	public static function dump() {
 		$a = static::all();
@@ -873,11 +876,11 @@ class schedadb_sdbClass_static {
 	
 	
 	## update db table based on class schema
-	public static function schemadb_update() {
+	public static function schemadb_update() {		
 		
 		## get class name
 		$c = static::klass();		
-
+		
 		## avoid re-update by check the cache
 		if (!isset(static::$kache[$c]['updated'])) {			
 			
@@ -892,7 +895,15 @@ class schedadb_sdbClass_static {
 			
 			##
 			static::$kache[$c]['updated'] = time();
+			
+			##
+			if (SCHEMADB_DEBUG) {
+				echo '<pre style="border:1px solid #9F6000;margin:0 0 1px 0;padding:2px;color:#9F6000;background:#FEEFB3;">';
+				echo '<strong>'.str_pad('update',10,' ',STR_PAD_LEFT).'</strong>: '.$c.'</pre>';						
+			}
+			
 		}
+						
 	}
 		
 }
@@ -912,7 +923,15 @@ class schemadb_sdbClass extends schedadb_sdbClass_static {
 			$this->{$f} = schemadb::get_value($this->{$f});
 		}
 	}
-			
+		
+	## assign value and store object
+	public function assign($query) {
+		foreach($query as $k=>$v) {
+			$this->{$k} = $v;			
+		}
+		$this->store();
+	}
+	
 	## auto-store element method
 	public function store() {				
 		
