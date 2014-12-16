@@ -25,8 +25,8 @@
 
 
 ## constants
-define('SCHEMADB_DEBUG',false);   
-			
+define('SCHEMADB_VERSION','0.9.1'); 			
+define('SCHEMADB_DEBUG',false); 
 
 ## schemadb mysql constants for rapid fields creation
 define('MYSQL_PRIMARY_KEY','%|key:primary_key|%');
