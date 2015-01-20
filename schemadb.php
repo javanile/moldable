@@ -25,7 +25,7 @@
 
 
 ## constants
-define('SCHEMADB_VERSION','0.9.2'); 			
+define('SCHEMADB_VERSION','0.9.3'); 			
 define('SCHEMADB_DEBUG',false); 
 
 ## schemadb mysql constants for rapid fields creation
@@ -233,24 +233,23 @@ class schemadb {
 				if ($u) {
 					if ($d['Key']=='PRI') {
 						$i = true;
-						$z[] = schemadb::alter_table_change($table,$f,$d);
+						array_unshift($z, schemadb::alter_table_change($table,$f,$d));						
+						//$z[] = schemadb::alter_table_change($table,$f,$d);
 					} else {
-						$o[] = schemadb::alter_table_change($table,$f,$d);
+						array_unshift($o, schemadb::alter_table_change($table,$f,$d));					
+						//$o[] = schemadb::alter_table_change($table,$f,$d);
 					}
 				}
 				
 			} else {
-				echo 'A';
 				## add column 
 				if ($d['Key']=='PRI') {
-					echo 'B';
 					$i = true;
 					array_unshift($z, schemadb::alter_table_add($table,$f,$d));
 					//$z[] = schemadb::alter_table_add($table,$f,$d);					
 				} else {
-					echo 'C';
-					array_unshift($o, schemadb::alter_table_add($table,$f,$d));
-					//$o[] = schemadb::alter_table_add($table,$f,$d);
+					//array_unshift($o, schemadb::alter_table_add($table,$f,$d));
+					$o[] = schemadb::alter_table_add($table,$f,$d);
 				}
 			}
 		}
