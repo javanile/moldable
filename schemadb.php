@@ -25,8 +25,8 @@
 
 
 ## constants
-define('SCHEMADB_VERSION','0.9.3'); 			
-define('SCHEMADB_DEBUG',false); 
+define('SCHEMADB_VERSION','0.9.4'); 			
+define('SCHEMADB_DEBUG',false);
 
 ## schemadb mysql constants for rapid fields creation
 define('MYSQL_PRIMARY_KEY','%|key:primary_key|%');
@@ -236,8 +236,8 @@ class schemadb {
 						array_unshift($z, schemadb::alter_table_change($table,$f,$d));						
 						//$z[] = schemadb::alter_table_change($table,$f,$d);
 					} else {
-						array_unshift($o, schemadb::alter_table_change($table,$f,$d));					
-						//$o[] = schemadb::alter_table_change($table,$f,$d);
+						//array_unshift($o, schemadb::alter_table_change($table,$f,$d));					
+						$o[] = schemadb::alter_table_change($table,$f,$d);
 					}
 				}
 				
