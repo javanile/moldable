@@ -25,7 +25,7 @@
 
 
 ## constants
-define('SCHEMADB_VERSION','0.9.4'); 			
+define('SCHEMADB_VERSION','0.9.5'); 			
 define('SCHEMADB_DEBUG',false);
 
 ## schemadb mysql constants for rapid fields creation
@@ -854,16 +854,16 @@ class schedadb_sdbClass_static {
 		echo '</table>';
 	}
 	
-	// delete element by primary key
+	
+	## delete element by primary key
 	public static function delete($id) {
 		if ($id>0) {
 			$t = static::table();
 			$k = static::primary_key();
-			$s = "DELETE FROM {$t} WHERE Id='$id'";
-			schemadb_action('query',$s);
+			$s = "DELETE FROM {$t} WHERE {$k}='{$id}'";
+			schemadb::execute('query',$s);
 		}		
 	}		
-	
 	
 	## instrospect and retrieve element schema
 	public static function skema() {		
