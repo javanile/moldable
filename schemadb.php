@@ -25,7 +25,7 @@
 
 
 ## constants
-define('SCHEMADB_VERSION','0.9.5'); 			
+define('SCHEMADB_VERSION','0.9.6'); 			
 define('SCHEMADB_DEBUG',false);
 
 ## schemadb mysql constants for rapid fields creation
@@ -752,7 +752,7 @@ class schedadb_sdbClass_static {
 		$q = "SELECT * FROM {$t} {$w} {$o}";				
 		
 		## fetch res
-		$r = schemadb_action('results',$q);
+		$r = schemadb::execute('results',$q);
 		$a = array();
 		foreach($r as $i=>$o) {
 			$a[$i] = self::build($o);
@@ -2075,4 +2075,4 @@ class schemadb_ezSQL_mysql extends schemadb_ezSQLcore
 		@mysql_close($this->dbh);	
 	}
 
-}
+} 
