@@ -1141,7 +1141,7 @@ class schemadb_sdbClass extends schedadb_sdbClass_static {
 		
 		##
 		$t = static::table();
-		$q = "INSERT INTO {$t} ($c) VALUES ($v)";
+		$q = "INSERT INTO {$t} ({$c}) VALUES ({$v})";
 		
 		##
 		schemadb::execute('query',$q);
@@ -1156,19 +1156,26 @@ class schemadb_sdbClass extends schedadb_sdbClass_static {
 		}
 	}
 	
-	// return fields names
+	## return fields names
 	public function fields() {		
+	
+		##
 		$c = get_class($this);
 		$f = get_class_vars($c);
 		$a = array();
+		
+		##
 		foreach($f as $k=>$v) {
 			if (!in_array($k,static::$proto)) {
 				$a[] = $k;
 			}
 		}
+		
+		##
 		return $a;		
 	}
-			
+	
+	##
 	public static function primary_key() {
 		$s = static::skema();		
 		foreach($s as $k=>$v) {			
@@ -1179,8 +1186,13 @@ class schemadb_sdbClass extends schedadb_sdbClass_static {
 		return false;
 	}
 	
+	##
 	public function get($field) {
+	
+		##
 		$m = 'get_parser_'.$field;
+		
+		##
 		if (method_exists($this,$m)) {
 			return $this->{$m}($this->{$field});		
 		} else {
@@ -1188,8 +1200,13 @@ class schemadb_sdbClass extends schedadb_sdbClass_static {
 		}
 	}
 	
+	##
 	public function set($field,$value) {
+		
+		##
 		$m = 'set_parser_'.$field;
+		
+		##
 		if (method_exists($this,$m)) {
 			$this->{$field} = $this->{$m}($value);
 		} else {
@@ -1198,13 +1215,12 @@ class schemadb_sdbClass extends schedadb_sdbClass_static {
 	}	
 } 
 
-// canonical name
+## canonical name
 class sdbClass extends schemadb_sdbClass {
-	// .
-	// .
-	// .
+	## only for flatman
 }
 
+## ezsql library embedded
 /**********************************************************************
 *  Author: Justin Vincent (jv@vip.ie)
 *  Web...: http://justinvincent.com
