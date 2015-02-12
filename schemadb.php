@@ -581,15 +581,16 @@ class schemadb {
 			##	
 			default:	
 				trigger_error("No PSEUDOTYPE value for '{$t}' => '{$notation}'",E_USER_ERROR);		
-		}		
-		
+		}				
 	}
 	
 	## handle creation of related object
 	public static function object_build($d,$a,&$r) {
 		
+		##
 		$t = schemadb::get_type($d);
 		
+		##
 		switch($t) {
 			case 'class':
 				$c = schemadb::get_class($d);
@@ -604,7 +605,9 @@ class schemadb {
 	
 	## printout database status/info
 	public static function parse_date($date) {
-		if ($date!='0000-00-00') {
+		
+		##
+		if ($date != '0000-00-00') {
 			return @date('Y-m-d',@strtotime(''.$date));
 		} else {
 			return null;
@@ -632,12 +635,7 @@ class schemadb {
 		var_dump($s);
 		echo '</pre>';		
 	}
-	
-	
 }
-
-
-
 
 ## static part of sdbClass
 class schedadb_sdbClass_static {
