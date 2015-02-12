@@ -23,7 +23,6 @@
  * 
 \*/
 
-
 ## constants
 define('SCHEMADB_VERSION','0.9.7'); 			
 define('SCHEMADB_DEBUG',false);
@@ -43,18 +42,14 @@ define('MYSQL_INT_14','%|type:int(14)|%');
 define('MYSQL_FLOAT','%|type:float(14,4)|%');
 define('MYSQL_FLOAT_14_4','%|type:float(14,4)|%');
 
-
 ## usefull mysql func
 function MYSQL_NOW() { return @date('Y-m-d H:i:s'); }
-
 
 ## main class as namespace container
 class schemadb {
 	
-	
 	## 
 	static private $db = NULL;
-	
 	
 	##
 	static private $default = array(		
@@ -67,7 +62,6 @@ class schemadb {
 		),
 	);
 	
-	
 	## init database connection
 	public static function &connect($host,$username,$password,$database,$prefix) {
 							
@@ -79,7 +73,6 @@ class schemadb {
 		return schemadb::$db;
 	}
 
-	
 	## 
 	public static function execute($method,$sql=NULL) {
 		
@@ -114,12 +107,10 @@ class schemadb {
 		return $return;
 	}
 
-	
 	## apply schema on the db
 	public static function apply($schema) {	
 		return schemadb::update($schema);	
 	}
-
 	
 	## update db via schema
 	public static function update($schema) {
@@ -138,7 +129,6 @@ class schemadb {
 		return $q;
 	}
 
-
 	## update table via schema
 	public static function update_table($table,$schema) {
 
@@ -155,7 +145,6 @@ class schemadb {
 		## return queries
 		return $q;
 	}
-
 
 	## generate query to align db
 	public static function diff($schema,$parse=true) {
@@ -176,7 +165,6 @@ class schemadb {
 		## return estimated sql query
 		return $o;	
 	}
-
 
 	## generate query to align table
 	public static function diff_table($table,$schema,$parse=true) {	
@@ -262,7 +250,6 @@ class schemadb {
 		return array_merge($z,$o);
 	}
 
-
 	##
 	public static function desc() {
 		
@@ -280,7 +267,6 @@ class schemadb {
 		return $r;
 			
 	}
-	
 	
 	## describe table
 	public static function desc_table($table) {
@@ -304,7 +290,6 @@ class schemadb {
 		return $a;
 	}
 
-
 	##
 	private static function column_definition($d,$o=true) {
 		
@@ -327,7 +312,6 @@ class schemadb {
 		return $q;
 	}
 
-	
 	## retrieve sql to create a table
 	private static function create_table($t,$s) {
 
@@ -353,7 +337,6 @@ class schemadb {
 		return $q;
 	}
 
-
 	##
 	private static function alter_table_add($t,$f,$d) {
 		
@@ -366,7 +349,6 @@ class schemadb {
 		##
 		return $q; 	
 	}
-
 	
 	## retrieve sql to alter table definition
 	private static function alter_table_change($t,$f,$d) {
@@ -381,13 +363,11 @@ class schemadb {
 		return $q; 
 	}
 
-	
 	## retrive query to remove primary key
 	private static function alter_table_drop_primary_key($t) {
 		$q = "ALTER TABLE {$t} DROP PRIMARY KEY";
 		return $q;
 	}
-	
 	
 	## parse a multi-table schema to sanitize end explod implicit info
 	public static function schema_parse($schema) {	
@@ -400,7 +380,6 @@ class schemadb {
 		return $s;
 	}
 	
-
 	## parse table schema to sanitize end explod implicit info
 	public static function schema_parse_table($schema) {	
 		
@@ -414,7 +393,6 @@ class schemadb {
 
 		return $s;
 	}
-	
 	
 	## build mysql column attribute set
 	public static function schema_parse_table_column($value,$field=false,$before_field=false) {
@@ -502,10 +480,13 @@ class schemadb {
 	##
 	public static function get_type($value) {
 
+		##
 		$t = gettype($value);
 
+		##
 		switch ($t) {
 			
+			##
 			case 'string':
 				if (preg_match('/^\%\|([a-z]+):(.*)\|\%$/i',$value,$d)) {
 					switch($d[1]) {
@@ -518,19 +499,23 @@ class schemadb {
 					return 'datetime';													
 				} else if (preg_match('/[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]/',$value)) {
 					return 'date';													
-				} else {;				
+				} else {				
 					return 'string';
 				}
-				
+			
+			##
 			case 'NULL':	
 				return 'string';
 
+			##
 			case 'boolean':
 				return 'boolean';
 
+			##
 			case 'integer':
 				return 'int';
 
+			##	
 			case 'double':
 				return 'float';
 
@@ -547,39 +532,58 @@ class schemadb {
 	##
 	public static function get_value($notation) {
 
+		##
 		$t = schemadb::get_type($notation);
 
+		##
 		switch($t) {
 			
-			case 'int'			: return (int) $notation;		
-			case 'boolean'		: return (boolean) $notation;		
-			case 'primary_key'	: return NULL;
-			case 'string'		: return (string) $notation;
-			case 'float'		: return (float) $notation;
-			case 'class'		: return NULL;
-			case 'array'		: return NULL;	
-			case 'date'			: return schemadb::parse_date($notation);
-			case 'datetime'		: return schemadb::parse_datetime($notation);
-			case 'column'		: return NULL;	
-
-		}		
+			##
+			case 'int': 
+				return (int) $notation;		
 			
-		trigger_error("No PSEUDOTYPE value for '{$t}' => '{$notation}'",E_USER_ERROR);		
+			##
+			case 'boolean':
+				return (boolean) $notation;		
+			
+			##
+			case 'primary_key': 
+				return NULL;
+				
+			##	
+			case 'string':
+				return (string) $notation;
+			
+			##	
+			case 'float': 
+				return (float) $notation;
+				
+			##	
+			case 'class':
+				return NULL;
+			
+			##
+			case 'array': 
+				return NULL;
+			
+			##
+			case 'date': 
+				return schemadb::parse_date($notation);
+			
+			##	
+			case 'datetime': 
+				return schemadb::parse_datetime($notation);
+			
+			##	
+			case 'column': 
+				return NULL;	
+
+			##	
+			default:	
+				trigger_error("No PSEUDOTYPE value for '{$t}' => '{$notation}'",E_USER_ERROR);		
+		}		
+		
 	}
-	
-	/*
-	
-	##
-	private static function sanitize_column_attributes($f,$d,$b) {		
-		$d['Field']		= $f;
-		$d['Key']		= isset($d['Key']) ? $d['Key'] : schemadb::$default['COLUMN_ATTRIBUTE']['Key'];
-		$d['Type']		= isset($d['Type']) ? $d['Type'] : schemadb::$default['COLUMN_ATTRIBUTE']['Type'];
-		$d['Null']		= isset($d['Null']) ? ($d['Null']&&$d['Null']!='NO' ? 'YES' : 'NO') : 'YES';	
-		$d['Before']	= $b;
-		$d['First']		= !$b; 
-		return $d;	
-	}
-	*/
 	
 	## handle creation of related object
 	public static function object_build($d,$a,&$r) {
