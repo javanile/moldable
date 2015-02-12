@@ -25,7 +25,7 @@
 
 
 ## constants
-define('SCHEMADB_VERSION','0.9.6'); 			
+define('SCHEMADB_VERSION','0.9.7'); 			
 define('SCHEMADB_DEBUG',false);
 
 ## schemadb mysql constants for rapid fields creation
@@ -834,6 +834,50 @@ class schedadb_sdbClass_static {
 	}	
 		
 	##
+	public static function encode($data) {
+		
+		##
+		$c = get_called_class();
+		
+		##
+		foreach($data as $f=>$v) {
+			$m = 'encode_'.$f;
+			if (method_exists($c,$m)) {
+				if (is_object($data)) {
+					$data->{$f} = call_user_func($c.'::'.$m,$v);
+				} else {
+					$data[$f] = call_user_func($c.'::'.$m,$v);					
+				}
+			}  				
+		}
+		
+		##
+		return $data;
+	}
+	
+	##
+	public static function decode($data) {
+
+		##
+		$c = get_called_class();
+		
+		##
+		foreach($data as $f=>$v) {
+			$m = 'decode_'.$f;
+			if (method_exists($c,$m)) {
+				if (is_object($data)) {
+					$data->{$f} = call_user_func($c.'::'.$m,$v);
+				} else {
+					$data[$f] = call_user_func($c.'::'.$m,$v);					
+				}
+			}  				
+		}
+		
+		##
+		return $data;
+	}
+	
+	##
 	public static function dump() {
 		$a = static::all();
 		echo '<table border=1>';
@@ -1110,15 +1154,6 @@ class sdbClass extends schemadb_sdbClass {
 	// .
 	// .
 }
-
-
-function schemadb_debug($flag) {
-	global $schemadb_debug;
-	$schemadb_debug = $flag;
-}
-
-
-
 
 /**********************************************************************
 *  Author: Justin Vincent (jv@vip.ie)
