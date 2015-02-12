@@ -622,8 +622,7 @@ class schemadb {
 			return null;
 		} 			
 	}
-	
-	
+		
 	## printout database status/info
 	public static function dump() {
 		
@@ -670,7 +669,6 @@ class schedadb_sdbClass_static {
 		return $p.$t;
 	}
 	
-	
 	## retrieve static class name
 	public static function klass() {
 		
@@ -701,10 +699,16 @@ class schedadb_sdbClass_static {
 		
 	## 
 	public static function build($data=null) {
+		
+		##
 		$o = new static();
+		
+		##
 		if ($data) {
 			$o->fill($data);
-		}	
+		}
+		
+		##
 		return $o;
 	}
 		
@@ -733,18 +737,26 @@ class schedadb_sdbClass_static {
 	
 	##
 	public static function query($query) {
+		
+		##
 		$t = self::table();		
 		
 		## where block for the query
 		$w = array();
+		
+		##
 		if (isset($query['where'])) {
 			$w[] = $query['where'];
 		}
+		
+		##
 		foreach($query as $k=>$v) {
 			if ($k!='sort'&&$k!='where') {
 				$w[] = "{$k}='$v'";
 			}
 		}
+		
+		##
 		$w = count($w)>0 ? 'WHERE '.implode(' AND ',$w) : '';
 		
 		## order by block
@@ -755,10 +767,16 @@ class schedadb_sdbClass_static {
 		
 		## fetch res
 		$r = schemadb::execute('results',$q);
+		
+		##
 		$a = array();
+		
+		##
 		foreach($r as $i=>$o) {
 			$a[$i] = self::build($o);
 		}
+		
+		##
 		return $a;
 	}
 	
@@ -790,8 +808,14 @@ class schedadb_sdbClass_static {
 		
 		##
 		$w = count($w)>0 ? 'WHERE '.implode(' AND ',$w) : '';
+		
+		##
 		$s = "SELECT * FROM {$t} {$w} LIMIT 1";
+		
+		##
 		$r = schemadb::execute('row',$s);		
+		
+		##
 		if ($r) {
 			return self::build($r);
 		}		
@@ -900,27 +924,38 @@ class schedadb_sdbClass_static {
 		echo '</table>';
 	}
 	
-	
 	## delete element by primary key
 	public static function delete($id) {
+		
+		## check a valid id
 		if ($id>0) {
+			
+			## prepare sql query
 			$t = static::table();
 			$k = static::primary_key();
 			$s = "DELETE FROM {$t} WHERE {$k}='{$id}'";
+			
+			## execute query
 			schemadb::execute('query',$s);
 		}		
 	}		
 	
 	## instrospect and retrieve element schema
 	public static function skema() {		
+		
+		##
 		$c = static::klass();		
 		$f = get_class_vars($c);
 		$s = array();
+		
+		##
 		foreach($f as $k=>$v) {
 			if (!in_array($k,self::$proto)) {
 				$s[$k] = $v;
 			}
 		}
+		
+		##
 		return $s;
 	}
 	
@@ -932,32 +967,30 @@ class schedadb_sdbClass_static {
 		$c = static::klass();		
 		
 		## avoid re-update by check the cache
-		if (!isset(static::$kache[$c]['updated'])) {			
-			
-			##
-			$t = static::table();		
-			$s = static::skema();
+		if (isset(static::$kache[$c]['updated'])) {			
+			return;			
+		}	
+		
+		## get table and model schema
+		$t = static::table();		
+		$s = static::skema();
 
-			##
-			if (count($s)>0) {
-				schemadb::update_table($t,$s);
-			}	
-			
-			##
-			static::$kache[$c]['updated'] = time();
-			
-			##
-			if (SCHEMADB_DEBUG) {
-				echo '<pre style="border:1px solid #9F6000;margin:0 0 1px 0;padding:2px;color:#9F6000;background:#FEEFB3;">';
-				echo '<strong>'.str_pad('update',10,' ',STR_PAD_LEFT).'</strong>: '.$c.'</pre>';						
-			}
-			
+		## have a valid schema update db table
+		if (count($s)>0) {
+			schemadb::update_table($t,$s);
+		}	
+
+		## cache last update avoid multiple call
+		static::$kache[$c]['updated'] = time();
+
+		## debug output
+		if (SCHEMADB_DEBUG) {
+			echo '<pre style="border:1px solid #9F6000;margin:0 0 1px 0;padding:2px;color:#9F6000;background:#FEEFB3;">';
+			echo '<strong>'.str_pad('update',10,' ',STR_PAD_LEFT).'</strong>: '.$c.'</pre>';						
 		}
-						
 	}
 		
 }
-
 
 ## self methods of sdbClass
 class schemadb_sdbClass extends schedadb_sdbClass_static {
@@ -1013,7 +1046,7 @@ class schemadb_sdbClass extends schedadb_sdbClass_static {
 		}				
 	}
 	
-	//
+	##
 	public function fill($array) {		
 		foreach($this->fields() as $f) {
 			if (isset($array[$f])) {
@@ -1028,7 +1061,7 @@ class schemadb_sdbClass extends schedadb_sdbClass_static {
 		}	
 	}
 	
-	
+	##
 	public function store_update() {		
 		
 		## update database schema
@@ -1051,53 +1084,69 @@ class schemadb_sdbClass extends schedadb_sdbClass_static {
 		}
 		$s = implode(',',$s);
 
+		##
 		$t = $this->table();
 		$i = $this->{$k};
 		$q = "UPDATE {$t} SET {$s} WHERE {$k}='{$i}'";
 		
+		##
 		schemadb::execute('query',$q);		
 	}
 	
+	##
 	public function store_insert() {		
-		
+	
+		##
 		static::schemadb_update();	
 		
+		##
 		$c = array();
 		$v = array();
 		$k = static::primary_key();
 		
+		##
 		foreach(static::skema() as $f=>$d) {
 			
+			##
 			if ($f==$k) {continue;}
 			
+			##
 			$a = $this->{$f};
 			$t = gettype($a);
 
+			##
 			switch($t) {
 
+				##
 				case 'double':
 					$a = number_format($a,2,'.','');
 					break;
 
+				##
 				case 'array':
 					schemadb::object_build($d,$a,$r);
 					$a = $r;
 					break;
 
 			}
-								
+				
+			##
 			$c[] = $f;			
 			$v[] = "'".$a."'";
 		}
 		
+		##
 		$c = implode(',',$c);
 		$v = implode(',',$v);
 		
+		##
 		$t = static::table();
 		$q = "INSERT INTO {$t} ($c) VALUES ($v)";
-			
+		
+		##
 		schemadb::execute('query',$q);
 		
+		##
 		if ($k) {
 			$i = schemadb::execute('last_id');	
 			$this->{$k} = $i;
@@ -1105,7 +1154,6 @@ class schemadb_sdbClass extends schedadb_sdbClass_static {
 		} else {
 			return true;
 		}
-
 	}
 	
 	// return fields names
