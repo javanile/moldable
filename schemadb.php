@@ -24,7 +24,7 @@
 \*/
 
 ## constants
-define('SCHEMADB_VERSION','0.9.8'); 			
+define('SCHEMADB_VERSION','0.9.9'); 			
 define('SCHEMADB_DEBUG',false);
 
 ## schemadb mysql constants for rapid fields creation
@@ -1093,7 +1093,14 @@ class schemadb_sdbClass extends schedadb_sdbClass_static {
 		$q = "UPDATE {$t} SET {$s} WHERE {$k}='{$i}'";
 		
 		##
-		schemadb::execute('query',$q);		
+		schemadb::execute('query',$q);	
+		
+		##
+		if ($k) {
+			return $this->{$k};
+		} else {
+			return true;
+		}
 	}
 	
 	##
@@ -1109,8 +1116,6 @@ class schemadb_sdbClass extends schedadb_sdbClass_static {
 		
 		##
 		foreach(static::skema() as $f=>$d) {
-			
-			var_dump($f);
 			
 			##
 			if ($f==$k) {continue;}
