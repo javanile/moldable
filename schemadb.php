@@ -24,7 +24,7 @@
 \*/
 
 ## constants
-define('SCHEMADB_VERSION','0.9.9'); 			
+define('SCHEMADB_VERSION','0.9.91'); 			
 define('SCHEMADB_DEBUG',false);
 
 ## schemadb mysql constants for rapid fields creation
@@ -623,6 +623,11 @@ class schemadb {
 		} 			
 	}
 		
+	##
+	public static function escape($value) {
+		return mysql_real_escape_string(stripslashes($value));
+	}
+		
 	## printout database status/info
 	public static function dump() {
 		
@@ -907,6 +912,21 @@ class schedadb_sdbClass_static {
 	}
 	
 	##
+	public static function map($data,$map) {
+		
+		##
+		$o = static::build($data);
+		
+		##
+		foreach($map as $m=>$f) {
+			$o->{$f} = $data[$m];			
+		}
+		
+		##
+		return $o;
+	}
+	
+	##
 	public static function dump() {
 		$a = static::all();
 		echo '<table border=1>';
@@ -943,6 +963,21 @@ class schedadb_sdbClass_static {
 		}		
 	}		
 	
+	## drop table
+	public static function drop() {
+		
+		## prepare sql query
+		$t = static::table();
+		$s = "DROP TABLE IF EXISTS {$t}";
+		$c = static::klass();
+
+		## clear cached
+		unset(static::$kache[$c]['updated']);
+		
+		## execute query
+		schemadb::execute('query',$s);
+	}		
+
 	## instrospect and retrieve element schema
 	public static function skema() {		
 		
@@ -1104,8 +1139,8 @@ class schemadb_sdbClass extends schedadb_sdbClass_static {
 	}
 	
 	##
-	public function store_insert() {		
-	
+	public function store_insert($force=false) {		
+			
 		##
 		static::schemadb_update();	
 		
@@ -1118,7 +1153,7 @@ class schemadb_sdbClass extends schedadb_sdbClass_static {
 		foreach(static::skema() as $f=>$d) {
 			
 			##
-			if ($f==$k) {continue;}
+			if ($f==$k&&!$force) {continue;}
 			
 			##
 			$a = $this->{$f};
@@ -1140,6 +1175,9 @@ class schemadb_sdbClass extends schedadb_sdbClass_static {
 
 			}
 				
+			##
+			$a = schemadb::escape($a);
+			
 			##
 			$c[] = $f;			
 			$v[] = "'".$a."'";
