@@ -1086,6 +1086,8 @@ class schemadb_sdbClass extends schedadb_sdbClass_static {
 	
 	##
 	public function fill($array) {		
+		
+		##
 		foreach($this->fields() as $f) {
 			if (isset($array[$f])) {
 				$this->{$f} = $array[$f];		
