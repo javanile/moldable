@@ -5,13 +5,9 @@ xdebug_disable();
 
 require_once '../../schemadb.php';
 
-$host = 'localhost';	## database host 
-$user = 'root';			## database username
-$pass = 'root';			## database password
-$name = 'db_schemadb';	## database name	
-$pref = 'hh_';		## table prefix
+$conn = "";
 
-schemadb::connect($host,$user,$pass,$name,$pref);
+schemadb::connect($conn,$user,$pass,$pref);
 
 class People extends sdbClass {
 	
@@ -19,6 +15,7 @@ class People extends sdbClass {
 	public $name = "";
 	public $surname = "";
 	public $age = 0;
+	public $ciccio = 0;
 	
 }
 

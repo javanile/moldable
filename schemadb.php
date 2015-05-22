@@ -785,6 +785,25 @@ class schedadb_sdbClass_static {
 		return $a;
 	}
 	
+	##
+	public static function first() {
+
+		##
+		$t = static::table();		
+	
+		##
+		$s = "SELECT * FROM {$t} LIMIT 1";
+		
+		##
+		$r = schemadb::execute('row',$s);		
+		
+		##
+		if ($r) {
+			return static::build($r);
+		}		
+		
+	}
+	
 	## alias 6char of ping
 	public static function exists($query) {
 		return static::ping($query);
@@ -1086,8 +1105,6 @@ class schemadb_sdbClass extends schedadb_sdbClass_static {
 	
 	##
 	public function fill($array) {		
-		
-		##
 		foreach($this->fields() as $f) {
 			if (isset($array[$f])) {
 				$this->{$f} = $array[$f];		

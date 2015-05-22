@@ -1,22 +1,44 @@
 <?php
 ini_set('display_errors',true);
 error_reporting(E_ALL);
-xdebug_disable();
 
-require_once('../../schemadb.php');
 
-$values = array(MYSQL_DATE);
+require_once '../../schemadb.php';
 
-echo '<table border=1 cellpadding=4><tr><th>Annotation</th><th>Value</th><th>Type</th><th>Column</th></tr>';
-foreach($values as $value) {
-	echo '<tr><td>';
-	var_dump($value); 
-	echo '</td><td>';
-	echo schemadb::get_value($value);
-	echo '</td><td><strong>';
-	echo schemadb::get_type($value);
-	echo '</strong></td><td><pre>';
-	var_dump(schemadb::schema_parse_table_column($value));
-	echo '</pre></td></tr>';
+/*_*/
+$type = 'sqlite3';
+$host = __DIR__;
+$name = '1.sq3';
+$user = 'root';
+$pass = 'root';
+$pref = 'test1_';
+/*/
+$type = 'mysql';
+$host = 'm-04.th.seeweb.it';
+$name = 'javanile04844';
+$user = 'javanile04844';
+$pass = 'java07441';
+$pref = 'test1_';
+/*_*/
+
+##
+schemadb::connect(
+	$type,
+	$host,
+	$name,
+	$user,
+	$pass,
+	$pref
+);
+
+##
+class People extends sdbClass {
+	
+	public $pid = MYSQL_PRIMARY_KEY;
+	public $name = "";
+	public $surname = "";
+	public $age = 0;
+	 
 }
-echo '</table>';
+
+People::schemadb_update();
