@@ -24,7 +24,7 @@
 \*/
 
 ## constants
-define('SCHEMADB_VERSION','0.9.91'); 			
+define('SCHEMADB_VERSION','0.9.92'); 			
 define('SCHEMADB_DEBUG',false);
 
 ## schemadb mysql constants for rapid fields creation
@@ -1015,8 +1015,7 @@ class schedadb_sdbClass_static {
 		##
 		return $s;
 	}
-	
-	
+		
 	## update db table based on class schema
 	public static function schemadb_update() {		
 		
@@ -1045,6 +1044,13 @@ class schedadb_sdbClass_static {
 			echo '<pre style="border:1px solid #9F6000;margin:0 0 1px 0;padding:2px;color:#9F6000;background:#FEEFB3;">';
 			echo '<strong>'.str_pad('update',10,' ',STR_PAD_LEFT).'</strong>: '.$c.'</pre>';						
 		}
+	}
+	
+	##
+	public static function connect($conn=null) {
+		
+		##
+		static::schemadb_update();		
 	}
 		
 }
