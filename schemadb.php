@@ -24,7 +24,7 @@
 \*/
 
 ## constants
-define('SCHEMADB_VERSION','0.9.92'); 			
+define('SCHEMADB_VERSION','0.9.96'); 			
 define('SCHEMADB_DEBUG',false);
 
 ## schemadb mysql constants for rapid fields creation
@@ -629,15 +629,41 @@ class schemadb {
 	}
 		
 	## printout database status/info
-	public static function dump() {
+	public static function info() {
 		
 		## describe databse
-		$s = schemadb::desc();
+		$s = static::desc();
 		
 		## printout
 		echo '<pre>';
 		var_dump($s);
 		echo '</pre>';		
+	}
+	
+	## printout database status/info
+	public static function dump() {
+		
+		## describe databse
+		$a = static::all();
+		
+		##
+		if (count($a) > 0) {
+			echo '<table><tr>';			
+			foreach(array_keys($a[0]) as $k) {
+				echo '<th>'.$k.'</th>';
+			}
+			echo '</tr>';
+			foreach($a as $r) {
+				echo '<tr>';
+				foreach($r as $v) {
+					echo '<td>'.$v.'</td>';
+				}
+				echo '</tr>';
+			}			
+			echo '</table>';
+		} else {
+			echo get_called_class().': is empty';
+		}				
 	}
 }
 
@@ -887,6 +913,17 @@ class schedadb_sdbClass_static {
 	}	
 		
 	##
+	public static function import($records) {
+		
+		##
+		foreach($records as $record) {
+			
+			##
+			static::insert($record);			
+		} 		
+	}
+	
+	##
 	public static function encode($data) {
 		
 		##
@@ -967,15 +1004,43 @@ class schedadb_sdbClass_static {
 	}
 	
 	## delete element by primary key
-	public static function delete($id) {
-		
-		## check a valid id
-		if ($id>0) {
+	public static function delete($query) {
+
+		##
+		$t = static::table();
+
+		##
+		if (is_array($query)) {
+			
+			## where block for the query
+			$w = array();
+
+			##
+			if (isset($query['where'])) {
+				$w[] = $query['where'];
+			}
+
+			##
+			foreach($query as $k=>$v) {
+				if ($k!='sort'&&$k!='where') {
+					$w[] = "{$k}='$v'";
+				}
+			}
+			
+			##
+			$w = count($w)>0 ? 'WHERE '.implode(' AND ',$w) : '';
+
+			##
+			$s = "DELETE FROM {$t} {$w}";
+			
+			## execute query
+			schemadb::execute('query',$s);
+						
+		} else if ($query > 0) {
 			
 			## prepare sql query
-			$t = static::table();
 			$k = static::primary_key();
-			$s = "DELETE FROM {$t} WHERE {$k}='{$id}'";
+			$s = "DELETE FROM {$t} WHERE {$k}='{$$query}'";
 			
 			## execute query
 			schemadb::execute('query',$s);
