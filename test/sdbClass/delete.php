@@ -24,6 +24,9 @@ class Item extends sdbClass {
 }
 
 ##
+Item::drop();
+
+##
 Item::import(array(
 	array('name' => 'Francesco', 'age' => 10),
 	array('name' => 'Paolo', 'age' => 12),

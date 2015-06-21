@@ -1040,7 +1040,7 @@ class schedadb_sdbClass_static {
 			
 			## prepare sql query
 			$k = static::primary_key();
-			$s = "DELETE FROM {$t} WHERE {$k}='{$$query}'";
+			$s = "DELETE FROM {$t} WHERE {$k}='{$query}'";
 			
 			## execute query
 			schemadb::execute('query',$s);
