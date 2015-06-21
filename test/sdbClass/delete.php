@@ -28,17 +28,17 @@ Item::drop();
 
 ##
 Item::import(array(
-	array('name' => 'Francesco', 'age' => 10),
-	array('name' => 'Paolo', 'age' => 12),
-	array('name' => 'Piero', 'age' => 10),
-	array('name' => 'Antonio', 'age' => 13),	
+	array('name' => 'Francesco',	'age' => 10),
+	array('name' => 'Paolo',		'age' => 12),
+	array('name' => 'Piero',		'age' => 10),
+	array('name' => 'Antonio',		'age' => 13),	
 ));
 
 ##
 Item::dump();
 
 ##
-Item::delete(array('age'=>10));
+Item::delete(array('age' => 10));
 
 ##
 Item::dump();
