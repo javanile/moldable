@@ -24,7 +24,7 @@
 \*/
 
 ## constants
-define('SCHEMADB_VERSION','0.9.96'); 			
+define('SCHEMADB_VERSION','0.9.97'); 			
 define('SCHEMADB_DEBUG',false);
 
 ## schemadb mysql constants for rapid fields creation
@@ -73,11 +73,18 @@ class schemadb {
 		return schemadb::$db;
 	}
 
+	##
+	public static function connected() {
+		
+		##
+		return static::$db != NULL;		
+	}
+	
 	## 
 	public static function execute($method,$sql=NULL) {
 		
 		## assert the db connection
-		if (schemadb::$db == NULL) {
+		if (schemadb::$db == NULL) {			
 			die('schemadb connection not found');
 		}
 		
@@ -1115,9 +1122,12 @@ class schedadb_sdbClass_static {
 	public static function connect($conn=null) {
 		
 		##
-		static::schemadb_update();		
-	}
+		if (schemadb::connected()) {
 		
+			##
+			static::schemadb_update();		
+		}
+	}		
 }
 
 ## self methods of sdbClass
