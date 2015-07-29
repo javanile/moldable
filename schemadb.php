@@ -623,7 +623,7 @@ class schemadb {
 	
 	## printout database status/info
 	public static function parse_datetime($datetime) {
-		if ($date!='0000-00-00 00:00:00') {
+		if ($datetime!='0000-00-00 00:00:00') {
 			return @date('Y-m-d H:i:s',@strtotime(''.$datetime));
 		} else {
 			return null;
@@ -982,7 +982,7 @@ class schedadb_sdbClass_static {
 		
 		##
 		foreach($map as $m=>$f) {
-			$o->{$f} = $data[$m];			
+			$o->{$f} = isset($data[$m]) ? $data[$m] : '';			
 		}
 		
 		##
