@@ -12,16 +12,19 @@ require_once '../../SchemaDB.php';
 use SourceForge\SchemaDB\SchemaDB;
 
 ##
+use SourceForge\SchemaDB\Storable;
+
+##
 $conn = new SchemaDB(array(
 	'host' => $host,
 	'user' => $user,
 	'pass' => $pass,
 	'name' => $name,
-	'pref' => $pref,
+	'pref' => 'e1_',
 ));
 
 ##
-class Persona extends Storable {			
+class Person extends Storable {			
 	public $field2 = static::PRIMARY_KEY;	
 	public $id14 = 9;
 	public $field1 = 5;

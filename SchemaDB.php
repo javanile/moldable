@@ -804,11 +804,11 @@ class Parse {
 			
 			##
 			case 'date': 
-				return schemadb::parse_date($notation);
+				return static::parse_date($notation);
 			
 			##	
 			case 'datetime': 
-				return schemadb::parse_datetime($notation);
+				return static::parse_datetime($notation);
 			
 			##	
 			case 'column': 

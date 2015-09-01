@@ -3,6 +3,7 @@
 ##
 error_reporting(E_ALL);
 ini_set('display_errors',true);
+if (function_exists('xdebug_disable')) { xdebug_disable(); }
 
 ##
 require_once '../data.php'; 
