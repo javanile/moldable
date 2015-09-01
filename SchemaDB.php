@@ -24,9 +24,28 @@
 \*/
 
 /**
- * main class as namespace container
- *
- *  
+ * Main class prototyping a SchemaDB connection with MySQL database
+ * 
+ * <code>
+ * <?php
+ *		## Create SchemaDB connection
+ *		$conn = new SchemaDB(array(
+ *			'host' => 'localhost',
+ *			'user' => 'root',
+ *			'pass' => 'root',
+ *			'name' => 'db_schemadb',
+ *			'pref' => 'tbl_',
+ *		));
+ * 
+ *		## Create Table on database
+ *		$conn->update(array(
+ *			'Table1' => array(
+ *				'Field1' => 0,
+ *				'Field2' => "",
+ *			)
+ *		))
+ * ?> 
+ * </code>
  */
 class SchemaDB {
 
@@ -229,9 +248,11 @@ class SchemaDB {
 
 	/**
 	 * generate query to align table
-	 * 
-	 * 
-	 * 
+	 *
+	 * @param type $table
+	 * @param type $schema
+	 * @param type $parse
+	 * @return type
 	 */
 	public function diff_table($table,$schema,$parse=true) {	
 
@@ -246,7 +267,7 @@ class SchemaDB {
 		
 		## if table no exists return sql statament for creating this
 		if (!$e) {
-			return array(SchemaDB_Statament::create_table($table, $s));					
+			return array(SchemaDB_Mysql::create_table($table, $s));					
 		}
 
 		## used as output array 
@@ -272,8 +293,8 @@ class SchemaDB {
 		if ($p && count($z) > 0) {
 			$a[$p]['Key'] = '';
 			$a[$p]['Extra'] = '';				
-			$z[] = SchemaDB_Statament::alter_table_drop_primary_key($table);									
-			$z[] = SchemaDB_Statament::alter_table_change($table,$p,$a[$p]);
+			$z[] = SchemaDB_Mysql::alter_table_drop_primary_key($table);									
+			$z[] = SchemaDB_Mysql::alter_table_change($table,$p,$a[$p]);
 		}		
 			
 		##
@@ -287,7 +308,7 @@ class SchemaDB {
 		if (!isset($a[$f])) {
 			
 			##
-			$q = SchemaDB_Statament::alter_table_add($table,$f,$d);
+			$q = SchemaDB_Mysql::alter_table_add($table,$f,$d);
 			
 			## add primary key column
 			if ($d['Key'] == 'PRI') {
@@ -304,7 +325,7 @@ class SchemaDB {
 		else if (static::diff_table_field_attributes($a,$f,$d)) {
 							
 			##
-			$q = SchemaDB_Statament::alter_table_change($table,$f,$d);
+			$q = SchemaDB_Mysql::alter_table_change($table,$f,$d);
 			
 			## alter column that lose primary key
 			if ($a[$f]['Key'] == 'PRI' || $d['Key'] == 'PRI') {
@@ -445,37 +466,46 @@ class SchemaDB {
  * used with mysql query template and place-holder replacing
  * 
  */
-class SchemaDB_Statament {
+class SchemaDB_Mysql {
 	
+	##
 	private static $default = array(
-		
+		'attributes' => array(
+			'type' => 'int(10)',
+		),
 	);
 	
 	##
 	public static function column_definition($d,$o=true) {
-		
-		var_Dump($d);
-		
+			
 		##
 		$t = isset($d['Type']) ? $d['Type'] : static::$default['attributes']['type'];
-		$u = isset($d['Null']) && ($d['Null']=="NO" || !$d["Null"]) ? 'NOT NULL' : 'NULL';
-		$l = isset($d["Default"]) && $d["Default"] ? "DEFAULT '$d[Default]'" : '';
-		$e = isset($d["Extra"]) ? $d["Extra"] : '';
-		$p = isset($d["Key"])&&$d["Key"]=="PRI" ? 'PRIMARY KEY' : '';
-		$q = "{$t} {$u} {$l} {$e} {$p}";
+		$u = isset($d['Null']) && ($d['Null']=="NO" || !$d['Null']) ? 'NOT NULL' : 'NULL';
+		$l = isset($d['Default']) && $d['Default'] ? "DEFAULT '$d[Default]'" : '';
+		$e = isset($d['Extra']) ? $d['Extra'] : '';
+		$p = isset($d['Key']) && $d['Key'] == 'PRI' ? 'PRIMARY KEY' : '';
+		
+		##
+		$q = $t.' '.$u.' '.$l.' '.$e.' '.$p;
 		
 		##
 		if ($o) {
 			$f = isset($d["First"])&&$d["First"] ? 'FIRST' : '';
 			$b = isset($d["Before"])&&$d["Before"] ? 'AFTER '.$d["Before"] : '';
-			$q.= " {$f} {$b}";
+			$q.= ' '.$f.' '.$b;
 		} 
 		
 		##
 		return $q;
 	}
-
-	## retrieve sql to create a table
+	
+	/**
+	 * Prepare sql code to create a table
+	 * 
+	 * @param string $t	The name of table to create 
+	 * @param array	$s Skema of the table contain column definitions		
+	 * @return string Sql code statament of CREATE TABLE
+	 */
 	public static function create_table($t,$s) {
 
 		##
@@ -512,7 +542,7 @@ class SchemaDB_Statament {
 	public static function alter_table_add($t,$f,$d) {
 		
 		##
-		$c = SchemaDB_Statament::column_definition($d);
+		$c = SchemaDB_Mysql::column_definition($d);
 		
 		##
 		$q = "ALTER TABLE {$t} ADD {$f} {$c}";	
@@ -525,7 +555,7 @@ class SchemaDB_Statament {
 	public static function alter_table_change($t,$f,$d) {
 		
 		##
-		$c = SchemaDB_Statament::column_definition($d);
+		$c = SchemaDB_Mysql::column_definition($d);
 		
 		##
 		$q = "ALTER TABLE {$t} CHANGE {$f} {$f} {$c}";	
