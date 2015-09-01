@@ -1,15 +1,20 @@
 <?php
-ini_set('display_errors',true);
+
+##
 error_reporting(E_ALL);
+ini_set('display_errors',true);
 if (function_exists('xdebug_disable')) { xdebug_disable(); }
 
-##
+## 
 require_once '../../SchemaDB.php';
 
+##
+use SourceForge\SchemaDB\SchemaDB;
+
 
 
 ##
-new SchemaDB(array(
+$conn = new SchemaDB(array(
 	'host' => $host,
 	'user' => $user,
 	'pass' => $pass,
@@ -18,8 +23,8 @@ new SchemaDB(array(
 ));
 
 ##
-class Persona extends sdbClass {			
-	public $field2 = sdbClass::PRIMARY_KEY;	
+class Persona extends Storable {			
+	public $field2 = static::PRIMARY_KEY;	
 	public $id14 = 9;
 	public $field1 = 5;
 	public $ciccio = "";

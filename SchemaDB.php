@@ -23,6 +23,10 @@
  *
 \*/
 
+## Thanks to SourceForge.net 
+## for your mission on the web
+namespace SourceForge\SchemaDB;
+
 /**
  * Main class prototyping a SchemaDB connection with MySQL database
  * 
@@ -257,7 +261,7 @@ class SchemaDB {
 	public function diff_table($table,$schema,$parse=true) {	
 
 		## parse input schema if required
-		$s = $parse ? SchemaDB_Parse::schema_parse_table($schema) : $schema;
+		$s = $parse ? Parse::schema_parse_table($schema) : $schema;
 		
 		## sql query to test table exists
 		$q = "SHOW TABLES LIKE '{$table}'";
@@ -267,7 +271,7 @@ class SchemaDB {
 		
 		## if table no exists return sql statament for creating this
 		if (!$e) {
-			return array(SchemaDB_Mysql::create_table($table, $s));					
+			return array(Mysql::create_table($table, $s));					
 		}
 
 		## used as output array 
@@ -293,8 +297,8 @@ class SchemaDB {
 		if ($p && count($z) > 0) {
 			$a[$p]['Key'] = '';
 			$a[$p]['Extra'] = '';				
-			$z[] = SchemaDB_Mysql::alter_table_drop_primary_key($table);									
-			$z[] = SchemaDB_Mysql::alter_table_change($table,$p,$a[$p]);
+			$z[] = Mysql::alter_table_drop_primary_key($table);									
+			$z[] = Mysql::alter_table_change($table,$p,$a[$p]);
 		}		
 			
 		##
@@ -308,7 +312,7 @@ class SchemaDB {
 		if (!isset($a[$f])) {
 			
 			##
-			$q = SchemaDB_Mysql::alter_table_add($table,$f,$d);
+			$q = Mysql::alter_table_add($table,$f,$d);
 			
 			## add primary key column
 			if ($d['Key'] == 'PRI') {
@@ -325,7 +329,7 @@ class SchemaDB {
 		else if (static::diff_table_field_attributes($a,$f,$d)) {
 							
 			##
-			$q = SchemaDB_Mysql::alter_table_change($table,$f,$d);
+			$q = Mysql::alter_table_change($table,$f,$d);
 			
 			## alter column that lose primary key
 			if ($a[$f]['Key'] == 'PRI' || $d['Key'] == 'PRI') {
@@ -466,7 +470,7 @@ class SchemaDB {
  * used with mysql query template and place-holder replacing
  * 
  */
-class SchemaDB_Mysql {
+class Mysql {
 	
 	##
 	private static $default = array(
@@ -542,7 +546,7 @@ class SchemaDB_Mysql {
 	public static function alter_table_add($t,$f,$d) {
 		
 		##
-		$c = SchemaDB_Mysql::column_definition($d);
+		$c = Mysql::column_definition($d);
 		
 		##
 		$q = "ALTER TABLE {$t} ADD {$f} {$c}";	
@@ -555,7 +559,7 @@ class SchemaDB_Mysql {
 	public static function alter_table_change($t,$f,$d) {
 		
 		##
-		$c = SchemaDB_Mysql::column_definition($d);
+		$c = Mysql::column_definition($d);
 		
 		##
 		$q = "ALTER TABLE {$t} CHANGE {$f} {$f} {$c}";	
@@ -581,7 +585,7 @@ class SchemaDB_Mysql {
  * 
  * 
  */
-class SchemaDB_Parse {
+class Parse {
 	
 	##
 	private static $default = array(
@@ -639,7 +643,7 @@ class SchemaDB_Parse {
 		);
 		
 		##
-		$t = SchemaDB_Parse::get_type($value);
+		$t = Parse::get_type($value);
 
 		##
 		switch ($t) {
@@ -762,7 +766,7 @@ class SchemaDB_Parse {
 	public static function get_value($notation) {
 
 		##
-		$t = SchemaDB_Parse::get_type($notation);
+		$t = Parse::get_type($notation);
 
 		##
 		switch($t) {
@@ -878,7 +882,7 @@ class SchemaDB_Parse {
  * 
  *  
  */
-class SchedaDB_sdbClass {
+class Table {
 	
 	## schemadb mysql constants for rapid fields creation
 	const PRIMARY_KEY	= '%|key:primary_key|%';
@@ -1351,7 +1355,7 @@ class SchedaDB_sdbClass {
  * 
  * 
  */
-class SchemaDB_sdbClass_Model extends SchedaDB_sdbClass {
+class Model extends Table {
 	
 	/**
 	 * Load item from DB by primary key
@@ -1464,7 +1468,7 @@ class SchemaDB_sdbClass_Model extends SchedaDB_sdbClass {
  * 
  * 
  */
-class SchemaDB_sdbClass_Object extends schedadb_sdbClass_Model {
+class Object extends Model {
 	
 	## constructor
 	public function __construct() {
@@ -1474,7 +1478,7 @@ class SchemaDB_sdbClass_Object extends schedadb_sdbClass_Model {
 
 		## prepare field values strip schema definitions
 		foreach($this->fields() as $f) {
-			$this->{$f} = SchemaDB_Parse::get_value($this->{$f});
+			$this->{$f} = Parse::get_value($this->{$f});
 		}
 	}
 		
@@ -1532,125 +1536,6 @@ class SchemaDB_sdbClass_Object extends schedadb_sdbClass_Model {
 		}	
 	}
 	
-	##
-	public function store_update() {		
-		
-		## update database schema
-		static::schemadb_update();	
-		
-		##
-		$k = static::primary_key();
-		
-		##
-		$e = array();
-		
-		##
-		foreach($this->fields() as $f) {
-			
-			##
-			if ($f == $k) { continue; }
-			
-			##
-			$v = SchemaDB_Parse::encode($this->{$f});
-						
-			##
-			$e[] = "{$f} = '{$v}'";
-		}
-		
-		##
-		$s = implode(',',$e);
-
-		##
-		$t = static::table();
-		
-		##
-		$i = $this->{$k};
-		
-		##
-		$q = "UPDATE {$t} SET {$s} WHERE {$k}='{$i}'";
-		
-		##
-		static::getSchemaDB()->execute_do_query($q);	
-		
-		##
-		if ($k) {
-			return $this->{$k};
-		} 
-		
-		##
-		else {
-			return true;
-		}
-	}
-	
-	##
-	public function store_insert($force=false) {		
-			
-		##
-		static::schemadb_update();	
-		
-		##
-		$c = array();
-		$v = array();
-		$k = static::primary_key();
-		
-		##
-		foreach(static::skema() as $f=>$d) {
-			
-			##
-			if ($f==$k&&!$force) {continue;}
-			
-			##
-			$a = $this->{$f};
-			$t = gettype($a);
-
-			##
-			switch($t) {
-
-				##
-				case 'double':
-					$a = number_format($a,2,'.','');
-					break;
-
-				##
-				case 'array':
-					schemadb::object_build($d,$a,$r);
-					$a = $r;
-					break;
-
-			}
-				
-			##
-			$a = SchemaDB_Parse::escape($a);
-			
-			##
-			$c[] = $f;			
-			$v[] = "'".$a."'";
-		}
-		
-		##
-		$c = implode(',',$c);
-		$v = implode(',',$v);
-		
-		##
-		$t = static::table();
-		$q = "INSERT INTO {$t} ({$c}) VALUES ({$v})";
-		
-		##
-		static::getSchemaDB()->execute_do_query($q);
-		
-		##
-		if ($k) {
-			$i = static::getSchemaDB()->execute_get_last_id();	
-			$this->{$k} = $i;
-			return $i;
-		} 
-		
-		##
-		else {
-			return true;
-		}
-	}
 	
 	## return fields names
 	public function fields() {		
@@ -1726,8 +1611,128 @@ class SchemaDB_sdbClass_Object extends schedadb_sdbClass_Model {
  * 
  * 
  */
-class sdbClass extends SchemaDB_sdbClass_Object {
-	## only for flatman
+class Storable extends Object {
+	
+	##
+	public function store_update() {		
+		
+		## update database schema
+		static::schemadb_update();	
+		
+		##
+		$k = static::primary_key();
+		
+		##
+		$e = array();
+		
+		##
+		foreach($this->fields() as $f) {
+			
+			##
+			if ($f == $k) { continue; }
+			
+			##
+			$v = Parse::encode($this->{$f});
+						
+			##
+			$e[] = "{$f} = '{$v}'";
+		}
+		
+		##
+		$s = implode(',',$e);
+
+		##
+		$t = static::table();
+		
+		##
+		$i = $this->{$k};
+		
+		##
+		$q = "UPDATE {$t} SET {$s} WHERE {$k}='{$i}'";
+		
+		##
+		static::getSchemaDB()->execute_do_query($q);	
+		
+		##
+		if ($k) {
+			return $this->{$k};
+		} 
+		
+		##
+		else {
+			return true;
+		}
+	}
+	
+	##
+	public function store_insert($force=false) {		
+			
+		##
+		static::schemadb_update();	
+		
+		##
+		$c = array();
+		$v = array();
+		$k = static::primary_key();
+		
+		##
+		foreach(static::skema() as $f=>$d) {
+			
+			##
+			if ($f==$k&&!$force) {continue;}
+			
+			##
+			$a = $this->{$f};
+			$t = gettype($a);
+
+			##
+			switch($t) {
+
+				##
+				case 'double':
+					$a = number_format($a,2,'.','');
+					break;
+
+				##
+				case 'array':
+					schemadb::object_build($d,$a,$r);
+					$a = $r;
+					break;
+
+			}
+				
+			##
+			$a = Parse::escape($a);
+			
+			##
+			$c[] = $f;			
+			$v[] = "'".$a."'";
+		}
+		
+		##
+		$c = implode(',',$c);
+		$v = implode(',',$v);
+		
+		##
+		$t = static::table();
+		$q = "INSERT INTO {$t} ({$c}) VALUES ({$v})";
+		
+		##
+		static::getSchemaDB()->execute_do_query($q);
+		
+		##
+		if ($k) {
+			$i = static::getSchemaDB()->execute_get_last_id();	
+			$this->{$k} = $i;
+			return $i;
+		} 
+		
+		##
+		else {
+			return true;
+		}
+	}
+	
 }
 
 /**
