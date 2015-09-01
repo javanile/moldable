@@ -236,7 +236,7 @@ class SchemaDB {
 	public function diff_table($table,$schema,$parse=true) {	
 
 		## parse input schema if required
-		$s = $parse ? SchemaDB_Parser::schema_parse_table($schema) : $schema;
+		$s = $parse ? SchemaDB_Parse::schema_parse_table($schema) : $schema;
 		
 		## sql query to test table exists
 		$q = "SHOW TABLES LIKE '{$table}'";
@@ -250,13 +250,11 @@ class SchemaDB {
 		}
 
 		## used as output array 
-		$o = array(
-			'a' => array(),
-			'b' => array(),
-			'c' => array(),
-			'd' => array(),
-		);
-			
+		$o = array();
+		
+		## used as output array 
+		$z = array();
+		
 		## describe table get current table description
 		$a = $this->desc_table($table);
 		
@@ -267,51 +265,55 @@ class SchemaDB {
 		foreach($s as $f=>$d) {			
 			
 			##
-			$this->diff_table_field($a,$f,$d,$table,$o); 			
+			$this->diff_table_field($a,$f,$d,$table,$o,$z); 			
 		}
-					
-		if (count($o['a']) > 0) {
-		#	array_unshift($o['a'], SchemaDB_Statament::alter_table_drop_primary_key($table));
-		}
-		
-		echo '<pre>';				
-		var_Dump($o);
-		echo '</pre>';
 		
 		##
-		return array_merge($o['a'],$o['b'],$o['c'],$o['d']);
+		if ($p && count($z) > 0) {
+			$a[$p]['Key'] = '';
+			$a[$p]['Extra'] = '';				
+			$z[] = SchemaDB_Statament::alter_table_drop_primary_key($table);									
+			$z[] = SchemaDB_Statament::alter_table_change($table,$p,$a[$p]);
+		}		
+			
+		##
+		return array_merge(array_reverse($z),$o);
 	}
 
 	##
-	public function diff_table_field($a,$f,$d,$table,&$o) {
+	public function diff_table_field($a,$f,$d,$table,&$o,&$z) {
 				
 		## check if column exists in current db
 		if (!isset($a[$f])) {
 			
+			##
+			$q = SchemaDB_Statament::alter_table_add($table,$f,$d);
+			
 			## add primary key column
 			if ($d['Key'] == 'PRI') {
-				$o['a'][] = SchemaDB_Statament::alter_table_add($table,$f,$d);
+				$z[] = $q;
 			} 
 			
 			## add normal column
 			else {
-				$o['b'][] = SchemaDB_Statament::alter_table_add($table,$f,$d);
+				$o[] = $q;
 			}			
 		} 
 				
 		## check if column need to be updated				
 		else if (static::diff_table_field_attributes($a,$f,$d)) {
-			
-			var_dump($a[$f]);
+							
+			##
+			$q = SchemaDB_Statament::alter_table_change($table,$f,$d);
 			
 			## alter column that lose primary key
-			if ($a[$f]['Key'] == 'PRI') {
-				$o['c'][] = SchemaDB_Statament::alter_table_change($table,$f,$d);						
+			if ($a[$f]['Key'] == 'PRI' || $d['Key'] == 'PRI') {
+				$z[] = $q;						
 			} 
-			
-			##
+									
+			## alter colum than not interact with primary key
 			else {
-				$o['d'][] = SchemaDB_Statament::alter_table_change($table,$f,$d);
+				$o[] = $q;
 			}
 		}		
 	}
@@ -337,10 +339,10 @@ class SchemaDB {
 	public function diff_table_field_primary_key($a) {
 		
 		## loop throd current column property
-		foreach($a as $d) {
+		foreach ($a as $f=>$d) {
 
 			## if have a difference
-			if ($d['Key'] == 'PRI') { return true; }	
+			if ($d['Key'] == 'PRI') { return $f; }	
 		}
 
 		##
@@ -553,7 +555,7 @@ class SchemaDB_Statament {
  * 
  * 
  */
-class SchemaDB_Parser {
+class SchemaDB_Parse {
 	
 	##
 	private static $default = array(
@@ -611,7 +613,7 @@ class SchemaDB_Parser {
 		);
 		
 		##
-		$t = SchemaDB_Parser::get_type($value);
+		$t = SchemaDB_Parse::get_type($value);
 
 		##
 		switch ($t) {
@@ -694,7 +696,7 @@ class SchemaDB_Parser {
 						case 'key': return $d[2];
 						case 'schema': return 'schema';
 					}					
-				} else if (schemadb::get_class($value)) {
+				} else if (static::get_class($value)) {
 					return 'class';					
 				} else if (preg_match('/[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9] [0-9][0-9]:[0-9][0-9]:[0-9][0-9]/',$value)) {				
 					return 'datetime';													
@@ -734,7 +736,7 @@ class SchemaDB_Parser {
 	public static function get_value($notation) {
 
 		##
-		$t = SchemaDB_Parser::get_type($notation);
+		$t = SchemaDB_Parse::get_type($notation);
 
 		##
 		switch($t) {
@@ -1203,16 +1205,29 @@ class SchedaDB_sdbClass {
 	
 	##
 	public static function dump() {
+
+		##
 		$a = static::all();
-		echo '<table border=1>';
+		
+		##
+		$t = static::table();
+
+		##
+		echo '<table border="1" style="text-align:center"><tr><th colspan="8">'.$t.'</td></th>';
+		
+		##
+		$r = reset($a);
+		
+		##
+		echo '<tr>';
+		foreach($r as $f=>$v) {
+			echo '<th>'.$f.'</th>';
+		}				
+		echo '</tr>';
+		
+		##
 		foreach($a as $i=>$r) {
-			if ($i==0) {
-				echo '<tr>';
-				foreach($r as $f=>$v) {
-					echo '<th>'.$f.'</th>';
-				}				
-				echo '</tr>';
-			}
+			
 			echo '<tr>';
 			foreach($r as $f=>$v) {
 				echo '<td>'.$v.'</td>';
@@ -1413,7 +1428,7 @@ class SchemaDB_sdbClass_Object extends schedadb_sdbClass {
 
 		## prepare field values strip schema definitions
 		foreach($this->fields() as $f) {
-			$this->{$f} = SchemaDB_Parser::get_value($this->{$f});
+			$this->{$f} = SchemaDB_Parse::get_value($this->{$f});
 		}
 	}
 		
@@ -1490,7 +1505,7 @@ class SchemaDB_sdbClass_Object extends schedadb_sdbClass {
 			if ($f == $k) { continue; }
 			
 			##
-			$v = SchemaDB_Parser::encode($this->{$f});
+			$v = SchemaDB_Parse::encode($this->{$f});
 						
 			##
 			$e[] = "{$f} = '{$v}'";
@@ -1560,7 +1575,7 @@ class SchemaDB_sdbClass_Object extends schedadb_sdbClass {
 			}
 				
 			##
-			$a = SchemaDB_Parser::escape($a);
+			$a = SchemaDB_Parse::escape($a);
 			
 			##
 			$c[] = $f;			
