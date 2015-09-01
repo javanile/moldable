@@ -1026,7 +1026,7 @@ class Table {
 		$q = "SELECT * FROM {$t} {$w} {$o}";				
 		
 		## fetch res
-		$r = schemadb::execute('results',$q);
+		$r = static::getSchemaDB()->execute_get_results($q);
 		
 		##
 		$a = array();
@@ -1212,23 +1212,26 @@ class Table {
 	}
 	
 	##
-	public static function dump() {
+	public static function dump($list=null) {
 
 		##
-		$a = static::all();
+		$a = $list ? $list : static::all();
 		
 		##
 		$t = static::table();
 
 		##
-		echo '<table border="1" style="text-align:center"><tr><th colspan="8">'.$t.'</td></th>';
+		$r = reset($a);
+			
+		##
+		$n = count((array)$r);
 		
 		##
-		$r = reset($a);
-		
+		echo '<table border="1" style="text-align:center"><tr><th colspan="'.$n.'">'.$t.'</th></tr>';
+				
 		##
 		echo '<tr>';
-		foreach($r as $f=>$v) {
+		foreach($a[$r] as $f=>$v) {
 			echo '<th>'.$f.'</th>';
 		}				
 		echo '</tr>';
