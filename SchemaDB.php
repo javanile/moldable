@@ -250,71 +250,68 @@ class SchemaDB {
 		}
 
 		## used as output array 
-		$o = array();
-				
-		##
-		$z = array();
-
-		## insert 
-		$p = false;
-				
+		$o = array(
+			'a' => array(),
+			'b' => array(),
+			'c' => array(),
+			'd' => array(),
+		);
+			
 		## describe table get current table description
 		$a = $this->desc_table($table);
-			
-		#echo '<pre>';
-		#var_dump($a);
-		#echo '</pre>';
+		
+		##
+		$p = $this->diff_table_field_primary_key($a);
 		
 		## test field definition
 		foreach($s as $f=>$d) {			
 			
 			##
-			$this->diff_table_field($a,$f,$d,$table,$o,$z); 
-			
-			##
-			$p = $this->diff_table_field_primary_key($a,$f,$d) ? true : $p;
+			$this->diff_table_field($a,$f,$d,$table,$o); 			
+		}
+					
+		if (count($o['a']) > 0) {
+		#	array_unshift($o['a'], SchemaDB_Statament::alter_table_drop_primary_key($table));
 		}
 		
-		##
-		if ($p) {
-			array_unshift($z,SchemaDB_Statament::alter_table_drop_primary_key($table));
-		} 
+		echo '<pre>';				
+		var_Dump($o);
+		echo '</pre>';
 		
 		##
-		return array_merge($z,$o);
+		return array_merge($o['a'],$o['b'],$o['c'],$o['d']);
 	}
 
 	##
-	public function diff_table_field($a,$f,$d,$table,&$o,&$z) {
+	public function diff_table_field($a,$f,$d,$table,&$o) {
 				
 		## check if column exists in current db
 		if (!isset($a[$f])) {
 			
-			## add column 
+			## add primary key column
 			if ($d['Key'] == 'PRI') {
-				array_unshift($z, SchemaDB_Statament::alter_table_add($table,$f,$d));
+				$o['a'][] = SchemaDB_Statament::alter_table_add($table,$f,$d);
 			} 
 			
-			##
+			## add normal column
 			else {
-				$o[] = SchemaDB_Statament::alter_table_add($table,$f,$d);
-			}
-			
-			##
-			return;
-		}
+				$o['b'][] = SchemaDB_Statament::alter_table_add($table,$f,$d);
+			}			
+		} 
 				
-		## update column				
-		if (static::diff_table_field_attributes($a,$f,$d)) {
+		## check if column need to be updated				
+		else if (static::diff_table_field_attributes($a,$f,$d)) {
 			
-			##
-			if ($d['Key'] == 'PRI') {
-				array_unshift($z, SchemaDB_Statament::alter_table_change($table,$f,$d));						
+			var_dump($a[$f]);
+			
+			## alter column that lose primary key
+			if ($a[$f]['Key'] == 'PRI') {
+				$o['c'][] = SchemaDB_Statament::alter_table_change($table,$f,$d);						
 			} 
 			
 			##
 			else {
-				$o[] = SchemaDB_Statament::alter_table_change($table,$f,$d);
+				$o['d'][] = SchemaDB_Statament::alter_table_change($table,$f,$d);
 			}
 		}		
 	}
@@ -337,13 +334,13 @@ class SchemaDB {
 	}
 	
 	##
-	public function diff_table_field_primary_key($a,$f,$d) {
+	public function diff_table_field_primary_key($a) {
 		
 		## loop throd current column property
-		foreach($a[$f] as $k=>$v) {
+		foreach($a as $d) {
 
 			## if have a difference
-			if ($k == 'Key' && $v == 'PRI' && $d[$k] !== $v) { return true; }	
+			if ($d['Key'] == 'PRI') { return true; }	
 		}
 
 		##
@@ -517,7 +514,7 @@ class SchemaDB_Statament {
 	public static function alter_table_add($t,$f,$d) {
 		
 		##
-		$c = schemadb::column_definition($d);
+		$c = SchemaDB_Statament::column_definition($d);
 		
 		##
 		$q = "ALTER TABLE {$t} ADD {$f} {$c}";	
@@ -1224,6 +1221,42 @@ class SchedaDB_sdbClass {
 		}
 		echo '</table>';
 	}
+	
+	##
+	public static function desc() {
+			
+		##
+		$t = static::table();
+
+		##
+		$s = static::getSchemaDB()->desc_table($t);
+		
+		##
+		echo '<table border="1" style="text-align:center"><tr><th colspan="8">'.$t.'</td></th>';
+			
+		##
+		$d = reset($s);
+		
+		##
+		echo '<tr>';				
+		foreach($d as $a=>$v) { 
+			echo '<th>'.$a.'</th>';					
+		}				
+		echo '</tr>';						
+			
+		##
+		foreach($s as $d) {				
+			echo '<tr>';				
+			foreach($d as $a=>$v) { 
+				echo '<td>'.$v.'</td>'; 				
+			}
+			echo '</tr>';											
+		}
+			
+		##
+		echo '</table>';			
+	}
+	
 	
 	## delete element by primary key
 	public static function delete($query) {

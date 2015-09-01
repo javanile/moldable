@@ -22,11 +22,14 @@ new SchemaDB(array(
 	'pref' => $pref,
 ));
 
+
 ##
 class Persona extends sdbClass {			
-	public $field1 = 1;
-	public $field2 = sdbClass::PRIMARY_KEY;	
+	public $id1 = sdbClass::PRIMARY_KEY;
+	public $field1 = 5;
+	public $field2 = 4;	
 }
+
 
 #Persona::drop('confirm');
 
@@ -37,6 +40,9 @@ class Persona extends sdbClass {
 //))->store();
 
 ##
-Persona::dump();
+Persona::desc();
+
+##
+#Persona::dump();
 
 
