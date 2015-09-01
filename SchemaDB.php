@@ -387,10 +387,18 @@ class SchemaDB {
 		
 		##
 		$q = "DESC {$table}";
+		
+		##
 		$i = $this->execute_get_results($q);
+		
+		##
 		$a = array();		
+		
+		##
 		$n = 0;
-		$b = false;
+		
+		##
+		$b = 0;
 		
 		##
 		foreach($i as $j) {		
@@ -405,18 +413,6 @@ class SchemaDB {
 		return $a;
 	}
 			
-	## printout database status/info
-	public function info() {
-		
-		## describe databse
-		$s = static::desc();
-		
-		## printout
-		echo '<pre>';
-		var_dump($s);
-		echo '</pre>';		
-	}
-	
 	## printout database status/info
 	public function dump() {
 		
@@ -912,32 +908,7 @@ class SchedaDB_sdbClass {
 		##
 		return isset(static::$SchemaDB) ? static::$SchemaDB : SchemaDB::getDefault();
 	}
-		
-	## load element by primary key
-	public static function load($id) {
-		
-		##
-		$i = (int) $id;
-		
-		##
-		$t = static::table();
-		
-		##
-		$k = static::primary_key();		
-		
-		##
-		$q = "SELECT * FROM {$t} WHERE {$k}='{$i}' LIMIT 1";		
-		
-		##
-		$r = static::getSchemaDB()->execute_get_row($q);
-		
-		##
-		$o = static::make($r);
-		
-		##
-		return $o;
-	}
-	
+			
 	## 
 	public static function make($data=null) {
 		
@@ -1271,82 +1242,7 @@ class SchedaDB_sdbClass {
 		##
 		echo '</table>';			
 	}
-		
-	## delete element by primary key
-	public static function delete($query) {
-
-		##
-		$t = static::table();
-
-		##
-		if (is_array($query)) {
-			
-			## where block for the query
-			$w = array();
-
-			##
-			if (isset($query['where'])) {
-				$w[] = $query['where'];
-			}
-
-			##
-			foreach($query as $k=>$v) {
-				if ($k!='sort'&&$k!='where') {
-					$w[] = "{$k}='$v'";
-				}
-			}
-			
-			##
-			$w = count($w)>0 ? 'WHERE '.implode(' AND ',$w) : '';
-
-			##
-			$s = "DELETE FROM {$t} {$w}";
-			
-			## execute query
-			static::getSchemaDB()->execute_do_query($s);						
-		} 
-		
-		##
-		else if ($query > 0) {
-			
-			## prepare sql query
-			$k = static::primary_key();
-			
-			##
-			$i = (int) $query;
-			
-			## 
-			$q = "DELETE FROM {$t} WHERE {$k}='{$i}' LIMIT 1";
-			
-			## execute query
-			static::getSchemaDB()->execute_do_query($q);	
-		}		
-	}		
 	
-	## drop table
-	public static function drop($confirm=null) {
-		
-		##
-		if ($confirm !== 'confirm') {
-			return;
-		}
-		
-		## prepare sql query
-		$t = static::table();
-		
-		##
-		$q = "DROP TABLE IF EXISTS {$t}";
-		
-		##
-		$c = static::getClass();
-
-		## clear cached
-		unset(static::$internal['cache'][$c]['updated']);
-		
-		## execute query
-		static::getSchemaDB()->execute_do_query($q);
-	}		
-
 	## instrospect and retrieve element schema
 	public static function skema() {		
 		
@@ -1420,11 +1316,125 @@ class SchedaDB_sdbClass {
 }
 
 /**
+ * 
+ * 
+ * 
+ * 
+ */
+class SchemaDB_sdbClass_Model extends SchedaDB_sdbClass {
+	
+	/**
+	 * Load item from DB by primary key
+	 * 
+	 * @param type $id
+	 * @return type
+	 */
+	public static function load($id) {
+		
+		##
+		$i = (int) $id;
+		
+		##
+		$t = static::table();
+		
+		##
+		$k = static::primary_key();		
+		
+		##
+		$q = "SELECT * FROM {$t} WHERE {$k}='{$i}' LIMIT 1";		
+		
+		##
+		$r = static::getSchemaDB()->execute_get_row($q);
+		
+		##
+		$o = static::make($r);
+		
+		##
+		return $o;
+	}
+	
+	## delete element by primary key or query
+	public static function delete($query) {
+
+		##
+		$t = static::table();
+
+		##
+		if (is_array($query)) {
+			
+			## where block for the query
+			$h = array();
+
+			##
+			if (isset($query['where'])) {
+				$h[] = $query['where'];
+			}
+
+			##
+			foreach($query as $k=>$v) {
+				if ($k!='sort'&&$k!='where') {
+					$h[] = "{$k}='{$v}'";
+				}
+			}
+			
+			##
+			$w = count($h)>0 ? 'WHERE '.implode(' AND ',$h) : '';
+
+			##
+			$s = "DELETE FROM {$t} {$w}";
+			
+			## execute query
+			static::getSchemaDB()->execute_do_query($s);						
+		} 
+		
+		##
+		else if ($query > 0) {
+			
+			## prepare sql query
+			$k = static::primary_key();
+			
+			##
+			$i = (int) $query;
+			
+			## 
+			$q = "DELETE FROM {$t} WHERE {$k}='{$i}' LIMIT 1";
+			
+			## execute query
+			static::getSchemaDB()->execute_do_query($q);	
+		}		
+	}		
+	
+	## drop table
+	public static function drop($confirm=null) {
+		
+		##
+		if ($confirm !== 'confirm') {
+			return;
+		}
+		
+		## prepare sql query
+		$t = static::table();
+		
+		##
+		$q = "DROP TABLE IF EXISTS {$t}";
+		
+		##
+		$c = static::getClass();
+
+		## clear cached
+		unset(static::$internal['cache'][$c]['updated']);
+		
+		## execute query
+		static::getSchemaDB()->execute_do_query($q);
+	}			
+}
+
+/**
  * self methods of sdbClass
  * 
  * 
  */
-class SchemaDB_sdbClass_Object extends schedadb_sdbClass {
+class SchemaDB_sdbClass_Object extends schedadb_sdbClass_Model {
 	
 	## constructor
 	public function __construct() {
