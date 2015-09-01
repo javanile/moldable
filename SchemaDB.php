@@ -59,7 +59,7 @@ class SchemaDB {
 
 	## constants
 	const VERSION	= '0.3.0'; 			
-	const DEBUG		= 1;
+	const DEBUG		= 0;
 
 	## 
 	const DO_QUERY		= 0; 
@@ -1221,31 +1221,32 @@ class Table {
 		$t = static::table();
 
 		##
-		$r = reset($a);
+		$r = key($a);
 			
 		##
-		$n = count((array)$r);
+		$n = count($a) > 0 ? count((array) $a[$r]) : 1;
 		
 		##
-		echo '<table border="1" style="text-align:center"><tr><th colspan="'.$n.'">'.$t.'</th></tr>';
+		echo '<pre><table border="1" style="text-align:center"><thead><tr><th colspan="'.$n.'">'.$t.'</th></tr>';
 				
 		##
 		echo '<tr>';
 		foreach($a[$r] as $f=>$v) {
 			echo '<th>'.$f.'</th>';
 		}				
-		echo '</tr>';
-		
+		echo '</tr></thead><tbody>';
+				
 		##
-		foreach($a as $i=>$r) {
-			
+		foreach($a as $i=>$r) {			
 			echo '<tr>';
 			foreach($r as $f=>$v) {
 				echo '<td>'.$v.'</td>';
 			}				
 			echo '</tr>';
 		}
-		echo '</table>';
+		
+		##
+		echo '</tbody></table></pre>';
 	}
 	
 	##
@@ -1903,7 +1904,7 @@ class schemadb_ezSQLcore
 	*  Get one row from the DB - see docs for more detail
 	*/
 
-	function get_row($query=null,$output=Record,$y=0)
+	function get_row($query=null,$output=OBJECT,$y=0)
 	{
 
 		// Log how the function was called
@@ -1916,7 +1917,7 @@ class schemadb_ezSQLcore
 		}
 
 		// If the output is an object then return object using the row offset..
-		if ( $output == Record )
+		if ( $output == OBJECT )
 		{
 			return $this->last_result[$y]?$this->last_result[$y]:null;
 		}
@@ -1968,7 +1969,7 @@ class schemadb_ezSQLcore
 	*  Return the the query as a result set - see docs for more details
 	*/
 
-	function get_results($query=null, $output = Record)
+	function get_results($query=null, $output = OBJECT)
 	{
 
 		// Log how the function was called
@@ -1981,7 +1982,7 @@ class schemadb_ezSQLcore
 		}
 
 		// Send back array of objects. Each row is an object
-		if ( $output == Record )
+		if ( $output == OBJECT )
 		{
 			return $this->last_result;
 		}

@@ -11,8 +11,6 @@ require_once '../../SchemaDB.php';
 ##
 use SourceForge\SchemaDB\SchemaDB;
 
-
-
 ##
 $conn = new SchemaDB(array(
 	'host' => $host,
