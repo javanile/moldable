@@ -11,6 +11,12 @@ require_once '../data.php';
 require_once '../../SchemaDB.php';
 
 ##
+use SourceForge\SchemaDB\SchemaDB;
+
+##
+use SourceForge\SchemaDB\Storable;
+
+##
 new SchemaDB(array(
 	'host' => $host,
 	'user' => $user,
@@ -20,34 +26,34 @@ new SchemaDB(array(
 ));
 
 ##
-class Item extends sdbClass {
+class Person extends Storable {
 	
-	public $id = sdbClass::PRIMARY_KEY;
+	##
+	public $id = static::PRIMARY_KEY;
 	
+	##
 	public $name = "";
 	
+	##
 	public $age = 0;	
 }
 
-##
-Item::drop();
+## remove Person table and complete items list
+Person::drop('confirm');
 
-##
-Item::import(array(
+## import Persons from array-of-array
+Person::import(array(
 	array('name' => 'Francesco',	'age' => 10),
 	array('name' => 'Paolo',		'age' => 12),
 	array('name' => 'Piero',		'age' => 10),
 	array('name' => 'Antonio',		'age' => 13),	
 ));
 
-##
-Item::dump();
+## printout table record before delete
+Person::dump();
 
-##
-Item::delete(array('age' => 10));
+## delete Person with 10 years old 
+Person::delete(array('age' => 10));
 
-##
-Item::dump();
-
-
-
+## printout table record after delete
+Person::dump();

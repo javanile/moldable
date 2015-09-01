@@ -23,8 +23,12 @@
  *
 \*/
 
-## Thanks to SourceForge.net 
-## for your mission on the web
+/*\
+ * 
+ * Thanks to SourceForge.net 
+ * for your mission on the web
+ * 
+\*/
 namespace SourceForge\SchemaDB;
 
 /**
@@ -101,7 +105,7 @@ class SchemaDB {
 	private function &connect($host,$username,$password,$database,$prefix) {
 							
 		## 
-		$db = new schemadb_ezSQL_mysql($username,$password,$database,$host);
+		$db = new SchemaDB_ezSQL_mysql($username,$password,$database,$host);
 		
 		##
 		$db->prefix = $prefix;
@@ -466,9 +470,8 @@ class SchemaDB {
 }
 
 /**
- * a collection of mysql stataments builder
+ * A collection of MySQL stataments builder
  * used with mysql query template and place-holder replacing
- * 
  */
 class Mysql {
 	
@@ -1468,7 +1471,7 @@ class Model extends Table {
  * 
  * 
  */
-class Object extends Model {
+class Record extends Model {
 	
 	## constructor
 	public function __construct() {
@@ -1611,7 +1614,7 @@ class Object extends Model {
  * 
  * 
  */
-class Storable extends Object {
+class Storable extends Record {
 	
 	##
 	public function store_update() {		
@@ -1897,7 +1900,7 @@ class schemadb_ezSQLcore
 	*  Get one row from the DB - see docs for more detail
 	*/
 
-	function get_row($query=null,$output=OBJECT,$y=0)
+	function get_row($query=null,$output=Record,$y=0)
 	{
 
 		// Log how the function was called
@@ -1910,7 +1913,7 @@ class schemadb_ezSQLcore
 		}
 
 		// If the output is an object then return object using the row offset..
-		if ( $output == OBJECT )
+		if ( $output == Record )
 		{
 			return $this->last_result[$y]?$this->last_result[$y]:null;
 		}
@@ -1962,7 +1965,7 @@ class schemadb_ezSQLcore
 	*  Return the the query as a result set - see docs for more details
 	*/
 
-	function get_results($query=null, $output = OBJECT)
+	function get_results($query=null, $output = Record)
 	{
 
 		// Log how the function was called
@@ -1975,7 +1978,7 @@ class schemadb_ezSQLcore
 		}
 
 		// Send back array of objects. Each row is an object
-		if ( $output == OBJECT )
+		if ( $output == Record )
 		{
 			return $this->last_result;
 		}
@@ -2396,7 +2399,7 @@ $ezsql_mysql_str = array
 */
 
 
-class schemadb_ezSQL_mysql extends schemadb_ezSQLcore
+class SchemaDB_ezSQL_mysql extends schemadb_ezSQLcore
 {
 
 	var $dbuser = false;
@@ -2411,7 +2414,7 @@ class schemadb_ezSQL_mysql extends schemadb_ezSQLcore
 	*  same time as initialising the ezSQL_mysql class
 	*/
 
-	function schemadb_ezSQL_mysql($dbuser='', $dbpassword='', $dbname='', $dbhost='localhost', $encoding='')
+	public function __construct($dbuser='', $dbpassword='', $dbname='', $dbhost='localhost', $encoding='')
 	{
 		$this->dbuser = $dbuser;
 		$this->dbpassword = $dbpassword;
@@ -2440,6 +2443,8 @@ class schemadb_ezSQL_mysql extends schemadb_ezSQLcore
 
 	function connect($dbuser='', $dbpassword='', $dbhost='localhost')
 	{
+		
+		
 		global $ezsql_mysql_str; $return_val = false;
 
 		// Keep track of how long the DB takes to connect

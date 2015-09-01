@@ -5,19 +5,16 @@ error_reporting(E_ALL);
 ini_set('display_errors',true);
 
 ##
+require_once '../data.php';
+
+##
 require_once '../../SchemaDB.php';
 
 ##
 use SourceForge\SchemaDB\SchemaDB;
 
 ##
-use SourceForge\SchemaDB\Storable;
-
-##
-require_once '../data.php';
-
-##
-$sdb = new SchemaDB(array(
+$conn = new SchemaDB(array(
 	'host' => $host,
 	'user' => $user,
 	'pass' => $pass,
@@ -26,5 +23,5 @@ $sdb = new SchemaDB(array(
 ));
 
 ##
-$sdb->dump();
+$conn->dump();
 
