@@ -417,7 +417,7 @@ class SchemaDB {
 	public function dump() {
 		
 		## describe databse
-		$a = static::all();
+		$a = $this->desc();
 		
 		##
 		if (count($a) > 0) {
