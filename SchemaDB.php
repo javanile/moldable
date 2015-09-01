@@ -997,47 +997,55 @@ class Table {
 	
 	##
 	public static function query($query) {
+				
+		##
+		$x = $query;
 		
 		##
 		$t = self::table();		
 		
 		## where block for the query
-		$w = array();
+		$h = array();
 		
 		##
-		if (isset($query['where'])) {
-			$w[] = $query['where'];
+		if (isset($x['where'])) {
+			$h[] = "(".$x['where'].")";
 		}
 		
 		##
-		foreach($query as $k=>$v) {
-			if ($k!='sort'&&$k!='where') {
-				$w[] = "{$k}='$v'";
+		foreach($x as $k=>$v) {
+			
+			##
+			if (in_array($k,array('order','where','limit'))) {
+				continue;
 			}
+			
+			##
+			$h[] = "{$k} = '{$v}'";			
 		}
 		
 		##
-		$w = count($w)>0 ? 'WHERE '.implode(' AND ',$w) : '';
+		$w = count($h) > 0 ? 'WHERE '.implode(' AND ',$h) : '';
 		
 		## order by block
-		$o = isset($query['sort']) ? 'ORDER BY '.$query['sort'] : '';		
+		$o = isset($x['order']) ? 'ORDER BY '.$x['order'] : '';		
+		
+		## order by block
+		$l = isset($x['limit']) ? 'LIMIT '.$x['limit'] : '';		
 		
 		## build query
-		$q = "SELECT * FROM {$t} {$w} {$o}";				
+		$q = "SELECT * FROM {$t} {$w} {$o} {$l}";				
 		
 		## fetch res
 		$r = static::getSchemaDB()->execute_get_results($q);
-		
+				
 		##
-		$a = array();
-		
-		##
-		foreach($r as $i=>$o) {
-			$a[$i] = self::build($o);
+		foreach($r as &$i) {
+			$i = static::make($i);
 		}
 		
 		##
-		return $a;
+		return $r;
 	}
 	
 	##

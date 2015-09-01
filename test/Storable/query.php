@@ -48,6 +48,7 @@ Person::drop('confirm');
 Person::import(array(
 	array('name' => 'Francesco',	'age' => 10),
 	array('name' => 'Paolo',		'age' => 12),
+	array('name' => 'Matteo',		'age' => 15),
 	array('name' => 'Piero',		'age' => 10),
 	array('name' => 'Antonio',		'age' => 13),	
 	array('name' => 'Carlo',		'age' => 9),	
@@ -58,7 +59,9 @@ Person::dump();
 
 ##
 $list = Person::query(array(
-	'where' => "age>11"
+	'where' => "age > 11",
+	'order' => "age ASC",
+	'limit' => "2",
 ));
 
 ##
