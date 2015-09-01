@@ -1,26 +1,32 @@
 <?php
-ini_set('display_errors',true);
+
+##
 error_reporting(E_ALL);
+ini_set('display_errors',true);
 
-require_once '../../schemadb.php';
+##
+require_once '../data.php'; 
 
-$host = 'm-04.th.seeweb.it';
-$name = 'javanile04844';
-$user = 'javanile04844';
-$pass = 'java07441';
-$pref = 'sdb_delete_';			## table prefix
+##
+require_once '../../SchemaDB.php';
 
-schemadb::connect($host,$user,$pass,$name,$pref);
+##
+new SchemaDB(array(
+	'host' => $host,
+	'user' => $user,
+	'pass' => $pass,
+	'name' => $name,
+	'pref' => $pref,
+));
 
 ##
 class Item extends sdbClass {
 	
-	public $id = MYSQL_PRIMARY_KEY;
+	public $id = sdbClass::PRIMARY_KEY;
 	
 	public $name = "";
 	
-	public $age = 0;
-	
+	public $age = 0;	
 }
 
 ##

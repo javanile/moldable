@@ -1192,7 +1192,7 @@ class SchedaDB_sdbClass {
 	public static function map($data,$map) {
 		
 		##
-		$o = static::build($data);
+		$o = static::make($data);
 		
 		##
 		foreach($map as $m=>$f) {
@@ -1271,8 +1271,7 @@ class SchedaDB_sdbClass {
 		##
 		echo '</table>';			
 	}
-	
-	
+		
 	## delete element by primary key
 	public static function delete($query) {
 
@@ -1304,21 +1303,28 @@ class SchedaDB_sdbClass {
 			$s = "DELETE FROM {$t} {$w}";
 			
 			## execute query
-			schemadb::execute('query',$s);
-						
-		} else if ($query > 0) {
+			static::getSchemaDB()->execute_do_query($s);						
+		} 
+		
+		##
+		else if ($query > 0) {
 			
 			## prepare sql query
 			$k = static::primary_key();
-			$s = "DELETE FROM {$t} WHERE {$k}='{$query}'";
+			
+			##
+			$i = (int) $query;
+			
+			## 
+			$q = "DELETE FROM {$t} WHERE {$k}='{$i}' LIMIT 1";
 			
 			## execute query
-			schemadb::execute('query',$s);
+			static::getSchemaDB()->execute_do_query($q);	
 		}		
 	}		
 	
 	## drop table
-	public static function drop($confirm) {
+	public static function drop($confirm=null) {
 		
 		##
 		if ($confirm !== 'confirm') {
