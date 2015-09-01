@@ -1,31 +1,42 @@
 <?php
 ini_set('display_errors',true);
 error_reporting(E_ALL);
-xdebug_disable();
+if (function_exists('xdebug_disable')) { xdebug_disable(); }
 
-require_once '../schemadb.php';
+##
+require_once '../../SchemaDB.php';
 
+##
 $host = 'm-04.th.seeweb.it';	## database host 
-$user = 'javanile93298';		## database username
-$pass = 'java90898';			## database password
-$name = 'javanile93298';		## database name	
+$user = 'javanile02517';		## database username
+$pass = 'java17481';			## database password
+$name = 'javanile02517';		## database name	
 $pref = 'd1_';					## table prefix
 
-schemadb::connect($host,$user,$pass,$name,$pref);
+##
+new SchemaDB(array(
+	'host' => $host,
+	'user' => $user,
+	'pass' => $pass,
+	'name' => $name,
+	'pref' => $pref,
+));
 
-schemadb::apply(array(
-	
-	'table1' => array(
-		'id'		=> MYSQL_PRIMARY_KEY,
-		'valore'	=> true,
-		'number'	=> 10,
-		'title'		=> MYSQL_VARCHAR,	
-		'title2'	=> '%|varchar(200)|%',
-		'cap'		=> array(1,2,3),
-		'rela'		=> '<<People>>',
-	),
+##
+class Persona extends sdbClass {			
+	public $field1 = 1;
+	public $field2 = sdbClass::PRIMARY_KEY;	
+}
 
-)); 
- 
-schemadb::dump();
+#Persona::drop('confirm');
+
+##
+//Persona::make(array(
+//	'field1' => 1,
+//	'field2' => 2
+//))->store();
+
+##
+Persona::dump();
+
 
