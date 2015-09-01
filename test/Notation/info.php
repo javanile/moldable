@@ -13,6 +13,9 @@ use SourceForge\SchemaDB\Storable;
 ##
 $values = array(
 	Storable::DATE,
+	Storable::TEXT,
+	array(0,1,2),
+	"",
 );
 
 ##
@@ -22,9 +25,9 @@ echo '<table border=1 cellpadding=4><tr><th>Notation</th><th>Value</th><th>Type<
 foreach($values as $value) {
 	echo '<tr><td>';
 	var_dump($value); 
-	echo '</td><td>';
+	echo '</td><td align="center">';
 	echo SourceForge\SchemaDB\Parse::get_value($value);
-	echo '</td><td><strong>';
+	echo '</td><td align="center"><strong>';
 	echo SourceForge\SchemaDB\Parse::get_type($value);
 	echo '</strong></td><td><pre>';
 	var_dump(SourceForge\SchemaDB\Parse::schema_parse_table_column($value));

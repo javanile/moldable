@@ -25,10 +25,10 @@ $conn = new SchemaDB(array(
 
 ##
 class Person extends Storable {			
-	public $field2 = static::PRIMARY_KEY;	
-	public $id14 = 9;
-	public $field1 = 5;
-	public $ciccio = "";
+	public $field2	= static::PRIMARY_KEY;	
+	public $id14	= '<{}>';
+	public $field1	= 5;
+	public $ciccio	= "";
 }
 
 Persona::make(array('ciccio'=>'ciao'))->store();

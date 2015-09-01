@@ -631,7 +631,7 @@ class Parse {
 	}
 	
 	## build mysql column attribute set
-	public static function schema_parse_table_column($value,$field=false,$before_field=false) {
+	public static function schema_parse_table_column($notation,$field=null,$before_field=null) {
 		
 		## default schema of a column
 		$d = array(
@@ -646,11 +646,18 @@ class Parse {
 		);
 		
 		##
-		$t = Parse::get_type($value);
+		$t = static::get_type($notation);
 
 		##
 		switch ($t) {
 
+			##
+			case 'schema':
+				foreach(static::get_schema($notation) as $a=>$v) {
+					$d[$a] = $v;
+				}
+				break;
+			
 			case 'date':
 				$d['Type'] = 'date';
 				break;
@@ -672,29 +679,29 @@ class Parse {
 
 			case 'boolean': 
 				$d['Type'] = 'tinyint(1)';
-				$d['Default'] = (int)$value;
+				$d['Default'] = (int)$notation;
 				$d['Null'] = 'NO';	
 				break;
 				
 			case 'int': 
 				$d['Type'] = 'int(10)';
-				$d['Default'] = (int)$value;
+				$d['Default'] = (int)$notation;
 				$d['Null'] = 'NO';			
 				break;
 				
 			case 'float': 
 				$d['Type'] = 'float(12,2)';
-				$d['Default'] = (int)$value;
+				$d['Default'] = (int)$notation;
 				$d['Null'] = 'NO';			
 				break;
 				
 			case 'array':
-				$d['Default'] = $value[0];
-				$d['Null'] = in_array(null,$value) ? ' YES' : 'NO';							
+				$d['Default'] = $notation[0];
+				$d['Null'] = in_array(null,$notation) ? 'YES' : 'NO';							
 				$t = array();
-				foreach($value as $i) {
+				foreach($notation as $i) {
 					if ($i!==null) {
-						$t[] = "'".$i."'";
+						$t[] = "'{$i}'";
 					}					
 				}
 				$d['Type'] = 'enum('.implode(',',$t).')';
@@ -703,37 +710,25 @@ class Parse {
 		
 		return $d;
 	}
-
-	##
-	public static function get_class($value) {
-		if (preg_match('/^<<([_a-zA-Z][_a-zA-Z0-9]*)>>$/i',$value,$d)) {
-			return $d[1];
-		} else {
-			return false;
-		}
-	}
 	
 	##
-	public static function get_type($value) {
+	public static function get_type($notation) {
 
 		##
-		$t = gettype($value);
+		$t = gettype($notation);
 
 		##
 		switch ($t) {
 			
 			##
 			case 'string':
-				if (preg_match('/^\%\|([a-z]+):(.*)\|\%$/i',$value,$d)) {
-					switch($d[1]) {
-						case 'key': return $d[2];
-						case 'schema': return 'schema';
-					}					
-				} else if (static::get_class($value)) {
-					return 'class';					
-				} else if (preg_match('/[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9] [0-9][0-9]:[0-9][0-9]:[0-9][0-9]/',$value)) {				
+				if (preg_match('/^<\{[A-Za-z_][0-9A-Za-z_]*\}>$/i',$notation)) {
+					return 'class';										
+				} else if (preg_match('/^<\{.*\}>$/i',$notation)) {
+					return 'schema';					
+				} else if (preg_match('/[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9] [0-9][0-9]:[0-9][0-9]:[0-9][0-9]/',$notation)) {				
 					return 'datetime';													
-				} else if (preg_match('/[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]/',$value)) {
+				} else if (preg_match('/[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]/',$notation)) {
 					return 'date';													
 				} else {				
 					return 'string';
@@ -756,10 +751,10 @@ class Parse {
 				return 'float';
 
 			case 'array':
-				if ($value && $value == array_values($value)) {
+				if ($notation && $notation == array_values($notation)) {
 					return 'array';
 				} else {
-					return 'column';
+					return 'schema';
 				}			
 		}	
 		
@@ -769,7 +764,7 @@ class Parse {
 	public static function get_value($notation) {
 
 		##
-		$t = Parse::get_type($notation);
+		$t = static::get_type($notation);
 
 		##
 		switch($t) {
@@ -811,13 +806,24 @@ class Parse {
 				return static::parse_datetime($notation);
 			
 			##	
+			case 'schema': 
+				return null;
+			
+			##	
 			case 'column': 
-				return NULL;	
+				return null;	
 
 			##	
 			default:	
 				trigger_error("No PSEUDOTYPE value for '{$t}' => '{$notation}'",E_USER_ERROR);		
 		}				
+	}
+	
+	##
+	public static function get_schema($notation) {
+	
+		##
+		return json_decode(trim($notation,'<>'),true);
 	}
 	
 	## handle creation of related object
@@ -888,16 +894,16 @@ class Parse {
 class Table {
 	
 	## schemadb mysql constants for rapid fields creation
-	const PRIMARY_KEY	= '%|key:primary_key|%';
-	const VARCHAR		= '%|type:varchar(255)|%';
-	const VARCHAR_80	= '%|type:varchar(80)|%';
-	const VARCHAR_255	= '%|type:varchar(255)|%';
-	const TEXT			= '%|type:text|%';
-	const INT			= '%|type:int(10)|%';
-	const INT_10		= '%|type:int(10)|%';
-	const INT_14		= '%|type:int(14)|%';
-	const FLOAT			= '%|type:float(14,4)|%';
-	const FLOAT_14_4	= '%|type:float(14,4)|%';
+	const PRIMARY_KEY	= '<{"Key:primary_key}>';
+	const VARCHAR		= '<{"Type:varchar(255)}>';
+	const VARCHAR_80	= '<{"Type:varchar(80)}>';
+	const VARCHAR_255	= '<{"Type:varchar(255)}>';
+	const TEXT			= '<{"Type":"text"}>';
+	const INT			= '<{"Type:int(10)}>';
+	const INT_10		= '<{"Type:int(10)}>';
+	const INT_14		= '<{"Type:int(14)}>';
+	const FLOAT			= '<{"Type:float(14,4)}>';
+	const FLOAT_14_4	= '<{"Type:float(14,4)}>';
 	const TIME			= '00:00:00';
 	const DATE			= '0000-00-00';
 	const DATETIME		= '0000-00-00 00:00:00';
