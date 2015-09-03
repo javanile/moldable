@@ -38,7 +38,7 @@ class Person extends Storable {
 	public $age = 0;	
 	
 	##
-	public $telephone = "";
+	public $telephone = "";		
 }
 
 ## remove Person table and complete items list
