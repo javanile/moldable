@@ -93,157 +93,11 @@ class SchemaDB {
 		
 		## 
 		$this->connect($args);
-					
-		## if no default SchemaDB connection auto-set then-self
-		if (static::$default === null) {			
-			
-			## set current SchemaDB connection to default
-			static::$default = &$this;
-		}
-	}
-	
-	/**
-	 * Retrieve default SchemaDB connection
-	 * 
-	 * @return type 
-	 */
-	public static function getDefault() {
-		
-		## return static $default
-		return static::$default;
-	}
-		
-	/**
-	 * Init database connection
-	 * 
-	 * @param type $host
-	 * @param type $username
-	 * @param type $password
-	 * @param type $database
-	 * @param type $prefix
-	 * @return \SourceForge\SchemaDB\SchemaDB_ezSQL_mysql
-	 */
-	private function connect($args) {
-		
-		## check arguments for connection
-		# TODO: controls $args field for validate id 
-		
-		## execute connection
-		static::execute(static::CONNECT, $args);
-	}
-	
-	/**
-	 * Execute SQL query to database
-	 * 
-	 * @param type $sql
-	 * @return type
-	 */
-	public function query($sql) {
 		
 		##
-		return $this->execute(static::QUERY, $sql); 
+		static::setDefault($this);		
 	}
 	
-	/**
-	 * Return current database prefix used
-	 * 
-	 * @return type
-	 */
-	public function getPrefix() {
-		
-		##
-		return $this->execute(static::GET_PREFIX); 
-	}
-	
-	/**
-	 * 
-	 * @return type
-	 */
-	public function getLastId() {
-		
-		##
-		return $this->execute(static::GET_LAST_ID); 
-	}
-	
-	/**
-	 * 
-	 * 
-	 * @param type $sql
-	 * @return type
-	 */
-	public function getRow($sql) {
-		
-		##
-		return $this->execute(static::GET_ROW, $sql); 
-	}
-	
-	/**
-	 * Get a list/array of record from database
-	 * based on SQL query passed
-	 * 
-	 * @param string $sql
-	 * @return array
-	 */
-	public function getResults($sql) {
-		
-		## e
-		return $this->execute(static::GET_RESULTS, $sql); 
-	}
-	
-	/**
-	 * 
-	 * @param type $method
-	 * @param array/string $args
-	 * @return type
-	 */ 
-	public function execute($method, $args) {
-				
-		## debug the queries
-		if (static::DEBUG) {
-			$method_label = array('QUERY','CONNECT','GET_ROW','GET_PREFIX','GET_LAST_ID','GET_RESULTS');
-			echo '<pre style="border:1px solid #9F6000;margin:0 0 1px 0;padding:2px;color:#9F6000;background:#FEEFB3;"><strong>'.str_pad($method_label[$method],12,' ',STR_PAD_LEFT).'</strong>'.($args?': '.$args:'').'</pre>';			
-		}
-	
-		## select appropriate method
-		switch ($method) {
-			
-			##
-			case static::CONNECT:
-				
-				##
-				$this->db = new SchemaDB_ezSQL_mysql(
-					$args['user'],
-					$args['pass'],
-					$args['name'],
-					$args['host']
-				);
-				
-				##
-				$this->db->prefix = $args['pref']; 	
-				
-				##
-				return true;   	
-				
-			##	
-			case static::QUERY:	return $this->db->query($args); 
-			
-			##
-			case static::GET_ROW: return $this->db->get_row($sql,ARRAY_A);
-			
-			##
-			case static::GET_PREFIX: return $this->db->prefix;
-			
-			##
-			case static::GET_LAST_ID: return $this->db->insert_id;
-			
-			##	
-			case static::GET_RESULTS: return $this->db->get_results($sql,ARRAY_A); 
-			
-			##
-			default: die("execute method not exists");
-		}				
-	}
-
 	## apply schema on the db
 	public function apply($schema) {	
 		
@@ -510,8 +364,167 @@ class SchemaDB {
 		##
 		return $a;
 	}
+
+		/**
+	 * Retrieve default SchemaDB connection
+	 * 
+	 * @return type 
+	 */
+	public static function getDefault() {
+		
+		## return static $default
+		return static::$default;
+	}
+	
+	/**
+	 * 
+	 * @param type $schemadb
+	 */
+	public static function setDefault($schemadb) {
+		
+		## if no default SchemaDB connection auto-set then-self
+		if (static::$default === null) {			
 			
-	## printout database status/info
+			## set current SchemaDB connection to default
+			static::$default = &$schemadb;
+		}
+	}
+	
+		
+	/**
+	 * Init database connection
+	 * 
+	 * @param type $host
+	 * @param type $username
+	 * @param type $password
+	 * @param type $database
+	 * @param type $prefix
+	 * @return \SourceForge\SchemaDB\SchemaDB_ezSQL_mysql
+	 */
+	private function connect($args) {
+		
+		## check arguments for connection
+		# TODO: controls $args field for validate id 
+		
+		## execute connection
+		static::execute(static::CONNECT, $args);
+	}
+	
+	/**
+	 * Execute SQL query to database
+	 * 
+	 * @param type $sql
+	 * @return type
+	 */
+	public function query($sql) {
+		
+		##
+		return $this->execute(static::QUERY, $sql); 
+	}
+	
+	/**
+	 * Return current database prefix used
+	 * 
+	 * @return type
+	 */
+	public function getPrefix() {
+		
+		##
+		return $this->execute(static::GET_PREFIX); 
+	}
+	
+	/**
+	 * 
+	 * @return type
+	 */
+	public function getLastId() {
+		
+		##
+		return $this->execute(static::GET_LAST_ID); 
+	}
+	
+	/**
+	 * 
+	 * 
+	 * @param type $sql
+	 * @return type
+	 */
+	public function getRow($sql) {
+		
+		##
+		return $this->execute(static::GET_ROW, $sql); 
+	}
+	
+	/**
+	 * Get a list/array of record from database
+	 * based on SQL query passed
+	 * 
+	 * @param string $sql
+	 * @return array
+	 */
+	public function getResults($sql) {
+		
+		## e
+		return $this->execute(static::GET_RESULTS, $sql); 
+	}
+	
+	/**
+	 * 
+	 * @param type $method
+	 * @param array/string $args
+	 * @return type
+	 */ 
+	public function execute($method, $args) {
+				
+		## debug the queries
+		if (static::DEBUG) {
+			$method_label = array('QUERY','CONNECT','GET_ROW','GET_PREFIX','GET_LAST_ID','GET_RESULTS');
+			echo '<pre style="border:1px solid #9F6000;margin:0 0 1px 0;padding:2px;color:#9F6000;background:#FEEFB3;"><strong>'.str_pad($method_label[$method],12,' ',STR_PAD_LEFT).'</strong>'.($args?': '.$args:'').'</pre>';			
+		}
+	
+		## select appropriate method
+		switch ($method) {
+			
+			##
+			case static::CONNECT:
+				
+				##
+				$this->db = new SchemaDB_ezSQL_mysql(
+					$args['user'],
+					$args['pass'],
+					$args['name'],
+					$args['host']
+				);
+				
+				##
+				$this->db->prefix = $args['pref']; 	
+				
+				##
+				return true;   	
+				
+			##	
+			case static::QUERY:	return $this->db->query($args); 
+			
+			##
+			case static::GET_ROW: return $this->db->get_row($args,ARRAY_A);
+			
+			##
+			case static::GET_PREFIX: return $this->db->prefix;
+			
+			##
+			case static::GET_LAST_ID: return $this->db->insert_id;
+			
+			##	
+			case static::GET_RESULTS: return $this->db->get_results($args,ARRAY_A); 
+			
+			##
+			default: die("execute method not exists");
+		}				
+	}
+
+	/**
+	 * printout database status and info
+	 */ 
 	public function dump() {
 		
 		## describe databse
