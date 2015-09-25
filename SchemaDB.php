@@ -36,31 +36,31 @@ namespace SourceForge\SchemaDB;
  * 
  * <code>
  * <?php
- *		## Create SchemaDB connection
- *		$conn = new SchemaDB(array(
- *			'host' => 'localhost',
- *			'user' => 'root',
- *			'pass' => 'root',
- *			'name' => 'db_schemadb',
- *			'pref' => 'tbl_',
- *		));
+ * ## Create SchemaDB connection
+ * $conn = new SchemaDB(array(
+ *		'host' => 'localhost',
+ *		'user' => 'root',
+ *		'pass' => 'root',
+ *		'name' => 'db_schemadb',
+ *		'pref' => 'tbl_',
+ * ));
  * 
- *		## Create Table on database
- *		$conn->update(array(
- *			'Table1' => array(
- *				'Field1' => 0,
- *				'Field2' => "",
- *			)
- *		))
+ * ## Create Table on database
+ * $conn->update(array(
+ *		'Table1' => array(
+ *			'Field1' => 0,
+ *			'Field2' => "",
+ *		)
+ * ));
  * ?> 
  * </code>
  */
 class SchemaDB {
 
 	## constants
-	const VERSION	= '0.3.0'; 			
 	const DEBUG		= 0;
-
+	const VERSION	= '0.3.0'; 			
+	
 	## 
 	const DO_QUERY		= 0; 
 	const GET_PREFIX	= 1;
@@ -74,7 +74,13 @@ class SchemaDB {
 	## 
 	private $db = null;
 			
-	##
+	/**
+	 * 
+	 * 
+	 * 
+	 * 
+	 * @param type $args
+	 */
 	public function __construct($args) {
 		
 		## init db connection
@@ -94,14 +100,27 @@ class SchemaDB {
 		}
 	}
 	
-	## retrieve default SchemaDB connection
+	/**
+	 * retrieve default SchemaDB connection
+	 * 
+	 * @return type 
+	 */
 	public static function getDefault() {
 		
 		## return static $default
 		return static::$default;
 	}
 		
-	## init database connection
+	/**
+	 * init database connection
+	 * 
+	 * @param type $host
+	 * @param type $username
+	 * @param type $password
+	 * @param type $database
+	 * @param type $prefix
+	 * @return \SourceForge\SchemaDB\SchemaDB_ezSQL_mysql
+	 */
 	private function &connect($host,$username,$password,$database,$prefix) {
 							
 		## 
@@ -114,49 +133,76 @@ class SchemaDB {
 		return $db;
 	}
 
-	## 
+	/**
+	 * 
+	 * @return type
+	 */ 
 	private function connected() {
 		
 		##
 		return $this->db !== null;		
 	}
 	
-	##
+	/**
+	 * 
+	 * @param type $sql
+	 * @return type
+	 */
 	public function execute_do_query($sql) {
 		
 		##
 		return $this->execute(static::DO_QUERY, $sql); 
 	}
 	
-	##
+	/**
+	 * 
+	 * @return type
+	 */
 	public function execute_get_prefix() {
 		
 		##
 		return $this->execute(static::GET_PREFIX); 
 	}
 	
-	##
+	/**
+	 * 
+	 * @return type
+	 */
 	public function execute_get_last_id() {
 		
 		##
 		return $this->execute(static::GET_LAST_ID); 
 	}
 	
-	##
+	/**
+	 * 
+	 * 
+	 * @param type $sql
+	 * @return type
+	 */
 	public function execute_get_row($sql) {
 		
 		##
 		return $this->execute(static::GET_ROW, $sql); 
 	}
 	
-	##
+	/**
+	 * 
+	 * @param type $sql
+	 * @return type
+	 */
 	public function execute_get_results($sql) {
 		
 		##
 		return $this->execute(static::GET_RESULTS, $sql); 
 	}
 	
-	## 
+	/**
+	 * 
+	 * @param type $method
+	 * @param type $sql
+	 * @return type
+	 */ 
 	public function execute($method,$sql=NULL) {
 		
 		## assert the db connection
