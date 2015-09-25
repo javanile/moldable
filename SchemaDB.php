@@ -1212,37 +1212,55 @@ class Table {
 		return $o;
 	}	
 		
-	##
-	public static function import($records) {
+	/**
+	 * Import records from a source
+	 * 
+	 * @param type $source
+	 */
+	public static function import($source) {
 		
-		##
-		foreach($records as $record) {
+		## source is array loop throut records
+		foreach($source as $record) {
 			
-			##
+			## insert single record
 			static::insert($record);			
-		} 		
+		}
 	}
 	
-	##
-	public static function encode($data) {
+	/**
+	 * Encode/manipulate field on object 
+	 * based on encode_ static method of class 
+	 * 
+	 * @param type $object
+	 * @return type
+	 */
+	public static function encode($object) {
 		
 		##
-		$c = get_called_class();
+		$c = static::getClass();
 		
 		##
-		foreach($data as $f=>$v) {
+		foreach($object as $f=>$v) {
+			
+			##
 			$m = 'encode_'.$f;
-			if (method_exists($c,$m)) {
-				if (is_object($data)) {
-					$data->{$f} = call_user_func($c.'::'.$m,$v);
-				} else {
-					$data[$f] = call_user_func($c.'::'.$m,$v);					
-				}
-			}  				
+			
+			##
+			if (!method_exists($c,$m)) { continue; }
+				
+			##
+			else if (is_object($object)) {
+				$data->{$f} = call_user_func($c.'::'.$m,$v);
+			} 
+
+			##
+			else if (is_array($object)) {
+				$data[$f] = call_user_func($c.'::'.$m,$v);					
+			}
 		}
 		
 		##
-		return $data;
+		return $object;
 	}
 	
 	##
