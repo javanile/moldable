@@ -565,6 +565,9 @@ class Driver {
 			case static::GET_ROW: return $this->db->get_row($args,ARRAY_A);
 			
 			##
+			case static::GET_VALUE: return $this->db->get_var($args);
+			
+			##
 			case static::GET_PREFIX: return $this->db->prefix;
 			
 			##
