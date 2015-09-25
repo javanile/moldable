@@ -57,16 +57,25 @@ namespace SourceForge\SchemaDB;
  */
 class SchemaDB {
 
-	## constants
-	const DEBUG		= 0;
-	const VERSION	= '0.3.0'; 			
+	/**
+	 * Constant to enable debug print-out
+	 */
+	const DEBUG	= 0;
 	
-	## 
-	const DO_QUERY		= 0; 
-	const GET_PREFIX	= 1;
-	const GET_LAST_ID	= 2;
-	const GET_ROW		= 3;
-	const GET_RESULTS	= 4;
+	/**
+	 * Currenti release version number
+	 */
+	const VERSION = '0.3.0'; 			
+	
+	/**
+	 * Constant to handle database interaction (execute)
+	 */ 
+	const QUERY = 0; 
+	const CONNECT = 1; 
+	const GET_ROW = 2;
+	const GET_PREFIX = 3;
+	const GET_LAST_ID = 4;
+	const GET_RESULTS = 5;
 
 	## 
 	private static $default = null; 
@@ -75,24 +84,17 @@ class SchemaDB {
 	private $db = null;
 			
 	/**
+	 * Construct and connect a SchemaDB drive 
+	 * to mysql database best way to start use it
 	 * 
-	 * 
-	 * 
-	 * 
-	 * @param type $args
+	 * @param array $args Array with connection parameters
 	 */
 	public function __construct($args) {
 		
-		## init db connection
-		$this->db = $this->connect(
-			$args['host'],
-			$args['user'],
-			$args['pass'],
-			$args['name'],
-			$args['pref']
-		);
-		
-		## if no default SchemaDB connection auto-set myself
+		## 
+		$this->connect($args);
+					
+		## if no default SchemaDB connection auto-set then-self
 		if (static::$default === null) {			
 			
 			## set current SchemaDB connection to default
@@ -101,7 +103,7 @@ class SchemaDB {
 	}
 	
 	/**
-	 * retrieve default SchemaDB connection
+	 * Retrieve default SchemaDB connection
 	 * 
 	 * @return type 
 	 */
@@ -112,7 +114,7 @@ class SchemaDB {
 	}
 		
 	/**
-	 * init database connection
+	 * Init database connection
 	 * 
 	 * @param type $host
 	 * @param type $username
@@ -121,44 +123,33 @@ class SchemaDB {
 	 * @param type $prefix
 	 * @return \SourceForge\SchemaDB\SchemaDB_ezSQL_mysql
 	 */
-	private function &connect($host,$username,$password,$database,$prefix) {
-							
-		## 
-		$db = new SchemaDB_ezSQL_mysql($username,$password,$database,$host);
+	private function connect($args) {
 		
-		##
-		$db->prefix = $prefix;
-
-		##
-		return $db;
-	}
-
-	/**
-	 * 
-	 * @return type
-	 */ 
-	private function connected() {
+		## check arguments for connection
+		# TODO: controls $args field for validate id 
 		
-		##
-		return $this->db !== null;		
+		## execute connection
+		static::execute(static::CONNECT, $args);
 	}
 	
 	/**
+	 * Execute SQL query to database
 	 * 
 	 * @param type $sql
 	 * @return type
 	 */
-	public function execute_do_query($sql) {
+	public function query($sql) {
 		
 		##
-		return $this->execute(static::DO_QUERY, $sql); 
+		return $this->execute(static::QUERY, $sql); 
 	}
 	
 	/**
+	 * Return current database prefix used
 	 * 
 	 * @return type
 	 */
-	public function execute_get_prefix() {
+	public function getPrefix() {
 		
 		##
 		return $this->execute(static::GET_PREFIX); 
@@ -168,7 +159,7 @@ class SchemaDB {
 	 * 
 	 * @return type
 	 */
-	public function execute_get_last_id() {
+	public function getLastId() {
 		
 		##
 		return $this->execute(static::GET_LAST_ID); 
@@ -180,20 +171,22 @@ class SchemaDB {
 	 * @param type $sql
 	 * @return type
 	 */
-	public function execute_get_row($sql) {
+	public function getRow($sql) {
 		
 		##
 		return $this->execute(static::GET_ROW, $sql); 
 	}
 	
 	/**
+	 * Get a list/array of record from database
+	 * based on SQL query passed
 	 * 
-	 * @param type $sql
-	 * @return type
+	 * @param string $sql
+	 * @return array
 	 */
-	public function execute_get_results($sql) {
+	public function getResults($sql) {
 		
-		##
+		## e
 		return $this->execute(static::GET_RESULTS, $sql); 
 	}
 	
@@ -203,26 +196,42 @@ class SchemaDB {
 	 * @param type $sql
 	 * @return type
 	 */ 
-	public function execute($method,$sql=NULL) {
-		
-		## assert the db connection
-		if (!$this->connected()) {			
-			die('schemadb connection not found');
-		}
-		
+	public function execute($method, $args) {
+				
 		## debug the queries
 		if (static::DEBUG) {
-			$method_label = array('DO_QUERY','GET_PREFIX','GET_LAST_ID','GET_ROW','GET_RESULTS');
-			echo '<pre style="border:1px solid #9F6000;margin:0 0 1px 0;padding:2px;color:#9F6000;background:#FEEFB3;"><strong>'.str_pad($method_label[$method],12,' ',STR_PAD_LEFT).'</strong>'.($sql?': '.$sql:'').'</pre>';			
+			$method_label = array('QUERY','CONNECT','GET_ROW','GET_PREFIX','GET_LAST_ID','GET_RESULTS');
+			echo '<pre style="border:1px solid #9F6000;margin:0 0 1px 0;padding:2px;color:#9F6000;background:#FEEFB3;"><strong>'.str_pad($method_label[$method],12,' ',STR_PAD_LEFT).'</strong>'.($args?': '.$args:'').'</pre>';			
 		}
 	
 		## select appropriate method
 		switch ($method) {
-			case static::DO_QUERY:		return $this->db->query($sql); 
-			case static::GET_ROW:		return $this->db->get_row($sql,ARRAY_A);
-			case static::GET_PREFIX:	return $this->db->prefix;
-			case static::GET_LAST_ID:	return $this->db->insert_id;
-			case static::GET_RESULTS:	return $this->db->get_results($sql,ARRAY_A); 
+			
+			##
+			case static::CONNECT:
+				
+				##
+				$this->db = new SchemaDB_ezSQL_mysql(
+					$args['user'],
+					$args['pass'],
+					$args['name'],
+					$args['host']
+				);
+				
+				##
+				$this->db->prefix = $args['pref']; 	
+				
+				##
+				return true;   	
+					
+					
+					
+			case static::QUERY:	
+				return $this->db->query($args); 
+			case static::GET_ROW: return $this->db->get_row($sql,ARRAY_A);
+			case static::GET_PREFIX: return $this->db->prefix;
+			case static::GET_LAST_ID: return $this->db->insert_id;
+			case static::GET_RESULTS: return $this->db->get_results($sql,ARRAY_A); 
 			default: die("execute method not exists");
 		}				
 	}
@@ -274,7 +283,7 @@ class SchemaDB {
 			foreach($q as $s) {			
 			
 				## execute each queries
-				$this->execute_do_query($s);
+				$this->query($s);
 			}				
 		}
 
@@ -323,7 +332,7 @@ class SchemaDB {
 		$q = "SHOW TABLES LIKE '{$table}'";
 		
 		## test if table exists
-		$e = $this->execute_get_row($q);
+		$e = $this->getRow($q);
 		
 		## if table no exists return sql statament for creating this
 		if (!$e) {
@@ -470,7 +479,7 @@ class SchemaDB {
 		$q = "DESC {$table}";
 		
 		##
-		$i = $this->execute_get_results($q);
+		$i = $this->getResults($q);
 		
 		##
 		$a = array();		
@@ -975,7 +984,7 @@ class Table {
 	public static function table() {
 		
 		## get prefix
-		$p = static::getSchemaDB()->execute_get_prefix();
+		$p = static::getSchemaDB()->getPrefix();
 		
 		## check various possible table-name definition
 		if (isset(static::$table)) {			
@@ -1039,7 +1048,7 @@ class Table {
 		$q = "SELECT * FROM {$t}";
 		
 		##
-		$r = static::getSchemaDB()->execute_get_results($q);
+		$r = static::getSchemaDB()->getResults($q);
 		
 		##
 		$a = array();
@@ -1095,7 +1104,7 @@ class Table {
 		$q = "SELECT * FROM {$t} {$w} {$o} {$l}";				
 		
 		## fetch res
-		$r = static::getSchemaDB()->execute_get_results($q);
+		$r = static::getSchemaDB()->getResults($q);
 				
 		##
 		foreach($r as &$i) {
@@ -1474,7 +1483,7 @@ class Model extends Table {
 		$q = "SELECT * FROM {$t} WHERE {$k}='{$i}' LIMIT 1";		
 		
 		##
-		$r = static::getSchemaDB()->execute_get_row($q);
+		$r = static::getSchemaDB()->getRow($q);
 		
 		##
 		$o = static::make($r);
@@ -1514,7 +1523,7 @@ class Model extends Table {
 			$s = "DELETE FROM {$t} {$w}";
 			
 			## execute query
-			static::getSchemaDB()->execute_do_query($s);						
+			static::getSchemaDB()->query($s);						
 		} 
 		
 		##
@@ -1530,7 +1539,7 @@ class Model extends Table {
 			$q = "DELETE FROM {$t} WHERE {$k}='{$i}' LIMIT 1";
 			
 			## execute query
-			static::getSchemaDB()->execute_do_query($q);	
+			static::getSchemaDB()->query($q);	
 		}		
 	}		
 	
@@ -1555,7 +1564,7 @@ class Model extends Table {
 		unset(static::$internal['cache'][$c]['updated']);
 		
 		## execute query
-		static::getSchemaDB()->execute_do_query($q);
+		static::getSchemaDB()->query($q);
 	}			
 }
 
@@ -1747,7 +1756,7 @@ class Storable extends Record {
 		$q = "UPDATE {$t} SET {$s} WHERE {$k}='{$i}'";
 		
 		##
-		static::getSchemaDB()->execute_do_query($q);	
+		static::getSchemaDB()->query($q);	
 		
 		##
 		if ($k) {
@@ -1814,11 +1823,11 @@ class Storable extends Record {
 		$q = "INSERT INTO {$t} ({$c}) VALUES ({$v})";
 		
 		##
-		static::getSchemaDB()->execute_do_query($q);
+		static::getSchemaDB()->query($q);
 		
 		##
 		if ($k) {
-			$i = static::getSchemaDB()->execute_get_last_id();	
+			$i = static::getSchemaDB()->getLastId();	
 			$this->{$k} = $i;
 			return $i;
 		} 
