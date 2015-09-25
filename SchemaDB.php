@@ -255,8 +255,14 @@ class SchemaDB {
 		return $q;
 	}
 
-	## update table via schema
-	public function update_table($table,$schema) {
+	/**
+	 * Update database table via schema
+	 * 
+	 * @param string $table real table name to update 
+	 * @param type $schema 
+	 * @return type
+	 */ 
+	public function update_table($table, $schema) {
 
 		## retrive queries
 		$q = $this->diff_table($table,$schema);
@@ -1190,8 +1196,13 @@ class Table {
 		return $o;
 	}
 	
-	##
-	public static function update($query) {
+	/**
+	 * 
+	 * @param type $query
+	 * @param type $values
+	 * @return type
+	 */
+	public static function update($query, $values) {
 				
 		##
 		$o = static::build($query);
