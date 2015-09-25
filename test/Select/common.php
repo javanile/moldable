@@ -1,6 +1,5 @@
 <?php
 
-
 ##
 require_once '../common.php'; 
 
@@ -19,13 +18,18 @@ new SchemaDB(array(
 	'user' => $user,
 	'pass' => $pass,
 	'name' => $name,
-	'pref' => $pref,
+	'pref' => 't101_',
 ));
 
 ##
-$list = Person::load(array(
-	'id'	=> $id,
-	'field' => 'name',
-));
+class Person extends Storable {
+	
+	public $name = "";
+	public $surname = "";
+	public $age = 0;
+	public $address = 0;
+	
+}
 
-
+##
+echo '<pre>';

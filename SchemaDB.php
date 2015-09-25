@@ -143,10 +143,10 @@ class SchemaDB {
 	 * @param type $schema 
 	 * @return type
 	 */ 
-	public function updateTable($table, $schema) {
+	public function updateTable($table,$schema,$parse=true) {
 
 		## retrive queries
-		$q = $this->diffTable($table,$schema);
+		$q = $this->diffTable($table,$schema,$parse);
 		
 		## execute queries
 		if ($q && count($q)>0) {
@@ -366,12 +366,12 @@ class SchemaDB {
 		$n = 0;
 		
 		##
-		$b = 0;
+		$b = false;
 		
 		##
 		foreach($i as $j) {		
 			$j['Before'] = $b;		
-			$j['First']	= $n == 0;
+			$j['First']	= $n === 0;
 			$a[$j['Field']] = $j;					
 			$b = $j['Field'];
 			$n++;
@@ -562,7 +562,7 @@ class SchemaDB {
 			foreach($d as $f => $a) {
 				echo '<tr>';
 				echo '<th>'.$f.'</th>';
-				foreach($d[$r] as $k=>$v) {
+				foreach($a as $k=>$v) {
 					echo '<td>'.$v.'</td>';
 				}			
 				echo '</tr>';
@@ -884,7 +884,7 @@ class Parser {
 	}
 
 	##
-	public static function get_value($notation) {
+	public static function getValue($notation) {
 
 		##
 		$t = static::get_type($notation);
@@ -1484,7 +1484,7 @@ class Table {
 
 		## have a valid schema update db table
 		if (count($s) > 0) {
-			static::getSchemaDB()->update_table($t,$s);
+			static::getSchemaDB()->updateTable($t, $s, false);
 		}	
 
 		## cache last update avoid multiple call
@@ -1645,15 +1645,27 @@ class Record extends Model {
 
 		## prepare field values strip schema definitions
 		foreach($this->fields() as $f) {
-			$this->{$f} = Parse::get_value($this->{$f});
+			
+			##
+			$this->{$f} = Parser::getValue($this->{$f});
 		}
 	}
 		
-	## assign value and store object
+	/**
+	 * Assign value and store object
+	 * 
+	 * @param type $query
+	 */
 	public function assign($query) {
-		foreach($query as $k=>$v) {
+		
+		##
+		foreach($query as $k => $v) {
+		
+			##
 			$this->{$k} = $v;			
 		}
+		
+		##
 		$this->store();
 	}
 	
