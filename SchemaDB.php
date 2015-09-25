@@ -1669,7 +1669,11 @@ class Record extends Model {
 		$this->store();
 	}
 	
-	## auto-store element method
+	/**
+	 * Auto-store element method
+	 * 
+	 * @return type
+	 */
 	public function store() {				
 		
 		## retrieve primary key
@@ -1677,13 +1681,21 @@ class Record extends Model {
 		
 		## based on primary key store action
 		if ($k && $this->{$k}>0) {
+			
+			##
 			return $this->store_update();						
 		} else {
+			
+			##
 			return $this->store_insert();			
 		}
 	}
 		
-	## fill field with set parser value from array
+	/**
+	 * Fill field with set parser value from array
+	 * 
+	 * @param type $array
+	 */
 	public function fetch($array) {			
 		
 		##
@@ -1714,9 +1726,12 @@ class Record extends Model {
 			$this->{$k} = isset($array[$k]) ? (int) $array[$k] : (int)$this->{$k}; 		
 		}	
 	}
-	
-	
-	## return fields names
+		
+	/**
+	 * Return fields names
+	 * 
+	 * @return type
+	 */
 	public function fields() {		
 	
 		##
@@ -1755,34 +1770,6 @@ class Record extends Model {
 		##
 		return false;
 	}
-		
-	##
-	public function get($field) {
-	
-		##
-		$m = 'get_parser_'.$field;
-		
-		##
-		if (method_exists($this,$m)) {
-			return $this->{$m}($this->{$field});		
-		} else {
-			return $this->{$field};
-		}
-	}
-	
-	##
-	public function set($field,$value) {
-		
-		##
-		$m = 'set_parser_'.$field;
-		
-		##
-		if (method_exists($this,$m)) {
-			$this->{$field} = $this->{$m}($value);
-		} else {
-			$this->{$field} = $value;
-		}
-	}	
 } 
 
 /**
