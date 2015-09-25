@@ -154,7 +154,14 @@ class SchemaDB extends Driver {
 		return $q;
 	}
 
-	## generate query to align db
+	/**
+	 * Generate SQL query to align database
+	 * compare real database and passed schema
+	 * 
+	 * @param type $schema
+	 * @param type $parse
+	 * @return type
+	 */
 	public function diff($schema,$parse=true) {
 
 		## prepare
@@ -418,9 +425,10 @@ class Driver {
 	const QUERY = 0; 
 	const CONNECT = 1; 
 	const GET_ROW = 2;
-	const GET_PREFIX = 3;
-	const GET_LAST_ID = 4;
-	const GET_RESULTS = 5;
+	const GET_VALUE = 3;
+	const GET_PREFIX = 4;
+	const GET_LAST_ID = 5;
+	const GET_RESULTS = 6;
 
 	/**
 	 *
@@ -507,6 +515,17 @@ class Driver {
 	
 	/**
 	 * 
+	 * @param type $sql
+	 * @return type
+	 */
+	public function getValue($sql) {
+		
+		## e
+		return $this->execute(static::GET_VALUE, $sql); 		
+	}
+	
+	/**
+	 * 
 	 * @param type $method
 	 * @param array/string $args
 	 * @return type
@@ -515,7 +534,7 @@ class Driver {
 				
 		## debug the queries
 		if (static::DEBUG) {
-			$method_label = array('QUERY','CONNECT','GET_ROW','GET_PREFIX','GET_LAST_ID','GET_RESULTS');
+			$method_label = array('QUERY','CONNECT','GET_ROW','GET_VALUE','GET_PREFIX','GET_LAST_ID','GET_RESULTS');
 			echo '<pre style="border:1px solid #9F6000;margin:0 0 1px 0;padding:2px;color:#9F6000;background:#FEEFB3;"><strong>'.str_pad($method_label[$method],12,' ',STR_PAD_LEFT).'</strong>'.($args?': '.json_encode($args):'').'</pre>';			
 		}
 	
@@ -712,7 +731,25 @@ class Mysql {
 		
 		##
 		return $q;
-	}	
+	}
+	
+	/**
+	 * 
+	 * @param type $f
+	 * @return string
+	 */
+	public static function select_fields($f) {
+	
+		##
+		if (is_null($f)) {
+			return '*';			
+		} 
+		
+		##
+		else if (is_string($f)) {
+			return $f;
+		}			
+	}
 }
 
 /**
@@ -1546,6 +1583,24 @@ class Table {
 		##
 		return @date('Y-m-d H:i:s'); 
 	}
+	
+	/**
+	 * 
+	 * 
+	 * @param type $array
+	 */
+	protected function fetch($sql,$array=false,$value=false) {					
+		
+		##
+		if (!$value) {
+			return static::make(static::getSchemaDB()->getRow($sql));
+		} 
+		
+		##
+		else {
+			return static::getSchemaDB()->getValue($sql);						
+		}				
+	}
 }
 
 /**
@@ -1570,29 +1625,24 @@ class Model extends Table {
 		##
 		$t = static::table();
 		
-		##
+		## get primary key 
 		$k = static::primary_key();		
 		
-		
-		##
-		if (is_string($fields)) {
-			
-		} 
+		## parse SQL select fields
+		$f = Mysql::select_fields($fields);
 				
-		##
+		## prepare SQL query
 		$q = "SELECT {$f} FROM {$t} WHERE {$k}='{$i}' LIMIT 1";		
 		
-		##
-		$r = static::getSchemaDB()->getRow($q);
-		
-		##
-		$o = static::make($r);
-		
-		##
-		return $o;
+		## fetch data on database and return it 
+		return static::fetch($q, false, is_string($fields));
 	}
 	
-	## delete element by primary key or query
+	/**
+	 * Delete element by primary key or query
+	 * 
+	 * @param type $query
+	 */
 	public static function delete($query) {
 
 		##
@@ -1665,7 +1715,7 @@ class Model extends Table {
 		
 		## execute query
 		static::getSchemaDB()->query($q);
-	}			
+	}				
 }
 
 /**
@@ -1729,27 +1779,6 @@ class Record extends Model {
 		}
 	}
 		
-	/**
-	 * Fill field with set parser value from array
-	 * 
-	 * @param type $array
-	 */
-	public function fetch($array) {			
-		
-		##
-		foreach($this->fields() as $f) {
-			$this->set($f,$array[$f]);			
-		}
-		
-		##
-		$k = $this->primary_key();
-		
-		##
-		if ($k) {
-			$this->{$k} = isset($array[$k]) ? (int) $array[$k] : (int)$this->{$k}; 		
-		}				
-	}
-	
 	##
 	public function fill($array) {		
 		foreach($this->fields() as $f) {
