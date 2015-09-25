@@ -105,11 +105,16 @@ class SchemaDB {
 		return schemadb::update($schema);	
 	}
 	
-	## update db via schema
+	/**
+	 * Update db via schema
+	 * 
+	 * @param type $schema
+	 * @return type
+	 */ 
 	public function update($schema) {
 
 		## retrive queries
-		$q = static::diff($schema);
+		$q = $this->diff($schema);
 
 		## execute queries
 		if (count($q)>0) {
@@ -118,7 +123,7 @@ class SchemaDB {
 			foreach($q as $s) {			
 				
 				##
-				static::execute(static::DO_QUERY, $s);
+				$this->query($s);
 			}				
 		}
 
@@ -157,10 +162,10 @@ class SchemaDB {
 	public function diff($schema,$parse=true) {
 
 		## prepare
-		$s = $parse ? schemadb::schema_parse($schema) : $schema;		
+		$s = $parse ? Parser::parseSchema($schema) : $schema;		
 		
 		## get prefix string 
-		$p = static::execute(static::GET_PREFIX);	
+		$p = $this->getPrefix();	
 		
 		##
 		$o = array();
@@ -365,7 +370,7 @@ class SchemaDB {
 		return $a;
 	}
 
-		/**
+	/**
 	 * Retrieve default SchemaDB connection
 	 * 
 	 * @return type 
@@ -390,7 +395,6 @@ class SchemaDB {
 		}
 	}
 	
-		
 	/**
 	 * Init database connection
 	 * 
@@ -670,7 +674,7 @@ class Mysql {
  * 
  * 
  */
-class Parse {
+class Parser {
 	
 	##
 	private static $default = array(
@@ -683,19 +687,25 @@ class Parse {
 		),
 	);
 		
-	## parse a multi-table schema to sanitize end explod implicit info
-	public static function schema_parse($schema) {	
+	## parse a multi-table schema to sanitize end explode implicit info
+	public static function parseSchema($schema) {	
+		
+		##
 		$s = array();
 
-		foreach($schema as $t=>$f) {
-			$s[$t] = schemadb::schema_parse_table($f);
+		##
+		foreach($schema as $t => $f) {
+		
+			##
+			$s[$t] = static::parseSchemaTable($f);
 		}
 
+		##
 		return $s;
 	}
 	
 	## parse table schema to sanitize end explod implicit info
-	public static function schema_parse_table($schema) {	
+	public static function parseSchemaTable($schema) {	
 			
 		##
 		$s = array();
@@ -703,8 +713,13 @@ class Parse {
 		##
 		$b = false;
 		
+		##
 		foreach($schema as $f=>$d) {
-			$s[$f] = static::schema_parse_table_column($d,$f,$b);	
+		
+			##
+			$s[$f] = static::parseSchemaTableColumn($d,$f,$b);	
+			
+			##
 			$b = $f;
 		}
 
@@ -712,8 +727,15 @@ class Parse {
 		return $s;
 	}
 	
-	## build mysql column attribute set
-	public static function schema_parse_table_column($notation,$field=null,$before_field=null) {
+	/**
+	 * Build mysql column attribute set
+	 * 
+	 * @param type $notation
+	 * @param type $field
+	 * @param type $before_field
+	 * @return string
+	 */ 
+	public static function parseSchemaTableColumn($notation,$field=null,$before_field=null) {
 		
 		## default schema of a column
 		$d = array(
