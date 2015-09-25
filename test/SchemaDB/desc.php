@@ -19,23 +19,9 @@ $Schema = new SchemaDB(array(
 ));
 
 ## Apply schema create or update database tables
-$Schema->apply(array(
-	
-	## define users table
-	'User' => array(
-		'userid'   => 0,
-		'username' => '',
-		'password' => '',
-		'type'	=> 1
-	),
-	
-	## define articles table
-	'Article' => array(
-		'articleid' => 0,
-		'title'		=> '',
-		'content'	=> '',
-	),	
-));
+$desc = $Schema->desc();
 
 ##
-$Schema->dump();
+echo '<pre>';
+var_dump($desc);
+echo '</pre>';

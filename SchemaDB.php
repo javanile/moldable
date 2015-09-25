@@ -60,7 +60,7 @@ class SchemaDB {
 	/**
 	 * Constant to enable debug print-out
 	 */
-	const DEBUG	= 0;
+	const DEBUG	= 1;
 	
 	/**
 	 * Currenti release version number
@@ -143,10 +143,10 @@ class SchemaDB {
 	 * @param type $schema 
 	 * @return type
 	 */ 
-	public function update_table($table, $schema) {
+	public function updateTable($table, $schema) {
 
 		## retrive queries
-		$q = $this->diff_table($table,$schema);
+		$q = $this->diffTable($table,$schema);
 		
 		## execute queries
 		if ($q && count($q)>0) {
@@ -168,22 +168,22 @@ class SchemaDB {
 
 		## prepare
 		$s = $parse ? Parser::parseSchema($schema) : $schema;		
-		
+				
 		## get prefix string 
 		$p = $this->getPrefix();	
 		
-		##
+		## output container for rescued SQL query
 		$o = array();
 
 		## loop throu the schema
-		foreach($s as $t=>$d) {
+		foreach($s as $t => $d) {
 			
 			##
-			$q = $this->diffTable($p.$t,$d,false);		
-			
+			$q = $this->diffTable($p.$t, $d, false);		
+						
 			##
 			if (count($q)>0) {
-				$o = array_merge($o,$q);
+				$o = array_merge($o, $q);
 			}
 		}
 
@@ -200,19 +200,22 @@ class SchemaDB {
 	 * @return type
 	 */
 	public function diffTable($table,$schema,$parse=true) {	
-
+		
 		## parse input schema if required
 		$s = $parse ? Parser::parseSchemaTable($schema) : $schema;
 		
+		## 
+		$t = $parse ? $this->getPrefix() . $table : $table;
+		
 		## sql query to test table exists
-		$q = "SHOW TABLES LIKE '{$table}'";
+		$q = "SHOW TABLES LIKE '{$t}'";
 		
 		## test if table exists
 		$e = $this->getRow($q);
 		
 		## if table no exists return sql statament for creating this
 		if (!$e) {
-			return array(Mysql::create_table($table, $s));					
+			return array(Mysql::createTable($t, $s));					
 		}
 
 		## used as output array 
@@ -222,7 +225,7 @@ class SchemaDB {
 		$z = array();
 		
 		## describe table get current table description
-		$a = $this->descTable($table);
+		$a = $this->descTable($t);
 		
 		##
 		$p = $this->diff_table_field_primary_key($a);
@@ -231,15 +234,15 @@ class SchemaDB {
 		foreach($s as $f=>$d) {			
 			
 			##
-			$this->diff_table_field($a,$f,$d,$table,$o,$z); 			
+			$this->diff_table_field($a,$f,$d,$t,$o,$z); 			
 		}
 		
 		##
 		if ($p && count($z) > 0) {
 			$a[$p]['Key'] = '';
 			$a[$p]['Extra'] = '';				
-			$z[] = Mysql::alter_table_drop_primary_key($table);									
-			$z[] = Mysql::alter_table_change($table,$p,$a[$p]);
+			$z[] = Mysql::alter_table_drop_primary_key($t);									
+			$z[] = Mysql::alter_table_change($t,$p,$a[$p]);
 		}		
 			
 		##
@@ -267,7 +270,7 @@ class SchemaDB {
 		} 
 				
 		## check if column need to be updated				
-		else if (static::diff_table_field_attributes($a,$f,$d)) {
+		else if ($this->diff_table_field_attributes($a,$f,$d)) {
 							
 			##
 			$q = Mysql::alter_table_change($table,$f,$d);
@@ -486,12 +489,12 @@ class SchemaDB {
 	 * @param array/string $args
 	 * @return type
 	 */ 
-	public function execute($method, $args) {
+	public function execute($method, $args=null) {
 				
 		## debug the queries
 		if (static::DEBUG) {
 			$method_label = array('QUERY','CONNECT','GET_ROW','GET_PREFIX','GET_LAST_ID','GET_RESULTS');
-			echo '<pre style="border:1px solid #9F6000;margin:0 0 1px 0;padding:2px;color:#9F6000;background:#FEEFB3;"><strong>'.str_pad($method_label[$method],12,' ',STR_PAD_LEFT).'</strong>'.($args?': '.$args:'').'</pre>';			
+			echo '<pre style="border:1px solid #9F6000;margin:0 0 1px 0;padding:2px;color:#9F6000;background:#FEEFB3;"><strong>'.str_pad($method_label[$method],12,' ',STR_PAD_LEFT).'</strong>'.($args?': '.json_encode($args):'').'</pre>';			
 		}
 	
 		## select appropriate method
@@ -540,26 +543,34 @@ class SchemaDB {
 	public function dump() {
 		
 		## describe databse
-		$a = $this->desc();
+		$s = $this->desc();
+		
+		##	
+		echo '<pre><table border="1" style="text-align:center">';			
 		
 		##
-		if (count($a) > 0) {
-			echo '<table><tr>';			
-			foreach(array_keys($a[0]) as $k) {
+		foreach($s as $t => $d) {
+			
+			##
+			echo '<tr><th colspan="9">'.$t.'</th></tr>';
+			echo '<tr><td>&nbsp;</td>';			
+			$r = key($d);			
+			foreach($d[$r] as $k=>$v) {
 				echo '<th>'.$k.'</th>';
 			}
 			echo '</tr>';
-			foreach($a as $r) {
+			foreach($d as $f => $a) {
 				echo '<tr>';
-				foreach($r as $v) {
+				echo '<th>'.$f.'</th>';
+				foreach($d[$r] as $k=>$v) {
 					echo '<td>'.$v.'</td>';
-				}
+				}			
 				echo '</tr>';
-			}			
-			echo '</table>';
-		} else {
-			echo get_called_class().': is empty';
-		}				
+			}
+		}
+		
+		##
+		echo '</table></pre>';		
 	}
 }
 
@@ -607,7 +618,7 @@ class Mysql {
 	 * @param array	$s Skema of the table contain column definitions		
 	 * @return string Sql code statament of CREATE TABLE
 	 */
-	public static function create_table($t,$s) {
+	public static function createTable($t,$s) {
 
 		##
 		$e = array();

@@ -19,14 +19,13 @@ $Schema = new SchemaDB(array(
 ));
 
 ## Apply schema create or update database tables
-$Schema->apply(array(
+$diff = $Schema->diff(array(
 	
 	## define users table
 	'User' => array(
 		'userid'   => 0,
 		'username' => '',
-		'password' => '',
-		'type'	=> 1
+		'password' => '',		
 	),
 	
 	## define articles table
@@ -38,4 +37,6 @@ $Schema->apply(array(
 ));
 
 ##
-$Schema->dump();
+echo '<pre>';
+var_dump($diff);
+echo '</pre>';

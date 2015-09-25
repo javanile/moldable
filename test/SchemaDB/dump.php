@@ -1,11 +1,7 @@
 <?php
 
 ##
-error_reporting(E_ALL);
-ini_set('display_errors',true);
-
-##
-require_once '../data.php';
+require_once '../common.php';
 
 ##
 require_once '../../SchemaDB.php';
@@ -14,14 +10,14 @@ require_once '../../SchemaDB.php';
 use SourceForge\SchemaDB\SchemaDB;
 
 ##
-$conn = new SchemaDB(array(
+$SchemaDB = new SchemaDB(array(
 	'host' => $host,
 	'user' => $user,
 	'pass' => $pass,
 	'name' => $name,
-	'pref' => $pref,
+	'pref' => 't100_',
 ));
 
 ##
-$conn->dump();
+$SchemaDB->dump();
 
