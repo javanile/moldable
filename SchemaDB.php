@@ -287,7 +287,14 @@ class SchemaDB {
 		}		
 	}
 	
-	##
+	/**
+	 * 
+	 * 
+	 * @param type $a
+	 * @param type $f
+	 * @param type $d
+	 * @return boolean
+	 */
 	public function diff_table_field_attributes($a,$f,$d) {
 					
 		## loop throd current column property
@@ -549,24 +556,30 @@ class SchemaDB {
 		echo '<pre><table border="1" style="text-align:center">';			
 		
 		##
-		foreach($s as $t => $d) {
-			
+		if ($s) {
+						
 			##
-			echo '<tr><th colspan="9">'.$t.'</th></tr>';
-			echo '<tr><td>&nbsp;</td>';			
-			$r = key($d);			
-			foreach($d[$r] as $k=>$v) {
-				echo '<th>'.$k.'</th>';
-			}
-			echo '</tr>';
-			foreach($d as $f => $a) {
-				echo '<tr>';
-				echo '<th>'.$f.'</th>';
-				foreach($a as $k=>$v) {
-					echo '<td>'.$v.'</td>';
-				}			
+			foreach($s as $t => $d) {
+
+				##
+				echo '<tr><th colspan="9">'.$t.'</th></tr>';
+				echo '<tr><td>&nbsp;</td>';			
+				$r = key($d);			
+				foreach($d[$r] as $k=>$v) {
+					echo '<th>'.$k.'</th>';
+				}
 				echo '</tr>';
+				foreach($d as $f => $a) {
+					echo '<tr>';
+					echo '<th>'.$f.'</th>';
+					foreach($a as $k=>$v) {
+						echo '<td>'.$v.'</td>';
+					}			
+					echo '</tr>';
+				}
 			}
+		} else {
+			echo '<tr><th>No database tables</th></tr>';
 		}
 		
 		##
@@ -1017,7 +1030,7 @@ class Parser {
 class Table {
 	
 	## schemadb mysql constants for rapid fields creation
-	const PRIMARY_KEY	= '<{"Key:primary_key}>';
+	const PRIMARY_KEY	= '<{"Key":"PRI","Extra":"auto_increment"}>';
 	const VARCHAR		= '<{"Type:varchar(255)}>';
 	const VARCHAR_80	= '<{"Type:varchar(80)}>';
 	const VARCHAR_255	= '<{"Type:varchar(255)}>';
@@ -1033,8 +1046,12 @@ class Table {
 		
 	## bundle to collect info and stored cache
 	protected static $internal = array(
-		'cache'		=> null,
-		'exclude'	=> array(
+		
+		##
+		'cache'	=> null,
+		
+		##
+		'exclude' => array(
 			'SchemaDB',
 			'class',
 			'table',
@@ -1480,7 +1497,7 @@ class Table {
 		$t = static::table();		
 		
 		## and model schema
-		$s = static::skema();
+		$s = Parser::parseSchemaTable(static::skema());
 
 		## have a valid schema update db table
 		if (count($s) > 0) {
@@ -1798,7 +1815,7 @@ class Storable extends Record {
 			if ($f == $k) { continue; }
 			
 			##
-			$v = Parse::encode($this->{$f});
+			$v = Parser::encode($this->{$f});
 						
 			##
 			$e[] = "{$f} = '{$v}'";
@@ -1868,7 +1885,7 @@ class Storable extends Record {
 			}
 				
 			##
-			$a = Parse::escape($a);
+			$a = Parser::escape($a);
 			
 			##
 			$c[] = $f;			

@@ -4,6 +4,9 @@
 require_once 'common.php';
 
 ##
+Person::drop('confirm');
+
+##
 Person::import(array(
 	array(
 		'name' => 'Mario', 

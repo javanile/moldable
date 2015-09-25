@@ -24,6 +24,7 @@ new SchemaDB(array(
 ##
 class Person extends Storable {
 	
+	public $id = self::PRIMARY_KEY;	 
 	public $name = "";
 	public $surname = "";
 	public $age = 0;
