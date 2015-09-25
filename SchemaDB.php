@@ -193,7 +193,7 @@ class SchemaDB {
 	/**
 	 * 
 	 * @param type $method
-	 * @param type $sql
+	 * @param array/string $args
 	 * @return type
 	 */ 
 	public function execute($method, $args) {
@@ -223,15 +223,23 @@ class SchemaDB {
 				
 				##
 				return true;   	
-					
-					
-					
-			case static::QUERY:	
-				return $this->db->query($args); 
+				
+			##	
+			case static::QUERY:	return $this->db->query($args); 
+			
+			##
 			case static::GET_ROW: return $this->db->get_row($sql,ARRAY_A);
+			
+			##
 			case static::GET_PREFIX: return $this->db->prefix;
+			
+			##
 			case static::GET_LAST_ID: return $this->db->insert_id;
+			
+			##	
 			case static::GET_RESULTS: return $this->db->get_results($sql,ARRAY_A); 
+			
+			##
 			default: die("execute method not exists");
 		}				
 	}
