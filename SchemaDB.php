@@ -98,11 +98,16 @@ class SchemaDB {
 		static::setDefault($this);		
 	}
 	
-	## apply schema on the db
+	/**
+	 * Apply schema on the db
+	 * 
+	 * @param type $schema
+	 * @return type
+	 */ 
 	public function apply($schema) {	
 		
 		##
-		return schemadb::update($schema);	
+		return $this->update($schema);	
 	}
 	
 	/**
@@ -172,7 +177,11 @@ class SchemaDB {
 
 		## loop throu the schema
 		foreach($s as $t=>$d) {
-			$q = static::diff_table($p.$t,$d,false);		
+			
+			##
+			$q = $this->diffTable($p.$t,$d,false);		
+			
+			##
 			if (count($q)>0) {
 				$o = array_merge($o,$q);
 			}
@@ -190,10 +199,10 @@ class SchemaDB {
 	 * @param type $parse
 	 * @return type
 	 */
-	public function diff_table($table,$schema,$parse=true) {	
+	public function diffTable($table,$schema,$parse=true) {	
 
 		## parse input schema if required
-		$s = $parse ? Parse::schema_parse_table($schema) : $schema;
+		$s = $parse ? Parser::parseSchemaTable($schema) : $schema;
 		
 		## sql query to test table exists
 		$q = "SHOW TABLES LIKE '{$table}'";
@@ -213,7 +222,7 @@ class SchemaDB {
 		$z = array();
 		
 		## describe table get current table description
-		$a = $this->desc_table($table);
+		$a = $this->descTable($table);
 		
 		##
 		$p = $this->diff_table_field_primary_key($a);
@@ -310,29 +319,28 @@ class SchemaDB {
 	public function desc() {
 		
 		##
-		$p = static::execute(static::GET_PREFIX);		
+		$p = $this->getPrefix();		
 		
 		##
 		$q = "SHOW TABLES LIKE '{$p}%'";
 		
 		##
-		$l = static::execute(static::GET_RESULTS, $q);		
+		$l = $this->getResults($q);
+				
+		##
+		if (!count($l)) { return; }
 		
 		##
 		$r = array();
 		
 		##
-		if (count($l)>0) {
-		
+		foreach($l as $t) {
+
 			##
-			foreach($l as $t) {
-			
-				##
-				$t = reset($t);
-				
-				##
-				$r[$t] = static::desc_table($t);				
-			}
+			$t = reset($t);
+
+			##
+			$r[$t] = $this->descTable($t);				
 		}
 		
 		##
@@ -340,7 +348,7 @@ class SchemaDB {
 	}
 	
 	## describe table
-	public function desc_table($table) {
+	public function descTable($table) {
 		
 		##
 		$q = "DESC {$table}";
@@ -411,7 +419,7 @@ class SchemaDB {
 		# TODO: controls $args field for validate id 
 		
 		## execute connection
-		static::execute(static::CONNECT, $args);
+		$this->execute(static::CONNECT, $args);
 	}
 	
 	/**
