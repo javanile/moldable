@@ -9,3 +9,6 @@ $id = 1;
 ##
 $name = Person::load($id, 'name');
 
+##
+var_dump($name);
+

@@ -55,7 +55,7 @@ namespace SourceForge\SchemaDB;
  * ?> 
  * </code>
  */
-class SchemaDB {
+class SchemaDB extends Driver {
 
 	/**
 	 * Constant to enable debug print-out
@@ -66,23 +66,14 @@ class SchemaDB {
 	 * Currenti release version number
 	 */
 	const VERSION = '0.3.0'; 			
-	
+		
 	/**
-	 * Constant to handle database interaction (execute)
+	 *
+	 * 
+	 * @var type 
 	 */ 
-	const QUERY = 0; 
-	const CONNECT = 1; 
-	const GET_ROW = 2;
-	const GET_PREFIX = 3;
-	const GET_LAST_ID = 4;
-	const GET_RESULTS = 5;
-
-	## 
 	private static $default = null; 
-	
-	## 
-	private $db = null;
-			
+				
 	/**
 	 * Construct and connect a SchemaDB drive 
 	 * to mysql database best way to start use it
@@ -411,7 +402,31 @@ class SchemaDB {
 			## set current SchemaDB connection to default
 			static::$default = &$schemadb;
 		}
-	}
+	}	
+}
+
+/**
+ * 
+ * 
+ * 
+ */
+class Driver {	
+	
+	/**
+	 * Constant to handle database interaction (execute)
+	 */ 
+	const QUERY = 0; 
+	const CONNECT = 1; 
+	const GET_ROW = 2;
+	const GET_PREFIX = 3;
+	const GET_LAST_ID = 4;
+	const GET_RESULTS = 5;
+
+	/**
+	 *
+	 * @var type 
+	 */	
+	private $db = null;
 	
 	/**
 	 * Init database connection
@@ -423,7 +438,7 @@ class SchemaDB {
 	 * @param type $prefix
 	 * @return \SourceForge\SchemaDB\SchemaDB_ezSQL_mysql
 	 */
-	private function connect($args) {
+	protected function connect($args) {
 		
 		## check arguments for connection
 		# TODO: controls $args field for validate id 
@@ -1547,7 +1562,7 @@ class Model extends Table {
 	 * @param type $id
 	 * @return type
 	 */
-	public static function load($id) {
+	public static function load($id,$fields=null) {
 		
 		##
 		$i = (int) $id;
@@ -1558,8 +1573,14 @@ class Model extends Table {
 		##
 		$k = static::primary_key();		
 		
+		
 		##
-		$q = "SELECT * FROM {$t} WHERE {$k}='{$i}' LIMIT 1";		
+		if (is_string($fields)) {
+			
+		} 
+				
+		##
+		$q = "SELECT {$f} FROM {$t} WHERE {$k}='{$i}' LIMIT 1";		
 		
 		##
 		$r = static::getSchemaDB()->getRow($q);
