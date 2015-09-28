@@ -9,7 +9,7 @@ namespace SourceForge\SchemaDB;
  * 
  * 
  */
-class SocketDBO {
+class SocketPDO {
 	
 	/**
 	 *

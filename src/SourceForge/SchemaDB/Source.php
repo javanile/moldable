@@ -135,48 +135,88 @@ class Source
      * @return type
      */
     public function execute($method, $args=null)
-    {
-        ## debug the queries
-        if (static::DEBUG) {
-            $method_label = array('QUERY','CONNECT','GET_ROW','GET_VALUE','GET_PREFIX','GET_LAST_ID','GET_RESULTS');
-            echo '<pre style="border:1px solid #9F6000;margin:0 0 1px 0;padding:2px;color:#9F6000;background:#FEEFB3;"><strong>'.str_pad($method_label[$method],12,' ',STR_PAD_LEFT).'</strong>'.($args?': '.json_encode($args):'').'</pre>';
-        }
-
+    {        
         ## select appropriate method
         switch ($method) {
 
             ##
             case static::CONNECT:
-
-                ##
-                $this->db = new SocketDBO($args);
+				
+				##
+				static::log('CONNECT', $args);
+                
+				##
+                $this->db = new SocketPDO($args);
                 
                 ##
                 return true;  
 
             ##
-            case static::QUERY:	return $this->db->query($args);
+            case static::QUERY:	
+				
+				##
+				static::log('QUERY', $args);
+                
+				##
+				return $this->db->query($args);
 			
             ##
-            case static::GET_ROW: return $this->db->getRow($args);
+            case static::GET_ROW: 
+				
+				##
+				static::log('GET_ROW', $args);
+                
+				##
+				return $this->db->getRow($args);
 			
             ##
-            case static::GET_VALUE: return $this->db->getVar($args);
+            case static::GET_VALUE: 
+				
+				##
+				static::log('GET_VALUE', $args);
+                
+				##
+				return $this->db->getVar($args);
 
             ##
-            case static::GET_PREFIX: return $this->db->getPrefix();
+            case static::GET_PREFIX: 
+				$perfix = $this->db->getPrefix();
+				static::log('GET_PREFIX', $perfix);
+				return $perfix;
 
             ##
-            case static::GET_LAST_ID: return $this->db->lastInsertId();
+            case static::GET_LAST_ID: 
+				
+				$id = $this->db->lastInsertId();
+				
+				static::log('GET_LAST_ID', $id);
+				
+				return $id;
 
             ##
-            case static::GET_RESULTS: return $this->db->getResults($args);
+            case static::GET_RESULTS: 
+				
+				static::log('GET_RESULTS', $args);
+				
+				return $this->db->getResults($args);
 
             ##
             default: die("execute method not exists");
         }
     }
 
+	/**
+	 * 
+	 * 
+	 */
+	public static function log($method, $args=null) {
+	
+		## debug the queries
+        if (static::DEBUG) {
+            echo '<pre style="border:1px solid #9F6000;margin:0 0 1px 0;padding:2px;color:#9F6000;background:#FEEFB3;"><strong>'.str_pad($method,14,' ',STR_PAD_LEFT).'</strong>'.($args?': '.json_encode($args):'').'</pre>';
+        }
+	}
+	
     /**
      * printout database status and info
      */
