@@ -3,14 +3,20 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/cicciodarkast/Documents/NetBeansProjects/sf/library/schemadb/test/SchemaDB/dump.php</file>
-            <file>file:/C:/Users/cicciodarkast/Documents/NetBeansProjects/sf/library/schemadb/test/4/1.php</file>
-            <file>file:/C:/Users/cicciodarkast/Documents/NetBeansProjects/sf/library/schemadb/test/Storable/ping.php</file>
-            <file>file:/C:/Users/cicciodarkast/Documents/NetBeansProjects/sf/library/schemadb/test/Notation/info.php</file>
-            <file>file:/C:/Users/cicciodarkast/Documents/NetBeansProjects/sf/library/schemadb/src/SchemaDB/SchemaDB.php</file>
-            <file>file:/C:/Users/cicciodarkast/Documents/NetBeansProjects/sf/library/schemadb/src/SchemaDB/doctor.php</file>
-            <file>file:/C:/Users/cicciodarkast/Documents/NetBeansProjects/sf/library/schemadb/test/Storable/delete.php</file>
-            <file>file:/C:/Users/cicciodarkast/Documents/NetBeansProjects/sf/library/schemadb/test/Storable/query.php</file>
+            <file>file:/C:/Users/cicciodarkast/Documents/NetBeansProjects/sf/library/schemadb/src/SourceForge/SchemaDB/Parser.php</file>
+            <file>file:/C:/Users/cicciodarkast/Documents/NetBeansProjects/sf/library/schemadb/src/SourceForge/SchemaDB/Connection.php</file>
+            <file>file:/C:/Users/cicciodarkast/Documents/NetBeansProjects/sf/library/schemadb/src/SourceForge/SchemaDB/autoload.php</file>
+            <file>file:/C:/Users/cicciodarkast/Documents/NetBeansProjects/sf/library/schemadb/test/Sql/delete.php</file>
+            <file>file:/C:/Users/cicciodarkast/Documents/NetBeansProjects/sf/library/schemadb/src/SourceForge/SchemaDB/Driver.php</file>
+            <file>file:/C:/Users/cicciodarkast/Documents/NetBeansProjects/sf/library/schemadb/src/SourceForge/SchemaDB/Mysql.php</file>
+            <file>file:/C:/Users/cicciodarkast/Documents/NetBeansProjects/sf/library/schemadb/src/SourceForge/SchemaDB/Table.php</file>
+            <file>file:/C:/Users/cicciodarkast/Documents/NetBeansProjects/sf/library/schemadb/src/SourceForge/SchemaDB/SchemaDB.php</file>
+            <file>file:/C:/Users/cicciodarkast/Documents/NetBeansProjects/sf/library/schemadb/src/SourceForge/SchemaDB/Record.php</file>
+            <file>file:/C:/Users/cicciodarkast/Documents/NetBeansProjects/sf/library/schemadb/src/SourceForge/SchemaDB/Storable.php</file>
+            <file>file:/C:/Users/cicciodarkast/Documents/NetBeansProjects/sf/library/schemadb/composer.json</file>
+            <file>file:/C:/Users/cicciodarkast/Documents/NetBeansProjects/sf/library/schemadb/test/Sql/query.php</file>
+            <file>file:/C:/Users/cicciodarkast/Documents/NetBeansProjects/sf/library/schemadb/test/Sql/common.php</file>
+            <file>file:/C:/Users/cicciodarkast/Documents/NetBeansProjects/sf/library/schemadb/src/SourceForge/SchemaDB/Model.php</file>
         </group>
     </open-files>
 </project-private>

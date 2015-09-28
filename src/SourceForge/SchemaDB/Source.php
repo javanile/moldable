@@ -1,12 +1,17 @@
 <?php
 
+/*\
+ * 
+ * 
+\*/
+namespace SourceForge\SchemaDB;
 
 /**
  *
  *
  *
  */
-class Driver
+class Source
 {
     /**
      * Constant to handle database interaction (execute)
@@ -25,6 +30,16 @@ class Driver
      */
     private $db = null;
 
+	/**
+	 * 
+	 * @param type $args
+	 */
+	public function __construct($args) {
+
+		##
+        $this->connect($args);
+	}
+	
     /**
      * Init database connection
      *
@@ -74,7 +89,6 @@ class Driver
     public function getLastId()
     {
         ##
-
         return $this->execute(static::GET_LAST_ID);
     }
 
@@ -87,7 +101,6 @@ class Driver
     public function getRow($sql)
     {
         ##
-
         return $this->execute(static::GET_ROW, $sql);
     }
 
@@ -101,7 +114,6 @@ class Driver
     public function getResults($sql)
     {
         ## e
-
         return $this->execute(static::GET_RESULTS, $sql);
     }
 
@@ -113,7 +125,6 @@ class Driver
     public function getValue($sql)
     {
         ## e
-
         return $this->execute(static::GET_VALUE, $sql);
     }
 
@@ -138,37 +149,28 @@ class Driver
             case static::CONNECT:
 
                 ##
-                $this->db = new SchemaDB_ezSQL_mysql(
-                    $args['user'],
-                    $args['pass'],
-                    $args['name'],
-                    $args['host']
-                );
-
+                $this->db = new SocketDBO($args);
+                
                 ##
-                $this->db->prefix = $args['pref'];
-
-                ##
-
-                return true;
+                return true;  
 
             ##
             case static::QUERY:	return $this->db->query($args);
+			
+            ##
+            case static::GET_ROW: return $this->db->getRow($args);
+			
+            ##
+            case static::GET_VALUE: return $this->db->getVar($args);
 
             ##
-            case static::GET_ROW: return $this->db->get_row($args,ARRAY_A);
+            case static::GET_PREFIX: return $this->db->getPrefix();
 
             ##
-            case static::GET_VALUE: return $this->db->get_var($args);
+            case static::GET_LAST_ID: return $this->db->lastInsertId();
 
             ##
-            case static::GET_PREFIX: return $this->db->prefix;
-
-            ##
-            case static::GET_LAST_ID: return $this->db->insert_id;
-
-            ##
-            case static::GET_RESULTS: return $this->db->get_results($args,ARRAY_A);
+            case static::GET_RESULTS: return $this->db->getResults($args);
 
             ##
             default: die("execute method not exists");
