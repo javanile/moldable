@@ -26,7 +26,7 @@ class Record extends Model
             $this->{$f} = Parser::getValue($this->{$f});
         }
     }
-
+	
     /**
      * Assign value and store object
      *
@@ -53,7 +53,7 @@ class Record extends Model
     public function store()
     {
         ## retrieve primary key
-        $k = static::primary_key();
+        $k = static::getPrimaryKey();
 
         ## based on primary key store action
         if ($k && $this->{$k}>0) {
@@ -100,28 +100,5 @@ class Record extends Model
         
 		##
 		return array_diff($fields, static::getModelSetting('exclude'));		
-    }
-
-    ##
-    public static function primary_key()
-    {
-        ##
-        $s = static::getSchema();
-
-        ##
-        foreach ($s as $k=>$v) {
-
-            ##
-            if ($v === static::PRIMARY_KEY) {
-
-                ##
-
-                return $k;
-            }
-        }
-
-        ##
-
-        return false;
     }
 }

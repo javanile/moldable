@@ -22,13 +22,11 @@ class SocketPDO {
 	 * @var type 
 	 */
 	private $prefix = null;
-	
+		
 	/**
 	 * 
-	 * @param type $args
 	 */
-	public function __construct($args) {
-		
+	public function connect($args) {
 		##
 		$dsn = "mysql:host={$args['host']};dbname={$args['name']}";
 		
@@ -106,5 +104,32 @@ class SocketPDO {
 	{
 		##
 		return $this->dbo->lastInsertId();		
-	}	
+	}
+	
+	/**
+	 * 
+	 */
+	public function transact() {
+		
+		##
+		$this->dbo->beginTransaction();		
+	}
+	
+	/**
+	 * 
+	 */
+	public function commit() {
+
+		##
+		$this->dbo->commit();				
+	}
+	
+	/**
+	 * 
+	 */
+	public function rollback() {
+
+		##
+		$this->dbo->rollBack();				
+	}
 }

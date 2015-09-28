@@ -313,7 +313,8 @@ class Parser
 
     ##
     public static function escape($value)
-    {
+    {		
+		##
         return stripslashes($value);
     }
 
@@ -329,7 +330,6 @@ class Parser
         }
 
         ##
-
         return $v;
     }
 }

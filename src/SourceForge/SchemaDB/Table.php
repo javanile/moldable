@@ -64,394 +64,32 @@ class Table
         ## return complete table name
         return $table;
     }
-
-    ##
-    public static function getDatabase()
+    
+	/**
+	 * Retrieve primary key field name
+	 *  
+	 * @return boolean
+	 */
+    public static function getPrimaryKey()
     {
         ##
-        return isset(static::$SchemaDB) ? static::$SchemaDB : Database::getDefault();
-    }
-
-    ##
-    public static function make($data=null)
-    {
-        ##
-        $o = new static();
+        $schema = static::getSchema();
 
         ##
-        if ($data) {
-            $o->fill($data);
-        }
-
-        ##
-
-        return $o;
-    }
-
-    ##
-    public static function build($data=null)
-    {
-        ##
-
-        return static::make($data);
-    }
-
-    ##
-    public static function all()
-    {
-        ##
-        static::updateTable();
-
-        ##
-        $t = static::getTable();
-
-        ##
-        $q = "SELECT * FROM {$t}";
-
-        ##
-        $r = static::getDatabase()->getResults($q);
-
-        ##
-        $a = array();
-
-        ##
-        foreach ($r as $i=>$o) {
-            $a[$i] = static::make($o);
-        }
-
-        ##
-
-        return $a;
-    }
-
-    ##
-    public static function query($query)
-    {
-        ##
-        $x = $query;
-
-        ##
-        $t = self::getTable();
-
-        ## where block for the query
-        $h = array();
-
-        ##
-        if (isset($x['where'])) {
-            $h[] = "(".$x['where'].")";
-        }
-
-        ##
-        foreach ($x as $k=>$v) {
+        foreach ($schema as $field => $value) {
 
             ##
-            if (in_array($k,array('order','where','limit'))) {
-                continue;
-            }
+            if ($value === static::PRIMARY_KEY) {
 
-            ##
-            $h[] = "{$k} = '{$v}'";
-        }
-
-        ##
-        $w = count($h) > 0 ? 'WHERE '.implode(' AND ',$h) : '';
-
-        ## order by block
-        $o = isset($x['order']) ? 'ORDER BY '.$x['order'] : '';
-
-        ## order by block
-        $l = isset($x['limit']) ? 'LIMIT '.$x['limit'] : '';
-
-        ## build query
-        $q = "SELECT * FROM {$t} {$w} {$o} {$l}";
-
-        ## fetch res
-        $r = static::getDatabase()->getResults($q);
-
-        ##
-        foreach ($r as &$i) {
-            $i = static::make($i);
-        }
-
-        ##
-
-        return $r;
-    }
-
-    ##
-    public static function first()
-    {
-        ##
-        $t = static::getTable();
-
-        ##
-        $s = "SELECT * FROM {$t} LIMIT 1";
-
-        ##
-        $r = schemadb::execute('row',$s);
-
-        ##
-        if ($r) {
-            return static::build($r);
-        }
-
-    }
-
-    ## alias 6char of ping
-    public static function exists($query)
-    {
-        return static::ping($query);
-    }
-
-    ##
-    public static function ping($query)
-    {
-        ##
-        static::updateTable();
-
-        ##
-        $t = self::getTable();
-        $w = array();
-
-        ##
-        if (isset($query['where'])) {
-            $w[] = $query['where'];
-            unset($query['where']);
-        }
-
-        ##
-        foreach (static::getSchema() as $f=>$d) {
-            if (isset($query[$f])) {
-                $v = $query[$f];
-                $w[] = "{$f}='$v'";
+                ##
+                return $field;
             }
         }
 
         ##
-        $w = count($w)>0 ? 'WHERE '.implode(' AND ',$w) : '';
-
-        ##
-        $s = "SELECT * FROM {$t} {$w} LIMIT 1";
-
-        ##
-        $r = schemadb::execute('row',$s);
-
-        ##
-        if ($r) {
-            return self::build($r);
-        }
+        return false;
     }
-
-    ##
-    public static function submit($query)
-    {
-        ##
-        $o = static::ping($query);
-
-        ##
-        if (!$o) {
-            $o = static::build($query);
-            $o->store();
-        }
-
-        ##
-
-        return $o;
-    }
-
-    ##
-    public static function insert($query)
-    {
-        ##
-        $o = static::build($query);
-        $o->store_insert();
-
-        ##
-
-        return $o;
-    }
-
-    /**
-     *
-     * @param  type $query
-     * @param  type $values
-     * @return type
-     */
-    public static function update($query, $values)
-    {
-        ##
-        $o = static::build($query);
-        $o->store_update();
-
-        ##
-
-        return $o;
-    }
-
-    /**
-     * Import records from a source
-     *
-     * @param type $source
-     */
-    public static function import($source)
-    {
-        ## source is array loop throut records
-        foreach ($source as $record) {
-
-            ## insert single record
-            static::insert($record);
-        }
-    }
-
-    /**
-     * Encode/manipulate field on object
-     * based on encode_ static method of class
-     *
-     * @param  type $object
-     * @return type
-     */
-    public static function encode($object)
-    {
-        ##
-        $c = static::getClass();
-
-        ##
-        foreach ($object as $f=>$v) {
-
-            ##
-            $m = 'encode_'.$f;
-
-            ##
-            if (!method_exists($c,$m)) { continue; }
-
-            ##
-            else if (is_object($object)) {
-                $data->{$f} = call_user_func($c.'::'.$m,$v);
-            }
-
-            ##
-            else if (is_array($object)) {
-                $data[$f] = call_user_func($c.'::'.$m,$v);
-            }
-        }
-
-        ##
-
-        return $object;
-    }
-
-    ##
-    public static function decode($data)
-    {
-        ##
-        $c = get_called_class();
-
-        ##
-        foreach ($data as $f=>$v) {
-            $m = 'decode_'.$f;
-            if (method_exists($c,$m)) {
-                if (is_object($data)) {
-                    $data->{$f} = call_user_func($c.'::'.$m,$v);
-                } else {
-                    $data[$f] = call_user_func($c.'::'.$m,$v);
-                }
-            }
-        }
-
-        ##
-
-        return $data;
-    }
-
-    ##
-    public static function map($data,$map)
-    {
-        ##
-        $o = static::make($data);
-
-        ##
-        foreach ($map as $m=>$f) {
-            $o->{$f} = isset($data[$m]) ? $data[$m] : '';
-        }
-
-        ##
-
-        return $o;
-    }
-
-    ##
-    public static function dump($list=null)
-    {
-        ##
-        $a = $list ? $list : static::all();
-
-        ##
-        $t = static::getTable();
-
-        ##
-        $r = key($a);
-
-        ##
-        $n = count($a) > 0 ? count((array) $a[$r]) : 1;
-
-        ##
-        echo '<pre><table border="1" style="text-align:center"><thead><tr><th colspan="'.$n.'">'.$t.'</th></tr>';
-
-        ##
-        echo '<tr>';
-        foreach ($a[$r] as $f=>$v) {
-            echo '<th>'.$f.'</th>';
-        }
-        echo '</tr></thead><tbody>';
-
-        ##
-        foreach ($a as $i=>$r) {
-            echo '<tr>';
-            foreach ($r as $f=>$v) {
-                echo '<td>'.$v.'</td>';
-            }
-            echo '</tr>';
-        }
-
-        ##
-        echo '</tbody></table></pre>';
-    }
-
-    ##
-    public static function desc()
-    {
-        ##
-        $t = static::getTable();
-
-        ##
-        $s = static::getSchemaDB()->desc_table($t);
-
-        ##
-        echo '<table border="1" style="text-align:center"><tr><th colspan="8">'.$t.'</td></th>';
-
-        ##
-        $d = reset($s);
-
-        ##
-        echo '<tr>';
-        foreach ($d as $a=>$v) {
-            echo '<th>'.$a.'</th>';
-        }
-        echo '</tr>';
-
-        ##
-        foreach ($s as $d) {
-            echo '<tr>';
-            foreach ($d as $a=>$v) {
-                echo '<td>'.$v.'</td>';
-            }
-            echo '</tr>';
-        }
-
-        ##
-        echo '</table>';
-    }
-
+	    
     /**
 	 * Instrospect and retrieve element schema
 	 *  
@@ -513,6 +151,20 @@ class Table
         static::setModelSetting('update', time());
     }
 
+	##
+    public static function getDatabase()
+    {
+        ##
+        return isset(static::$SchemaDB) ? static::$SchemaDB : Database::getDefault();
+    }
+
+	##
+    public static function setDatabase()
+    {
+        ##
+        isset(static::$SchemaDB) ? static::$SchemaDB : Database::getDefault();
+    }
+
     ##
     public static function connect($conn=null)
     {
@@ -528,7 +180,6 @@ class Table
     public static function now()
     {
         ##
-
         return @date('Y-m-d H:i:s');
     }
 
@@ -541,12 +192,53 @@ class Table
     {
         ##
         if (!$value) {
-            return static::make(static::getSchemaDB()->getRow($sql));
+            return static::make(static::getDatabase()->getRow($sql));
         }
 
         ##
         else {
-            return static::getSchemaDB()->getValue($sql);
+            return static::getDatabase()->getValue($sql);
+        }
+    }
+	
+	/**
+	 * Drop table
+	 * 
+	 * @param type $confirm
+	 * @return type
+	 */ 
+    public static function drop($confirm=null)
+    {
+        ##
+        if ($confirm !== 'confirm') {
+            return;
+        }
+
+        ## prepare sql query
+        $t = static::getTable();
+
+        ##
+        $q = "DROP TABLE IF EXISTS {$t}";
+
+		##
+		static::delModelSetting('update');
+		
+        ## execute query
+        static::getDatabase()->query($q);
+    }
+	
+	/**
+     * Import records from a source
+     *
+     * @param type $source
+     */
+    public static function import($source)
+    {
+        ## source is array loop throut records
+        foreach ($source as $record) {
+
+            ## insert single record
+            static::insert($record);
         }
     }
 }

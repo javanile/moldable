@@ -207,15 +207,9 @@ class Database extends Source
 
         ##
         $t = $parse ? $this->getPrefix() . $table : $table;
-
-        ## sql query to test table exists
-        $q = "SHOW TABLES LIKE '{$t}'";
-
-        ## test if table exists
-        $e = $this->getRow($q);
-
+        
         ## if table no exists return sql statament for creating this
-        if (!$e) {
+        if (!$this->tableExists($t)) {
             return array(Mysql::createTable($t, $s));
         }
 
@@ -235,7 +229,7 @@ class Database extends Source
         foreach ($s as $f=>$d) {
 
             ##
-            $this->diff_table_field($a,$f,$d,$t,$o,$z);
+            $this->diffTableField($a,$f,$d,$t,$o,$z);
         }
 
         ##
@@ -247,12 +241,28 @@ class Database extends Source
         }
 
         ##
-
         return array_merge(array_reverse($z),$o);
     }
 
+	/**
+	 * 
+	 * @param type $table
+	 * @return type
+	 */
+	public function tableExists($table) {
+		
+		## sql query to test table exists
+        $q = "SHOW TABLES LIKE '{$table}'";
+
+        ## test if table exists
+        $e = $this->getRow($q);
+
+		##
+		return $e;
+	}
+	
     ##
-    public function diff_table_field($a,$f,$d,$table,&$o,&$z)
+    public function diffTableField($a,$f,$d,$table,&$o,&$z)
     {
         ## check if column exists in current db
         if (!isset($a[$f])) {
@@ -418,6 +428,48 @@ class Database extends Source
             ## set current SchemaDB connection to default
             static::$default = &$schemadb;
         }
+    }
+	
+	/**
+     * printout database status and info
+     */
+    public function dump()
+    {
+        ## describe databse
+        $s = $this->desc();
+
+        ##
+        echo '<pre><table border="1" style="text-align:center">';
+
+        ##
+        if ($s) {
+
+            ##
+            foreach ($s as $t => $d) {
+
+                ##
+                echo '<tr><th colspan="9">'.$t.'</th></tr>';
+                echo '<tr><td>&nbsp;</td>';
+                $r = key($d);
+                foreach ($d[$r] as $k=>$v) {
+                    echo '<th>'.$k.'</th>';
+                }
+                echo '</tr>';
+                foreach ($d as $f => $a) {
+                    echo '<tr>';
+                    echo '<th>'.$f.'</th>';
+                    foreach ($a as $k=>$v) {
+                        echo '<td>'.$v.'</td>';
+                    }
+                    echo '</tr>';
+                }
+            }
+        } else {
+            echo '<tr><th>No database tables</th></tr>';
+        }
+
+        ##
+        echo '</table></pre>';
     }
 }
 
