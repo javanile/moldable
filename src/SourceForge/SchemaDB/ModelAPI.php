@@ -12,7 +12,6 @@ namespace SourceForge\SchemaDB;
  */
 class ModelAPI extends Model {
 	
-	
 	/**
      * Load item from DB by primary key
      *
@@ -245,7 +244,6 @@ class ModelAPI extends Model {
         $o->store_update();
 
         ##
-
         return $o;
     }
 

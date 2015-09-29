@@ -29,13 +29,13 @@ new SchemaDB(array(
 class Person extends Storable {
 	
 	##
-	public $id = static::PRIMARY_KEY;
+	public $id = self::PRIMARY_KEY;
 	
 	##
 	public $name = "";
 	
 	##
-	public $age = 0;	
+	public $age = 0;
 }
 
 ## remove Person table and complete items list

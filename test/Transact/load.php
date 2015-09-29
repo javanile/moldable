@@ -4,6 +4,15 @@
 require_once 'common.php';
 
 ##
+use SourceForge\SchemaDB;
+
+##
+$db = new SchemaDB\Database();
+
+##
+$db->transact();
+
+##
 $id = 1;
 
 ##

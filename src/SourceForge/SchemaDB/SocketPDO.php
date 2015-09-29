@@ -77,16 +77,20 @@ class SocketPDO {
 	public function getResults($sql) {
 		
 		##
-		$s = $this->dbo->prepare($sql);
+		$statament = $this->dbo->prepare($sql);
 		
 		##
-		$s->execute();
+		$statament->execute();
 
 		##
-		return $s->fetchAll();
+		$all = $statament->fetchAll(\PDO::FETCH_ASSOC);
+				
+		##
+		return $all;
 	}
 	
 	/**
+	 * Return prefix passed on init attribute
 	 * 
 	 * @return type
 	 */
@@ -97,8 +101,9 @@ class SocketPDO {
 	}
 	
 	/**
+	 * Return last insert id 
 	 * 
-	 * 
+	 * @return type
 	 */
 	public function lastInsertId() 
 	{
@@ -107,6 +112,7 @@ class SocketPDO {
 	}
 	
 	/**
+	 * 
 	 * 
 	 */
 	public function transact() {

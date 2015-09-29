@@ -4,13 +4,13 @@
 require_once '../common.php'; 
 
 ## require library
-require_once '../../SchemaDB.php';
+require_once '../../src/SourceForge/SchemaDB/autoload.php';
 
 ## retrive main class to enstablish connection
-use SourceForge\SchemaDB\SchemaDB;
+use SourceForge\SchemaDB;
 
 ## Connect to MySQL database
-$Schema = new SchemaDB(array(
+$db = new SchemaDB\Database(array(
 	'host' => $host,
 	'user' => $user,
 	'pass' => $pass,
@@ -19,7 +19,7 @@ $Schema = new SchemaDB(array(
 ));
 
 ## Apply schema create or update database tables
-$desc = $Schema->desc();
+$desc = $db->desc();
 
 ##
 echo '<pre>';
