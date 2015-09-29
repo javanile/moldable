@@ -89,6 +89,76 @@ class Database extends Source
         static::setDefault($this);
     }
 
+	    ##
+    public function desc()
+    {
+        ##
+        $p = $this->getPrefix();
+
+        ##
+        $q = "SHOW TABLES LIKE '{$p}%'";
+
+        ##
+        $l = $this->getResults($q);
+
+        ##
+        if (!count($l)) { return; }
+
+        ##
+        $r = array();
+
+        ##
+        foreach ($l as $t) {
+
+            ##
+            $t = reset($t);
+
+            ##
+            $r[$t] = $this->descTable($t);
+        }
+
+        ##
+
+        return $r;
+    }
+
+    /**
+	 * describe table
+	 * 
+	 * @param type $table
+	 * @return type
+	 */
+    public function descTable($table)
+    {
+        ##
+        $q = "DESC {$table}";
+
+        ##
+        $i = $this->getResults($q);
+
+        ##
+        $a = array();
+
+        ##
+        $n = 0;
+
+        ##
+        $b = false;
+
+        ##
+        foreach ($i as $j) {
+            $j['Before'] = $b;
+            $j['First']	= $n === 0;
+            $a[$j['Field']] = $j;
+            $b = $j['Field'];
+            $n++;
+        }
+
+        ##
+
+        return $a;
+    }
+
     /**
      * Apply schema on the db
      *
@@ -152,7 +222,6 @@ class Database extends Source
         }
 
         ## return queries
-
         return $q;
     }
 
@@ -223,7 +292,7 @@ class Database extends Source
         $a = $this->descTable($t);
 
         ##
-        $p = $this->diff_table_field_primary_key($a);
+        $p = $this->diffTableFieldPrimaryKey($a);
 
         ## test field definition
         foreach ($s as $f=>$d) {
@@ -262,7 +331,7 @@ class Database extends Source
 	}
 	
     ##
-    public function diffTableField($a,$f,$d,$table,&$o,&$z)
+    private function diffTableField($a,$f,$d,$table,&$o,&$z)
     {
         ## check if column exists in current db
         if (!isset($a[$f])) {
@@ -307,7 +376,7 @@ class Database extends Source
      * @param  type    $d
      * @return boolean
      */
-    public function diff_table_field_attributes($a,$f,$d)
+    private function diff_table_field_attributes($a,$f,$d)
     {
         ## loop throd current column property
         foreach ($a[$f] as $k=>$v) {
@@ -325,7 +394,7 @@ class Database extends Source
     }
 
     ##
-    public function diff_table_field_primary_key($a)
+    private function diffTableFieldPrimaryKey($a)
     {
         ## loop throd current column property
         foreach ($a as $f=>$d) {
@@ -337,71 +406,6 @@ class Database extends Source
         ##
 
         return false;
-    }
-
-    ##
-    public function desc()
-    {
-        ##
-        $p = $this->getPrefix();
-
-        ##
-        $q = "SHOW TABLES LIKE '{$p}%'";
-
-        ##
-        $l = $this->getResults($q);
-
-        ##
-        if (!count($l)) { return; }
-
-        ##
-        $r = array();
-
-        ##
-        foreach ($l as $t) {
-
-            ##
-            $t = reset($t);
-
-            ##
-            $r[$t] = $this->descTable($t);
-        }
-
-        ##
-
-        return $r;
-    }
-
-    ## describe table
-    public function descTable($table)
-    {
-        ##
-        $q = "DESC {$table}";
-
-        ##
-        $i = $this->getResults($q);
-
-        ##
-        $a = array();
-
-        ##
-        $n = 0;
-
-        ##
-        $b = false;
-
-        ##
-        foreach ($i as $j) {
-            $j['Before'] = $b;
-            $j['First']	= $n === 0;
-            $a[$j['Field']] = $j;
-            $b = $j['Field'];
-            $n++;
-        }
-
-        ##
-
-        return $a;
     }
 
     /**
