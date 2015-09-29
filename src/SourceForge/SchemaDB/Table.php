@@ -6,6 +6,8 @@
 \*/
 namespace SourceForge\SchemaDB;
 
+const VARCHAR = '<{"Type:varchar(255)}>';
+
 /**
  * static part of sdbClass
  *

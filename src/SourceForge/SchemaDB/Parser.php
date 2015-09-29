@@ -90,14 +90,14 @@ class Parser
         );
 
         ##
-        $t = static::get_type($notation);
+        $t = static::getType($notation);
 
         ##
         switch ($t) {
 
             ##
             case 'schema':
-                foreach (static::get_schema($notation) as $a=>$v) {
+                foreach (static::getSchema($notation) as $a=>$v) {
                     $d[$a] = $v;
                 }
                 break;
@@ -155,119 +155,154 @@ class Parser
         return $d;
     }
 
-    ##
-    public static function get_type($notation)
+    /**
+	 * 
+	 * 
+	 * @param type $notation
+	 * @return string
+	 */
+    public static function getType($notation)
     {
         ##
-        $t = gettype($notation);
+        $type = gettype($notation);
 
         ##
-        switch ($t) {
+        switch ($type) {
 
             ##
-            case 'string':
-                if (preg_match('/^<\{[A-Za-z_][0-9A-Za-z_]*\}>$/i',$notation)) {
-                    return 'class';
-                } elseif (preg_match('/^<\{.*\}>$/i',$notation)) {
-                    return 'schema';
-                } elseif (preg_match('/[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9] [0-9][0-9]:[0-9][0-9]:[0-9][0-9]/',$notation)) {
-                    return 'datetime';
-                } elseif (preg_match('/[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]/',$notation)) {
-                    return 'date';
-                } else {
-                    return 'string';
-                }
+			case 'string': return static::getTypeString($notation);
+                				
+			##
+			case 'array': return static::getTypeArray($notation);                
+				
+            ##
+			case 'NULL': return 'string';
 
             ##
-            case 'NULL':
-                return 'string';
+			case 'boolean': return 'boolean';
 
             ##
-            case 'boolean':
-                return 'boolean';
+			case 'integer': return 'int';
 
             ##
-            case 'integer':
-                return 'int';
-
-            ##
-            case 'double':
-                return 'float';
-
-            case 'array':
-                if ($notation && $notation == array_values($notation)) {
-                    return 'array';
-                } else {
-                    return 'schema';
-                }
+			case 'double': return 'float';
         }
-
     }
 
-    ##
+	/**
+	 * 
+	 * @param type $notation
+	 */
+	private static function getTypeString($notation) {
+		
+		##
+		if (preg_match('/^<\{[A-Za-z_][0-9A-Za-z_]*\}>$/i',$notation)) {
+			return 'class';
+		} 
+
+		##
+		elseif (preg_match('/^<\{.*\}>$/i',$notation)) {
+			return 'schema';
+		} 
+
+		##
+		elseif (preg_match('/[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9] [0-9][0-9]:[0-9][0-9]:[0-9][0-9]/',$notation)) {
+			return 'datetime';
+		} 
+
+		##
+		elseif (preg_match('/[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]/',$notation)) {
+			return 'date';
+		} 
+
+		##
+		else {
+			return 'string';
+		}		
+	}
+	
+	/**
+	 * 
+	 * 
+	 * @param type $notation
+	 * @return string
+	 */
+	private static function getTypeArray($notation) {
+		
+		##
+		if ($notation && $notation == array_values($notation)) {
+			return 'array';
+		} 
+
+		##
+		else {
+			return 'schema';
+		}
+	}
+	
+    /**
+	 * Retrieve value of a parsable notation
+	 * Value rapresent ...
+	 * 
+	 * @param type $notation
+	 * @return type
+	 */
     public static function getValue($notation)
     {
         ##
-        $t = static::get_type($notation);
+        $t = static::getType($notation);
 
         ##
         switch ($t) {
 
             ##
-            case 'int':
-                return (int) $notation;
+			case 'int': return (int) $notation;
 
             ##
-            case 'boolean':
-                return (boolean) $notation;
+			case 'boolean': return (boolean) $notation;
 
             ##
-            case 'primary_key':
-                return NULL;
+			case 'primary_key': return NULL;
 
             ##
-            case 'string':
-                return (string) $notation;
+			case 'string': return (string) $notation;
 
             ##
-            case 'float':
-                return (float) $notation;
+			case 'float': return (float) $notation;
 
             ##
-            case 'class':
-                return NULL;
+			case 'class': return NULL;
 
             ##
-            case 'array':
-                return NULL;
+			case 'array': return NULL;
 
             ##
-            case 'date':
-                return static::parse_date($notation);
+			case 'date': return static::parse_date($notation);
 
             ##
-            case 'datetime':
-                return static::parse_datetime($notation);
+			case 'datetime': return static::parse_datetime($notation);
 
             ##
-            case 'schema':
-                return null;
+			case 'schema': return null;
 
             ##
-            case 'column':
-                return null;
+			case 'column': return null;
 
             ##
-            default:
-                trigger_error("No PSEUDOTYPE value for '{$t}' => '{$notation}'",E_USER_ERROR);
+            default: trigger_error("No PSEUDOTYPE value for '{$t}' => '{$notation}'",E_USER_ERROR);
         }
     }
 
-    ##
-    public static function get_schema($notation)
+    /**
+	 * Parse notation and redtrieve 
+	 * its rappresenting schema if have it
+	 * 
+	 * @param type $notation
+	 * @return type
+	 */
+    public static function getSchema($notation)
     {
         ##
-
         return json_decode(trim($notation,'<>'),true);
     }
 
