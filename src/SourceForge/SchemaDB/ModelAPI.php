@@ -96,32 +96,34 @@ class ModelAPI extends Model {
         return $r;
     }
 
-	##
-    public static function all()
+	/**
+	 * 
+	 * 
+	 * @param type $fields
+	 * @return type
+	 */
+    public static function all($fields)
     {
         ##
         static::updateTable();
 
         ##
-        $t = static::getTable();
+        $table = static::getTable();
 
+		##
+		$join = "";
+		
+		## 
+		$selectFields = Mysql::selectFields($fields, $join);
+		
         ##
-        $q = "SELECT * FROM {$t}";
+        $sql = "SELECT {$selectFields} FROM {$table} AS t0 {$join}";
 
-        ##
-        $r = static::getDatabase()->getResults($q);
-
-        ##
-        $a = array();
-
-        ##
-        foreach ($r as $i=>$o) {
-            $a[$i] = static::make($o);
-        }
-
-        ##
-
-        return $a;
+		##
+		$results =  static::fetch($sql, true);
+		
+		##
+        return $results;
     }
 
     ##

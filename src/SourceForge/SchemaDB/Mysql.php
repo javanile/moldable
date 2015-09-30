@@ -127,40 +127,48 @@ class Mysql
      * @param  type   $f
      * @return string
      */
-    public static function selectFields($f,&$j)
+    public static function selectFields($fields, &$join)
     {
         ##
-        $j = "";
+        $join = "";
 
         ##
-        if (is_null($f)) {
+        if (is_null($fields)) {
             return '*';
         }
 
         ##
-        else if (is_string($f)) {
+        else if (is_string($fields)) {
             return $f;
         }
 
         ##
-        else if (is_array($f)) {
+        else if (is_array($fields)) {
 
             ##
-            $s = array();
+            $selectFields = array();
 
             ##
-
-            ##
-            foreach ($f as $k=>$v) {
-                $s[] = is_numeric($k) ? $v : $k;
-                if (preg_match('/([a-z]+)\.\*/i',$k,$d)) {
-                    $j .= "INNER JOIN {$v} AS $d[1] ON ";
-                }
+            foreach ($fields as $field => $definition) {
+				
+				##
+				if (is_numeric($field)) {
+					$selectFields[] = 't0.'.$definition;					
+				} else if (is_array($definition)) {
+					$alias  = $definition['alias'];
+					$table	= $definition['table'];
+					$key	= $alias.'.'.$definition['key'];
+					$lookup	= $definition['lookup'];
+					$join  .= "JOIN {$table} AS {$alias} ON {$key} = {$lookup}";
+					$fieldJoin	= $alias.'.'.$definition['field'];
+					$selectFields[] = $fieldJoin. ' AS '.$field; 
+				} else {
+					$selectFields[] = $definition. ' AS '.$field;										
+				} 				
             }
 
             ##
-
-            return implode(',',$s);
+            return implode(',',$selectFields);
         }
     }
 }

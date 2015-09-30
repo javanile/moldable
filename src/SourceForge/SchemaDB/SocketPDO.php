@@ -39,6 +39,9 @@ class SocketPDO {
 		$this->dbo = new \PDO($dsn,$args['user'],$args['pass'],$opt);		
 	
 		##
+		$this->dbo->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
+		
+		##
 		$this->prefix = $args['pref'];		
 	}
 	

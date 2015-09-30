@@ -4,13 +4,13 @@
 require_once '../common.php'; 
 
 ##
-require_once '../../SchemaDB.php';
+require_once '../../src/SourceForge/SchemaDB/autoload.php';
 
 ##
-use SourceForge\SchemaDB\SchemaDB;
+use SourceForge\SchemaDB;
 
 ##
-new SchemaDB(array(
+new SchemaDB\Database(array(
 	'host' => $host,
 	'user' => $user,
 	'pass' => $pass,
@@ -19,10 +19,7 @@ new SchemaDB(array(
 ));
 
 ##
-use SourceForge\SchemaDB\Storable;
-
-##
-class Person extends Storable {
+class Person extends SchemaDB\Storable {
 	
 	##
 	public $id = self::PRIMARY_KEY;	 
@@ -35,7 +32,7 @@ class Person extends Storable {
 }
 
 ##
-class Address extends Storable {
+class Address extends SchemaDB\Storable {
 
 	##
 	public $id = self::PRIMARY_KEY;

@@ -194,15 +194,29 @@ class Table
      */
     protected static function fetch($sql,$array=false,$value=false)
     {
+		echo '<pre>Ciao:';
+		//var_dump($sql);
+	
+		##
+		if ($array) {
+			$result = static::getDatabase()->getResults($sql);			
+		}
+		
         ##
-        if (!$value) {
-            return static::make(static::getDatabase()->getRow($sql));
+        else if (!$value) {
+            $result = static::make(static::getDatabase()->getRow($sql));
         }
 
         ##
         else {
-            return static::getDatabase()->getValue($sql);
+            $result = static::getDatabase()->getValue($sql);
         }
+		
+		var_dump($result);
+		echo '</pre>';
+		die();
+		
+		return $result;
     }
 	
 	/**

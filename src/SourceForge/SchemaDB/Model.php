@@ -162,8 +162,13 @@ class Model extends Table
 		static::updateTable();       
     }
 
-	##
-    public static function make($values=null)
+	/**
+	 * 
+	 * @param type $values
+	 * @param type $map
+	 * @return \static
+	 */
+    public static function make($values=null, $map=null)
     {
         ##
         $object = new static();
@@ -224,6 +229,13 @@ class Model extends Table
         return $o;
     }
 	
+	/**
+	 * 
+	 * @param type $values
+	 * @param type $filter
+	 * @param type $map
+	 * @return type
+	 */
 	public static function filter($values, $filter, $map=null) {
 		
 		##
@@ -256,5 +268,21 @@ class Model extends Table
 		##
         return $object;		
 	}
+	
+	/**
+	 * 
+	 */
+	public static function join($field,$lookup) {
+		
+		##
+		return array(
+			'alias' => 'j0',
+			'class' => get_called_class(),
+			'field' => $field,		
+			'table' => static::getTable(),
+			'key'	=> static::getPrimaryKey(),
+			'lookup' => $lookup,
+		);		
+	} 
 }
 
