@@ -19,14 +19,21 @@ class ModelDecoder extends SchemaDB\Storable {
 	public $ts = self::DATETIME;
 
 	##
-	public $name = self::VARCHAR;	
+	public $name = self::VARCHAR;		
+	
+	##
+	public function decode_($value) {
+	
+		##
+		return $value;
+	}
 	
 	##
 	public function decode_ts($ts) {
 	
 		##
 		return date('d/m/Y', $ts);
-	}	
+	}
 }
 
 ## 
@@ -38,4 +45,3 @@ $decoded = ModelDecoder::decode(array(
 echo '<pre>';
 var_dump($decoded);
 echo '</pre>';
-

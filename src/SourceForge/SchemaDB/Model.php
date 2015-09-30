@@ -120,23 +120,41 @@ class Model extends Table
 	}
 
 	##
-    public static function getDatabase()
-    {
-		var_Dump("Ciao",Database::getDefault());
-		echo '<pre>';
-		debug_print_backtrace();
-		echo '</pre>';
-        ##
-        return static::hasClassSetting('database') ? static::getClassSetting('database') : Database::getDefault();
-    }
-
-	##
-    public static function setDatabase($database)
-    {        
+	public static function getMethodsByPrefix($prefix=null) {
+	
 		##
-		static::setClassSetting('database',$database);
-    }
-
+		if (static::hasClassSetting($prefix)) {
+			return static::getClassSetting($prefix);
+		}
+		
+		##
+		$class = static::getClass();
+		
+		##
+		$allMethods = get_class_methods($class);
+		
+		##
+		$methods = array();
+		
+		##
+		if (count($allMethods) > 0) {					
+			foreach($allMethods as $method) {
+				if (preg_match('/^'.$prefix.'/i',$method)) {
+					$methods[] = $method;
+				}
+			}			
+		} 
+		
+		##
+		asort($methods);
+		
+		##
+		static::setClassSetting($prefix, $methods);
+		
+		##
+		return $methods;
+	} 
+		
     ##
     public static function connect($conn=null)
     {
@@ -205,5 +223,38 @@ class Model extends Table
         ##
         return $o;
     }
+	
+	public static function filter($values, $filter, $map=null) {
+		
+		##
+		$object = is_array($values) ? static::make($values,$map) : $values;
+	
+		##
+		$methods = static::getMethodsByPrefix($filter);
+				
+		##
+		if (!is_object($object) || count($methods) == 0) { 
+			return $object;			
+		}
+       	
+		##
+		foreach ($object as $field => $value) {
+			
+			##
+			$compareWith = $filter.$field;
+			
+			##
+			foreach($methods as $method) {				
+				
+				##
+				if (preg_match('/^'.$method.'/i',$compareWith)) {
+					$object->{$field} = call_user_func(array($object, $method), $value);					
+				}				
+			}
+		}
+        
+		##
+        return $object;		
+	}
 }
 

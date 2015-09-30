@@ -257,66 +257,22 @@ class ModelAPI extends Model {
      * @param  type $$values
      * @return type
      */
-    public static function encode($values)
+    public static function encode($values, $map=null)
     {
-        ##
-        $class = static::getClass();
-
-        ##
-        foreach ($values as $field => $value) {
-
-            ##
-            $method = 'encode_'.$field;
-
-            ##
-            if (!method_exists($class,$method)) { continue; }
-
-            ##
-            else if (is_object($values)) {
-                $values->{$f} = call_user_func($class.'::'.$method,$value);
-            }
-
-            ##
-            else if (is_array($$values)) {
-                $values[$f] = call_user_func($c.'::'.$m,$v);
-            }
-        }
-
-        ##
-        return $values;
+		##
+		return static::filter($value, 'decode_', $map);		
     }
 
-    ##
-    public static function decode($values)
-    {
+    /**
+	 * 
+	 * 
+	 * @param type $values
+	 * @return type
+	 */
+    public static function decode($values, $map=null)
+    {					
 		##
-		$object = is_array($values) ? static::make($values) : $values;
-		
-		##
-		if (!is_object($values)) { return $object;}
-        
-		
-		var_dump($object);
-		die();
-		
-		##
-        $c = get_called_class();
-
-        ##
-        foreach ($data as $f=>$v) {
-            $m = 'decode_'.$f;
-            if (method_exists($c,$m)) {
-                if (is_object($data)) {
-                    $data->{$f} = call_user_func($c.'::'.$m,$v);
-                } else {
-                    $data[$f] = call_user_func($c.'::'.$m,$v);
-                }
-            }
-        }
-
-        ##
-
-        return $data;
+		return static::filter($value, 'decode_', $map);		
     }
 
     /**

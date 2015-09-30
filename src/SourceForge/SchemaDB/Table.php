@@ -158,6 +158,28 @@ class Table
         static::setModelSetting('update', time());
     }
 	
+	/**
+	 * Retriece linked database or default
+	 * 
+	 * @return type
+	 */
+    public static function getDatabase()
+    {		
+        ##
+        return static::hasClassSetting('database') ? static::getClassSetting('database') : Database::getDefault();
+    }
+
+	/**
+	 * Link specific database to this table
+	 * 
+	 * @return type
+	 */
+    public static function setDatabase($database)
+    {        
+		##
+		static::setClassSetting('database',$database);
+    }
+
     ## usefull mysql func
     public static function now()
     {
