@@ -15,51 +15,61 @@ namespace SourceForge\SchemaDB;
 class Parser
 {
     ##
-    private static $default = array(
-        'attribute' => array(
-            'type'		=> 'int(10)',
-            'null'		=> 'YES',
-            'key'		=> '',
-            'default'	=> '',
-            'extra'		=> '',
-        ),
-    );
+    private static $DEFAULTS = [
+		'attribute' => [
+			'Type'		=> 'int(10)',
+            'Null'		=> 'YES',
+            'Key'		=> '',
+            'Default'	=> '',
+            'Extra'		=> '',
+		],
+		'schema' => [
+			'Field'		=> '',
+            'Type'		=> 'int(10)',
+            'Null'		=> 'YES',
+            'Key'		=> '',
+            'Default'	=> '',
+            'Extra'		=> '',
+            'Before'	=> '',
+            'First'		=> '',
+		],
+	];
 
-    ## parse a multi-table schema to sanitize end explode implicit info
-    public static function parseSchema($schema)
-    {
-        ##
-        $s = array();
+    /**
+	 * parse a multi-table schema to sanitize end explode implicit info
+	 * 
+	 * @param type $schema
+	 * @return type
+	 */
+    public static function parseSchemaDB(&$schema)
+    {		
+        ## loop throh tables on the schema
+        foreach($schema as &$table) {
 
-        ##
-        foreach ($schema as $t => $f) {
-
-            ##
-            $s[$t] = static::parseSchemaTable($f);
+            ## parse each table
+            static::parseSchemaTable($table);
         }
-
-        ##
-
-        return $s;
     }
 
-    ## parse table schema to sanitize end explod implicit info
-    public static function parseSchemaTable($schema)
-    {
+    /**
+	 * Parse table schema to sanitize end explod implicit info
+	 * 
+	 * @param type $schema
+	 * @return type
+	 */
+    public static function parseSchemaTable(&$schema)
+    {        
         ##
-        $s = array();
-
-        ##
-        $b = false;
+        $before = null;
 
         ##
         foreach ($schema as $f=>$d) {
 
             ##
-            $s[$f] = static::parseSchemaTableColumn($d,$f,$b);
+            static::parseSchemaTableColumn($d,$f,$before);
 
             ##
-            $b = $f;
+            $before = $f;
         }
 
         ##
@@ -76,24 +86,12 @@ class Parser
      * @return string
      */
     public static function parseSchemaTableColumn($notation,$field=null,$before_field=null)
-    {
-        ## default schema of a column
-        $d = array(
-            'Field'		=> $field,
-            'Type'		=> static::$default['attribute']['type'],
-            'Null'		=> static::$default['attribute']['null'],
-            'Key'		=> static::$default['attribute']['key'],
-            'Default'	=> static::$default['attribute']['default'],
-            'Extra'		=> static::$default['attribute']['extra'],
-            'Before'	=> $before_field,
-            'First'		=> !$before_field,
-        );
+    {        		
+        ##
+        $type = static::getType($notation);
 
         ##
-        $t = static::getType($notation);
-
-        ##
-        switch ($t) {
+        switch ($type) {
 
             ##
             case 'schema':
@@ -102,7 +100,8 @@ class Parser
                 }
                 break;
 
-            case 'date':
+			##
+			case 'date': return static::getDateSchema();
                 $d['Type'] = 'date';
                 break;
 
@@ -151,8 +150,6 @@ class Parser
                 $d['Type'] = 'enum('.implode(',',$t).')';
                 break;
         }
-
-        return $d;
     }
 
     /**
@@ -196,7 +193,7 @@ class Parser
 	private static function getTypeString($notation) {
 		
 		##
-		if (preg_match('/^<\{[A-Za-z_][0-9A-Za-z_]*\}>$/i',$notation)) {
+		if (preg_match('/^<<\{[A-Za-z_][0-9A-Za-z_]*\>>$/i',$notation)) {
 			return 'class';
 		} 
 

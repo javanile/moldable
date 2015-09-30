@@ -232,32 +232,33 @@ class Database extends Source
      * @param  type $parse
      * @return type
      */
-    public function diff($schema,$parse=true)
+    public function diff(&$schema,$parse=true)
     {
         ## prepare
-        $s = $parse ? Parser::parseSchema($schema) : $schema;
+        if ($parse) { 
+			Parser::parseSchema($schema);
+		}
 
         ## get prefix string
-        $p = $this->getPrefix();
+        $prefix = $this->getPrefix();
 
         ## output container for rescued SQL query
-        $o = array();
+        $queries = array();
 
         ## loop throu the schema
-        foreach ($s as $t => $d) {
+        foreach ($schema as $table => &$attributes) {
+
+            ## 
+            $sql = $this->diffTable($prefix . $table, $attributes, false);
 
             ##
-            $q = $this->diffTable($p.$t, $d, false);
-
-            ##
-            if (count($q)>0) {
-                $o = array_merge($o, $q);
+            if (count($sql) > 0) {
+                $queries = array_merge($queries, $sql);
             }
         }
 
         ## return estimated sql query
-
-        return $o;
+        return $queries;
     }
 
     /**
@@ -268,51 +269,98 @@ class Database extends Source
      * @param  type $parse
      * @return type
      */
-    public function diffTable($table,$schema,$parse=true)
+    public function diffTable($table, &$schema, $parse=true)
     {
         ## parse input schema if required
-        $s = $parse ? Parser::parseSchemaTable($schema) : $schema;
-
-        ##
-        $t = $parse ? $this->getPrefix() . $table : $table;
-        
+        if ($parse) { 
+			
+			##
+			Parser::parseSchemaTable($schema);
+			
+			##
+			$table = $this->getPrefix() . $table;
+		}
+				
         ## if table no exists return sql statament for creating this
-        if (!$this->tableExists($t)) {
-            return array(Mysql::createTable($t, $s));
+        if (!$this->tableExists($table)) {
+			
+			## 
+            return array(Mysql::createTable($table, $schema));
         }
 
-        ## used as output array
-        $o = array();
+		##
+		return $this->diffTableQueries();
+	}
+	
+    /**
+     * generate query to align table
+     *
+     * @param  type $table
+     * @param  type $schema
+     * @param  type $parse
+     * @return type
+     */
+    private function diffTableQueries($table, &$schema)
+    {
+        ## first order queries used as output array
+        $foQueries = array();
 
-        ## used as output array
-        $z = array();
+        ## second order queries used as output array
+        $soQueries = array();
 
         ## describe table get current table description
-        $a = $this->descTable($t);
-
-        ##
-        $p = $this->diffTableFieldPrimaryKey($a);
+        $fields = $this->descTable($table);
 
         ## test field definition
-        foreach ($s as $f=>$d) {
+        foreach ($schema as $field => &$attributes) {
 
             ##
-            $this->diffTableField($a,$f,$d,$t,$o,$z);
+            $this->diffTableField(
+				$fields,
+				$field,
+				$attributes,
+				$table,
+				$foQueries,
+				$soQueries
+			);
+        }
+
+		return $this->diffTableMergeQueries($table, $fields, $foQueries, $soQueries);
+	}
+	
+	/**
+	 * 
+	 * 
+	 * 
+	 * @return type
+	 */
+	private function diffTableMergeQueries($table, &$fields, &$foQueries, &$soQueries) {
+
+		##
+        $key = $this->diffTableFieldPrimaryKey($fields);
+
+        ##
+        if ($key && count($foQueries) > 0) {
+			
+			##
+            $foQueries[] = Mysql::alterTableDropPrimaryKey($table);
+            
+			##
+			$fields[$key]['Key'] = '';
+            
+			##
+			$fields[$key]['Extra'] = '';
+            
+			##
+			$foQueries[] = Mysql::alterTableChange($table, $key, $fields[$key]);
         }
 
         ##
-        if ($p && count($z) > 0) {
-            $a[$p]['Key'] = '';
-            $a[$p]['Extra'] = '';
-            $z[] = Mysql::alterTableDropPrimaryKey($t);
-            $z[] = Mysql::alterTableChange($t,$p,$a[$p]);
-        }
-
-        ##
-        return array_merge(array_reverse($z),$o);
+        return array_merge(array_reverse($foQueries), $soQueries);
     }
 
 	/**
+	 * Test if a table exists
 	 * 
 	 * @param type $table
 	 * @return type
@@ -320,49 +368,57 @@ class Database extends Source
 	public function tableExists($table) {
 		
 		## sql query to test table exists
-        $q = "SHOW TABLES LIKE '{$table}'";
+        $sql = "SHOW TABLES LIKE '{$table}'";
 
         ## test if table exists
-        $e = $this->getRow($q);
+        $exists = $this->getRow($sql);
 
-		##
-		return $e;
+		## return and cast test result
+		return (boolean) $exists;
 	}
 	
-    ##
-    private function diffTableField($a,$f,$d,$table,&$o,&$z)
+    /**
+	 * 
+	 * @param type $table
+	 * @param type $field
+	 * @param type $attributes
+	 * @param type $fields
+	 * @param type $foQueries
+	 * @param type $soQueries
+	 */
+    private function diffTableField($table, $field, &$attributes, &$fields, &$foQueries,&$soQueries)
     {
         ## check if column exists in current db
-        if (!isset($a[$f])) {
+        if (!isset($fields[$field])) {
 
             ##
-            $q = Mysql::alterTableAdd($table,$f,$d);
+            $sql = Mysql::alterTableAdd($table, $field, $attributes);
 
             ## add primary key column
-            if ($d['Key'] == 'PRI') {
-                $z[] = $q;
+            if ($attributes['Key'] == 'PRI') {
+                $foQueries[] = $sql;
             }
 
             ## add normal column
             else {
-                $o[] = $q;
+                $soQueries[] = $sql;
             }
         }
 
         ## check if column need to be updated
-        else if ($this->diff_table_field_attributes($a,$f,$d)) {
+        else if ($this->diffTableFieldAttributes($field, $attributes, $fields)) {
 
             ##
-            $q = Mysql::alterTableChange($table,$f,$d);
+            $sql = Mysql::alterTableChange($table, $field, $attributes);
 
             ## alter column that lose primary key
-            if ($a[$f]['Key'] == 'PRI' || $d['Key'] == 'PRI') {
-                $z[] = $q;
+            if ($fields[$field]['Key'] == 'PRI' || $attributes['Key'] == 'PRI') {
+                $foQueries[] = $sql;
             }
 
             ## alter colum than not interact with primary key
             else {
-                $o[] = $q;
+                $soQueries[] = $sql;
             }
         }
     }
@@ -375,7 +431,7 @@ class Database extends Source
      * @param  type    $d
      * @return boolean
      */
-    private function diff_table_field_attributes($a,$f,$d)
+    private function diffTableFieldAttributes($a,$f,$d)
     {
         ## loop throd current column property
         foreach ($a[$f] as $k=>$v) {
@@ -392,18 +448,24 @@ class Database extends Source
         return false;
     }
 
-    ##
-    private function diffTableFieldPrimaryKey($a)
+    /**
+	 * Return primary field name if have one
+	 * 
+	 * @param type $fields
+	 * @return boolean
+	 */
+    private function diffTableFieldPrimaryKey(&$fields)
     {
         ## loop throd current column property
-        foreach ($a as $f=>$d) {
+        foreach ($fields as $field => &$attributes) {
 
-            ## if have a difference
-            if ($d['Key'] == 'PRI') { return $f; }
+            ## lookitup by equal
+            if ($attributes['Key'] == 'PRI') { 
+				return $field; 				
+			}
         }
 
         ##
-
         return false;
     }
 

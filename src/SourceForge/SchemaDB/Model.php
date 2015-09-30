@@ -281,7 +281,7 @@ class Model extends Table
 			'field' => $field,		
 			'table' => static::getTable(),
 			'key'	=> static::getPrimaryKey(),
-			'lookup' => $lookup,
+			'lookup'=> $lookup,
 		);		
 	} 
 }
