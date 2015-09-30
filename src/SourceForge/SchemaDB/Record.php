@@ -69,22 +69,6 @@ class Record extends ModelAPI
         }
     }
 
-    ##
-    public function fill($array)
-    {
-        foreach ($this->getFields() as $f) {
-            if (isset($array[$f])) {
-                $this->{$f} = $array[$f];
-            }
-        }
-
-        $k = $this->primary_key();
-
-        if ($k) {
-            $this->{$k} = isset($array[$k]) ? (int) $array[$k] : (int) $this->{$k};
-        }
-    }
-
     /**
      * Return fields names
      *

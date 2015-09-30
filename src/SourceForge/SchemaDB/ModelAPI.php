@@ -287,9 +287,19 @@ class ModelAPI extends Model {
     }
 
     ##
-    public static function decode($data)
+    public static function decode($values)
     {
-        ##
+		##
+		$object = is_array($values) ? static::make($values) : $values;
+		
+		##
+		if (!is_object($values)) { return $object;}
+        
+		
+		var_dump($object);
+		die();
+		
+		##
         $c = get_called_class();
 
         ##

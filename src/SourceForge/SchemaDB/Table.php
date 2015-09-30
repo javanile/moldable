@@ -133,7 +133,12 @@ class Table
 	 */ 
     public static function updateTable()
     {        
-        ## avoid re-update by check the cache
+		## if model is not connectect to any db return
+		if (!static::getDatabase()) {
+			return;			
+		}	
+
+		## avoid re-update by check the cache
         if (static::hasModelSetting('update')) {	
 			return;
 		}
@@ -152,32 +157,7 @@ class Table
         ## cache last update avoid multiple call
         static::setModelSetting('update', time());
     }
-
-	##
-    public static function getDatabase()
-    {
-        ##
-        return isset(static::$SchemaDB) ? static::$SchemaDB : Database::getDefault();
-    }
-
-	##
-    public static function setDatabase()
-    {
-        ##
-        isset(static::$SchemaDB) ? static::$SchemaDB : Database::getDefault();
-    }
-
-    ##
-    public static function connect($conn=null)
-    {
-        ##
-        if (schemadb::connected()) {
-
-            ##
-            static::updateTable();
-        }
-    }
-
+	
     ## usefull mysql func
     public static function now()
     {

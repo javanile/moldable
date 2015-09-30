@@ -13,13 +13,13 @@ use SourceForge\SchemaDB;
 class ModelDecoder extends SchemaDB\Storable {	
 	
 	##
-	public $id = self::PRIMARY_KEY;
-
-	##
-	public $ts = self::DATETIME;
-
+	public $pid = self::PRIMARY_KEY;
+	
 	##
 	public $name = self::VARCHAR;	
+	
+	##
+	public $ts = self::DATETIME;
 	
 	##
 	public function decode_ts($ts) {

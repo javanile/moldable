@@ -120,18 +120,43 @@ class Model extends Table
 	}
 
 	##
-    public static function make($data=null)
+    public static function getDatabase()
+    {
+		var_Dump("Ciao",Database::getDefault());
+		echo '<pre>';
+		debug_print_backtrace();
+		echo '</pre>';
+        ##
+        return static::hasClassSetting('database') ? static::getClassSetting('database') : Database::getDefault();
+    }
+
+	##
+    public static function setDatabase($database)
+    {        
+		##
+		static::setClassSetting('database',$database);
+    }
+
+    ##
+    public static function connect($conn=null)
+    {
+		##
+		static::updateTable();       
+    }
+
+	##
+    public static function make($values=null)
     {
         ##
-        $o = new static();
+        $object = new static();
 
         ##
-        if ($data) {
-            $o->fill($data);
+        if ($values) {
+            $object->fill($values);
         }
 
         ##
-        return $o;
+        return $object;
     }
 
     ##
@@ -139,6 +164,31 @@ class Model extends Table
     {
         ##
         return static::make($data);
+    }
+	
+	/**
+	 * 
+	 * 
+	 * @param type $values
+	 */
+    public function fill($values)
+    {
+		##
+        foreach ($this->getFields() as $f) {
+            
+			##
+			if (isset($values[$f])) {
+                $this->{$f} = $values[$f];
+            }
+        }
+
+		##
+        $k = $this->getPrimaryKey();
+
+		##
+        if ($k) {
+            $this->{$k} = isset($values[$k]) ? (int) $values[$k] : (int) $this->{$k};
+        }
     }
 	
 	##

@@ -415,21 +415,20 @@ class Database extends Source
     public static function getDefault()
     {
         ## return static $default
-
         return static::$default;
     }
 
     /**
      *
-     * @param type $schemadb
+     * @param type $database
      */
-    public static function setDefault($schemadb)
+    public static function setDefault($database)
     {
         ## if no default SchemaDB connection auto-set then-self
         if (static::$default === null) {
 
             ## set current SchemaDB connection to default
-            static::$default = &$schemadb;
+            static::$default = &$database;
         }
     }
 	
