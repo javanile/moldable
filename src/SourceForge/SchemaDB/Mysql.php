@@ -127,7 +127,7 @@ class Mysql
      * @param  type   $f
      * @return string
      */
-    public static function selectFields($fields, &$join)
+    public static function selectFields($fields, $tableAlias, &$join)
     {
         ##
         $join = "";
@@ -153,7 +153,7 @@ class Mysql
 				
 				##
 				if (is_numeric($field)) {
-					$selectFields[] = 't0.'.$definition;					
+					$selectFields[] = $tableAlias.'.'.$definition;					
 				} else if (is_array($definition)) {
 					$alias  = $definition['alias'];
 					$table	= $definition['table'];

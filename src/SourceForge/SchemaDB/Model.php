@@ -276,7 +276,7 @@ class Model extends Table
 		
 		##
 		return array(
-			'alias' => 'j0',
+			'alias' => get_called_class(),
 			'class' => get_called_class(),
 			'field' => $field,		
 			'table' => static::getTable(),

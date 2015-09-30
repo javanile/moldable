@@ -113,11 +113,14 @@ class ModelAPI extends Model {
 		##
 		$join = "";
 		
+		##
+		$class = get_called_class();
+		
 		## 
-		$selectFields = Mysql::selectFields($fields, $join);
+		$selectFields = Mysql::selectFields($fields, $class, $join);
 		
         ##
-        $sql = "SELECT {$selectFields} FROM {$table} AS t0 {$join}";
+        $sql = "SELECT {$selectFields} FROM {$table} AS {$class} {$join}";
 
 		##
 		$results =  static::fetch($sql, true);
