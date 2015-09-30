@@ -11,7 +11,7 @@ namespace SourceForge\SchemaDB;
  *
  *
  */
-class Record extends Model
+class Record extends ModelAPI
 {
     ## constructor
     public function __construct()

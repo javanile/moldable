@@ -10,7 +10,7 @@ require_once '../../src/SourceForge/SchemaDB/autoload.php';
 use SourceForge\SchemaDB;
 
 ##
-class TestModel extends SchemaDB\Storable {	
+class ModelDecoder extends SchemaDB\Storable {	
 	
 	##
 	public $pid = self::PRIMARY_KEY;
@@ -22,20 +22,20 @@ class TestModel extends SchemaDB\Storable {
 	public $ts = self::DATETIME;
 	
 	##
-	public static function encode_ts($date) {
+	public function decode_ts($ts) {
 	
 		##
-		return (int) $date;
+		return date('d/m/Y', $ts);
 	}	
 }
 
 ## 
-$encoded = TestModel::encode(array(
-	'ts' => '1/1/1981', 
+$decoded = ModelDecoder::decode(array(
+	'ts' => time(), 
 ));
 
 ##
 echo '<pre>';
-var_dump($encoded);
+var_dump($decoded);
 echo '</pre>';
 

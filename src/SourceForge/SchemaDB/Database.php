@@ -118,7 +118,6 @@ class Database extends Source
         }
 
         ##
-
         return $r;
     }
 
@@ -305,8 +304,8 @@ class Database extends Source
         if ($p && count($z) > 0) {
             $a[$p]['Key'] = '';
             $a[$p]['Extra'] = '';
-            $z[] = Mysql::alter_table_drop_primary_key($t);
-            $z[] = Mysql::alter_table_change($t,$p,$a[$p]);
+            $z[] = Mysql::alterTableDropPrimaryKey($t);
+            $z[] = Mysql::alterTableChange($t,$p,$a[$p]);
         }
 
         ##
@@ -337,7 +336,7 @@ class Database extends Source
         if (!isset($a[$f])) {
 
             ##
-            $q = Mysql::alter_table_add($table,$f,$d);
+            $q = Mysql::alterTableAdd($table,$f,$d);
 
             ## add primary key column
             if ($d['Key'] == 'PRI') {
@@ -354,7 +353,7 @@ class Database extends Source
         else if ($this->diff_table_field_attributes($a,$f,$d)) {
 
             ##
-            $q = Mysql::alter_table_change($table,$f,$d);
+            $q = Mysql::alterTableChange($table,$f,$d);
 
             ## alter column that lose primary key
             if ($a[$f]['Key'] == 'PRI' || $d['Key'] == 'PRI') {

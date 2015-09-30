@@ -21,22 +21,25 @@ class ModelAPI extends Model {
     public static function load($id,$fields=null)
     {
         ##
-        $i = (int) $id;
+        $index = (int) $id;
 
         ##
-        $t = static::getTable();
+        $table = static::getTable();
 
         ## get primary key
-        $k = static::getPrimaryKey();
+        $key = static::getPrimaryKey();
 
+		##
+		$join = null;
+		
         ## parse SQL select fields
-        $f = Mysql::select_fields($fields,$j);
+        $selectFields = Mysql::selectFields($fields, $join);
 
         ## prepare SQL query
-        $q = "SELECT {$f} FROM {$t} {$j} WHERE {$k}='{$i}' LIMIT 1";
+        $sql = "SELECT {$selectFields} FROM {$table} {$join} WHERE {$key}='{$index}' LIMIT 1";
 
         ## fetch data on database and return it
-        return static::fetch($q, false, is_string($fields));
+        return static::fetch($sql, false, is_string($fields));
     }
 	
     ##
@@ -251,37 +254,36 @@ class ModelAPI extends Model {
      * Encode/manipulate field on object
      * based on encode_ static method of class
      *
-     * @param  type $object
+     * @param  type $$values
      * @return type
      */
-    public static function encode($object)
+    public static function encode($values)
     {
         ##
-        $c = static::getClass();
+        $class = static::getClass();
 
         ##
-        foreach ($object as $f=>$v) {
+        foreach ($values as $field => $value) {
 
             ##
-            $m = 'encode_'.$f;
+            $method = 'encode_'.$field;
 
             ##
-            if (!method_exists($c,$m)) { continue; }
+            if (!method_exists($class,$method)) { continue; }
 
             ##
-            else if (is_object($object)) {
-                $data->{$f} = call_user_func($c.'::'.$m,$v);
+            else if (is_object($values)) {
+                $values->{$f} = call_user_func($class.'::'.$method,$value);
             }
 
             ##
-            else if (is_array($object)) {
-                $data[$f] = call_user_func($c.'::'.$m,$v);
+            else if (is_array($$values)) {
+                $values[$f] = call_user_func($c.'::'.$m,$v);
             }
         }
 
         ##
-
-        return $object;
+        return $values;
     }
 
     ##
@@ -306,23 +308,6 @@ class ModelAPI extends Model {
 
         return $data;
     }
-
-    ##
-    public static function map($data,$map)
-    {
-        ##
-        $o = static::make($data);
-
-        ##
-        foreach ($map as $m=>$f) {
-            $o->{$f} = isset($data[$m]) ? $data[$m] : '';
-        }
-
-        ##
-
-        return $o;
-    }
-
 
     /**
      * Delete element by primary key or query

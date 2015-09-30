@@ -20,7 +20,7 @@ class Mysql
     );
 
     ##
-    public static function column_definition($d,$o=true)
+    public static function columnDefinition($d,$o=true)
     {
         ##
         $t = isset($d['Type']) ? $d['Type'] : static::$default['attributes']['type'];
@@ -70,7 +70,7 @@ class Mysql
             }
 
             ##
-            $e[] = $f.' '.static::column_definition($d,false);
+            $e[] = $f.' '.static::columnDefinition($d,false);
         }
 
         ## implode
@@ -85,10 +85,10 @@ class Mysql
     }
 
     ##
-    public static function alter_table_add($t,$f,$d)
+    public static function alterTableAdd($t,$f,$d)
     {
         ##
-        $c = Mysql::column_definition($d);
+        $c = Mysql::columnDefinition($d);
 
         ##
         $q = "ALTER TABLE {$t} ADD {$f} {$c}";
@@ -99,10 +99,10 @@ class Mysql
     }
 
     ## retrieve sql to alter table definition
-    public static function alter_table_change($t,$f,$d)
+    public static function alterTableChange($t,$f,$d)
     {
         ##
-        $c = Mysql::column_definition($d);
+        $c = Mysql::columnDefinition($d);
 
         ##
         $q = "ALTER TABLE {$t} CHANGE {$f} {$f} {$c}";
@@ -113,14 +113,13 @@ class Mysql
     }
 
     ## retrive query to remove primary key
-    public static function alter_table_drop_primary_key($t)
+    public static function alterTableDropPrimaryKey($table)
     {
         ##
-        $q = "ALTER TABLE {$t} DROP PRIMARY KEY";
+        $sql = "ALTER TABLE {$table} DROP PRIMARY KEY";
 
         ##
-
-        return $q;
+        return $sql;
     }
 
     /**
@@ -128,7 +127,7 @@ class Mysql
      * @param  type   $f
      * @return string
      */
-    public static function select_fields($f,&$j)
+    public static function selectFields($f,&$j)
     {
         ##
         $j = "";

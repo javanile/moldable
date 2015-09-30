@@ -140,5 +140,20 @@ class Model extends Table
         ##
         return static::make($data);
     }
+	
+	##
+    public static function map($data,$map)
+    {
+        ##
+        $o = static::make($data);
+
+        ##
+        foreach ($map as $m=>$f) {
+            $o->{$f} = isset($data[$m]) ? $data[$m] : '';
+        }
+
+        ##
+        return $o;
+    }
 }
 
