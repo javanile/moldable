@@ -59,7 +59,7 @@ class Source
 		if (!$this->link) 
 		{	
 			##
-			static::log('CONNECT', $this->args);
+			static::log('connect', $this->args);
 
 			##
 			$this->sock->connect($this->args);
@@ -81,7 +81,7 @@ class Source
 		$this->connect();
 
 		##
-		static::log('QUERY', $sql);
+		static::log('query', $sql);
 
 		##
 		return $this->sock->query($sql);
@@ -101,7 +101,7 @@ class Source
 		$perfix = $this->sock->getPrefix();
 		
 		##
-		static::log('GET_PREFIX', $perfix);
+		static::log('getPrefix', $perfix);
 		
 		##
 		return $perfix;
@@ -120,7 +120,7 @@ class Source
 		$id = $this->sock->lastInsertId();
 
 		##
-		static::log('GET_LAST_ID', $id);
+		static::log('getLastId', $id);
 
 		##
 		return $id;
@@ -138,7 +138,7 @@ class Source
 		$this->connect();
 		
 		##
-		static::log('GET_ROW', $sql);
+		static::log('getRow', $sql);
 
 		##
 		return $this->sock->getRow($sql);
@@ -174,10 +174,27 @@ class Source
 		$this->connect();
 
 		##
-		static::log('GET_VALUE', $sql);
+		static::log('getValue', $sql);
 
 		##
 		return $this->sock->getVar($sql);
+    }
+
+	 /**
+     *
+     * @param  type $sql
+     * @return type
+     */
+    public function getValues($sql)
+    {
+		##
+		$this->connect();
+
+		##
+		static::log('getValues', $sql);
+
+		##
+		return $this->sock->getColumn($sql);
     }
 
 	/**
@@ -188,7 +205,7 @@ class Source
 	
 		## debug the queries
         if (static::DEBUG) {
-            echo '<pre style="border:1px solid #9F6000;margin:0 0 1px 0;padding:2px;color:#9F6000;background:#FEEFB3;"><strong>'.str_pad($method,14,' ',STR_PAD_LEFT).'</strong>'.($args?': '.json_encode($args):'').'</pre>';
+            echo '<pre style="border:1px solid #9F6000;margin:0 0 1px 0;padding:2px 6px 3px 6px;color:#9F6000;background:#FEEFB3;"><strong>'.str_pad($method,14,' ',STR_PAD_LEFT).'</strong>'.($args?': '.json_encode($args):'').'</pre>';
         }
 	}
 

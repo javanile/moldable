@@ -67,6 +67,11 @@ class Database extends Source
      */
     const VERSION = '0.3.0';
 
+	/**
+	 * Timestamp for benchmark
+	 */
+	private $ts = null;
+	
     /**
      *
      *
@@ -82,6 +87,9 @@ class Database extends Source
      */
     public function __construct($args)
     {
+		##
+		$this->ts = microtime();	
+
 		## 
 		parent::__construct($args);
 
@@ -89,36 +97,38 @@ class Database extends Source
         static::setDefault($this);
     }
 
-	    ##
+	/**
+	 * Describe database each tables 
+	 * with the specific prefix and her fields
+	 * 
+	 * @return array Return and array with database description schema 
+	 */
     public function desc()
     {
         ##
-        $p = $this->getPrefix();
+        $prefix = $this->getPrefix();
 
         ##
-        $q = "SHOW TABLES LIKE '{$p}%'";
+        $sql = "SHOW TABLES LIKE '{$prefix}%'";
 
         ##
-        $l = $this->getResults($q);
-
+        $tables = $this->getValues($sql);
+		
         ##
-        if (!count($l)) { return; }
-
+        if (!$tables) { return; }
+      
+		##
+		$desc = array();
+		
         ##
-        $r = array();
-
-        ##
-        foreach ($l as $t) {
-
+        foreach ($tables as $table) {
+            
             ##
-            $t = reset($t);
-
-            ##
-            $r[$t] = $this->descTable($t);
+            $desc[$table] = $this->descTable($table);
         }
 
         ##
-        return $r;
+        return $desc;
     }
 
     /**
@@ -232,11 +242,11 @@ class Database extends Source
      * @param  type $parse
      * @return type
      */
-    public function diff(&$schema,$parse=true)
+    public function diff($schema,$parse=true)
     {
         ## prepare
         if ($parse) { 
-			Parser::parseSchema($schema);
+			Parser::parseSchemaDB($schema);
 		}
 
         ## get prefix string
@@ -535,6 +545,15 @@ class Database extends Source
         ##
         echo '</table></pre>';
     }
+	
+	/**
+	 * 
+	 */
+	public function benchmark() {
+		
+		## 
+		echo '<pre style="background:#333;color:#fff;padding:2px 6px 3px 6px;border:1px solid #000">Time: '.(microtime()-$this->ts).' Mem: '.memory_get_usage(true).'</pre>';
+	}
 }
 
 

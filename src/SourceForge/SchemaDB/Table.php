@@ -1,5 +1,8 @@
 <?php
+
 /*\
+ * 
+ * 
  * 
  * 
 \*/
@@ -28,9 +31,7 @@ class Table
     const TIME			= '00:00:00';
     const DATE			= '0000-00-00';
     const DATETIME		= '0000-00-00 00:00:00';
-    
-	var $a = '<<Address>>';
-	
+   	
     /**
 	 * Retrieve table name
 	 * 

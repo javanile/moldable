@@ -86,10 +86,36 @@ class SocketPDO {
 		$statament->execute();
 
 		##
-		$all = $statament->fetchAll(\PDO::FETCH_ASSOC);
+		$results = $statament->fetchAll(\PDO::FETCH_ASSOC);
 				
 		##
-		return $all;
+		return $results;
+	}
+	
+	/**
+	 * 
+	 * 
+	 * @param type $sql
+	 * @return type
+	 */
+	public function getColumn($sql) {
+		
+		##
+		$statament = $this->dbo->prepare($sql);
+		
+		##
+		$statament->execute();
+
+		##
+		$column = array(); 
+		
+		##
+		while($row = $statament->fetch()){
+			$column[] = $row[0];
+		}
+				
+		##
+		return $column;		
 	}
 	
 	/**
