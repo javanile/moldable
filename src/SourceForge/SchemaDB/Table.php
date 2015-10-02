@@ -19,15 +19,15 @@ class Table
 	 * schemadb mysql constants for rapid fields creation
 	 */
     const PRIMARY_KEY	= '<<{"Key":"PRI","Extra":"auto_increment"}>>';
-    const VARCHAR		= '<<{"Type:varchar(255)}>>';
-    const VARCHAR_80	= '<<{"Type:varchar(80)}>>';
-    const VARCHAR_255	= '<<{"Type:varchar(255)}>>';
+    const VARCHAR		= '<<{"Type":"varchar(255)"}>>';
+    const VARCHAR_80	= '<<{"Type":"varchar(80)"}>>';
+    const VARCHAR_255	= '<<{"Type":"varchar(255)"}>>';
     const TEXT			= '<<{"Type":"text"}>>';
-    const INT			= '<<{"Type:int(10)}>>';
-    const INT_10		= '<<{"Type:int(10)}>>';
-    const INT_14		= '<<{"Type:int(14)}>>';
-    const FLOAT			= '<<{"Type:float(14,4)}>>';
-    const FLOAT_14_4	= '<<{"Type:float(14,4)}>>';
+    const INT			= '<<{"Type":"int(10)"}>>';
+    const INT_10		= '<<{"Type":"int(10)"}>>';
+    const INT_14		= '<<{"Type":"int(14)"}>>';
+    const FLOAT			= '<<{"Type":"float(14,4)"}>>';
+    const FLOAT_14_4	= '<<{"Type":"float(14,4)"}>>';
     const TIME			= '00:00:00';
     const DATE			= '0000-00-00';
     const DATETIME		= '0000-00-00 00:00:00';

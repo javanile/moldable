@@ -33,8 +33,8 @@ $notations = array(
 	<?php foreach($notations as $notation) { ?>
 		<tr>
 			<td><?php var_dump($notation); ?></td>
-			<td align="center"><?=SchemaDB\Parser::getValue($notation)?></td>
-			<td align="center"><strong><?=SchemaDB\Parser::getType($notation)?></strong></td>
+			<td align="center"><?=SchemaDB\Parser::getNotaionValue($notation)?></td>
+			<td align="center"><strong><?=SchemaDB\Parser::getNotationType($notation)?></strong></td>
 			<td><pre><?=var_dump(SchemaDB\Parser::schema_parse_table_column($value))?></pre></td>
 		</tr>
 	<?php } ?>

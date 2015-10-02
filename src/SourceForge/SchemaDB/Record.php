@@ -23,7 +23,7 @@ class Record extends ModelAPI
         foreach ($this->getFields() as $f) {
 
             ##
-            $this->{$f} = Parser::getValue($this->{$f});
+            $this->{$f} = Parser::getNotaionValue($this->{$f});
         }
     }
 	

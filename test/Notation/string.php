@@ -13,8 +13,7 @@ $notations = array(
 	"",
 	"Hello World!",
 	SchemaDB\Table::VARCHAR,
-	SchemaDB\Table::TEXT,
-	 
+	SchemaDB\Table::TEXT,	 
 );
 
 ?>
@@ -25,9 +24,9 @@ $notations = array(
 	<?php foreach($notations as $notation) { ?>
 		<tr>
 			<td><pre><?php var_dump($notation); ?></pre></td>
-			<td align="center"><?=SchemaDB\Parser::getValue($notation)?></td>
-			<td align="center"><strong><?=SchemaDB\Parser::getType($notation)?></strong></td>
-			<td><pre><?=var_dump(SchemaDB\Parser::parseSchemaTableColumn($notation))?></pre></td>
+			<td align="center"><?=SchemaDB\Parser::getNotaionValue($notation)?></td>
+			<td align="center"><strong><?=SchemaDB\Parser::getNotationType($notation)?></strong></td>
+			<td><pre><?=var_dump(SchemaDB\Parser::parseSchemaTableField(null,$notation,null))?></pre></td>
 		</tr>
 	<?php } ?>
 </table>

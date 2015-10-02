@@ -14,27 +14,6 @@ namespace SourceForge\SchemaDB;
  */
 class Parser
 {
-    ##
-    private static $DEFAULTS = [
-		'attribute' => [
-			'Type'		=> 'int(10)',
-            'Null'		=> 'YES',
-            'Key'		=> '',
-            'Default'	=> '',
-            'Extra'		=> '',
-		],
-		'schema' => [
-			'Field'		=> '',
-            'Type'		=> 'int(10)',
-            'Null'		=> 'YES',
-            'Key'		=> '',
-            'Default'	=> '',
-            'Extra'		=> '',
-            'Before'	=> '',
-            'First'		=> '',
-		],
-	];
-
     /**
 	 * parse a multi-table schema to sanitize end explode implicit info
 	 * 
@@ -76,12 +55,12 @@ class Parser
     /**
      * Parse notation of a field
      *
-     * @param  type   $notation
      * @param  type   $field
-     * @param  type   $before_field
+     * @param  type   $notation
+     * @param  type   $before
      * @return string
      */
-    private static function parseSchemaTableField($field, &$notation, $before=null)
+    public static function &parseSchemaTableField($field, &$notation, $before=null)
     {        		
         ## get notation type 
         $type = static::getNotationType($notation);
@@ -116,6 +95,9 @@ class Parser
 			##
 			case 'enum': static::parseSchemaTableFieldEnum($field, $notation, $before); break;                   
         }
+		
+		##
+		return $notation;
     }
 
 	/**
@@ -341,17 +323,17 @@ class Parser
 		} 
 
 		##
-		elseif (preg_match('/^<<\{.*\}>>$/i', $notation)) {
+		else if (preg_match('/^<<\{.*\}>>$/i', $notation)) {
 			return 'json';
 		} 
 
 		##
-		elseif (preg_match('/^[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9] [0-9][0-9]:[0-9][0-9]:[0-9][0-9]$/', $notation)) {
+		else if (preg_match('/^[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9] [0-9][0-9]:[0-9][0-9]:[0-9][0-9]$/', $notation)) {
 			return 'datetime';
 		} 
 
 		##
-		elseif (preg_match('/^[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]$/', $notation)) {
+		else if (preg_match('/^[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]$/', $notation)) {
 			return 'date';
 		} 
 
@@ -387,7 +369,7 @@ class Parser
 	 * @param type $notation
 	 * @return type
 	 */
-    public static function getValue($notation)
+    public static function getNotaionValue($notation)
     {
         ##
         $t = static::getNotationType($notation);
@@ -396,7 +378,7 @@ class Parser
         switch ($t) {
 
             ##
-			case 'int': return (int) $notation;
+			case 'integer': return (int) $notation;
 
             ##
 			case 'boolean': return (boolean) $notation;
@@ -428,6 +410,9 @@ class Parser
             ##
 			case 'column': return null;
 
+			##
+			case 'json': return null;
+
             ##
             default: trigger_error("No PSEUDOTYPE value for '{$t}' => '{$notation}'",E_USER_ERROR);
         }
@@ -438,7 +423,7 @@ class Parser
     {
         ##
         if ($date != '0000-00-00') {
-            return @date('Y-m-d',@strtotime(''.$date));
+            return @date('Y-m-d', @strtotime(''.$date));
         } else {
             return null;
         }
@@ -447,8 +432,8 @@ class Parser
     ## printout database status/info
     public static function parseDatetime($datetime)
     {
-        if ($datetime!='0000-00-00 00:00:00') {
-            return @date('Y-m-d H:i:s',@strtotime(''.$datetime));
+        if ($datetime != '0000-00-00 00:00:00') {
+            return @date('Y-m-d H:i:s', @strtotime(''.$datetime));
         } else {
             return null;
         }
