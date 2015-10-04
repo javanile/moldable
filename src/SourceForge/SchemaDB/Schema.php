@@ -35,14 +35,14 @@ class Schema extends Table
 		##
 		$fields = array_diff(
 			$fields, 
-			static::getModelSetting('schemaExcludedFields'),
+			static::getModelSetting('schemaExcludedFields')
 		);
 
 		##
 		if (static::hasClassSetting('schemaExcludedFields')) {
 			$fields = array_diff(
 				$fields, 
-				static::getModelSetting('schemaExcludedFields'),
+				static::getModelSetting('schemaExcludedFields')
 			);
 		}
 		
@@ -66,14 +66,19 @@ class Schema extends Table
 		}
 		
 		##
-		$allFields = get_class_vars(get_called_class());
+		$fields = get_class_vars(get_called_class());
 		
 		##
-		$fields = array_diff(
-			$allFields, 
-			static::getModelSetting('schemaExcludedFields'),
-			static::getClassSetting('schemaExcludedFields')
-		);
+		foreach(static::getModelSetting('schemaExcludedFields') as $field) {
+			unset($fields[$field]);
+		}
+		
+		##
+		if (static::hasClassSetting('schemaExcludedFields')) {
+			foreach(static::getClassSetting('schemaExcludedFields') as $field) {
+				unset($fields[$field]);
+			}
+		}
 		
 		##
 		static::setClassSetting('schemaFieldsWithValues', $fields);
