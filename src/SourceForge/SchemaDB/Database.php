@@ -106,13 +106,7 @@ class Database extends Source
     public function desc()
     {
         ##
-        $prefix = $this->getPrefix();
-
-        ##
-        $sql = "SHOW TABLES LIKE '{$prefix}%'";
-
-        ##
-        $tables = $this->getValues($sql);
+		$tables = $this->getTables();
 		
         ##
         if (!$tables) { return; }
@@ -167,7 +161,26 @@ class Database extends Source
 
         return $a;
     }
+	
+	/**
+	 * 
+	 * @return type
+	 */
+	private function &getTables() {
+	
+		##
+        $prefix = $this->getPrefix();
 
+        ##
+        $sql = "SHOW TABLES LIKE '{$prefix}%'";
+
+        ##
+		$tables = $this->getValues($sql);
+		
+		##
+        return $tables; 
+	}
+	
     /**
      * Apply schema on the db
      *
@@ -299,7 +312,7 @@ class Database extends Source
         }
 
 		##
-		return $this->diffTableQueries();
+		return $this->diffTableQueries($table, $schema);
 	}
 	
     /**
@@ -326,10 +339,10 @@ class Database extends Source
 
             ##
             $this->diffTableField(
-				$fields,
+				$table,
 				$field,
 				$attributes,
-				$table,
+				$fields,
 				$foQueries,
 				$soQueries
 			);
@@ -441,20 +454,19 @@ class Database extends Source
      * @param  type    $d
      * @return boolean
      */
-    private function diffTableFieldAttributes($a,$f,$d)
+    private function diffTableFieldAttributes($field, $attributes, $fields)
     {
         ## loop throd current column property
-        foreach ($a[$f] as $k=>$v) {
+        foreach ($fields[$field] as $key => $value) {
 
             ##
-            #echo $k.': '.$d[$k].' !== '.$v.' = '.($d[$k] != $v).'<br/>';
+            //echo '<pre>'.$field.'['.$key.']: '.$attributes[$key].' !== '.$value.' = '.($attributes[$key] != $value).'</pre>';
 
             ## if have a difference
-            if ($d[$k] != $v) { return true; }
+            if ($attributes[$key] != $value) { return true; }
         }
 
         ##
-
         return false;
     }
 
@@ -503,6 +515,37 @@ class Database extends Source
             static::$default = &$database;
         }
     }
+	
+	/**
+	 * 
+	 * 
+	 * @param type $confirm
+	 * @return type
+	 */
+	public function drop($confirm) {
+		
+		if ($confirm != 'confirm') {
+			return;
+		}
+		
+		##
+		$tables = $this->getTables();
+		
+		##
+		if (!$tables) {
+			return;		
+		}
+		
+		##
+		foreach($tables as $table) {
+			
+			##
+			$sql = "DROP TABLE {$table}";
+			
+			##
+			$this->query($sql);			
+		}		
+	}
 	
 	/**
      * printout database status and info

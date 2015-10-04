@@ -12,19 +12,19 @@ namespace SourceForge\SchemaDB;
  *
  *
  */
-class Model extends Table
+class Model extends Schema
 {
 	/**
 	 * Bundle to collect info and stored cache
 	 * 
 	 * @var type 
 	 */
-    protected static $__ModelSettings = array(
-		'exclude' => array(
+    protected static $__ModelSettings__ = array(
+		'schemaExcludedFields' => array(
             'class',
             'table',
-            '__ModelSettings',
-            '__ClassSettings',
+            '__ModelSettings__',
+            '__ClassSettings__',
         ),		
 	); 
 	
@@ -32,7 +32,9 @@ class Model extends Table
 	 *
 	 * @var type 
 	 */
-	protected static $__ClassSettings; 
+	protected static $__ClassSettings__ = array(
+		'schemaExcludedFields' => array(),
+	); 
 			
 	/**
 	 * Retrieve static class name
@@ -51,7 +53,7 @@ class Model extends Table
 	public static function hasModelSetting($setting) {
 				
 		##
-		return isset(static::$__ModelSettings[$setting]);		
+		return isset(static::$__ModelSettings__[$setting]);		
 	}
 
 	/**
@@ -60,7 +62,7 @@ class Model extends Table
 	public static function getModelSetting($setting) {
 		
 		##
-		return static::$__ModelSettings[$setting];		
+		return static::$__ModelSettings__[$setting];		
 	}
 
 	/**
@@ -69,7 +71,7 @@ class Model extends Table
 	public static function setModelSetting($setting,$value) {
 		
 		##
-		static::$__ModelSettings[$setting] = $value;		
+		static::$__ModelSettings__[$setting] = $value;		
 	}
 
 	/**
@@ -79,7 +81,7 @@ class Model extends Table
 	public static function delModelSetting($setting) {
 		
 		## clear cached
-        unset(static::$__ModelSettings[$setting]);		
+        unset(static::$__ModelSettings__[$setting]);		
 	}
 	
 	/**
@@ -88,25 +90,25 @@ class Model extends Table
 	public static function hasClassSetting($setting) {
 			
 		##
-		return isset(static::$__ClassSettings[$setting][static::getClass()]);		
+		return isset(static::$__ClassSettings__[$setting][static::getClass()]);		
 	}
 
 	/**
 	 * 
 	 */
 	public static function getClassSetting($setting) {
-		
+					
 		##
-		return static::$__ClassSettings[$setting][static::getClass()];		
+		return static::$__ClassSettings__[$setting][static::getClass()];		
 	}
 
 	/**
 	 * 
 	 */
-	public static function setClassSetting($setting,$value) {
+	public static function setClassSetting($setting, $value) {
 		
 		##
-		static::$__ClassSettings[$setting][static::getClass()] = $value;		
+		static::$__ClassSettings__[$setting][static::getClass()] = $value;		
 	}
 
 	/**
@@ -116,7 +118,7 @@ class Model extends Table
 	public static function delClassSetting($setting) {
 		
 		## clear cached
-        unset(static::$__ClassSettings[$setting][static::getClass()]);		
+        unset(static::$__ClassSettings__[$setting][static::getClass()]);		
 	}
 
 	##

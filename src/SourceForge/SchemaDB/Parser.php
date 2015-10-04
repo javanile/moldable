@@ -36,7 +36,7 @@ class Parser
 	 * @param type $schema
 	 * @return type
 	 */
-    private static function parseSchemaTable(&$table)
+    public static function parseSchemaTable(&$table)
     {        
         ## for first field no have before 
         $before = null;
@@ -94,6 +94,15 @@ class Parser
                 
 			##
 			case 'enum': static::parseSchemaTableFieldEnum($field, $notation, $before); break;                   
+
+			##
+			case 'class': static::parseSchemaTableFieldClass($field, $notation, $before); break;                   
+
+			##
+			case 'null': static::parseSchemaTableFieldNull($field, $notation, $before); break; 
+			
+			##
+			default: trigger_error('Error parse type: '.$type);
         }
 		
 		##
@@ -139,25 +148,16 @@ class Parser
 	private static function parseSchemaTableFieldPrimaryKey($field, &$notation, $before) {
 	
 		##
-		$notation = array();
-		
-		##
-		$notation['Field'] = $field;
-		
-		##
-		$notation['Before'] = $before;
-		
-		##
-		$notation['Type'] = 'int(10)';
-                
-		##
-		$notation['Null'] = 'NO';
-                
-		##
-		$notation['Key'] = 'PRI';
-        
-		##
-		$notation['Extra'] = 'auto_increment';
+		$notation = array(
+			'Field'		=> $field,
+			'Before'	=> $before,
+			'First'		=> !$before,
+			'Type'		=> 'int(10)',
+			'Default'	=> '',
+			'Null'		=> 'NO',
+			'Key'		=> 'PRI',
+			'Extra'		=> 'auto_increment',
+		);		
 	}
 	
 	/**
@@ -224,17 +224,36 @@ class Parser
 	 * 
 	 */
 	private static function parseSchemaTableFieldInteger($field, &$notation, $before) {
-		
-		$notation = array();
+
 		##
-		$notation['Field'] = $field;
-		
+		$notation = array(
+			'Field'		=> $field,
+			'Before'	=> $before,
+			'First'		=> !$before,
+			'Type'		=> 'int(10)',
+			'Key'		=> '',
+			'Default'	=> (int) $notation,
+			'Null'		=> 'NO',
+			'Extra'		=> '',
+		);
+	}
+	
+	/**
+	 * 
+	 */
+	private static function parseSchemaTableFieldClass($field, &$notation, $before) {
+
 		##
-		$notation['Before'] = $before;
-		
-		$notation['Type'] = 'int(10)';
-		$notation['Default'] = (int) $notation;
-		$notation['Null'] = 'NO';
+		$notation = array(
+			'Field'		=> $field,
+			'Before'	=> $before,
+			'First'		=> !$before,
+			'Type'		=> 'int(10)',
+			'Key'		=> '',
+			'Default'	=> null,
+			'Null'		=> 'YES',
+			'Extra'		=> '',
+		);
 	}
 	
 	/**
@@ -277,6 +296,24 @@ class Parser
                 $d['Type'] = 'enum('.implode(',',$t).')';
 	}
 	
+	/**
+	 * 
+	 */
+	private static function parseSchemaTableFieldNull($field, &$notation, $before) {
+	
+		##
+		$notation = array(
+			'Field'		=> $field,
+			'Before'	=> $before,
+			'Type'		=> 'varchar(255)',
+			'Key'		=> '',
+            'Default'	=> '',
+            'Extra'		=> '',
+            'First'		=> !$before,
+			'Null'		=> 'YES',
+		);		
+	}
+	
     /**
 	 * 
 	 * 
@@ -296,18 +333,18 @@ class Parser
                 				
 			##
 			case 'array': return static::getNotationTypeArray($notation);                
-				
-            ##
-			case 'NULL': return 'string';
-
-            ##
-			case 'boolean': return 'boolean';
 
             ##
 			case 'integer': return 'integer';
 
             ##
 			case 'double': return 'float';
+
+			##
+			case 'boolean': return 'boolean';
+
+			##
+			case 'NULL': return 'null';
         }
     }
 
@@ -316,9 +353,17 @@ class Parser
 	 * @param type $notation
 	 */
 	private static function getNotationTypeString(&$notation) {
+				
+		## 
+		$macro = null;
 		
 		##
-		if (preg_match('/^<<\[A-Za-z_][0-9A-Za-z_]*\>>$/i', $notation)) {
+		if (preg_match('/^<<#([a-z_]+)>>$/i', $notation, $macro)) {
+			return $macro[1];
+		} 
+		
+		##
+		else if (preg_match('/^<<[A-Za-z_][0-9A-Za-z_]*>>$/i', $notation)) {
 			return 'class';
 		} 
 
@@ -372,10 +417,10 @@ class Parser
     public static function getNotaionValue($notation)
     {
         ##
-        $t = static::getNotationType($notation);
+        $type = static::getNotationType($notation);
 
         ##
-        switch ($t) {
+        switch ($type) {
 
             ##
 			case 'integer': return (int) $notation;
@@ -384,7 +429,7 @@ class Parser
 			case 'boolean': return (boolean) $notation;
 
             ##
-			case 'primary_key': return NULL;
+			case 'primary_key': return null;
 
             ##
 			case 'string': return (string) $notation;
@@ -393,10 +438,10 @@ class Parser
 			case 'float': return (float) $notation;
 
             ##
-			case 'class': return NULL;
+			case 'class': return null;
 
             ##
-			case 'array': return NULL;
+			case 'array': return null;
 
             ##
 			case 'date': return static::parseDate($notation);
@@ -412,9 +457,12 @@ class Parser
 
 			##
 			case 'json': return null;
+				
+			##
+			case 'null': return null;
 
             ##
-            default: trigger_error("No PSEUDOTYPE value for '{$t}' => '{$notation}'",E_USER_ERROR);
+            default: trigger_error("No PSEUDOTYPE value for '{$type}' => '{$notation}'",E_USER_ERROR);
         }
     }
 

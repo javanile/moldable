@@ -2,6 +2,23 @@
 <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
-        <group/>
+        <group>
+            <file>file:/C:/Users/cicciodarkast/Documents/NetBeansProjects/sf/library/schemadb/test/Database/desc.php</file>
+            <file>file:/C:/Users/cicciodarkast/Documents/NetBeansProjects/sf/library/schemadb/test/Database/dump.php</file>
+            <file>file:/C:/Users/cicciodarkast/Documents/NetBeansProjects/sf/library/schemadb/src/SourceForge/SchemaDB/SocketPDO.php</file>
+            <file>file:/C:/Users/cicciodarkast/Documents/NetBeansProjects/sf/library/schemadb/src/SourceForge/SchemaDB/Database.php</file>
+            <file>file:/C:/Users/cicciodarkast/Documents/NetBeansProjects/sf/library/schemadb/src/SourceForge/SchemaDB/Source.php</file>
+            <file>file:/C:/Users/cicciodarkast/Documents/NetBeansProjects/sf/library/schemadb/test/Database/apply.php</file>
+            <file>file:/C:/Users/cicciodarkast/Documents/NetBeansProjects/sf/library/schemadb/test/Database/diff.php</file>
+            <file>file:/C:/Users/cicciodarkast/Documents/NetBeansProjects/sf/library/schemadb/src/SourceForge/SchemaDB/Parser.php</file>
+            <file>file:/C:/Users/cicciodarkast/Documents/NetBeansProjects/sf/library/schemadb/src/SourceForge/SchemaDB/Table.php</file>
+            <file>file:/C:/Users/cicciodarkast/Documents/NetBeansProjects/sf/library/schemadb/test/Notation/integer.php</file>
+            <file>file:/C:/Users/cicciodarkast/Documents/NetBeansProjects/sf/library/schemadb/test/Notation/parse.php</file>
+            <file>file:/C:/Users/cicciodarkast/Documents/NetBeansProjects/sf/library/schemadb/test/Notation/string.php</file>
+            <file>file:/C:/Users/cicciodarkast/Documents/NetBeansProjects/sf/library/schemadb/test/Notation/other.php</file>
+            <file>file:/C:/Users/cicciodarkast/Documents/NetBeansProjects/sf/library/schemadb/src/SourceForge/SchemaDB/Mysql.php</file>
+            <file>file:/C:/Users/cicciodarkast/Documents/NetBeansProjects/sf/library/schemadb/src/SourceForge/SchemaDB/Model.php</file>
+            <file>file:/C:/Users/cicciodarkast/Documents/NetBeansProjects/sf/library/schemadb/test/Database/diffTable.php</file>
+        </group>
     </open-files>
 </project-private>

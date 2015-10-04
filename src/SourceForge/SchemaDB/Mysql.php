@@ -51,13 +51,13 @@ class Mysql
      * @param  array  $s Skema of the table contain column definitions
      * @return string Sql code statament of CREATE TABLE
      */
-    public static function createTable($t,$s)
+    public static function &createTable($table, &$schema)
     {
         ##
         $e = array();
 
         ## loop throut schema
-        foreach ($s as $f=>$d) {
+        foreach ($schema as $f => $d) {
 
             ##
             if (is_numeric($f) && is_string($d)) {
@@ -77,25 +77,29 @@ class Mysql
         $i = implode(',',$e);
 
         ## template sql to create table
-        $q = "CREATE TABLE {$t} ({$i})";
+        $sql = "CREATE TABLE {$table} ({$i})";
 
         ## return the sql
-
-        return $q;
+        return $sql;
     }
 
-    ##
-    public static function alterTableAdd($t,$f,$d)
+    /**
+	 * 
+	 * @param type $table
+	 * @param type $field
+	 * @param type $attributes
+	 * @return type
+	 */
+    public static function alterTableAdd($table, $field, $attributes)
     {
         ##
-        $c = Mysql::columnDefinition($d);
+        $column = Mysql::columnDefinition($attributes);
 
         ##
-        $q = "ALTER TABLE {$t} ADD {$f} {$c}";
+        $sql = "ALTER TABLE {$table} ADD {$field} {$column}";
 
         ##
-
-        return $q;
+        return $sql;
     }
 
     ## retrieve sql to alter table definition

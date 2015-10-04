@@ -11,10 +11,7 @@ function SchemaDB_autoload($className)
 	
 	
 	if (!@include_once __DIR__.'/'.$classPath[2].'.php') {
-		
-		echo '<pre>';
-		debug_print_backtrace();				
-		echo '</pre>';
+	
 	}	
 }
 }

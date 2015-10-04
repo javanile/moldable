@@ -1,0 +1,18 @@
+Creare un semplice database
+applicare una struttura/schema
+per la gestione di una contabilità
+
+url script:
+http://www.javanile.org/develop/schemadb/demo/it/Contabilita/aggiorna.php
+
+url adminer
+http://www.javanile.org/develop/schemadb/demo/it/Contabilita/adminer.php
+
+url adminer
+http://www.javanile.org/develop/schemadb/demo/it/Contabilita/reset.php
+
+
+
+
+
+

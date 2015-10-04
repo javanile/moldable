@@ -13,7 +13,20 @@ namespace SourceForge\SchemaDB;
  */
 class Storable extends Record
 {
-    ##
+	/**
+	 * 
+	 * 
+	 */
+	public function __construct($values) {
+		
+		## call anchesto constr
+		parent::__construct();
+		
+		## fill created object with passed values
+		$this->fill($values);
+	}
+
+	##
     public function store_update()
     {
         ## update database schema
@@ -75,38 +88,21 @@ class Storable extends Record
         $v = array();
         $k = static::getPrimaryKey();
 
+		$fields = static::getSchemaFields();
+			
+		
         ##
-        foreach (static::getSchema() as $f=>$d) {
+        foreach (static::getSchemaFields() as $field => $d) {
 
             ##
-            if ($f==$k&&!$force) {continue;}
+            if ($field==$k&&!$force) {continue;}
 
-            ##
-            $a = $this->{$f};
-            $t = gettype($a);
-
-            ##
-            switch ($t) {
-
-                ##
-                case 'double':
-                    $a = number_format($a,2,'.','');
-                    break;
-
-                ##
-                case 'array':
-                    schemadb::object_build($d,$a,$r);
-                    $a = $r;
-                    break;
-
-            }
-
-            ##
-            $a = Parser::escape($a);
-
+            ## get current value of attribute of object
+            $value = static::rappresentation($this->{$field});
+            
             ##
             $c[] = $f;
-            $v[] = "'".$a."'";
+            $v[] = "'".$value."'";
         }
 
         ##

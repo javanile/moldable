@@ -18,12 +18,15 @@ $db = new SchemaDB\Database(array(
 	'pref' => 't100_',
 ));
 
+## drop all database tables
+#$db->drop('confirm');
+
 ## Apply schema create or update database tables
 $db->apply(array(
 	
 	## define users table
 	'User' => array(
-		'userid'   => 0,
+		'userid'   => SchemaDB\Table::PRIMARY_KEY,
 		'username' => '',
 		'password' => '',
 		'type'	=> 1
@@ -31,7 +34,7 @@ $db->apply(array(
 	
 	## define articles table
 	'Article' => array(
-		'articleid' => 0,
+		'articleid' => SchemaDB\Table::PRIMARY_KEY,
 		'title'		=> '',
 		'content'	=> '',
 	),	

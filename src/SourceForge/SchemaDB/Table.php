@@ -18,7 +18,7 @@ class Table
     /**
 	 * schemadb mysql constants for rapid fields creation
 	 */
-    const PRIMARY_KEY	= '<<{"Key":"PRI","Extra":"auto_increment"}>>';
+    const PRIMARY_KEY	= '<<#primary_key>>';
     const VARCHAR		= '<<{"Type":"varchar(255)"}>>';
     const VARCHAR_80	= '<<{"Type":"varchar(80)"}>>';
     const VARCHAR_255	= '<<{"Type":"varchar(255)"}>>';
@@ -93,41 +93,7 @@ class Table
         ##
         return false;
     }
-	    
-    /**
-	 * Instrospect and retrieve element schema
-	 *  
-	 * @return type
-	 */
-    public static function getSchema()
-    {		
-		##
-		if (static::hasModelSetting('schema')) {
-			return static::getModelSetting('schema');
-		}
-		
-		##
-        $class = static::getClass();
-
-        ##
-        $vars = get_class_vars($class);
-
-        ##
-        $schema = array();
-
-        ##
-        foreach ($vars as $name => $value) {
-            if (!in_array($name, static::getModelSetting('exclude'))) {
-                $schema[$name] = $value;
-            }
-        }
-
-		##
-		static::setModelSetting('schema', $schema);
-		
-        ##
-        return $schema;
-    }
+	
 
     /**
 	 * 
@@ -148,11 +114,11 @@ class Table
         ## get table name
         $table = static::getTable();
 
-        ## and model schema
-        $schema = Parser::parseSchemaTable(static::getSchema());
-
+		## 
+		$schema = static::getSchema();
+						
         ## have a valid schema update db table
-        if (count($schema) > 0) {
+        if ($schema) {
             static::getDatabase()->updateTable($table, $schema, false);
         }
 
@@ -213,11 +179,7 @@ class Table
         else {
             $result = static::getDatabase()->getValue($sql);
         }
-		
-		var_dump($result);
-		echo '</pre>';
-		die();
-		
+			
 		return $result;
     }
 	
