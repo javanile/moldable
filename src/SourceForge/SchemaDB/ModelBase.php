@@ -45,7 +45,7 @@ class ModelBase extends Model {
         $sql = "SELECT {$selectFields} FROM {$table} AS {$alias} {$join} WHERE {$key}='{$index}' LIMIT 1";
 
         ## fetch data on database and return it
-        return static::fetch($sql, false, is_string($fields));
+        return static::fetch($sql, false, is_string($fields), is_null($fields));
 	}
 
 		/**

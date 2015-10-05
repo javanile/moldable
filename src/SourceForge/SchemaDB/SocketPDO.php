@@ -7,6 +7,11 @@ namespace SourceForge\SchemaDB;
 
 /**
  * 
+ */
+use PDO;
+
+/**
+ * 
  * 
  */
 class SocketPDO {
@@ -32,14 +37,14 @@ class SocketPDO {
 		
 		##
 		$opt = array(
-			\PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8',
+			PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8',
 		); 
 
 		##
-		$this->dbo = new \PDO($dsn,$args['user'],$args['pass'],$opt);		
+		$this->dbo = new PDO($dsn,$args['user'],$args['pass'],$opt);		
 	
 		##
-		$this->dbo->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
+		$this->dbo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 		
 		##
 		$this->prefix = $args['pref'];		
@@ -69,7 +74,7 @@ class SocketPDO {
 		$s->execute();
 
 		##
-		return $s->fetch();
+		return $s->fetch(PDO::FETCH_ASSOC);
 	}
 	
 	/**
@@ -86,7 +91,7 @@ class SocketPDO {
 		$statament->execute();
 
 		##
-		$results = $statament->fetchAll(\PDO::FETCH_ASSOC);
+		$results = $statament->fetchAll(PDO::FETCH_ASSOC);
 				
 		##
 		return $results;

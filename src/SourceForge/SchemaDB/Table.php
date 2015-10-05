@@ -242,7 +242,7 @@ class Table
      *
      * @param type $array
      */
-    protected static function fetch($sql, $array=false, $value=false)
+    protected static function fetch($sql, $array=false, $value=false, $cast=true)
     {	
 		##
 		if ($array) {
@@ -251,7 +251,12 @@ class Table
 		
         ##
         else if (!$value) {
-            $result = static::make(static::getDatabase()->getRow($sql));
+		
+			##
+			$row = static::getDatabase()->getRow($sql);
+			
+			##
+			return $cast ? static::make($row) : (object) $row; 
         }
 
         ##

@@ -10,10 +10,15 @@ Person::dump();
 Address::dump();
 
 ##
-$Person = Person::load(1, array(
-	'address1'
+$Person0 = Person::load(1);
+
+##
+$Person1 = Person::load(1, array(
+	'address1', 
+	'address2',
 ));
 
 ##
 echo '<pre>';
-var_Dump($Person);
+var_Dump($Person0);
+var_Dump($Person1);
