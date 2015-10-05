@@ -10,36 +10,33 @@ namespace SourceForge\SchemaDB;
  * 
  * 
  */
-class ModelAPI extends Model {
+class ModelAPI extends ModelBase {
 	
 	/**
-     * Load item from DB by primary key
+     * Load item from DB
      *
      * @param  type $id
      * @return type
      */
-    public static function load($id,$fields=null)
+    public static function load($index, $fields=null)
     {
-        ##
-        $index = (int) $id;
-
-        ##
-        $table = static::getTable();
-
-        ## get primary key
-        $key = static::getPrimaryKey();
+		## 
+		if (is_array($index)) {
+			return static::loadByQuery($index, $fields); 
+		}
 
 		##
-		$join = null;
+		$key = static::getPrimaryKey();
 		
-        ## parse SQL select fields
-        $selectFields = Mysql::selectFields($fields, $join);
-
-        ## prepare SQL query
-        $sql = "SELECT {$selectFields} FROM {$table} {$join} WHERE {$key}='{$index}' LIMIT 1";
-
-        ## fetch data on database and return it
-        return static::fetch($sql, false, is_string($fields));
+		## 
+		if ($key) {			
+			return static::loadByPrimaryKey($index, $fields); 			
+		} 
+		
+		## 
+		else {
+			return static::loadByMainField($index, $fields); 								
+		}
     }
 	
     ##

@@ -111,6 +111,34 @@ class Table
         return $key;
     }
 	
+	/**
+	 * Retrieve primary key field name
+	 *  
+	 * @return boolean
+	 */
+    public static function getMainField()
+    {
+		##
+		$setting = 'MainField';
+		
+		## retrieve value from class setting definition
+		if (static::hasClassSetting($setting)) {
+			return static::getClassSetting($setting);
+		}
+			
+		##
+		$fields = static::getSchemaFields();
+		
+		##
+		$field = $fields ? $fields[0] : false;
+        		
+		## store as setting for future request
+		static::setClassSetting($setting, $field);
+								
+        ## return primary key field name
+        return $field;
+    }
+	
 
     /**
 	 * 

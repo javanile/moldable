@@ -17,13 +17,15 @@ class Storable extends Record
 	 * 
 	 * 
 	 */
-	public function __construct($values) {
+	public function __construct($values=null) {
 		
 		## call anchesto constr
 		parent::__construct();
 						
 		## fill created object with passed values
-		$this->fill($values);
+		if ($values) {
+			$this->fill($values);
+		}
 		
 		##
 		static::updateTable();
@@ -111,21 +113,19 @@ class Storable extends Record
 	 */
     public function storeInsert($force=false)
     {
-        ##
+        ## update table if needed
         static::updateTable();
 
-        ##
+        ## collect field names for sql query
         $fieldsArray = array();
 		
-		##
+		## collect values for sql query
         $valuesArray = array();
         
-		##
+		## get primary field name
 		$key = static::getPrimaryKey();
-		
-		var_Dump($key);
-		
-		##
+				
+		## get complete fields schema
 		$schema = static::getSchema();
 				
 		##

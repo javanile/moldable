@@ -4,18 +4,27 @@
 require_once 'common.php';
 
 ##
-use SourceForge\SchemaDB\Storable;
+use SourceForge\SchemaDB;
 
 ##
-class Invoice extends Storable {
+SchemaDB\Database::getDefault()->drop('confirm');
+
+##
+class Invoice extends SchemaDB\Storable {
+	
+	##
+	public $code = '';
 	
 	##
 	public $product = '<<Product>>';
 }
 
 ##
-class Product extends Storable {
+class Product extends SchemaDB\Storable {
 
+	##
+	public $id = self::PRIMARY_KEY;
+	
 	##
 	public $name = '';
 	
@@ -24,7 +33,8 @@ class Product extends Storable {
 }
 
 ##
-$Invoice = new Invoice(array(
+$Invoice0 = new Invoice(array(
+	'code' => 'FAT1',
 	'product' => array(
 		'name' => 'Product No 1',
 		'price' => 1.3,
@@ -32,10 +42,18 @@ $Invoice = new Invoice(array(
 ));
 
 ##
-$Invoice->store();
+$Invoice0->store();
 
 ##
 Invoice::dump();
 
 ##
 Product::dump();
+
+##
+$Invoice1 = Invoice::load('FAT1');
+
+##
+echo '<pre>';
+var_Dump($Invoice1);
+echo '</pre>';
