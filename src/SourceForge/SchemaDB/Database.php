@@ -460,7 +460,7 @@ class Database extends Source
         foreach ($fields[$field] as $key => $value) {
 
             ##
-            //echo '<pre>'.$field.'['.$key.']: '.$attributes[$key].' !== '.$value.' = '.($attributes[$key] != $value).'</pre>';
+            #echo '<pre>'.$field.'['.$key.']: '.$attributes[$key].' !== '.$value.' = '.($attributes[$key] != $value).'</pre>';
 
             ## if have a difference
             if ($attributes[$key] != $value) { return true; }

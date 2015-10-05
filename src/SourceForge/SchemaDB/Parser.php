@@ -263,22 +263,16 @@ class Parser
 	private static function parseSchemaTableFieldFloat($field, &$notation, $before) {
 	
 		##
-		$notation = array();
-		
-		##
-		$notation['Field'] = $field;
-		
-		##
-		$notation['Before'] = $before;
-		
-		##
-		$notation ['Type'] = 'float(12,2)';
-        
-		##
-		$notation ['Default'] = (float) $notation;
-        
-		##
-		$notation ['Null'] = 'NO';          
+		$notation = array(
+			'Field'		=> $field,
+			'Before'	=> $before,
+			'First'		=> !$before,
+			'Type'		=> 'float(12,2)',
+			'Default'	=> (float) $notation,
+			'Null'		=> 'NO',
+			'Key'		=> '',
+			'Extra'		=> '',
+		);			
 	}
 	
 	/**

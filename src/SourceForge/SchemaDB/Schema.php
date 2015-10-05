@@ -96,8 +96,8 @@ class Schema extends Table
     public static function getSchema()
     {		
 		##
-		if (static::hasModelSetting('schema')) {
-			return static::getModelSetting('schema');
+		if (static::hasClassSetting('schema')) {
+			return static::getClassSetting('schema');
 		}
 		
 		##
@@ -115,7 +115,7 @@ class Schema extends Table
 		Parser::parseSchemaTable($schema);		
 		
 		##
-		static::setModelSetting('schema', $schema);
+		static::setClassSetting('schema', $schema);
 		
         ##
         return $schema;

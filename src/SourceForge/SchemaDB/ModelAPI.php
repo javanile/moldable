@@ -102,7 +102,7 @@ class ModelAPI extends Model {
 	 * @param type $fields
 	 * @return type
 	 */
-    public static function all($fields)
+    public static function all($fields=null)
     {
         ##
         static::updateTable();
@@ -123,7 +123,7 @@ class ModelAPI extends Model {
         $sql = "SELECT {$selectFields} FROM {$table} AS {$class} {$join}";
 
 		##
-		$results =  static::fetch($sql, true);
+		$results = static::fetch($sql, true);
 		
 		##
         return $results;

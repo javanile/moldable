@@ -76,22 +76,39 @@ class Table
 	 */
     public static function getPrimaryKey()
     {
-        ##
-        $schema = static::getSchema();
+		##
+		$setting = 'PrimaryKey';
+		
+		## retrieve value from class setting definition
+		if (static::hasClassSetting($setting)) {
+			return static::getClassSetting($setting);
+		}
+		
+		##
+		$key = false;
+		
+		##
+		$schema = static::getSchema();
 
         ##
-        foreach ($schema as $field => $value) {
+        foreach ($schema as $field => &$attributes) {
 
             ##
-            if ($value === static::PRIMARY_KEY) {
-
-                ##
-                return $field;
+            if ($attributes['Key'] == 'PRI') {
+	
+				##
+				$key = $field;
+                
+				##
+				break;
             }
         }
-
-        ##
-        return false;
+			
+		## store as setting for future request
+		static::setClassSetting($setting, $key);
+								
+        ## return primary key field name
+        return $key;
     }
 	
 
@@ -107,7 +124,7 @@ class Table
 		}	
 
 		## avoid re-update by check the cache
-        if (static::hasModelSetting('update')) {	
+        if (static::hasClassSetting('update')) {	
 			return;
 		}
 
@@ -123,7 +140,7 @@ class Table
         }
 
         ## cache last update avoid multiple call
-        static::setModelSetting('update', time());
+        static::setClassSetting('update', time());
     }
 	
 	/**
@@ -152,7 +169,7 @@ class Table
     public static function now()
     {
         ##
-        return @date('Y-m-d H:i:s');
+        return date('Y-m-d H:i:s');
     }
 
     /**
@@ -160,11 +177,8 @@ class Table
      *
      * @param type $array
      */
-    protected static function fetch($sql,$array=false,$value=false)
-    {
-		echo '<pre>Ciao:';
-		//var_dump($sql);
-	
+    protected static function fetch($sql, $array=false, $value=false)
+    {	
 		##
 		if ($array) {
 			$result = static::getDatabase()->getResults($sql);			

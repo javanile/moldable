@@ -21,9 +21,12 @@ class Storable extends Record
 		
 		## call anchesto constr
 		parent::__construct();
-		
+						
 		## fill created object with passed values
 		$this->fill($values);
+		
+		##
+		static::updateTable();
 	}
 
 	/**
@@ -108,22 +111,24 @@ class Storable extends Record
 	 */
     public function storeInsert($force=false)
     {
-		
-		echo 'I';
         ##
         static::updateTable();
 
         ##
         $fieldsArray = array();
+		
+		##
         $valuesArray = array();
         
 		##
 		$key = static::getPrimaryKey();
-				
+		
+		var_Dump($key);
+		
 		##
 		$schema = static::getSchema();
-		
-        ##
+				
+		##
         foreach ($schema as $field => &$column) {
 
             ##
@@ -152,16 +157,19 @@ class Storable extends Record
 
         ##
         if ($key) {
+			
+			##
             $index = static::getDatabase()->getLastId();
-            $this->{$key} = $index;
+            
+			##
+			$this->{$key} = $index;
 
+			##
             return $index;
         }
 
-        ##
-        else {
-            return true;
-        }
+        ##        
+		return true;        
     }
 
 	/**
@@ -175,7 +183,7 @@ class Storable extends Record
 		
 			##
 			$class = $column['Class'];
-			
+
 			##
 			$object = new $class($value);
 			
