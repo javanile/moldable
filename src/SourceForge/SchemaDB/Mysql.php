@@ -135,6 +135,8 @@ class Mysql
     {
         ##
         $join = "";
+		
+		
 
         ##
         if (is_null($fields)) {
@@ -149,32 +151,38 @@ class Mysql
         ##
         else if (is_array($fields)) {
 
-            ##
+			##
+			$aliasTable = array();
+            
+			##
             $selectFields = array();
-			
-			var_Dump($fields);
-			
+					
             ##
             foreach ($fields as $field => $definition) {
 				
 				##
-				if (is_numeric($field)) {
-					$selectFields[] = $tableAlias ? $tableAlias.'.'.$definition : $definition;					
+				if (is_numeric($field)) {					
+					$selectFields[] = static::selectFieldsSingletoneField($definition, $tableAlias);					
 				} 
 				
 				##
 				else if (is_array($definition)) {
-					var_dump($definition);
 					
 					##
-					$alias		= $definition['Alias'];
+					$class		= $definition['Class'];
+					
+					##
+					$aliasTable[$class] = isset($aliasTable[$class]) ? $aliasTable[$class]+1 : 1;
+					
+					##
+					$alias		= $aliasTable[$class] > 1 ? $class.''.$aliasTable[$class] : $class;
 					$table		= $definition['Table'];
 					$fieldFrom	= $definition['FieldFrom'];
 					$joinKey	= $alias.'.'.$definition['JoinKey'];
 					$fieldTo	= $alias.'.'.$definition['FieldTo'];
 					
 					##
-					$join .= "JOIN {$table} AS {$alias} ON {$joinKey} = {$fieldFrom}";
+					$join .= " JOIN {$table} AS {$alias} ON {$joinKey} = {$fieldFrom}";
 					
 					##
 					$selectFields[] = $fieldTo.' AS '.$field; 
@@ -187,8 +195,26 @@ class Mysql
             }
 
             ##
-            return implode(',',$selectFields);
+            return implode(', ',$selectFields);
         }
     }
+	
+	/**
+	 * 
+	 * @param type $field
+	 * @return type
+	 */
+	public static function selectFieldsSingletoneField($field,$tableAlias) {
+				
+		##
+		if (preg_match('/^[a-z_][a-z0-9_]*$/i', $field)) {
+			return $tableAlias ? $tableAlias.'.'.$field : $field;			
+		} 
+		
+		##
+		else {
+			return $field;
+		}		
+	}
 }
 

@@ -284,8 +284,7 @@ class Model extends Schema
 		##
 		return array(
 			'Table'		=> static::getTable(),			
-			'Alias'		=> get_called_class(),
-			'Class'		=> get_called_class(),
+			'Class'		=> static::getClass(),
 			'FieldFrom'	=> $fieldFrom,		
 			'FieldTo'	=> $fieldTo ? $fieldTo : static::getMainField(),
 			'JoinKey'	=> static::getPrimaryKey(),

@@ -36,11 +36,13 @@ Address::import(array(
 		'name' => 'Via Palestro',
 		'latitude' => 1000,
 		'longitude' => 2000,
+		'city'	=> 'Palermo',
 	),
 	array(
 		'name' => 'Via Milano',
 		'latitude' => 1400,
 		'longitude' => 2100,
+		'city'	=> 'Catania',
 	),
 ));
 
