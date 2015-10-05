@@ -227,13 +227,13 @@ class ModelAPI extends ModelBase {
     public static function insert($values)
     {
         ##
-        $o = static::make($values);
+        $object = static::make($values);
         
 		##
-		$o->store_insert();
+		$object->storeInsert();
 
         ##
-        return $o;
+        return $object;
     }
 
     /**

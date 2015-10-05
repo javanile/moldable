@@ -42,7 +42,7 @@ class Storable extends Record
         $key = static::getPrimaryKey();
 
         ## based on primary key store action
-        if ($key && $this->{$key} > 0) {
+        if ($key && $this->{$key}) {
 
             ##
             return $this->storeUpdate();

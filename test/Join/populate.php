@@ -12,13 +12,15 @@ Person::import(array(
 		'name' => 'Mario', 
 		'surname' => 'Rossi',
 		'age' => 21,
-		'address' => 1
+		'address1' => 1,
+		'address2' => 2,
 	),
 	array(
 		'name' => 'Franco', 
 		'surname' => 'Verde',
 		'age' => 22,
-		'address' => 2
+		'address1' => 2,
+		'address2' => 1,
 	),	
 ));
 

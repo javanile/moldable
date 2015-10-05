@@ -4,14 +4,16 @@
 require_once 'common.php';
 
 ##
-$id = 1;
+Person::dump();
 
 ##
-$Person = Person::load($id,array(
-	'name',	
-	'addres1_*' => Address::join('address1'),
-	'addres2_*' => Address::join('address2'),
+Address::dump();
+
+##
+$Person = Person::load(1, array(
+	'address1'
 ));
 
 ##
+echo '<pre>';
 var_Dump($Person);

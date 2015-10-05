@@ -139,7 +139,44 @@ class Table
         return $field;
     }
 	
-
+	/**
+	 * Retrieve primary key field name
+	 *  
+	 * @return boolean
+	 */
+    public static function getDefaultFields()
+    {
+		##
+		$setting = 'DefaultFields';
+		
+		## retrieve value from class setting definition
+		if (static::hasClassSetting($setting)) {
+			return static::getClassSetting($setting);
+		}
+		
+		##
+		$fields = array();
+        
+		##
+		$schema = static::getSchema();
+		
+		##
+		foreach($schema as $field => $attributes) {
+			if (isset($attributes['Class'])) {
+				$class = $attributes['Class'];
+				$fields[$field] = call_user_func($class.'::join', $field);
+			} else {
+				$fields[] = $field;
+			}			
+		}
+						
+		## store as setting for future request
+		static::setClassSetting($setting, $fields);
+								
+        ## return primary key field name
+        return $fields;
+    }
+	
     /**
 	 * 
 	 * @return type

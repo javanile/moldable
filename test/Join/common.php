@@ -28,7 +28,8 @@ class Person extends SchemaDB\Storable {
 	public $name = "";
 	public $surname = "";
 	public $age = 0;
-	public $address = 0;	
+	public $address1 = 0;	
+	public $address2 = 0;	
 }
 
 ##

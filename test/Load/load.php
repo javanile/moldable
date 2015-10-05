@@ -11,7 +11,7 @@ SchemaDB\Database::getDefault()->drop('confirm');
 
 ##
 class Invoice extends SchemaDB\Storable {
-	
+		
 	##
 	public $code = '';
 	

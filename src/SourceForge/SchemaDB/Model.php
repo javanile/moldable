@@ -274,7 +274,12 @@ class Model extends Schema
 	/**
 	 * 
 	 */
-	public static function join($field,$lookup) {
+	public static function join($field, $lookup=null) {
+		
+		##
+		if (!is_string($field)) {
+			trigger_error('Required field to join', E_USER_ERROR);
+		}
 		
 		##
 		return array(
@@ -283,7 +288,7 @@ class Model extends Schema
 			'field' => $field,		
 			'table' => static::getTable(),
 			'key'	=> static::getPrimaryKey(),
-			'lookup'=> $lookup,
+			'lookup'=> $lookup ? $lookup : null,
 		);		
 	} 
 }
