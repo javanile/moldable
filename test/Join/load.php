@@ -13,12 +13,15 @@ Address::dump();
 $Person0 = Person::load(1);
 
 ##
-$Person1 = Person::load(1, array(
-	'address1', 
-	'address2',
-));
-
-##
 echo '<pre>';
 var_Dump($Person0);
+echo '</pre>';
+
+##
+$Person1 = Person::load(1, array(
+	'address' => Address::join('address1'),  	
+));
+
+echo '<pre>';
 var_Dump($Person1);
+echo '</pre>';

@@ -274,21 +274,21 @@ class Model extends Schema
 	/**
 	 * 
 	 */
-	public static function join($field, $lookup=null) {
+	public static function join($fieldFrom, $fieldTo = null) {
 		
 		##
-		if (!is_string($field)) {
+		if (!is_string($fieldFrom)) {
 			trigger_error('Required field to join', E_USER_ERROR);
 		}
 		
 		##
 		return array(
-			'alias' => get_called_class(),
-			'class' => get_called_class(),
-			'field' => $field,		
-			'table' => static::getTable(),
-			'key'	=> static::getPrimaryKey(),
-			'lookup'=> $lookup ? $lookup : null,
+			'Table'		=> static::getTable(),			
+			'Alias'		=> get_called_class(),
+			'Class'		=> get_called_class(),
+			'FieldFrom'	=> $fieldFrom,		
+			'FieldTo'	=> $fieldTo ? $fieldTo : static::getMainField(),
+			'JoinKey'	=> static::getPrimaryKey(),
 		);		
 	} 
 }

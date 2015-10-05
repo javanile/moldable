@@ -127,16 +127,31 @@ class Table
 		}
 			
 		##
-		$fields = static::getSchemaFields();
+		$mainField = false;
 		
 		##
-		$field = $fields ? $fields[0] : false;
+		$schema = static::getSchema();
+
+        ##
+        foreach ($schema as $field => &$attributes) {
+
+            ##
+            if ($attributes['Key'] == 'PRI') {
+				continue;	
+            }
+			
+			##
+			$mainField = $field;
+			
+			##
+			break;
+        }
         		
 		## store as setting for future request
-		static::setClassSetting($setting, $field);
+		static::setClassSetting($setting, $mainField);
 								
         ## return primary key field name
-        return $field;
+        return $mainField;
     }
 	
 	/**

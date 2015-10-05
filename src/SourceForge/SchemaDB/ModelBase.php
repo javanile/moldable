@@ -42,7 +42,7 @@ class ModelBase extends Model {
         $selectFields = Mysql::selectFields($allFields, $class, $join);
 
         ## prepare SQL query
-        $sql = "SELECT {$selectFields} FROM {$table} AS {$alias} {$join} WHERE {$key}='{$index}' LIMIT 1";
+        $sql = "SELECT {$selectFields} FROM {$table} AS {$alias} {$join} WHERE {$alias}.{$key}='{$index}' LIMIT 1";
 
         ## fetch data on database and return it
         return static::fetch($sql, false, is_string($fields), is_null($fields));

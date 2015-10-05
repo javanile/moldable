@@ -143,7 +143,7 @@ class Mysql
 
         ##
         else if (is_string($fields)) {
-            return $f;
+            return $fields;
         }
 
         ##
@@ -151,22 +151,37 @@ class Mysql
 
             ##
             $selectFields = array();
-
+			
+			var_Dump($fields);
+			
             ##
             foreach ($fields as $field => $definition) {
 				
 				##
 				if (is_numeric($field)) {
-					$selectFields[] = $tableAlias.'.'.$definition;					
-				} else if (is_array($definition)) {
-					$alias  = $definition['alias'];
-					$table	= $definition['table'];
-					$key	= $alias.'.'.$definition['key'];
-					$lookup	= $definition['lookup'];
-					$join  .= "JOIN {$table} AS {$alias} ON {$key} = {$lookup}";
-					$fieldJoin	= $alias.'.'.$definition['field'];
-					$selectFields[] = $fieldJoin. ' AS '.$field; 
-				} else {
+					$selectFields[] = $tableAlias ? $tableAlias.'.'.$definition : $definition;					
+				} 
+				
+				##
+				else if (is_array($definition)) {
+					var_dump($definition);
+					
+					##
+					$alias		= $definition['Alias'];
+					$table		= $definition['Table'];
+					$fieldFrom	= $definition['FieldFrom'];
+					$joinKey	= $alias.'.'.$definition['JoinKey'];
+					$fieldTo	= $alias.'.'.$definition['FieldTo'];
+					
+					##
+					$join .= "JOIN {$table} AS {$alias} ON {$joinKey} = {$fieldFrom}";
+					
+					##
+					$selectFields[] = $fieldTo.' AS '.$field; 
+				} 
+				
+				##
+				else {
 					$selectFields[] = $definition. ' AS '.$field;										
 				} 				
             }
