@@ -20,10 +20,10 @@ class Record extends ModelAPI
         static::updateTable();
 
         ## prepare field values strip schema definitions
-        foreach ($this->getFields() as $f) {
+        foreach (static::getSchemaFields() as $field) {
 
             ##
-            $this->{$f} = Parser::getNotaionValue($this->{$f});
+            $this->{$field} = Parser::getNotaionValue($this->{$field});
         }
     }
 	
@@ -45,44 +45,5 @@ class Record extends ModelAPI
         $this->store();
     }
 
-    /**
-     * Auto-store element method
-     *
-     * @return type
-     */
-    public function store()
-    {
-        ## retrieve primary key
-        $k = static::getPrimaryKey();
-
-        ## based on primary key store action
-        if ($k && $this->{$k}>0) {
-
-            ##
-
-            return $this->store_update();
-        } else {
-
-            ##
-
-            return $this->store_insert();
-        }
-    }
-
-    /**
-     * Return fields names
-     *
-     * @return type
-     */
-    public function getFields()
-    {
-        ##
-        $class = get_class($this);
-        
-		##
-		$fields = array_keys(get_class_vars($class));
-        
-		##
-		return array_diff($fields, static::getModelSetting('exclude'));		
-    }
+    
 }

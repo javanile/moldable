@@ -10,7 +10,7 @@ function SchemaDB_autoload($className)
 	}
 	
 	
-	if (!@include_once __DIR__.'/'.$classPath[2].'.php') {
+	if (!include_once __DIR__.'/'.$classPath[2].'.php') {
 	
 	}	
 }

@@ -26,8 +26,31 @@ class Storable extends Record
 		$this->fill($values);
 	}
 
+	/**
+     * Auto-store element method
+     *
+     * @return type
+     */
+    public function store()
+    {
+        ## retrieve primary key
+        $key = static::getPrimaryKey();
+
+        ## based on primary key store action
+        if ($key && $this->{$key} > 0) {
+
+            ##
+            return $this->storeUpdate();
+        } else {
+
+            ##
+            return $this->storeInsert();
+        }
+    }  
+	
+	
 	##
-    public function store_update()
+    public function storeUpdate()
     {
         ## update database schema
         static::updateTable();
@@ -77,51 +100,62 @@ class Storable extends Record
         }
     }
 
-    ##
-    public function store_insert($force=false)
+    /**
+	 * 
+	 * 
+	 * @param type $force
+	 * @return boolean
+	 */
+    public function storeInsert($force=false)
     {
+		
+		echo 'I';
         ##
         static::updateTable();
 
         ##
-        $c = array();
-        $v = array();
-        $k = static::getPrimaryKey();
-
-		$fields = static::getSchemaFields();
-			
+        $fieldsArray = array();
+        $valuesArray = array();
+        
+		##
+		$key = static::getPrimaryKey();
+				
+		##
+		$schema = static::getSchema();
 		
         ##
-        foreach (static::getSchemaFields() as $field => $d) {
+        foreach ($schema as $field => &$column) {
 
             ##
-            if ($field==$k&&!$force) {continue;}
+            if ($field == $key && !$force) { continue; }
 
             ## get current value of attribute of object
-            $value = static::rappresentation($this->{$field});
+            $value = static::rapresentation($this->{$field}, $column);
             
             ##
-            $c[] = $f;
-            $v[] = "'".$value."'";
+            $fieldsArray[] = $field;
+            $valuesArray[] = "'".$value."'";
         }
 
         ##
-        $c = implode(',',$c);
-        $v = implode(',',$v);
+        $fields = implode(',', $fieldsArray);
+        $values = implode(',', $valuesArray);
 
         ##
-        $t = static::getTable();
-        $q = "INSERT INTO {$t} ({$c}) VALUES ({$v})";
+        $table = static::getTable();
+		
+		##
+        $sql = "INSERT INTO {$table} ({$fields}) VALUES ({$values})";
 
         ##
-        static::getDatabase()->query($q);
+        static::getDatabase()->query($sql);
 
         ##
-        if ($k) {
-            $i = static::getDatabase()->getLastId();
-            $this->{$k} = $i;
+        if ($key) {
+            $index = static::getDatabase()->getLastId();
+            $this->{$key} = $index;
 
-            return $i;
+            return $index;
         }
 
         ##
@@ -130,6 +164,33 @@ class Storable extends Record
         }
     }
 
+	/**
+	 * 
+	 * @param type $value
+	 */
+	public static function rapresentation($value, &$column) {
+		
+		##
+		if (is_array($value) && isset($column['Class'])) {
+		
+			##
+			$class = $column['Class'];
+			
+			##
+			$object = new $class($value);
+			
+			##
+			$index = $object->store();
+			
+			##
+			return $index;
+		}
+		
+		##
+		return $value;		
+	}
+	
+	
 	/**
 	 * 
 	 * @param type $list

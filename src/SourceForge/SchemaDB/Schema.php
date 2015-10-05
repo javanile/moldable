@@ -30,11 +30,11 @@ class Schema extends Table
 		}
 		
 		##
-		$fields = array_keys(get_class_vars(get_called_class()));
+		$allFields = array_keys(get_class_vars(get_called_class()));
 	
 		##
 		$fields = array_diff(
-			$fields, 
+			$allFields, 
 			static::getModelSetting('schemaExcludedFields')
 		);
 
@@ -108,22 +108,11 @@ class Schema extends Table
 
         ##
         foreach ($fields as $name => $value) {
-            if (!in_array($name, static::getModelSetting('exclude'))) {
-                $schema[$name] = $value;
-            }
+			$schema[$name] = $value;
         }
-
-		echo '<pre>';
-		##
-		//var_Dump($schema);
-		
+	
 		##			
 		Parser::parseSchemaTable($schema);		
-		
-		##
-		//var_Dump($schema);
-		
-		echo '</pre>';
 		
 		##
 		static::setModelSetting('schema', $schema);

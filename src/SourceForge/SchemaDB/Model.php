@@ -199,20 +199,20 @@ class Model extends Schema
     public function fill($values)
     {
 		##
-        foreach ($this->getFields() as $f) {
+        foreach (static::getSchemaFields() as $field) {
             
 			##
-			if (isset($values[$f])) {
-                $this->{$f} = $values[$f];
+			if (isset($values[$field])) {
+                $this->{$field} = $values[$field];
             }
         }
 
 		##
-        $k = $this->getPrimaryKey();
+        $key = $this->getPrimaryKey();
 
 		##
-        if ($k) {
-            $this->{$k} = isset($values[$k]) ? (int) $values[$k] : (int) $this->{$k};
+        if ($key) {
+            $this->{$key} = isset($values[$key]) ? (int) $values[$key] : (int) $this->{$key};
         }
     }
 	

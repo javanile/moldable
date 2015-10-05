@@ -249,7 +249,7 @@ class ModelAPI extends Model {
     {
         ##
         $o = static::build($query);
-        $o->store_update();
+        $o->storeUpdate();
 
         ##
         return $o;

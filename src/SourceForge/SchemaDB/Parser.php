@@ -245,6 +245,7 @@ class Parser
 
 		##
 		$notation = array(
+			'Class'		=> trim($notation,'<>'),
 			'Field'		=> $field,
 			'Before'	=> $before,
 			'First'		=> !$before,
