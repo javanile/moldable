@@ -35,16 +35,22 @@ class ModelFields extends ModelSchema
 	 * 
 	 * 
 	 */
-	const INT					= '<<{"Type":"int(10)"}>>';
-    const INT_10			= '<<{"Type":"int(10)"}>>';
-    const INT_14			= '<<{"Type":"int(14)"}>>';
+	const TINYINT	= '<<{"Type":"tinyint(4)"}>>';
+    const SMALLINT	= '<<{"Type":"smallint(6)"}>>';
+    const MEDIUMINT	= '<<{"Type":"mediumint(9)"}>>';
+    const INT		= '<<{"Type":"int(11)"}>>';
+    const INT_20	= '<<{"Type":"int(20)"}>>';
+    const BIGINT	= '<<{"Type":"bigint(20)"}>>';
     
 	/**
 	 * 
 	 */
-	const FLOAT				= '<<{"Type":"float(14,4)"}>>';
-    const FLOAT_14_4		= '<<{"Type":"float(14,4)"}>>';
-    
+	const DECIMAL	= '<<{"Type":"decimal(10,2)"}>>';
+    const NUMERIC	= '<<{"Type":"decimal(10,2)"}>>';
+    const REAL		= '<<{"Type":"real"}>>';
+    const FLOAT		= '<<{"Type":"float"}>>';
+    const DOUBLE	= '<<{"Type":"double"}>>';
+    	
 	/**
 	 * 
 	 */

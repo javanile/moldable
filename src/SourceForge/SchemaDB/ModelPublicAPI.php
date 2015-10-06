@@ -402,7 +402,7 @@ class ModelPublicAPI extends ModelProtectedAPI
         $q = "DROP TABLE IF EXISTS {$t}";
 
 		##
-		static::delModelSetting('update');
+		static::delConfig('update');
 		
         ## execute query
         static::getDatabase()->query($q);

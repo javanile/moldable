@@ -76,7 +76,10 @@ class SchemaParser
 				
 			## 	
 			case 'datetime': static::parseSchemaTableFieldDatetime($field, $notation, $before); break;
-               
+            
+			## 	
+			case 'timestamp': static::parseSchemaTableFieldTimestamp($field, $notation, $before); break;
+            	  	
 			## 
 			case 'primary_key': static::parseSchemaTableFieldPrimaryKey($field, $notation, $before); break;
                
@@ -133,24 +136,6 @@ class SchemaParser
 	/**
 	 * 
 	 */
-	private static function parseSchemaTableFieldDate($field, &$notation, $before) {
-		
-		##
-		$notation = array();
-			
-		##
-		$notation['Field'] = $field;
-		
-		##
-		$notation['Before'] = $before;
-		
-		##
-		$notation['Type'] = 'date';
-	}
-	
-	/**
-	 * 
-	 */
 	private static function parseSchemaTableFieldPrimaryKey($field, &$notation, $before) {
 	
 		##
@@ -169,19 +154,26 @@ class SchemaParser
 	/**
 	 * 
 	 */
+	private static function parseSchemaTableFieldDate($field, &$notation, $before) {
+		
+		##
+		$notation = static::parseSchemaTableFieldDefault($field, $before);
+					
+		##
+		$notation['Type'] = 'datetime';
+	}
+	
+	
+	/**
+	 * 
+	 */
 	private static function parseSchemaTableFieldDatetime($field, &$notation, $before) {
 		
 		##
-		$notation = array();
-			
+		$notation = static::parseSchemaTableFieldDefault($field, $before);
+					
 		##
-		$notation['Field'] = $field;
-		
-		##
-		$notation['Before'] = $before;
-		
-		##
-		$notation['Type'] = 'date';
+		$notation['Type'] = 'datetime';
 	}
 	
 	/**

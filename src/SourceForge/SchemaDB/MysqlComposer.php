@@ -96,7 +96,7 @@ class MysqlComposer
         $column = static::columnDefinition($attributes);
 
         ##
-        $sql = "ALTER TABLE {$table} ADD {$field} {$column}";
+        $sql = "ALTER TABLE {$table} ADD COLUMN {$field} {$column}";
 
         ##
         return $sql;
@@ -116,7 +116,7 @@ class MysqlComposer
         $column = static::columnDefinition($attributes);
 
         ##
-        $sql = "ALTER TABLE {$table} CHANGE {$field} {$field} {$column}";
+        $sql = "ALTER TABLE {$table} CHANGE COLUMN {$field} {$field} {$column}";
 
         ##
         return $sql;
