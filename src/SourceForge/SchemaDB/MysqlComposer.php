@@ -102,18 +102,24 @@ class MysqlComposer
         return $sql;
     }
 
-    ## retrieve sql to alter table definition
-    public static function alterTableChange($t,$f,$d)
+    /**
+	 * Retrieve sql to alter table definition
+	 * 
+	 * @param type $t
+	 * @param type $f
+	 * @param type $d
+	 * @return type
+	 */
+    public static function alterTableChange($table, $field, $attributes)
     {
         ##
-        $c = Mysql::columnDefinition($d);
+        $column = static::columnDefinition($attributes);
 
         ##
-        $q = "ALTER TABLE {$t} CHANGE {$f} {$f} {$c}";
+        $sql = "ALTER TABLE {$table} CHANGE {$field} {$field} {$column}";
 
         ##
-
-        return $q;
+        return $sql;
     }
 
     ## retrive query to remove primary key

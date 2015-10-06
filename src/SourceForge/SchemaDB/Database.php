@@ -232,7 +232,7 @@ class Database extends DatabaseCommon
     {
         ## prepare
         if ($parse) { 
-			DatabaseSchemaParser::parse($schema);
+			SchemaParser::parseSchemaDB($schema);
 		}
 
         ## get prefix string
@@ -390,8 +390,8 @@ class Database extends DatabaseCommon
         ## check if column need to be updated
         else if ($this->diffTableFieldAttributes($field, $attributes, $fields)) {
 
-            ##
-            $sql = Mysql::alterTableChange($table, $field, $attributes);
+            ## compose alter table query with attributes
+            $sql = MysqlComposer::alterTableChange($table, $field, $attributes);
 
             ## alter column that lose primary key
             if ($fields[$field]['Key'] == 'PRI' || $attributes['Key'] == 'PRI') {
