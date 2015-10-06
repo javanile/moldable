@@ -13,6 +13,36 @@ namespace SourceForge\SchemaDB;
 class ModelPublicAPI extends ModelProtectedAPI 
 {	
 	/**
+	 * 
+	 * @param type $database
+	 */
+    public static function connect($database=null)
+    {
+		##
+		static::updateTable();       
+    }
+
+	/**
+	 * 
+	 * @param type $values
+	 * @param type $map
+	 * @return \static
+	 */
+    public static function make($values=null, $map=null)
+    {
+        ##
+        $object = new static();
+
+        ##
+        if ($values) {
+            $object->fill($values);
+        }
+
+        ##
+        return $object;
+    }
+	
+	/**
      * Load item from DB
      *
      * @param  type $id
@@ -331,6 +361,26 @@ class ModelPublicAPI extends ModelProtectedAPI
             static::getDatabase()->query($q);
         }
     }
+	
+	/**
+	 * 
+	 */
+	public static function join($fieldFrom, $fieldTo = null) {
+		
+		##
+		if (!is_string($fieldFrom)) {
+			trigger_error('Required field to join', E_USER_ERROR);
+		}
+		
+		##
+		return array(
+			'Table'		=> static::getTable(),			
+			'Class'		=> static::getClass(),
+			'FieldFrom'	=> $fieldFrom,		
+			'FieldTo'	=> $fieldTo ? $fieldTo : static::getMainField(),
+			'JoinKey'	=> static::getPrimaryKey(),
+		);		
+	} 
 	
 	/**
 	 * Drop table

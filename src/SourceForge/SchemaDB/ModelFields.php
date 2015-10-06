@@ -13,7 +13,7 @@ namespace SourceForge\SchemaDB;
  *
  *
  */
-class Fields 
+class Fields extends ImprovedClass
 {
     /**
 	 * schemadb mysql constants for rapid fields creation
@@ -55,7 +55,7 @@ class Fields
 	 *  
 	 * @return boolean
 	 */
-    public static function getPrimaryKey()
+    protected static function getPrimaryKey()
     {
 		##
 		$attribute = 'PrimaryKey';
@@ -97,7 +97,7 @@ class Fields
 	 *  
 	 * @return boolean
 	 */
-    public static function getMainField()
+    protected static function getMainField()
     {
 		##
 		$setting = 'MainField';
@@ -140,7 +140,7 @@ class Fields
 	 *  
 	 * @return boolean
 	 */
-    public static function getDefaultFields()
+    protected static function getDefaultFields()
     {
 		##
 		$setting = 'DefaultFields';

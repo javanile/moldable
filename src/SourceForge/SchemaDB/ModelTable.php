@@ -13,7 +13,7 @@ namespace SourceForge\SchemaDB;
  *
  *
  */
-class ModelTable 
+class ModelTable extends Fields
 {   	
     /**
 	 * Retrieve table name

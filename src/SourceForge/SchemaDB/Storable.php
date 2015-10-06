@@ -11,9 +11,11 @@ namespace SourceForge\SchemaDB;
  *
  *
  */
-class Storable extends ModelRecord
+class Storable extends ModelPublicAPI
 {
 	/**
+	 * Construct a storable object 
+	 * with filled fields by values 
 	 * 
 	 * 
 	 */

@@ -14,16 +14,16 @@ $db->apply(array(
 	
 	## define users table
 	'User' => array(
-		'userid'	=> SchemaDB\Fields::PRIMARY_KEY,
+		'userid'	=> SchemaDB\ModelFields::PRIMARY_KEY,
 		'username'	=> '',
 		'password'	=> '',
 		'type'		=> 1,
-		'tipe'		=> SchemaDB\Fields::
+		'tipe'		=> SchemaDB\ModelFields::INT_10,
 	),
 	
 	## define articles table
 	'Article' => array(
-		'articleid' => SchemaDB\Fields::PRIMARY_KEY,
+		'articleid' => SchemaDB\ModelFields::PRIMARY_KEY,
 		'title'		=> '',
 		'content'	=> '',
 	),	

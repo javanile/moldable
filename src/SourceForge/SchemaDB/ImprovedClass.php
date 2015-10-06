@@ -12,7 +12,7 @@ namespace SourceForge\SchemaDB;
  *
  *
  */
-class ConfigurableClass
+class ImprovedClass
 {
 	/**
 	 * Bundle to collect info and stored cache
@@ -132,5 +132,45 @@ class ConfigurableClass
 		## clear cached
         unset(static::$__Config__[$attribute][$class]);		
 	}
+	
+	/**
+	 * 
+	 * @param type $prefix
+	 * @return type
+	 */
+	protected static function getMethodsByPrefix($prefix=null) {
+	
+		##
+		if (static::hasConfig($prefix)) {
+			return static::getConfig($prefix);
+		}
+		
+		##
+		$class = static::getClass();
+		
+		##
+		$allMethods = get_class_methods($class);
+		
+		##
+		$methods = array();
+		
+		##
+		if (count($allMethods) > 0) {					
+			foreach($allMethods as $method) {
+				if (preg_match('/^'.$prefix.'/i',$method)) {
+					$methods[] = $method;
+				}
+			}			
+		} 
+		
+		##
+		asort($methods);
+		
+		##
+		static::setClassSetting($prefix, $methods);
+		
+		##
+		return $methods;
+	} 
 }
 
