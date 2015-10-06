@@ -99,6 +99,9 @@ class Parser
 			case 'class': static::parseSchemaTableFieldClass($field, $notation, $before); break;                   
 
 			##
+			case 'vector': static::parseSchemaTableFieldVector($field, $notation, $before); break;                   
+
+			##
 			case 'null': static::parseSchemaTableFieldNull($field, $notation, $before); break; 
 			
 			##
@@ -111,16 +114,17 @@ class Parser
 
 	/**
 	 * 
+	 * 
 	 */
 	private static function parseSchemaTableFieldJson($field, &$notation, $before) {
 		
-		##
+		## decode json object into notation
 		$notation = json_decode(trim($notation,'<>'), true);
 		
-		##
+		## set-up field name
 		$notation['Field'] = $field;
 		
-		##
+		## set-up before field name
 		$notation['Before'] = $before;
 	}
     
@@ -246,6 +250,27 @@ class Parser
 		##
 		$notation = array(
 			'Class'		=> trim($notation,'<>'),
+			'Relation'	=> '1:1',
+			'Field'		=> $field,
+			'Before'	=> $before,
+			'First'		=> !$before,
+			'Type'		=> 'int(10)',
+			'Key'		=> '',
+			'Default'	=> null,
+			'Null'		=> 'YES',
+			'Extra'		=> '',
+		);
+	}
+	
+	/**
+	 * 
+	 */
+	private static function parseSchemaTableFieldVector($field, &$notation, $before) {
+
+		##
+		$notation = array(
+			'Class'		=> trim($notation,'<*>'),
+			'Relation'	=> '1:*',
 			'Field'		=> $field,
 			'Before'	=> $before,
 			'First'		=> !$before,
@@ -363,6 +388,11 @@ class Parser
 		} 
 
 		##
+		else if (preg_match('/^<<[A-Za-z_][0-9A-Za-z_]*\*>>$/i', $notation)) {
+			return 'vector';
+		} 
+
+		##
 		else if (preg_match('/^<<\{.*\}>>$/i', $notation)) {
 			return 'json';
 		} 
@@ -434,6 +464,9 @@ class Parser
 
             ##
 			case 'class': return null;
+
+			##
+			case 'vector': return null;
 
             ##
 			case 'array': return null;

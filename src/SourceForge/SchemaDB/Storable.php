@@ -135,7 +135,7 @@ class Storable extends Record
             if ($field == $key && !$force) { continue; }
 
             ## get current value of attribute of object
-            $value = static::rapresentation($this->{$field}, $column);
+            $value = static::insertRelationBefore($this->{$field}, $column);
             
             ##
             $fieldsArray[] = $field;
@@ -160,7 +160,17 @@ class Storable extends Record
 			
 			##
             $index = static::getDatabase()->getLastId();
-            
+        
+			##
+			foreach ($schema as $field => &$column) {
+				
+				##
+				if ($field == $key && !$force) { continue; }
+
+				##
+				static::insertRelationAfter($this->{$field}, $column);				
+			}
+			
 			##
 			$this->{$key} = $index;
 
@@ -176,28 +186,83 @@ class Storable extends Record
 	 * 
 	 * @param type $value
 	 */
-	public static function rapresentation($value, &$column) {
+	public static function insertRelationBefore($value, &$column) {
 		
 		##
-		if (is_array($value) && isset($column['Class'])) {
+		if (!is_array($value)) {
+			return $value;					
+		}
+			
+		##
+		switch ($column['Relation']) {
 		
 			##
-			$class = $column['Class'];
+			case '1:1': return static::insertRelationOneToOne($value, $column);
+			
+			##
+			case '1:*':	return static::insertRelationOneToMany($value, $column);			
+		}
+				
+	}
+	
+	/**
+	 * 
+	 */
+	public static function insertRelationOneToOne($value, &$column) {
+		
+		##
+		$class = $column['Class'];
 
+		##
+		$object = new $class($value);
+
+		##
+		$index = $object->store();
+
+		##
+		return $index;
+	}
+	
+	/**
+	 * 
+	 * @param type $value
+	 */
+	public static function insertRelationAfter($value, &$column) {
+		
+		##
+		if (!is_array($value)) {
+			return $value;					
+		}
+			
+		##
+		switch ($column['Relation']) {
+		
+			##
+			case '1:*':	return static::insertRelationOneToMany($value, $column);			
+		}				
+	}
+	
+	/**
+	 * 
+	 */
+	public static function insertRelationOneToMany($values, &$column) {
+		
+		##
+		$class = $column['Class'];
+
+		##
+		foreach($values as $value) {
+			
 			##
 			$object = new $class($value);
-			
+
 			##
 			$index = $object->store();
-			
-			##
-			return $index;
 		}
 		
 		##
-		return $value;		
+		return $index;
 	}
-	
 	
 	/**
 	 * 

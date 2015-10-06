@@ -134,90 +134,60 @@ class Database extends Source
     public function descTable($table)
     {
         ##
-        $q = "DESC {$table}";
+        $sql = "DESC {$table}";
 
         ##
-        $i = $this->getResults($q);
+        $fields = $this->getResults($sql);
 
         ##
-        $a = array();
+        $desc = array();
 
         ##
-        $n = 0;
+        $count = 0;
 
         ##
-        $b = false;
+        $before = false;
 
         ##
-        foreach ($i as $j) {
-            $j['Before'] = $b;
-            $j['First']	= $n === 0;
-            $a[$j['Field']] = $j;
-            $b = $j['Field'];
-            $n++;
+        foreach ($fields as $field) {
+			
+			##
+			$desc[$field['Field']] = $field;
+            $desc['First'] = $count === 0;
+            $desc['Before'] = $before;
+            
+			##
+			$before = $field['Field'];
+            $count++;
         }
 
         ##
-
-        return $a;
+        return $desc;
     }
-	
-	/**
-	 * 
-	 * @return type
-	 */
-	private function &getTables() {
-	
-		##
-        $prefix = $this->getPrefix();
-
-        ##
-        $sql = "SHOW TABLES LIKE '{$prefix}%'";
-
-        ##
-		$tables = $this->getValues($sql);
 		
-		##
-        return $tables; 
-	}
-	
     /**
-     * Apply schema on the db
+     * Apply schema on the database
      *
      * @param  type $schema
      * @return type
      */
     public function apply($schema)
     {
-        ##
-        return $this->update($schema);
-    }
-
-    /**
-     * Update db via schema
-     *
-     * @param  type $schema
-     * @return type
-     */
-    public function update($schema)
-    {
         ## retrive queries
-        $q = $this->diff($schema);
+        $queries = $this->diff($schema);
 
         ## execute queries
-        if (count($q)>0) {
+        if (!$queries) {
+			return;
+		}
 
-            ##
-            foreach ($q as $s) {
-
-                ##
-                $this->query($s);
-            }
-        }
-
+		## send all queries to align database
+		foreach ($queries as $sql) {
+			$this->query($sql);
+		}
+			
         ## return queries
-
-        return $q;
+        return $queries;
     }
 
     /**
@@ -225,26 +195,27 @@ class Database extends Source
      *
      * @param  string $table  real table name to update
      * @param  type   $schema
+     * @param  type   $parse
      * @return type
      */
-    public function updateTable($table,$schema,$parse=true)
+    public function updateTable($table, &$schema, $parse=true)
     {
         ## retrive queries
-        $q = $this->diffTable($table,$schema,$parse);
+        $queries = $this->diffTable($table, $schema, $parse);
 
         ## execute queries
-        if ($q && count($q)>0) {
+        if ($queries && count($queries) > 0) {
 
             ## loop throu all queries calculated and execute it
-            foreach ($q as $s) {
+            foreach ($queries as $sql) {
 
                 ## execute each queries
-                $this->query($s);
+                $this->query($sql);
             }
         }
 
         ## return queries
-        return $q;
+        return $queries;
     }
 
     /**
@@ -272,7 +243,7 @@ class Database extends Source
         foreach ($schema as $table => &$attributes) {
 
             ## 
-            $sql = $this->diffTable($prefix . $table, $attributes, false);
+            $sql = $this->diffTable($prefix.$table, $attributes, false);
 
             ##
             if (count($sql) > 0) {
@@ -312,7 +283,48 @@ class Database extends Source
         }
 
 		##
-		return $this->diffTableQueries($table, $schema);
+		$queries = $this->diffTableQueries($table, $schema);
+		
+		##
+		return $queries; 
+	}
+	
+	/**
+	 * Test if a table exists
+	 * 
+	 * @param type $table
+	 * @return type
+	 */
+	public function tableExists($table) {
+		
+		## sql query to test table exists
+        $sql = "SHOW TABLES LIKE '{$table}'";
+
+        ## test if table exists
+        $exists = $this->getRow($sql);
+
+		## return and cast test result
+		return (boolean) $exists;
+	}
+	
+	/**
+	 * Get array with current tables on database
+	 * 
+	 * @return array
+	 */
+	private function getTables() {
+	
+		##
+        $prefix = $this->getPrefix();
+
+        ##
+        $sql = "SHOW TABLES LIKE '{$prefix}%'";
+
+        ##
+		$tables = $this->getValues($sql);
+		
+		##
+        return $tables; 
 	}
 	
     /**
@@ -381,24 +393,6 @@ class Database extends Source
         ##
         return array_merge(array_reverse($foQueries), $soQueries);
     }
-
-	/**
-	 * Test if a table exists
-	 * 
-	 * @param type $table
-	 * @return type
-	 */
-	public function tableExists($table) {
-		
-		## sql query to test table exists
-        $sql = "SHOW TABLES LIKE '{$table}'";
-
-        ## test if table exists
-        $exists = $this->getRow($sql);
-
-		## return and cast test result
-		return (boolean) $exists;
-	}
 	
     /**
 	 * 
@@ -447,14 +441,15 @@ class Database extends Source
     }
 
     /**
+     * Evaluate diff between a field and their attributes
+	 * vs fields set definitions releaved direct from db
      *
-     *
-     * @param  type    $a
-     * @param  type    $f
-     * @param  type    $d
+     * @param  type $field
+     * @param  type $attributes
+     * @param  type $fields
      * @return boolean
      */
-    private function diffTableFieldAttributes($field, $attributes, $fields)
+    private function diffTableFieldAttributes($field, &$attributes, &$fields)
     {
         ## loop throd current column property
         foreach ($fields[$field] as $key => $value) {
@@ -503,10 +498,12 @@ class Database extends Source
     }
 
     /**
-     *
+     * Set global context default database 
+	 * for future use into model management
+	 * 
      * @param type $database
      */
-    public static function setDefault($database)
+    private static function setDefault($database)
     {
         ## if no default SchemaDB connection auto-set then-self
         if (static::$default === null) {
