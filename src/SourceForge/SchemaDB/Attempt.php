@@ -1,132 +1,10 @@
-<?php
-
-/*\
- * 
- * 
-\*/
-namespace SourceForge\SchemaDB;
-
-/**
- *
- *
- *
- *
- */
-class Model extends Schema
-{
-	/**
-	 * Bundle to collect info and stored cache
-	 * 
-	 * @var type 
-	 */
-    protected static $__ModelSettings__ = array(
-		'schemaExcludedFields' => array(
-            'class',
-            'table',
-            '__ModelSettings__',
-            '__ClassSettings__',
-        ),		
-	); 
-	
-	/**
-	 *
-	 * @var type 
-	 */
-	protected static $__ClassSettings__ = array(
-		'schemaExcludedFields' => array(),
-	); 
-			
-	/**
-	 * Retrieve static class name
-	 * 
-	 * @return type
-	 */ 
-    public static function getClass()
-    {
-        ##
-        return isset(static::$class) ? static::$class : get_called_class();
-    }
-	
-	/**
-	 * 
-	 */
-	public static function hasModelSetting($setting) {
-				
-		##
-		return isset(static::$__ModelSettings__[$setting]);		
-	}
-
-	/**
-	 * 
-	 */
-	public static function getModelSetting($setting) {
-		
-		##
-		return static::$__ModelSettings__[$setting];		
-	}
-
-	/**
-	 * 
-	 */
-	public static function setModelSetting($setting,$value) {
-		
-		##
-		static::$__ModelSettings__[$setting] = $value;		
-	}
-
-	/**
-	 * 
-	 * @param type $setting
-	 */
-	public static function delModelSetting($setting) {
-		
-		## clear cached
-        unset(static::$__ModelSettings__[$setting]);		
-	}
-	
-	/**
-	 * 
-	 */
-	public static function hasClassSetting($setting) {
-			
-		##
-		return isset(static::$__ClassSettings__[$setting][static::getClass()]);		
-	}
-
-	/**
-	 * 
-	 */
-	public static function getClassSetting($setting) {
-					
-		##
-		return static::$__ClassSettings__[$setting][static::getClass()];		
-	}
-
-	/**
-	 * 
-	 */
-	public static function setClassSetting($setting, $value) {
-		
-		##
-		static::$__ClassSettings__[$setting][static::getClass()] = $value;		
-	}
-
-	/**
-	 * 
-	 * @param type $setting
-	 */
-	public static function delClassSetting($setting) {
-		
-		## clear cached
-        unset(static::$__ClassSettings__[$setting][static::getClass()]);		
-	}
 
 	##
 	public static function getMethodsByPrefix($prefix=null) {
 	
 		##
-		if (static::hasClassSetting($prefix)) {
-			return static::getClassSetting($prefix);
+		if (static::hasConfig($prefix)) {
+			return static::getConfig($prefix);
 		}
 		
 		##
@@ -290,5 +168,11 @@ class Model extends Schema
 			'JoinKey'	=> static::getPrimaryKey(),
 		);		
 	} 
-}
 
+	
+	 ## usefull mysql func
+    public static function now()
+    {
+        ##
+        return date('Y-m-d H:i:s');
+    }

@@ -10,7 +10,7 @@ namespace SourceForge\SchemaDB;
  * 
  * 
  */
-class ModelBase extends Model {
+class ModelProtectedAPI extends ModelTable {
 
 	/**
 	 * 

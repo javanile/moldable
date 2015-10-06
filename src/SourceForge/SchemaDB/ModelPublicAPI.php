@@ -10,8 +10,8 @@ namespace SourceForge\SchemaDB;
  * 
  * 
  */
-class ModelAPI extends ModelBase {
-	
+class ModelPublicAPI extends ModelProtectedAPI 
+{	
 	/**
      * Load item from DB
      *
@@ -331,6 +331,126 @@ class ModelAPI extends ModelBase {
             static::getDatabase()->query($q);
         }
     }
+	
+	/**
+	 * Drop table
+	 * 
+	 * @param type $confirm
+	 * @return type
+	 */ 
+    public static function drop($confirm=null)
+    {
+        ##
+        if ($confirm !== 'confirm') {
+            return;
+        }
+
+        ## prepare sql query
+        $t = static::getTable();
+
+        ##
+        $q = "DROP TABLE IF EXISTS {$t}";
+
+		##
+		static::delModelSetting('update');
+		
+        ## execute query
+        static::getDatabase()->query($q);
+    }
+	
+	/**
+     * Import records from a source
+     *
+     * @param type $source
+     */
+    public static function import($source)
+    {
+        ## source is array loop throut records
+        foreach ($source as $record) {
+
+            ## insert single record
+            static::insert($record);
+        }
+    }
+	
+	/**
+	 * 
+	 * @param type $list
+	 */
+    public static function dump($list=null)
+    {
+        ##
+        $a = $list ? $list : static::all();
+
+        ##
+        $t = static::getTable();
+
+        ##
+        $r = key($a);
+
+        ##
+        $n = count($a) > 0 ? count((array) $a[$r]) : 1;
+
+        ##
+        echo '<pre><table border="1" style="text-align:center"><thead><tr><th colspan="'.$n.'">'.$t.'</th></tr>';
+
+        ##
+        echo '<tr>';
+        foreach ($a[$r] as $f=>$v) {
+            echo '<th>'.$f.'</th>';
+        }
+        echo '</tr></thead><tbody>';
+
+        ##
+        foreach ($a as $i=>$r) {
+            echo '<tr>';
+            foreach ($r as $f=>$v) {
+                echo '<td>'.$v.'</td>';
+            }
+            echo '</tr>';
+        }
+
+        ##
+        echo '</tbody></table></pre>';
+    }
+
+	/**
+	 * 
+	 */
+    public static function desc()
+    {
+        ##
+        $t = static::getTable();
+
+        ##
+        $s = static::getSchemaDB()->desc_table($t);
+
+        ##
+        echo '<table border="1" style="text-align:center"><tr><th colspan="8">'.$t.'</td></th>';
+
+        ##
+        $d = reset($s);
+
+        ##
+        echo '<tr>';
+        foreach ($d as $a=>$v) {
+            echo '<th>'.$a.'</th>';
+        }
+        echo '</tr>';
+
+        ##
+        foreach ($s as $d) {
+            echo '<tr>';
+            foreach ($d as $a=>$v) {
+                echo '<td>'.$v.'</td>';
+            }
+            echo '</tr>';
+        }
+
+        ##
+        echo '</table>';
+    }
+
 	
 	
 }

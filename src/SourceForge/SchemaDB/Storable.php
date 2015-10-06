@@ -11,7 +11,7 @@ namespace SourceForge\SchemaDB;
  *
  *
  */
-class Storable extends Record
+class Storable extends ModelRecord
 {
 	/**
 	 * 
@@ -27,7 +27,7 @@ class Storable extends Record
 			$this->fill($values);
 		}
 		
-		##
+		## update related table
 		static::updateTable();
 	}
 
@@ -36,25 +36,38 @@ class Storable extends Record
      *
      * @return type
      */
-    public function store()
+    public function store($values=null)
     {
+		##
+		if (is_array($values)) {
+			
+			##
+			foreach ($values as $field => $value) {
+			
+				##
+				$this->{$field} = $value;
+			}
+		}
+		
         ## retrieve primary key
         $key = static::getPrimaryKey();
 
         ## based on primary key store action
         if ($key && $this->{$key}) {
-
-            ##
             return $this->storeUpdate();
-        } else {
-
-            ##
+        } 
+		
+		##
+		else {
             return $this->storeInsert();
         }
     }  
-	
-	
-	##
+		
+	/**
+	 * 
+	 * 
+	 * @return boolean
+	 */
     public function storeUpdate()
     {
         ## update database schema
@@ -186,7 +199,7 @@ class Storable extends Record
 	 * 
 	 * @param type $value
 	 */
-	public static function insertRelationBefore($value, &$column) {
+	private static function insertRelationBefore($value, &$column) {
 		
 		##
 		if (!is_array($value)) {
@@ -208,7 +221,7 @@ class Storable extends Record
 	/**
 	 * 
 	 */
-	public static function insertRelationOneToOne($value, &$column) {
+	private static function insertRelationOneToOne($value, &$column) {
 		
 		##
 		$class = $column['Class'];
@@ -227,7 +240,7 @@ class Storable extends Record
 	 * 
 	 * @param type $value
 	 */
-	public static function insertRelationAfter($value, &$column) {
+	private static function insertRelationAfter($value, &$column) {
 		
 		##
 		if (!is_array($value)) {
@@ -245,7 +258,7 @@ class Storable extends Record
 	/**
 	 * 
 	 */
-	public static function insertRelationOneToMany($values, &$column) {
+	private static function insertRelationOneToMany($values, &$column) {
 		
 		##
 		$class = $column['Class'];
@@ -262,84 +275,5 @@ class Storable extends Record
 		
 		##
 		return $index;
-	}
-	
-	/**
-	 * 
-	 * @param type $list
-	 */
-    public static function dump($list=null)
-    {
-        ##
-        $a = $list ? $list : static::all();
-
-        ##
-        $t = static::getTable();
-
-        ##
-        $r = key($a);
-
-        ##
-        $n = count($a) > 0 ? count((array) $a[$r]) : 1;
-
-        ##
-        echo '<pre><table border="1" style="text-align:center"><thead><tr><th colspan="'.$n.'">'.$t.'</th></tr>';
-
-        ##
-        echo '<tr>';
-        foreach ($a[$r] as $f=>$v) {
-            echo '<th>'.$f.'</th>';
-        }
-        echo '</tr></thead><tbody>';
-
-        ##
-        foreach ($a as $i=>$r) {
-            echo '<tr>';
-            foreach ($r as $f=>$v) {
-                echo '<td>'.$v.'</td>';
-            }
-            echo '</tr>';
-        }
-
-        ##
-        echo '</tbody></table></pre>';
-    }
-
-	/**
-	 * 
-	 */
-    public static function desc()
-    {
-        ##
-        $t = static::getTable();
-
-        ##
-        $s = static::getSchemaDB()->desc_table($t);
-
-        ##
-        echo '<table border="1" style="text-align:center"><tr><th colspan="8">'.$t.'</td></th>';
-
-        ##
-        $d = reset($s);
-
-        ##
-        echo '<tr>';
-        foreach ($d as $a=>$v) {
-            echo '<th>'.$a.'</th>';
-        }
-        echo '</tr>';
-
-        ##
-        foreach ($s as $d) {
-            echo '<tr>';
-            foreach ($d as $a=>$v) {
-                echo '<td>'.$v.'</td>';
-            }
-            echo '</tr>';
-        }
-
-        ##
-        echo '</table>';
-    }
-
+	}	
 }

@@ -24,6 +24,13 @@ new SchemaDB(array(
 ##
 class Person extends Storable {
 	
+	##
+	static $class = 'Person_2';
+	
+	##
+	static $table = 'Ciao';
+	
+	##
 	public $id = self::PRIMARY_KEY;	 
 	public $name = "";
 	public $surname = "";

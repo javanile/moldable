@@ -11,7 +11,7 @@ namespace SourceForge\SchemaDB;
  *
  *
  */
-class Record extends ModelAPI
+class ModelRecord extends ModelPublicAPI
 {
     ## constructor
     public function __construct()
@@ -27,23 +27,6 @@ class Record extends ModelAPI
         }
     }
 	
-    /**
-     * Assign value and store object
-     *
-     * @param type $query
-     */
-    public function assign($query)
-    {
-        ##
-        foreach ($query as $k => $v) {
-
-            ##
-            $this->{$k} = $v;
-        }
-
-        ##
-        $this->store();
-    }
-
+    
     
 }
