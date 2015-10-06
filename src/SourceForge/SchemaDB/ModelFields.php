@@ -25,7 +25,9 @@ class ModelFields extends ModelSchema
 	 * 
 	 */
 	const VARCHAR		= '<<{"Type":"varchar(255)"}>>';
-    const VARCHAR_80	= '<<{"Type":"varchar(80)"}>>';
+    const VARCHAR_32	= '<<{"Type":"varchar(32)"}>>';
+    const VARCHAR_64	= '<<{"Type":"varchar(64)"}>>';
+    const VARCHAR_128	= '<<{"Type":"varchar(128)"}>>';
     const VARCHAR_255	= '<<{"Type":"varchar(255)"}>>';
     const TEXT			= '<<{"Type":"text"}>>';
     

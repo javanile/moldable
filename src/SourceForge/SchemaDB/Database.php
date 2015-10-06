@@ -374,7 +374,7 @@ class Database extends DatabaseCommon
         if (!isset($fields[$field])) {
 
             ##
-            $sql = Mysql::alterTableAdd($table, $field, $attributes);
+            $sql = MysqlComposer::alterTableAdd($table, $field, $attributes);
 
             ## add primary key column
             if ($attributes['Key'] == 'PRI') {

@@ -60,7 +60,7 @@ class SchemaParser
      * @param  type   $before
      * @return string
      */
-    public static function &parseSchemaTableField($field, &$notation, $before=null)
+    public static function parseSchemaTableField($field, &$notation, $before=null)
     {        		
         ## get notation type 
         $type = static::getNotationType($notation);
@@ -105,7 +105,7 @@ class SchemaParser
 			case 'null': static::parseSchemaTableFieldNull($field, $notation, $before); break; 
 			
 			##
-			default: trigger_error('Error parse type: '.$type);
+			default: trigger_error('Error parse type: '.$field.'('.$type.')');
         }
 		
 		##

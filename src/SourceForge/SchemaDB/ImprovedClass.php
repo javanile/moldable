@@ -21,10 +21,9 @@ class ImprovedClass
 	 */
     protected static $__Global__ = array(
 		'SchemaExcludedFields' => array(
-            'class',
-            'table',
-            '__ModelSettings__',
-            '__ClassSettings__',
+            '__Define__',
+            '__Global__',
+            '__Config__',
         ),		
 	); 
 	

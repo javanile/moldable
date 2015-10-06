@@ -93,7 +93,7 @@ class MysqlComposer
     public static function alterTableAdd($table, $field, $attributes)
     {
         ##
-        $column = Mysql::columnDefinition($attributes);
+        $column = static::columnDefinition($attributes);
 
         ##
         $sql = "ALTER TABLE {$table} ADD {$field} {$column}";

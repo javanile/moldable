@@ -34,7 +34,7 @@ class ModelSchema extends ImprovedClass
 		
 		##
 		$fields = static::getSchemaFieldsWithValues();
-		
+			
         ##
         $schema = array();
 
