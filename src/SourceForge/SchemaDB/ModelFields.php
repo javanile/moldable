@@ -100,11 +100,11 @@ class ModelFields extends ModelSchema
     protected static function getMainField()
     {
 		##
-		$setting = 'MainField';
+		$attribute = 'MainField';
 		
 		## retrieve value from class setting definition
-		if (static::hasClassSetting($setting)) {
-			return static::getClassSetting($setting);
+		if (static::hasConfig($attribute)) {
+			return static::getConfig($attribute);
 		}
 			
 		##
@@ -129,7 +129,7 @@ class ModelFields extends ModelSchema
         }
         		
 		## store as setting for future request
-		static::setClassSetting($setting, $mainField);
+		static::setConfig($attribute, $mainField);
 								
         ## return primary key field name
         return $mainField;

@@ -20,7 +20,7 @@ class ImprovedClass
 	 * @var type 
 	 */
     protected static $__Global__ = array(
-		'schemaExcludedFields' => array(
+		'SchemaExcludedFields' => array(
             'class',
             'table',
             '__ModelSettings__',
@@ -33,7 +33,7 @@ class ImprovedClass
 	 * @var type 
 	 */
 	protected static $__Config__ = array(
-		'schemaExcludedFields' => array(),
+		'SchemaExcludedFields' => array(),
 	); 
 			
 	/**
@@ -141,8 +141,11 @@ class ImprovedClass
 	protected static function getMethodsByPrefix($prefix=null) {
 	
 		##
-		if (static::hasConfig($prefix)) {
-			return static::getConfig($prefix);
+		$attribute = 'MethodsByPrefix:'.$prefix;
+		
+		##
+		if (static::hasConfig($attribute)) {
+			return static::getConfig($attribute);
 		}
 		
 		##
@@ -167,7 +170,7 @@ class ImprovedClass
 		asort($methods);
 		
 		##
-		static::setClassSetting($prefix, $methods);
+		static::setConfig($attribute, $methods);
 		
 		##
 		return $methods;

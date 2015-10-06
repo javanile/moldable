@@ -25,7 +25,7 @@ class ModelRecord extends ModelTable
         foreach (static::getSchemaFields() as $field) {
 
             ##
-            $this->{$field} = Parser::getNotaionValue($this->{$field});
+            $this->{$field} = SchemaParser::getNotaionValue($this->{$field});
         }
     }
 	

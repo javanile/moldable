@@ -13,7 +13,7 @@ namespace SourceForge\SchemaDB;
  *
  *
  */
-class ModelTable extends Fields
+class ModelTable extends ModelFields
 {   	
     /**
 	 * Retrieve table name
@@ -49,7 +49,7 @@ class ModelTable extends Fields
         $table = static::getDatabase()->getPrefix() . $name;
 
 		## store as setting for future request
-		static::setClassSetting($attribute, $table);
+		static::setConfig($attribute, $table);
 								
         ## return complete table name
         return $table;
@@ -66,8 +66,10 @@ class ModelTable extends Fields
 			return;			
 		}	
 
+		$attribute = 'TableUpdated';
+		
 		## avoid re-update by check the cache
-        if (static::hasClassSetting('update')) {	
+        if (static::hasConfig($attribute)) {	
 			return;
 		}
 
@@ -83,7 +85,7 @@ class ModelTable extends Fields
         }
 
         ## cache last update avoid multiple call
-        static::setClassSetting('update', time());
+        static::setConfig($attribute, time());
     }
 	
 	/**
@@ -93,8 +95,11 @@ class ModelTable extends Fields
 	 */
     protected static function getDatabase()
     {		
+		##
+		$attribute = 'Database';
+		
         ##
-        return static::hasClassSetting('database') ? static::getClassSetting('database') : Database::getDefault();
+        return static::hasConfig($attribute) ? static::getConfig($attribute) : Database::getDefault();
     }
 
 	/**

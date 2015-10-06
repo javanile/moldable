@@ -44,7 +44,7 @@ class ModelSchema extends ImprovedClass
         }
 	
 		##			
-		Parser::parseSchemaTable($schema);		
+		SchemaParser::parseSchemaTable($schema);		
 		
 		##
 		static::setConfig($attribute, $schema);
