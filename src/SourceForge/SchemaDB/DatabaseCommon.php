@@ -11,7 +11,7 @@ namespace SourceForge\SchemaDB;
  *
  *
  */
-class Source
+class DatabaseCommon
 {
 	/**
 	 * 
@@ -37,7 +37,7 @@ class Source
 		$this->args = $args;
 		
 		##
-        $this->sock = new SocketPDO();
+        $this->sock = new DatabaseSocketPDO();
 		
 		##
 		$this->link = false;

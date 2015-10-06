@@ -55,7 +55,7 @@ namespace SourceForge\SchemaDB;
  * ?>
  * </code>
  */
-class Database extends Source
+class Database extends DatabaseCommon
 {
     /**
      * Constant to enable debug print-out
@@ -360,6 +360,7 @@ class Database extends Source
 			);
         }
 
+		##
 		return $this->diffTableMergeQueries($table, $fields, $foQueries, $soQueries);
 	}
 	
@@ -550,38 +551,47 @@ class Database extends Source
     public function dump()
     {
         ## describe databse
-        $s = $this->desc();
+        $schema = $this->desc();
 
         ##
         echo '<pre><table border="1" style="text-align:center">';
 
         ##
-        if ($s) {
+        if (!$schema) {
+            echo '<tr><th>No database tables</th></tr></table></pre>';
+		}
+		
+		##
+		foreach ($schema as $table => $fields) {
 
-            ##
-            foreach ($s as $t => $d) {
+			##
+			echo '<tr><th colspan="9">'.$table.'</th></tr><tr><td>&nbsp;</td>';
 
-                ##
-                echo '<tr><th colspan="9">'.$t.'</th></tr>';
-                echo '<tr><td>&nbsp;</td>';
-                $r = key($d);
-                foreach ($d[$r] as $k=>$v) {
-                    echo '<th>'.$k.'</th>';
-                }
-                echo '</tr>';
-                foreach ($d as $f => $a) {
-                    echo '<tr>';
-                    echo '<th>'.$f.'</th>';
-                    foreach ($a as $k=>$v) {
-                        echo '<td>'.$v.'</td>';
-                    }
-                    echo '</tr>';
-                }
-            }
-        } else {
-            echo '<tr><th>No database tables</th></tr>';
-        }
-
+			##
+			$first = key($fields);
+			
+			##
+			foreach (array_keys($fields[$first]) as $attributeName) {
+				echo '<th>'.$attributeName.'</th>';
+			}
+			
+			##
+			echo '</tr>';
+			
+			##
+			foreach ($fields as $field => $attributes) {
+			
+				##
+				echo '<tr><th>'.$field.'</th>';
+				
+				##
+				foreach ($attributes as $value) { echo '<td>'.$value.'</td>'; }
+								
+				##
+				echo '</tr>';
+			}
+		}
+       			
         ##
         echo '</table></pre>';
     }

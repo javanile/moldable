@@ -14,13 +14,13 @@ use PDO;
  * 
  * 
  */
-class SocketPDO {
-	
+class DatabaseSocketPDO 
+{	
 	/**
 	 *
 	 * @var type 
 	 */
-	private $dbo = null; 
+	private $pdo = null; 
 
 	/**
 	 *
@@ -41,10 +41,10 @@ class SocketPDO {
 		); 
 
 		##
-		$this->dbo = new PDO($dsn,$args['user'],$args['pass'],$opt);		
+		$this->pdo = new PDO($dsn,$args['user'],$args['pass'],$opt);		
 	
 		##
-		$this->dbo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+		$this->pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 		
 		##
 		$this->prefix = $args['pref'];		
@@ -57,7 +57,7 @@ class SocketPDO {
 	public function query($sql) {
 			 	
 		##
-		$this->dbo->query($sql);		
+		$this->pdo->query($sql);		
 	}
 
 	/**
@@ -68,7 +68,7 @@ class SocketPDO {
 	public function getRow($sql) {
 		
 		##
-		$s = $this->dbo->prepare($sql);
+		$s = $this->pdo->prepare($sql);
 		
 		##
 		$s->execute();
@@ -85,7 +85,7 @@ class SocketPDO {
 	public function getResults($sql) {
 		
 		##
-		$statament = $this->dbo->prepare($sql);
+		$statament = $this->pdo->prepare($sql);
 		
 		##
 		$statament->execute();
@@ -106,7 +106,7 @@ class SocketPDO {
 	public function getColumn($sql) {
 		
 		##
-		$statament = $this->dbo->prepare($sql);
+		$statament = $this->pdo->prepare($sql);
 		
 		##
 		$statament->execute();
@@ -142,7 +142,7 @@ class SocketPDO {
 	public function lastInsertId() 
 	{
 		##
-		return $this->dbo->lastInsertId();		
+		return $this->pdo->lastInsertId();		
 	}
 	
 	/**
@@ -152,7 +152,7 @@ class SocketPDO {
 	public function transact() {
 		
 		##
-		$this->dbo->beginTransaction();		
+		$this->pdo->beginTransaction();		
 	}
 	
 	/**
@@ -161,7 +161,7 @@ class SocketPDO {
 	public function commit() {
 
 		##
-		$this->dbo->commit();				
+		$this->pdo->commit();				
 	}
 	
 	/**
@@ -170,6 +170,6 @@ class SocketPDO {
 	public function rollback() {
 
 		##
-		$this->dbo->rollBack();				
+		$this->pdo->rollBack();				
 	}
 }

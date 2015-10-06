@@ -7,7 +7,7 @@ require_once 'common.php';
 use SourceForge\SchemaDB;
 
 ## drop all database tables
-#$db->drop('confirm');
+$db->drop('confirm');
 
 ## Apply schema create or update database tables
 $db->apply(array( 
