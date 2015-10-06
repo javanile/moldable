@@ -117,15 +117,17 @@ class SchemaParser
 	 * 
 	 */
 	private static function parseSchemaTableFieldJson($field, &$notation, $before) {
-		
+
 		## decode json object into notation
-		$notation = json_decode(trim($notation,'<>'), true);
+		$json = json_decode(trim($notation,'<>'), true);
+
+		## set with default attributes
+		$notation = static::parseSchemaTableFieldDefault($field, $before);
 		
-		## set-up field name
-		$notation['Field'] = $field;
-		
-		## set-up before field name
-		$notation['Before'] = $before;
+		## override default with json passed
+		foreach ($json as $key => $value) {
+			$notation[$key] = $value;
+		}
 	}
     
 	/**
@@ -333,6 +335,25 @@ class SchemaParser
 			'Null'		=> 'YES',
 		);		
 	}
+	
+	/**
+	 * 
+	 */
+	private static function parseSchemaTableFieldDefault($field, $before) {
+		
+		##
+		return array(
+			'Field'		=> $field,
+			'First'		=> !$before,
+			'Before'	=> $before,
+			'Null'		=> 'YES',
+			'Default'	=> '',
+			'Key'		=> '',
+			'Type'		=> '',
+			'Extra'		=> '',
+		);		
+	}
+	
 	
     /**
 	 * 

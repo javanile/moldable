@@ -12,7 +12,7 @@ namespace SourceForge\SchemaDB;
  *
  *
  */
-class ImprovedClass
+class ModelClass
 {
 	/**
 	 * Bundle to collect info and stored cache
@@ -42,8 +42,11 @@ class ImprovedClass
 	 */ 
     protected static function getClass()
     {
+		##
+		$attribute = 'Class';
+		
         ##
-        return isset(static::$class) ? static::$class : get_called_class();
+        return static::optDefine($attribute, get_called_class());
     }
 	
 	/**
@@ -130,6 +133,53 @@ class ImprovedClass
 		
 		## clear cached
         unset(static::$__Config__[$attribute][$class]);		
+	}
+	
+	/**
+	 * 
+	 */
+	protected static function hasDefine($attribute) {
+				
+		##
+		return isset(static::$__Define__[$attribute]);		
+	}
+
+	/**
+	 * 
+	 */
+	protected static function getDefine($attribute) {
+		
+		##
+		return static::$__Define__[$attribute];		
+	}
+
+	/**
+	 * 
+	 */
+	protected static function setDefine($attribute, $value) {
+		
+		##
+		static::$__Define__[$attribute] = $value;		
+	}
+
+	/**
+	 * 
+	 * @param type $attribute
+	 */
+	protected static function delDefine($attribute) {
+		
+		## clear cached
+        unset(static::$__Define__[$attribute]);		
+	}
+
+	/**
+	 * 
+	 * @param type $attribute
+	 */
+	protected static function optDefine($attribute, $default) {
+		
+		##
+		return isset(static::$__Define__[$attribute]) ? static::$__Define__[$attribute] : $default;
 	}
 	
 	/**

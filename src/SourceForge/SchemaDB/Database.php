@@ -417,13 +417,21 @@ class Database extends DatabaseCommon
     private function diffTableFieldAttributes($field, &$attributes, &$fields)
     {
         ## loop throd current column property
-        foreach ($fields[$field] as $key => $value) {
-
-            ##
-            #echo '<pre>'.$field.'['.$key.']: '.$attributes[$key].' !== '.$value.' = '.($attributes[$key] != $value).'</pre>';
-
-            ## if have a difference
-            if ($attributes[$key] != $value) { return true; }
+        foreach ($fields[$field] as $key => $value) {            
+            
+			## if have a difference
+            if ($attributes[$key] == $value) { 
+				continue;
+			}	
+			
+			##
+            if (static::DEBUG) {
+				echo '<pre style="background:#E66;color:#000;margin:0 0 1px 0;padding:2px 6px 3px 6px;border:1px solid #000;">';
+				echo $field.'['.$key.']: "'.$attributes[$key].'" != "'.$value.'"</pre>';
+			}
+			
+			##			
+			return true; 							
         }
 
         ##

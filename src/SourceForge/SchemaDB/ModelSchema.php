@@ -15,7 +15,7 @@ namespace SourceForge\SchemaDB;
  *
  *
  */
-class ModelSchema extends ImprovedClass
+class ModelSchema extends ModelClass
 {
 	/**
 	 * Instrospect and retrieve element schema
@@ -39,13 +39,15 @@ class ModelSchema extends ImprovedClass
         $schema = array();
 
         ##
-        foreach ($fields as $name => $value) {
-			$schema[$name] = $value;
-        }
+		if ($fields && count($fields) > 0) {
+			foreach ($fields as $name => $value) {
+				$schema[$name] = $value;
+			}
+		}
 	
 		##			
 		SchemaParser::parseSchemaTable($schema);		
-		
+			
 		##
 		static::setConfig($attribute, $schema);
 		
