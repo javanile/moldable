@@ -13,13 +13,13 @@ namespace SourceForge\SchemaDB;
  *
  *
  */
-class Fields extends ImprovedClass
+class ModelFields extends ModelSchema 
 {
     /**
 	 * schemadb mysql constants for rapid fields creation
 	 */
     const PRIMARY_KEY			= '<<#primary_key>>';
-    const PRIMARY_KEY_INT_20	= '<<#primary_key>>';
+    const PRIMARY_KEY_INT_20	= '<<#primary_key>>'; 
     
 	/**
 	 * 
@@ -143,11 +143,11 @@ class Fields extends ImprovedClass
     protected static function getDefaultFields()
     {
 		##
-		$setting = 'DefaultFields';
+		$attribute = 'DefaultFields';
 		
 		## retrieve value from class setting definition
-		if (static::hasClassSetting($setting)) {
-			return static::getClassSetting($setting);
+		if (static::hasConfig($attribute)) {
+			return static::getConfig($attribute);
 		}
 		
 		##
@@ -167,7 +167,7 @@ class Fields extends ImprovedClass
 		}
 						
 		## store as setting for future request
-		static::setClassSetting($setting, $fields);
+		static::setConfig($attribute, $fields);
 								
         ## return primary key field name
         return $fields;

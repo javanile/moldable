@@ -10,7 +10,7 @@ require_once '../../src/SourceForge/SchemaDB/autoload.php';
 use SourceForge\SchemaDB;
 
 ##
-new SchemaDB\Database(array(
+$db = new SchemaDB\Database(array(
 	'host' => $host,
 	'user' => $user,
 	'pass' => $pass,

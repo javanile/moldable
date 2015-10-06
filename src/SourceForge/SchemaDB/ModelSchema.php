@@ -15,7 +15,7 @@ namespace SourceForge\SchemaDB;
  *
  *
  */
-class ModelSchema extends Table
+class ModelSchema extends ImprovedClass
 {
 	/**
 	 * Instrospect and retrieve element schema
@@ -114,7 +114,7 @@ class ModelSchema extends Table
 		}
 		
 		##
-		$fields = get_class_vars(get_called_class());
+		$fields = get_class_vars(static::getClass());
 		
 		##
 		foreach(static::getGlobal($exclude) as $field) {

@@ -10,7 +10,7 @@ use SourceForge\SchemaDB;
 #$db->drop('confirm');
 
 ## Apply schema create or update database tables
-$db->apply(array(
+$db->apply(array( 
 	
 	## define users table
 	'User' => array(
