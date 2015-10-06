@@ -12,7 +12,7 @@ namespace SourceForge\SchemaDB;
  *
  *
  */
-class Parser
+class SchemaParser
 {
     /**
 	 * parse a multi-table schema to sanitize end explode implicit info

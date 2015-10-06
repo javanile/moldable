@@ -10,7 +10,7 @@ namespace SourceForge\SchemaDB;
  * A collection of MySQL stataments builder
  * used with mysql query template and place-holder replacing
  */
-class Mysql
+class MysqlComposer
 {
     ##
     private static $default = array(

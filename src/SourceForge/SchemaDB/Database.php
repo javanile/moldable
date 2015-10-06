@@ -152,9 +152,11 @@ class Database extends DatabaseCommon
         foreach ($fields as $field) {
 			
 			##
+			$field['First'] = $count === 0;
+            $field['Before'] = $before;
+            
+			##
 			$desc[$field['Field']] = $field;
-            $desc['First'] = $count === 0;
-            $desc['Before'] = $before;
             
 			##
 			$before = $field['Field'];
@@ -230,7 +232,7 @@ class Database extends DatabaseCommon
     {
         ## prepare
         if ($parse) { 
-			Parser::parseSchemaDB($schema);
+			DatabaseSchemaParser::parse($schema);
 		}
 
         ## get prefix string
@@ -279,7 +281,7 @@ class Database extends DatabaseCommon
         if (!$this->tableExists($table)) {
 			
 			## 
-            return array(Mysql::createTable($table, $schema));
+            return array(MysqlComposer::createTable($table, $schema));
         }
 
 		##
@@ -288,45 +290,7 @@ class Database extends DatabaseCommon
 		##
 		return $queries; 
 	}
-	
-	/**
-	 * Test if a table exists
-	 * 
-	 * @param type $table
-	 * @return type
-	 */
-	public function tableExists($table) {
 		
-		## sql query to test table exists
-        $sql = "SHOW TABLES LIKE '{$table}'";
-
-        ## test if table exists
-        $exists = $this->getRow($sql);
-
-		## return and cast test result
-		return (boolean) $exists;
-	}
-	
-	/**
-	 * Get array with current tables on database
-	 * 
-	 * @return array
-	 */
-	private function getTables() {
-	
-		##
-        $prefix = $this->getPrefix();
-
-        ##
-        $sql = "SHOW TABLES LIKE '{$prefix}%'";
-
-        ##
-		$tables = $this->getValues($sql);
-		
-		##
-        return $tables; 
-	}
-	
     /**
      * generate query to align table
      *
@@ -379,7 +343,7 @@ class Database extends DatabaseCommon
         if ($key && count($foQueries) > 0) {
 			
 			##
-            $foQueries[] = Mysql::alterTableDropPrimaryKey($table);
+            $foQueries[] = MysqlComposer::alterTableDropPrimaryKey($table);
             
 			##
 			$fields[$key]['Key'] = '';
@@ -388,7 +352,7 @@ class Database extends DatabaseCommon
 			$fields[$key]['Extra'] = '';
             
 			##
-			$foQueries[] = Mysql::alterTableChange($table, $key, $fields[$key]);
+			$foQueries[] = MysqlComposer::alterTableChange($table, $key, $fields[$key]);
         }
 
         ##

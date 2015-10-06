@@ -198,6 +198,44 @@ class DatabaseCommon
     }
 
 	/**
+	 * Test if a table exists
+	 * 
+	 * @param type $table
+	 * @return type
+	 */
+	public function tableExists($table) {
+		
+		## sql query to test table exists
+        $sql = "SHOW TABLES LIKE '{$table}'";
+
+        ## test if table exists
+        $exists = $this->getRow($sql);
+
+		## return and cast test result
+		return (boolean) $exists;
+	}
+	
+	/**
+	 * Get array with current tables on database
+	 * 
+	 * @return array
+	 */
+	public function getTables() {
+	
+		##
+        $prefix = $this->getPrefix();
+
+        ##
+        $sql = "SHOW TABLES LIKE '{$prefix}%'";
+
+        ##
+		$tables = $this->getValues($sql);
+		
+		##
+        return $tables; 
+	}
+	
+	/**
 	 * 
 	 * 
 	 */
@@ -205,9 +243,8 @@ class DatabaseCommon
 	
 		## debug the queries
         if (static::DEBUG) {
-            echo '<pre style="border:1px solid #9F6000;margin:0 0 1px 0;padding:2px 6px 3px 6px;color:#9F6000;background:#FEEFB3;"><strong>'.str_pad($method,14,' ',STR_PAD_LEFT).'</strong>'.($args?': '.json_encode($args):'').'</pre>';
+            echo '<pre style="border:1px solid #9F6000;margin:0 0 1px 0;padding:2px 6px 3px 6px;color:#9F6000;background:#FEEFB3;">';
+			echo '<strong>'.str_pad($method,14,' ',STR_PAD_LEFT).'</strong>'.($args?': '.json_encode($args):'').'</pre>';
         }
-	}
-
-	
+	}	
 }
