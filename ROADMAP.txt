@@ -8,4 +8,4 @@ ROADMAP
  - Define encode/decode static method for a sub-set of field 
  - Implementig Unit of work pattern
  - Listening For Query Events (gestione hook/event per modelli e query al db)
- - Port to GitHub
+ - [DONE!] Port to GitHub
