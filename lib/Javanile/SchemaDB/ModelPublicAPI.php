@@ -144,7 +144,7 @@ class ModelPublicAPI extends ModelProtectedAPI
 		$class = get_called_class();
 		
 		## 
-		$selectFields = Mysql::selectFields($fields, $class, $join);
+		$selectFields = MysqlComposer::selectFields($fields, $class, $join);
 		
         ##
         $sql = "SELECT {$selectFields} FROM {$table} AS {$class} {$join}";
@@ -227,7 +227,7 @@ class ModelPublicAPI extends ModelProtectedAPI
 
         ##
         if ($r) {
-            return self::build($r);
+            return self::make($r);
         }
     }
 

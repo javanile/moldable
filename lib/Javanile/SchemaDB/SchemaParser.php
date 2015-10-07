@@ -279,8 +279,8 @@ class SchemaParser
 	/**
 	 * 
 	 */
-	private static function parseSchemaTableFieldFloat($field, &$notation, $before) {
-	
+	private static function parseSchemaTableFieldFloat($field, &$notation, $before)
+	{	
 		##
 		$notation = array(
 			'Field'		=> $field,
@@ -498,6 +498,9 @@ class SchemaParser
 
             ##
 			case 'array': return null;
+
+			##
+			case 'enum': return null;
 
             ##
 			case 'date': return static::parseDate($notation);

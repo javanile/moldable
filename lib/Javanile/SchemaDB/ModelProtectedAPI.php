@@ -86,6 +86,65 @@ class ModelProtectedAPI extends ModelRecord {
 	
 	/**
 	 * 
+	 * @param type $query
+	 * @param type $fields
+	 * @return type
+	 */
+	public static function loadByQuery($query, $fields=null) {
+						
+        ##
+        $table = static::getTable();
+		
+		##
+		$class = static::getClass();
+
+		##
+		$alias = $class;
+		
+		##
+		$join = null;
+		
+		##
+		$allFields = $fields ? $fields : static::getDefaultFields(); 
+		
+        ## parse SQL select fields
+        $selectFields = MysqlComposer::selectFields($allFields, $class, $join);
+		
+		##
+		$whereConditions = array();
+		
+		##
+        if (isset($query['where'])) {
+            $whereConditions[] = "(".$query['where'].")";
+        }
+
+        ##
+        foreach ($query as $field => $value) {
+
+            ##
+            if (in_array($field, array('order','where'))) {
+                continue;
+            }
+
+            ##
+            $whereConditions[] = "{$field} = '{$value}'";
+        }
+
+        ##
+        $where = implode(' AND ', $whereConditions);
+		
+        ## prepare SQL query
+        $sql = " SELECT {$selectFields} "
+			 . "   FROM {$table} AS {$alias} {$join} "
+			 . "  WHERE {$where} "
+			 . "  LIMIT 1";
+
+        ## fetch data on database and return it
+        return static::fetch($sql, false, is_string($fields), is_null($fields));
+	}
+	
+	/**
+	 * 
 	 * @param type $values
 	 * @param type $filter
 	 * @param type $map
