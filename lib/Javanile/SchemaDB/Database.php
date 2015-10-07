@@ -29,7 +29,7 @@
  * for your mission on the web
  *
 \*/
-namespace SourceForge\SchemaDB;
+namespace Javanile\SchemaDB;
 
 /**
  * Main class prototyping a SchemaDB connection with MySQL database

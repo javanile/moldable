@@ -4,7 +4,7 @@
  * 
  * 
 \*/
-namespace SourceForge\SchemaDB;
+namespace Javanile\SchemaDB;
 
 /**
  * A collection of MySQL stataments builder

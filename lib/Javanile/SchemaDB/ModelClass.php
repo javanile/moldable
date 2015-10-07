@@ -93,7 +93,7 @@ class ModelClass
 			
 		##
 		$class = static::getClass();
-		
+			
 		##
 		return isset(static::$__Config__[$attribute][$class]);		
 	}
@@ -176,10 +176,13 @@ class ModelClass
 	 * 
 	 * @param type $attribute
 	 */
-	protected static function optDefine($attribute, $default) {
+	protected static function optDefine($attribute, $default=null) {
 		
 		##
-		return isset(static::$__Define__[$attribute]) ? static::$__Define__[$attribute] : $default;
+		return isset(static::$__Define__) 
+			&& isset(static::$__Define__[$attribute]) 
+			 ? static::$__Define__[$attribute] 
+			 : $default;
 	}
 	
 	/**

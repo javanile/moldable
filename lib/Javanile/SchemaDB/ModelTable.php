@@ -110,7 +110,10 @@ class ModelTable extends ModelFields
     protected static function setDatabase($database)
     {        
 		##
-		static::setConfig('database', $database);
+		$attribute = 'Database';
+		
+		##
+		static::setConfig($attribute, $database);
     }
 
     /**

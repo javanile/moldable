@@ -8,7 +8,7 @@
  * 
  * 
 \*/
-namespace SourceForge\SchemaDB;
+namespace Javanile\SchemaDB;
 
 /**
  * static part of sdbClass

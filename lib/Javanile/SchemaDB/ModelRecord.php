@@ -4,7 +4,7 @@
  * 
  * 
 \*/
-namespace SourceForge\SchemaDB;
+namespace Javanile\SchemaDB;
 
 /**
  * self methods of sdbClass
