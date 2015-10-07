@@ -223,7 +223,7 @@ class ModelPublicAPI extends ModelProtectedAPI
         $s = "SELECT * FROM {$t} {$w} LIMIT 1";
 
         ##
-        $r = schemadb::execute('row',$s);
+        $r = static::getDatabase()->getRow($s);
 
         ##
         if ($r) {

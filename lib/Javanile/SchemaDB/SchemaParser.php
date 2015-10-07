@@ -299,15 +299,30 @@ class SchemaParser
 	 */
 	private static function parseSchemaTableFieldEnum($field, &$notation, $before) {
 	
-			 $d['Default'] = $notation[0];
-                $d['Null'] = in_array(null,$notation) ? 'YES' : 'NO';
-                $t = array();
-                foreach ($notation as $i) {
-                    if ($i!==null) {
-                        $t[] = "'{$i}'";
-                    }
-                }
-                $d['Type'] = 'enum('.implode(',',$t).')';
+		##
+		$enum = $notation;
+		
+		##
+		$notation = static::parseSchemaTableFieldDefault($field, $before);
+		
+		##
+		$notation['Default'] = $enum[0];
+        
+		##
+		$notation['Null'] = in_array(null, $enum) ? 'YES' : 'NO';
+        
+		##
+		$t = array();
+        
+		##
+		foreach ($notation as $i) {
+			if ($i !== null) {
+				$t[] = "'{$i}'";
+			}
+		}
+
+		##
+		$notation['Type'] = 'enum('.implode(',',$t).')';
 	}
 	
 	/**

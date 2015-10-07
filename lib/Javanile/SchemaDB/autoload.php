@@ -10,11 +10,9 @@ if (!function_exists("SchemaDB_autoload")) {
 		}
 
 		$classFile = __DIR__.'/'.$classPath[2].'.php';
-		
-		var_dump($classFile);
-		
+			
 		if (!include_once $classFile) {
-
+			return;
 		}	
 	}
 }
