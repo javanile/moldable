@@ -9,7 +9,7 @@
         {"name": "Francesco Bianco", "email": "info.francescobianco@gmail.com"}
     ],
     "require": {
-        "php": ">=5.3"
+        "php": ">=5.2"
     },
     "require-dev": {
         "phpunit/phpunit": "4.*",
