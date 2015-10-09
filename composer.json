@@ -3,7 +3,7 @@
     "type": "library",
     "description": "Powered Database Abstraction Layer",
     "keywords": ["schemadb", "database", "persistence", "queryobject"],
-    "homepage": "http://www.doctrine-project.org",
+    "homepage": "http://www.javanile.org",
     "license": "MIT",
     "authors": [
         {"name": "Francesco Bianco", "email": "info.francescobianco@gmail.com"}
