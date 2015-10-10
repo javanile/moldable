@@ -60,7 +60,7 @@ class Database extends DatabaseCommon
     /**
      * Constant to enable debug print-out
      */
-    const DEBUG	= 0;
+    const DEBUG	= 1;
 
     /**
      * Currenti release version number

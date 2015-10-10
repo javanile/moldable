@@ -19,12 +19,9 @@
         "symfony/console": "For helpful console commands such as SQL execution and import of files."
     },
     "autoload": {
-        "psr-0": { "Javanile\\SchemaDB\\": "lib/" }
+        "psr-0": { "Javanile\\SchemaDB\\": "src/" }
     },
     "autoload-dev": {
         "psr-0": { "Javanile\\SchemaDB\\Tests\\": "tests/" }
-    },
-    "archive": {
-        "exclude": ["!vendor", "tests", "*phpunit.xml", ".travis.yml", "build.xml", "build.properties", "composer.phar"]
     }
 }

@@ -46,9 +46,25 @@ class ModelClass
 		$attribute = 'Class';
 		
         ##
-        return static::optDefine($attribute, get_called_class());
+        return static::optDefine($attribute, static::getCalledClass());
     }
-	
+
+	/**
+	 * 
+	 * @return type
+	 */
+	protected static function getCalledClass() {
+
+		##
+		$class = get_called_class();
+		
+		##
+		$point = strrpos($class, '\\');
+		
+		##
+		return $point === false ? $class : substr($class, $point + 1);
+	}
+
 	/**
 	 * 
 	 */
