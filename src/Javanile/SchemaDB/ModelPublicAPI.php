@@ -183,44 +183,37 @@ class ModelPublicAPI extends ModelProtectedAPI
 	 */
     public static function exists($query)
     {
-		##
-		return static::ping($query);
-    }
-
-    /**
-	 * 
-	 * 
-	 * @param type $query
-	 * @return type
-	 */
-    public static function ping($query)
-    {
         ##
         static::updateTable();
 
         ##
-        $t = self::getTable();
-        $w = array();
+        $table = self::getTable();
+        
+		##
+		$whereConditions = array();
 
         ##
         if (isset($query['where'])) {
-            $w[] = $query['where'];
+            $whereConditions[] = $query['where'];
             unset($query['where']);
         }
 
+		##
+		$schema = static::getSchema();
+				
         ##
-        foreach (static::getSchema() as $f=>$d) {
-            if (isset($query[$f])) {
-                $v = $query[$f];
-                $w[] = "{$f}='$v'";
+        foreach ($schema as $field => $d) {
+            if (isset($query[$field])) {
+                $value = $query[$field];
+				$whereConditions[] = "{$field} = '{$value}'";
             }
         }
 
         ##
-        $w = count($w)>0 ? 'WHERE '.implode(' AND ',$w) : '';
+        $where = count($whereConditions)>0 ? 'WHERE '.implode(' AND ',$whereConditions) : '';
 
         ##
-        $s = "SELECT * FROM {$t} {$w} LIMIT 1";
+        $s = "SELECT * FROM {$table} {$where} LIMIT 1";
 
         ##
         $r = static::getDatabase()->getRow($s);
@@ -375,7 +368,7 @@ class ModelPublicAPI extends ModelProtectedAPI
 		##
 		return array(
 			'Table'		=> static::getTable(),			
-			'Class'		=> static::getClass(),
+			'Class'		=> static::getClassName(),
 			'FieldFrom'	=> $fieldFrom,		
 			'FieldTo'	=> $fieldTo ? $fieldTo : static::getMainField(),
 			'JoinKey'	=> static::getPrimaryKey(),

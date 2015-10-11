@@ -50,19 +50,30 @@ class ModelClass
     }
 
 	/**
+	 * Retrieve static class name
 	 * 
 	 * @return type
-	 */
-	protected static function getCalledClass() {
-
+	 */ 
+    protected static function getClassName()
+    {
 		##
-		$class = get_called_class();
+		$class = static::getClass();
 		
 		##
 		$point = strrpos($class, '\\');
 		
 		##
 		return $point === false ? $class : substr($class, $point + 1);
+    }
+
+	/**
+	 * 
+	 * @return type
+	 */
+	protected static function getCalledClass() {
+
+		##
+		return get_called_class();		
 	}
 
 	/**

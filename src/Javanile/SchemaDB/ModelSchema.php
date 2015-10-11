@@ -31,7 +31,10 @@ class ModelSchema extends ModelClass
 		if (static::hasConfig($attribute)) {
 			return static::getConfig($attribute);
 		}
+
+				var_dump(static::getClass());
 		
+
 		##
 		$fields = static::getSchemaFieldsWithValues();
 			
@@ -74,7 +77,7 @@ class ModelSchema extends ModelClass
 		}
 		
 		##
-		$allFields = array_keys(get_class_vars(get_called_class()));
+		$allFields = array_keys(get_class_vars(static::getClass()));
 	
 		##
 		$fields = array_diff(

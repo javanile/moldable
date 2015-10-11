@@ -138,14 +138,12 @@ class MysqlComposer
      * @return string
      */
     public static function selectFields($fields, $tableAlias, &$join)
-    {
-        ##
+    {        
+		##
         $join = "";
 		
-		
-
         ##
-        if (is_null($fields)) {
+        if (!$fields) {
             return '*';
         }
 

@@ -96,7 +96,7 @@ class ModelProtectedAPI extends ModelRecord {
         $table = static::getTable();
 		
 		##
-		$class = static::getClass();
+		$class = static::getClassName();
 
 		##
 		$alias = $class;
@@ -139,7 +139,7 @@ class ModelProtectedAPI extends ModelRecord {
 			 . "  WHERE {$where} "
 			 . "  LIMIT 1";
 
-        ## fetch data on database and return it
+		## fetch data on database and return it
         return static::fetch($sql, false, is_string($fields), is_null($fields));
 	}
 	

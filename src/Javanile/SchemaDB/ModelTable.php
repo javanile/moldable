@@ -42,7 +42,7 @@ class ModelTable extends ModelFields
 		
 		##
 		else {
-            $name = static::getCalledClass();
+            $name = static::getClassName();
         }
 
 		## get prefix
