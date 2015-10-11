@@ -233,17 +233,16 @@ class ModelPublicAPI extends ModelProtectedAPI
     public static function submit($query)
     {
         ##
-        $o = static::ping($query);
+        $object = static::exists($query);
 
         ##
-        if (!$o) {
-            $o = static::build($query);
-            $o->store();
+        if (!$object) {
+            $object = static::make($query);
+            $object->store();
         }
 
         ##
-
-        return $o;
+        return $object;
     }
 
     ##

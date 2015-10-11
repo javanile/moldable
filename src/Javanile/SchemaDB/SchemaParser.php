@@ -545,27 +545,5 @@ class SchemaParser
             return null;
         }
     }
-
-    ##
-    public static function escape($value)
-    {		
-		##
-        return stripslashes($value);
-    }
-
-    ##
-    public static function encode($value)
-    {
-        ##
-        $t = gettype($value);
-
-        ##
-        if ($t == 'double') {
-            $v = number_format($value,2,'.','');
-        }
-
-        ##
-        return $v;
-    }
 }
 

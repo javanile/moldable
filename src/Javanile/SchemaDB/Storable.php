@@ -81,17 +81,20 @@ class Storable extends ModelPublicAPI
         ##
         $e = array();
 
+		##
+		$fields = static::getSchemaFields();
+		
         ##
-        foreach ($this->getFields() as $f) {
+        foreach ($fields as $field) {
 
             ##
-            if ($f == $k) { continue; }
+            if ($field == $k) { continue; }
 
             ##
-            $v = Parser::encode($this->{$f});
-
+            $value = $this->{$field};
+			
             ##
-            $e[] = "{$f} = '{$v}'";
+            $e[] = "{$field} = '{$value}'";
         }
 
         ##
