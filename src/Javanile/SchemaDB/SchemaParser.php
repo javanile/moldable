@@ -59,12 +59,12 @@ class SchemaParser
      * @param  type   $notation
      * @param  type   $before
      * @return string
-     */
+     */ 
     public static function parseSchemaTableField($field, &$notation, $before=null)
     {        		
-        ## get notation type 
+		## get notation type 
         $type = static::getNotationType($notation);
-
+		
         ## look-to type
         switch ($type) {
 
@@ -298,13 +298,13 @@ class SchemaParser
 	 * 
 	 */
 	private static function parseSchemaTableFieldEnum($field, &$notation, $before) {
-	
+					
 		##
 		$enum = $notation;
 		
 		##
 		$notation = static::parseSchemaTableFieldDefault($field, $before);
-		
+				
 		##
 		$notation['Default'] = $enum[0];
         
@@ -315,14 +315,14 @@ class SchemaParser
 		$t = array();
         
 		##
-		foreach ($notation as $i) {
+		foreach ($enum as $i) {
 			if ($i !== null) {
 				$t[] = "'{$i}'";
 			}
 		}
 
 		##
-		$notation['Type'] = 'enum('.implode(',',$t).')';
+		$notation['Type'] = 'enum('.implode(',',$t).')';		
 	}
 	
 	/**
@@ -380,8 +380,8 @@ class SchemaParser
 			case 'string': return static::getNotationTypeString($notation);
                 				
 			##
-			case 'array': return static::getNotationTypeArray($notation);                
-
+			case 'array': return static::getNotationTypeArray($notation);
+				
             ##
 			case 'integer': return 'integer';
 
@@ -500,7 +500,7 @@ class SchemaParser
 			case 'array': return null;
 
 			##
-			case 'enum': return null;
+			case 'enum': return isset($notation[0]) && !is_null($notation[0]) ? $notation[0] : null;
 
             ##
 			case 'date': return static::parseDate($notation);

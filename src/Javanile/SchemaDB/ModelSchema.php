@@ -31,10 +31,7 @@ class ModelSchema extends ModelClass
 		if (static::hasConfig($attribute)) {
 			return static::getConfig($attribute);
 		}
-
-				var_dump(static::getClass());
 		
-
 		##
 		$fields = static::getSchemaFieldsWithValues();
 			

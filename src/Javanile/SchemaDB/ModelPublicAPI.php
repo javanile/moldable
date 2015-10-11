@@ -141,7 +141,7 @@ class ModelPublicAPI extends ModelProtectedAPI
 		$join = "";
 		
 		##
-		$class = get_called_class();
+		$class = static::getClassName();
 		
 		## 
 		$selectFields = MysqlComposer::selectFields($fields, $class, $join);
@@ -417,6 +417,43 @@ class ModelPublicAPI extends ModelProtectedAPI
 	
 	/**
 	 * 
+	 */
+    public static function desc()
+    {
+        ##
+        $table = static::getTable();
+
+        ##
+        $desc = static::getDatabase()->descTable($table);
+
+        ##
+        echo '<table border="1" style="text-align:center"><tr><th colspan="8">'.$table.'</td></th>';
+
+        ##
+        $attributes = array_keys(reset($desc));
+
+		##
+        echo '<tr>';
+        foreach ($attributes as $attribute) {
+            echo '<th>'.$attribute.'</th>';
+        }
+        echo '</tr>';
+
+        ##
+        foreach ($desc as $column) {
+            echo '<tr>';
+            foreach ($column as $attribute => $value) {
+                echo '<td>'.$value.'</td>';
+            }
+            echo '</tr>';
+        }
+
+        ##
+        echo '</table>';
+    }
+
+	/**
+	 * 
 	 * @param type $list
 	 */
     public static function dump($list=null)
@@ -454,45 +491,5 @@ class ModelPublicAPI extends ModelProtectedAPI
 
         ##
         echo '</tbody></table></pre>';
-    }
-
-	/**
-	 * 
-	 */
-    public static function desc()
-    {
-        ##
-        $t = static::getTable();
-
-        ##
-        $s = static::getSchemaDB()->desc_table($t);
-
-        ##
-        echo '<table border="1" style="text-align:center"><tr><th colspan="8">'.$t.'</td></th>';
-
-        ##
-        $d = reset($s);
-
-        ##
-        echo '<tr>';
-        foreach ($d as $a=>$v) {
-            echo '<th>'.$a.'</th>';
-        }
-        echo '</tr>';
-
-        ##
-        foreach ($s as $d) {
-            echo '<tr>';
-            foreach ($d as $a=>$v) {
-                echo '<td>'.$v.'</td>';
-            }
-            echo '</tr>';
-        }
-
-        ##
-        echo '</table>';
-    }
-
-	
-	
+    }	
 }
