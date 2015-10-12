@@ -20,10 +20,34 @@ $db = new SchemaDB\Database(array(
 	'pref' => 'prefix_',
 ));
 
-## $db is ready to use for your manipulation
+## '$db' is ready to use for your manipulation
 ```
 
+# How to: Create database schema (update if exists) 
 
+```php
+<?php
+
+## '$db' is pre-connected database object (follow: 'How to: Connect to database')
+$db->apply(array(
+
+	## table name
+	'Customer' => array(
+		
+		## customer fields
+		'id' => $db::PRIMARY_KEY,	// define field as a primary key
+		'name' => '',				// empty string define field as VARCHAR	
+	),
+
+	##
+	'Products' => array(
+
+		## products fields		
+	),
+
+));
+
+```
 
 
 
