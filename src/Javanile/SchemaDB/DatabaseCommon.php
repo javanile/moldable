@@ -177,7 +177,7 @@ class DatabaseCommon
 		static::log('getValue', $sql);
 
 		##
-		return $this->sock->getVar($sql);
+		return $this->sock->getValue($sql);
     }
 
 	 /**

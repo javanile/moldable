@@ -124,6 +124,24 @@ class DatabaseSocketPDO
 	}
 	
 	/**
+	 * 
+	 * 
+	 * @param type $sql
+	 * @return type
+	 */
+	public function getValue($sql) {
+		
+		##
+		$statament = $this->pdo->prepare($sql);
+		
+		##
+		$statament->execute();
+		
+		##
+		return $statament->fetchColumn(0);
+	}
+	
+	/**
 	 * Return prefix passed on init attribute
 	 * 
 	 * @return type
