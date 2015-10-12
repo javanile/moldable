@@ -7,7 +7,6 @@ with improved function to alterate and manipulate database schema
 
 ```php
 <?php
-
 ## library namespace 
 use Javanile\SchamaDB;
 
@@ -27,8 +26,10 @@ $db = new SchemaDB\Database(array(
 
 ```php
 <?php
-
 ## '$db' is pre-connected database object (follow: 'How to: Connect to database')
+
+## apply method send queries to create 
+## or align database to defined schema 
 $db->apply(array(
 
 	## table name
@@ -44,7 +45,6 @@ $db->apply(array(
 
 		## products fields		
 	),
-
 ));
 
 ```

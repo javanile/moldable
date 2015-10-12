@@ -12,7 +12,7 @@ namespace Javanile\SchemaDB;
  *
  *
  */
-class ModelClass
+class ModelClass extends SchemaNotation
 {
 	/**
 	 * Bundle to collect info and stored cache

@@ -3,9 +3,6 @@
 ## require connection parametrs
 require_once 'common.php'; 
 
-##
-use SourceForge\SchemaDB;
-
 ## drop all database tables
 #$db->drop('confirm');
 
@@ -14,16 +11,16 @@ $db->apply(array(
 	
 	## define users table
 	'User' => array(
-		'userid'	=> SchemaDB\ModelFields::PRIMARY_KEY,
+		'userid'	=> $db::PRIMARY_KEY,
 		'password'	=> '',
 		'type'		=> 1,
 		'username'	=> '',
-		'tipe'		=> SchemaDB\ModelFields::INT_10,
+		'tipe'		=> $db::INT_10,
 	),
 	
 	## define articles table
 	'Article' => array(
-		'articleid' => SchemaDB\ModelFields::PRIMARY_KEY,
+		'articleid' => $db::PRIMARY_KEY,
 		'title'		=> '',
 		'content'	=> '',
 	),	
