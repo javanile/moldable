@@ -1,5 +1,29 @@
 # SchemaDB
 
+SchemaDB is a Abstraction layer to manage MySQL database 
+with improved function to alterate and manipulate database schema
+
+# How to: Connect to database
+
+```php
+<?php
+
+## library namespace 
+use Javanile\SchamaDB;
+
+## initialize a database connection object 
+$db = new SchemaDB\Database(array(
+	'host' => 'localhost',
+	'user' => 'root',
+	'pass' => 'p4ssw0rd,
+	'name' => 'db_marketing',
+	'pref' => 'prefix_',
+));
+
+## $db is ready to use for your manipulation
+```
+
+
 
 
 
