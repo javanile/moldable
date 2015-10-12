@@ -1,7 +1,7 @@
 {
     "name": "javanile/schemadb",
     "type": "library",
-    "description": "Powered Database Abstraction Layer",
+    "description": "Powered PHP Database Abstraction Layer",
     "keywords": ["schemadb", "database", "persistence", "queryobject"],
     "homepage": "http://www.javanile.org",
     "license": "MIT",
