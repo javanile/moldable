@@ -62,11 +62,11 @@ class ModelProtectedAPI extends ModelRecord {
         ##
         $table = static::getTable();
 
-        ## get primary key
+        ## get main field
         $field = static::getMainField();
 
 		##
-		$class = static::getClass(); 
+		$alias = static::getClassName(); 
 		
 		##
 		$join = null;
@@ -75,10 +75,13 @@ class ModelProtectedAPI extends ModelRecord {
 		$allFields = $fields ? $fields : static::getDefaultFields(); 
 		
         ## parse SQL select fields
-        $selectFields = Mysql::selectFields($allFields, $class, $join);
+        $selectFields = MysqlComposer::selectFields($allFields, $alias, $join);
 
         ## prepare SQL query
-        $sql = "SELECT {$selectFields} FROM {$table} {$join} WHERE {$field}='{$value}' LIMIT 1";
+        $sql = " SELECT {$selectFields}"
+			 . "   FROM {$table} AS {$alias} {$join} "
+			 . "  WHERE {$field} = '{$value}' "
+			 . "  LIMIT 1";
 
         ## fetch data on database and return it
         return static::fetch($sql, false, is_string($fields));

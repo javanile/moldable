@@ -4,7 +4,7 @@
 require_once 'common.php';
 
 ##
-use SourceForge\SchemaDB;
+use Javanile\SchemaDB;
 
 ##
 SchemaDB\Database::getDefault()->drop('confirm');
@@ -54,6 +54,4 @@ Product::dump();
 $Invoice1 = Invoice::load('FAT1');
 
 ##
-echo '<pre>';
-var_Dump($Invoice1);
-echo '</pre>';
+SchemaDB\Debug::var_Dump($Invoice1);

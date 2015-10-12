@@ -9,10 +9,10 @@ ini_set('disply_errors', 1);
 require_once '../common.php'; 
 
 ##
-require_once '../../src/SourceForge/SchemaDB/autoload.php';
+require_once '../../src/Javanile/SchemaDB/autoload.php';
 
 ##
-use SourceForge\SchemaDB;
+use Javanile\SchemaDB;
 
 ##
 new SchemaDB\Database(array(
