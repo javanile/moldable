@@ -14,5 +14,10 @@ if (!file_exists(__DIR__.'/override.php')) {
 	$pass = '<<pass>>';	## database password
 	$name = '<<name>>';	## database name	
 	$pref = '<<pref>>'; ## database table prefix
+} 
+
+##
+else {
+	require_once __DIR__.'/override.php';
 }
 
