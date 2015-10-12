@@ -15,7 +15,7 @@ $db->apply(array(
 		'password'	=> '',
 		'type'		=> 1,
 		'username'	=> '',
-		'tipe'		=> $db::INT_10,
+		'tipe'		=> $db::INT_20,
 	),
 	
 	## define articles table
