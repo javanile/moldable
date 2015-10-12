@@ -203,7 +203,14 @@ class DatabaseCommon extends SchemaNotation
 	 * @param type $table
 	 * @return type
 	 */
-	public function tableExists($table) {
+	public function tableExists($table, $parse=true) {
+		
+		## prepare
+        if ($parse) { 
+			
+			##
+			$table = $this->getPrefix() . $table;			
+		}
 		
 		## sql query to test table exists
         $sql = "SHOW TABLES LIKE '{$table}'";

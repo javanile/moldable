@@ -1,13 +1,16 @@
 <?php
 
 ##
+echo '<h1>Test if table exists</h1>';
+
+##
 require_once '../common.php';
 
 ## require library
-require_once '../../src/SourceForge/SchemaDB/autoload.php';
+require_once '../../src/Javanile/SchemaDB/autoload.php';
 
 ##
-use SourceForge\SchemaDB;
+use Javanile\SchemaDB;
 
 ##
 $db = new SchemaDB\Database(array(
@@ -17,6 +20,12 @@ $db = new SchemaDB\Database(array(
 	'name' => $name,
 	'pref' => 't100_',
 ));
+
+## drop tables
+#$db->drop('confirm');
+
+## create table
+#$db->applyTable('Project', array('id' => 0));
 
 ##
 if ($db->tableExists('Project')) {

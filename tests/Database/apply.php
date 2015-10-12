@@ -28,3 +28,6 @@ $db->apply(array(
 
 ##
 $db->dump();
+
+## 
+$db->benchmark();

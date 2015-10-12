@@ -1,13 +1,16 @@
 <?php
 
 ##
+echo '<h1>Print-out database schema</h1>';
+
+##
 require_once '../common.php';
 
 ## require library
-require_once '../../src/SourceForge/SchemaDB/autoload.php';
+require_once '../../src/Javanile/SchemaDB/autoload.php';
 
 ##
-use SourceForge\SchemaDB;
+use Javanile\SchemaDB;
 
 ##
 $db = new SchemaDB\Database(array(

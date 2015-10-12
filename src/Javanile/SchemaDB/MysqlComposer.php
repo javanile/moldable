@@ -15,7 +15,7 @@ class MysqlComposer
     ##
     private static $default = array(
         'attributes' => array(
-            'type' => 'int(10)',
+            'type' => 'int(11)',
         ),
     );
 

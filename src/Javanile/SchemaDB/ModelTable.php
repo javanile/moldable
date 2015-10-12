@@ -81,7 +81,7 @@ class ModelTable extends ModelFields
 						
         ## have a valid schema update db table
         if ($schema) {
-            static::getDatabase()->updateTable($table, $schema, false);
+            static::getDatabase()->applyTable($table, $schema, false);
         }
 
         ## cache last update avoid multiple call

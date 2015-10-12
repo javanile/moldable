@@ -60,7 +60,7 @@ class Database extends DatabaseCommon
     /**
      * Constant to enable debug print-out
      */
-    const DEBUG	= 0;
+    const DEBUG	= 1;
 
     /**
      * Currenti release version number
@@ -200,7 +200,7 @@ class Database extends DatabaseCommon
      * @param  type   $parse
      * @return type
      */
-    public function updateTable($table, &$schema, $parse=true)
+    public function applyTable($table, $schema, $parse=true)
     {
         ## retrive queries
         $queries = $this->diffTable($table, $schema, $parse);
@@ -265,20 +265,20 @@ class Database extends DatabaseCommon
      * @param  type $parse
      * @return type
      */
-    public function diffTable($table, &$schema, $parse=true)
+    public function diffTable($table, $schema, $parse=true)
     {
         ## parse input schema if required
         if ($parse) { 
 			
 			##
-			Parser::parseSchemaTable($schema);
+			SchemaParser::parseSchemaTable($schema);
 			
 			##
 			$table = $this->getPrefix() . $table;
 		}
 				
         ## if table no exists return sql statament for creating this
-        if (!$this->tableExists($table)) {
+        if (!$this->tableExists($table, false)) {
 			
 			## 
             return array(MysqlComposer::createTable($table, $schema));

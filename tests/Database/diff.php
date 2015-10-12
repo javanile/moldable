@@ -1,13 +1,16 @@
 <?php
 
+## title
+echo '<h1>Database desc with var_dump</h1>';
+
 ## require connection parametrs
 require_once '../common.php'; 
 
 ## require library
-require_once '../../src/SourceForge/SchemaDB/autoload.php';
+require_once '../../src/Javanile/SchemaDB/autoload.php';
 
 ## retrive main class to enstablish connection
-use SourceForge\SchemaDB;
+use Javanile\SchemaDB;
 
 ## Connect to MySQL database
 $db = new SchemaDB\Database(array(
@@ -18,14 +21,13 @@ $db = new SchemaDB\Database(array(
 	'pref' => 't100_',
 ));
 
-## Compare schema and generate SQL to update tables
-$diff = $db->diff(array(
+$schema = array(
 	
 	## define users table
 	'User' => array(
-		'userid'   => SchemaDB\Table::VARCHAR,
+		'userid'   => $db::VARCHAR,
 		'username' => '',
-		'password' => '',		
+		'password' => 0,		
 	),
 	
 	## define articles table
@@ -34,9 +36,18 @@ $diff = $db->diff(array(
 		'title'		=> '',
 		'content'	=> '',
 	),	
-));
+);
 
 ##
-echo '<pre>';
+#$db->apply($schema);
+
+## Compare schema and generate SQL to update tables
+$diff = $db->diff($schema);
+
+##
+echo '<pre style="padding:2px;background:#eee;border:1px solid #ccc;">';
 var_dump($diff);
 echo '</pre>';
+
+## 
+$db->benchmark();
