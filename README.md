@@ -1,7 +1,7 @@
 # SchemaDB
 
-SchemaDB is a Abstraction layer to manage MySQL database 
-with improved function to alterate and manipulate database schema
+SchemaDB is an abstraction layer to manage MySQL database 
+with improved function to alter-state and manipulate database schema
 
 # How to: Connect to database
 
@@ -14,7 +14,7 @@ use Javanile\SchamaDB;
 $db = new SchemaDB\Database(array(
 	'host' => 'localhost',
 	'user' => 'root',
-	'pass' => 'p4ssw0rd,
+	'pass' => 'p4ssw0rd',
 	'name' => 'db_marketing',
 	'pref' => 'prefix_',
 ));
@@ -32,7 +32,7 @@ $db = new SchemaDB\Database(array(
 ## or align database to defined schema 
 $db->apply(array(
 
-	## table name
+	## customer table name
 	'Customer' => array(
 		
 		## customer fields
@@ -43,7 +43,7 @@ $db->apply(array(
 		'biography' => $db::TEXT,	// text for large string and contents
 	),
 
-	##
+	## products table name
 	'Products' => array(
 
 		## products fields		
