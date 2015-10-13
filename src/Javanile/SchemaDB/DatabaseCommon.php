@@ -248,6 +248,7 @@ class DatabaseCommon extends SchemaNotation
 	}
 	
 	/**
+	 * Debug mode setter
 	 * 
 	 */
 	public function setDebug($flag) {
@@ -257,13 +258,21 @@ class DatabaseCommon extends SchemaNotation
 	}
 	
 	/**
+	 * Debug mode getter
+	 * 
+	 */
+	protected function getDebug() {
+		return $this->debug; 
+	}
+	
+	/**
 	 * 
 	 * 
 	 */
 	private function log($method, $args=null) {
 	
 		## debug the queries
-        if ($this->debug) {
+        if ($this->getDebug()) {
             echo '<pre style="border:1px solid #9F6000;margin:0 0 1px 0;padding:2px 6px 3px 6px;color:#9F6000;background:#FEEFB3;">';
 			echo '<strong>'.str_pad($method,14,' ',STR_PAD_LEFT).'</strong>'.($args?': '.json_encode($args):'').'</pre>';
         }
