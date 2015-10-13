@@ -9,6 +9,7 @@ namespace Javanile\SchemaDB;
  * 
  */
 use PDO;
+use PDOException;
 
 /**
  * 
@@ -45,6 +46,7 @@ class DatabaseSocketPDO
 	
 		##
 		$this->pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+		#$this->pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_SILENT);
 		
 		##
 		$this->prefix = $args['pref'];		
@@ -83,13 +85,20 @@ class DatabaseSocketPDO
 	 * @return type
 	 */
 	public function getResults($sql) {
-		
+
 		##
 		$statament = $this->pdo->prepare($sql);
+
+		##
+		try {
+			$statament->execute();
+		} 
 		
 		##
-		$statament->execute();
-
+		catch (PDOException  $Exception) {			
+			throw new DatabaseException( $Exception->getMessage( ) , (int)$Exception->getCode( ) );
+		}
+		
 		##
 		$results = $statament->fetchAll(PDO::FETCH_ASSOC);
 				

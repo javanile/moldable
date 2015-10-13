@@ -58,11 +58,6 @@ namespace Javanile\SchemaDB;
 class Database extends DatabaseCommon
 {
     /**
-     * Constant to enable debug print-out
-     */
-    const DEBUG	= 1;
-
-    /**
      * Currenti release version number
      */
     const VERSION = '0.3.0';
@@ -71,7 +66,7 @@ class Database extends DatabaseCommon
 	 * Timestamp for benchmark
 	 */
 	private $ts = null;
-	
+		
     /**
      *
      *

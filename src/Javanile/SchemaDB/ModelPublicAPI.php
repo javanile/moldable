@@ -148,9 +148,16 @@ class ModelPublicAPI extends ModelProtectedAPI
 		
         ##
         $sql = "SELECT {$selectFields} FROM {$table} AS {$class} {$join}";
-
+				
 		##
-		$results = static::fetch($sql, true);
+		try {
+			$results = static::fetch($sql, true);
+		} 
+		
+		##
+		catch (DatabaseException $ex) {
+			static::error(debug_backtrace(), $ex);			
+		}
 		
 		##
         return $results;

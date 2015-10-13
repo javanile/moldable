@@ -18,7 +18,7 @@ class ModelProtectedAPI extends ModelRecord {
 	 * @param type $fields
 	 * @return type
 	 */
-	public static function loadByPrimaryKey($index, $fields=null) {
+	protected static function loadByPrimaryKey($index, $fields=null) {
 						
         ##
         $table = static::getTable();
@@ -53,11 +53,11 @@ class ModelProtectedAPI extends ModelRecord {
 
 	/**
 	 * 
-	 * @param type $index
+	 * @param type $value
 	 * @param type $fields
 	 * @return type
 	 */
-	public static function loadByMainField($value, $fields=null) {
+	protected static function loadByMainField($value, $fields=null) {
 			
         ##
         $table = static::getTable();
@@ -93,16 +93,13 @@ class ModelProtectedAPI extends ModelRecord {
 	 * @param type $fields
 	 * @return type
 	 */
-	public static function loadByQuery($query, $fields=null) {
+	protected static function loadByQuery($query, $fields=null) {
 						
         ##
         $table = static::getTable();
 		
 		##
-		$class = static::getClassName();
-
-		##
-		$alias = $class;
+		$alias = static::getClassName();
 		
 		##
 		$join = null;
@@ -111,7 +108,7 @@ class ModelProtectedAPI extends ModelRecord {
 		$allFields = $fields ? $fields : static::getDefaultFields(); 
 		
         ## parse SQL select fields
-        $selectFields = MysqlComposer::selectFields($allFields, $class, $join);
+        $selectFields = MysqlComposer::selectFields($allFields, $alias, $join);
 		
 		##
 		$whereConditions = array();
@@ -121,11 +118,14 @@ class ModelProtectedAPI extends ModelRecord {
             $whereConditions[] = "(".$query['where'].")";
         }
 
+		##
+		$exclude = array('order','where');
+		
         ##
         foreach ($query as $field => $value) {
 
             ##
-            if (in_array($field, array('order','where'))) {
+            if (in_array($field, $exclude)) {
                 continue;
             }
 
@@ -186,7 +186,22 @@ class ModelProtectedAPI extends ModelRecord {
         return $object;		
 	}
 	
-	
-
-
+	/**
+	 * 
+	 * 
+	 * @param type $trace
+	 * @param type $error
+	 */
+	protected static function error($trace,$error) {
+		
+		echo 1/0;
+		
+		echo '<pre>';
+		echo 'Database error: '.$error->getMessage()."\n";
+		echo 'Triggered at: '.$trace[0]['file']."\n";
+		
+		
+		echo '</pre>';
+		exit();
+	}
 }
