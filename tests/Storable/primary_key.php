@@ -4,14 +4,28 @@
 require_once 'common.php'; 
 
 ##
-use SourceForge\SchemaDB\Storable;
+use Javanile\SchemaDB;
 
 ##
-class Person extends Storable {
+class Invoices extends SchemaDB\Storable {
 	
 	##
-	public $id = self::PRIMARY_KEY;
+	public $id = self::PRIMARY_KEY; ## 
+	
+	##
+	public $number = 0;
+	
+	##
+	public $year = 0;
+	
+	##
+	public $created = self::DATE;
 }
+
+
+
+
+
 
 ##
 $Person = new Person();
