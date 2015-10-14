@@ -1,6 +1,6 @@
 <?php
 
-/*\
+/*
  * 
  * 
 \*/
@@ -12,74 +12,87 @@ namespace Javanile\SchemaDB;
  */
 class MysqlComposer
 {
-    ##
-    private static $default = array(
-        'attributes' => array(
-            'type' => 'int(11)',
+    //
+    private $defaults = array(
+        'Attributes' => array(
+            'Type' => 'int(11)',
         ),
     );
 
-    ##
-    public static function columnDefinition($d,$o=true)
+    //
+    public static function columnDefinition($attributes, $order=true)
     {
-        ##
-        $t = isset($d['Type']) ? $d['Type'] : static::$default['attributes']['type'];
-        $u = isset($d['Null']) && ($d['Null']=="NO" || !$d['Null']) ? 'NOT NULL' : 'NULL';
-        $l = isset($d['Default']) && $d['Default'] ? "DEFAULT '$d[Default]'" : '';
-        $e = isset($d['Extra']) ? $d['Extra'] : '';
-        $p = isset($d['Key']) && $d['Key'] == 'PRI' ? 'PRIMARY KEY' : '';
+		//
+		$a = &$attributes;
+		
+        //
+        $Type = isset($a['Type']) ? strtolower($a['Type']) : static::$defaults['Attributes']['Type'];
+        
+		//
+		$Null = isset($a['Null']) && ($a['Null'] == "NO" || !$a['Null']) ? 'NOT NULL' : 'NULL';
+        
+		//
+		$Default = isset($a['Default']) && $a['Default'] ? "DEFAULT '$a[Default]'" : '';
+        
+		//
+		$Key = isset($a['Key']) && $a['Key'] == 'PRI' ? 'PRIMARY KEY' : '';
 
-        ##
-        $q = $t.' '.$u.' '.$l.' '.$e.' '.$p;
+		//
+		$Extra = isset($a['Extra']) ? $a['Extra'] : '';
+        
+        //
+		$sql = "{$Type} {$Null} {$Default} {$Key} {$Extra}";
 
-        ##
-        if ($o) {
-            $f = isset($d["First"])&&$d["First"] ? 'FIRST' : '';
-            $b = isset($d["Before"])&&$d["Before"] ? 'AFTER '.$d["Before"] : '';
-            $q.= ' '.$f.' '.$b;
+        //
+        if ($order) {
+            $First = isset($a['First']) && $a['First'] ? 'FIRST' : '';
+            $Before = isset($a['Before']) && $a['Before'] ? 'AFTER '.$a['Before'] : '';
+			$sql .= " {$First} {$Before}";
         }
 
-        ##
-
-        return $q;
+        //
+        return $sql;
     }
 
     /**
      * Prepare sql code to create a table
      *
-     * @param  string $t The name of table to create
-     * @param  array  $s Skema of the table contain column definitions
+     * @param  string $table The name of table to create
+     * @param  array  $schema Skema of the table contain column definitions
      * @return string Sql code statament of CREATE TABLE
      */
-    public static function &createTable($table, &$schema)
-    {
-        ##
-        $e = array();
+    public static function createTable($table, $schema)
+    {		
+		//
+        $columnsArray = array();
 
-        ## loop throut schema
-        foreach ($schema as $f => $d) {
+        // loop throut schema
+        foreach ($schema as $field => $attributes) {
 
-            ##
-            if (is_numeric($f) && is_string($d)) {
+            //
+            if (is_numeric($field) && is_string($attributes)) {
 
-                ##
-                $f = $d;
+                //
+                $field = $attributes;
 
-                ##
-                $d = array();
+                //
+                $attributes = array();
             }
 
-            ##
-            $e[] = $f.' '.static::columnDefinition($d,false);
+			//
+			$column = static::columnDefinition($attributes, false);
+			
+            //
+			$columnsArray[] = "{$field} {$column}";
         }
 
-        ## implode
-        $i = implode(',',$e);
+        // implode
+        $columns = implode(',', $columnsArray);
+		
+        // template sql to create table
+        $sql = "CREATE TABLE `{$table}` ({$columns})";
 
-        ## template sql to create table
-        $sql = "CREATE TABLE {$table} ({$i})";
-
-        ## return the sql
+        // return the sql
         return $sql;
     }
 
@@ -92,13 +105,13 @@ class MysqlComposer
 	 */
     public static function alterTableAdd($table, $field, $attributes)
     {
-        ##
+        //
         $column = static::columnDefinition($attributes);
 
-        ##
-        $sql = "ALTER TABLE {$table} ADD COLUMN {$field} {$column}";
+        //
+        $sql = "ALTER TABLE `{$table}` ADD COLUMN `{$field}` {$column}";
 
-        ##
+        //
         return $sql;
     }
 
@@ -112,23 +125,23 @@ class MysqlComposer
 	 */
     public static function alterTableChange($table, $field, $attributes)
     {
-        ##
+        //
         $column = static::columnDefinition($attributes);
 
-        ##
-        $sql = "ALTER TABLE {$table} CHANGE COLUMN {$field} {$field} {$column}";
+        //
+        $sql = "ALTER TABLE `{$table}` CHANGE COLUMN `{$field}` `{$field}` {$column}";
 
-        ##
+        //
         return $sql;
     }
 
-    ## retrive query to remove primary key
+    // retrive query to remove primary key
     public static function alterTableDropPrimaryKey($table)
     {
-        ##
-        $sql = "ALTER TABLE {$table} DROP PRIMARY KEY";
+        //
+        $sql = "ALTER TABLE `{$table}` DROP PRIMARY KEY";
 
-        ##
+        //
         return $sql;
     }
 
@@ -139,66 +152,68 @@ class MysqlComposer
      */
     public static function selectFields($fields, $tableAlias, &$join)
     {        
-		##
+		//
         $join = "";
 		
-        ##
+        //
         if (!$fields) {
             return '*';
         }
 
-        ##
+        //
         else if (is_string($fields)) {
             return $fields;
         }
 
-        ##
+        //
         else if (is_array($fields)) {
 
-			##
+			//
 			$aliasTable = array();
             
-			##
+			//
             $selectFields = array();
 					
-            ##
+            //
             foreach ($fields as $field => $definition) {
 				
-				##
+				//
 				if (is_numeric($field)) {					
 					$selectFields[] = static::selectFieldsSingletoneField($definition, $tableAlias);					
 				} 
 				
-				##
+				//
 				else if (is_array($definition)) {
 					
-					##
+					//
 					$class		= $definition['Class'];
 					
-					##
+					//
 					$aliasTable[$class] = isset($aliasTable[$class]) ? $aliasTable[$class]+1 : 1;
 					
-					##
-					$alias		= $aliasTable[$class] > 1 ? $class.''.$aliasTable[$class] : $class;
-					$table		= $definition['Table'];
-					$fieldFrom	= $definition['FieldFrom'];
-					$joinKey	= $alias.'.'.$definition['JoinKey'];
-					$fieldTo	= $alias.'.'.$definition['FieldTo'];
+					//
+					$joinAlias = $aliasTable[$class] > 1 ? $class.''.$aliasTable[$class] : $class;
+					$joinTable = $definition['Table'];
 					
-					##
-					$join .= " JOIN {$table} AS {$alias} ON {$joinKey} = {$fieldFrom}";
+					//
+					$fieldFrom = $definition['FieldFrom'];
+					$joinKey = $joinAlias.'.'.$definition['JoinKey'];
+					$fieldTo = $joinAlias.'.'.$definition['FieldTo'];
 					
-					##
+					//
+					$join .= " JOIN {$joinTable} AS {$joinAlias} ON {$joinKey} = {$fieldFrom}";
+					
+					//
 					$selectFields[] = $fieldTo.' AS '.$field; 
 				} 
 				
-				##
+				//
 				else {
 					$selectFields[] = $definition. ' AS '.$field;										
 				} 				
             }
 
-            ##
+            //
             return implode(', ',$selectFields);
         }
     }
@@ -210,15 +225,24 @@ class MysqlComposer
 	 */
 	public static function selectFieldsSingletoneField($field,$tableAlias) {
 				
-		##
+		//
 		if (preg_match('/^[a-z_][a-z0-9_]*$/i', $field)) {
 			return $tableAlias ? $tableAlias.'.'.$field : $field;			
 		} 
 		
-		##
+		//
 		else {
 			return $field;
 		}		
 	}
+	
+	/**
+	 * Quote table or column names
+	 * 
+	 * 
+	 */
+	protected static function quote($name) {
+		return '`'.$name.'`';
+	} 
 }
 

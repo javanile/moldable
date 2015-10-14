@@ -1,6 +1,6 @@
 <?php
 
-/*\
+/*
  * 
  * 
  * 
@@ -22,38 +22,38 @@ class ModelFields extends ModelSchema
 	 */
     protected static function getPrimaryKey()
     {
-		##
+		//
 		$attribute = 'PrimaryKey';
 		
-		## retrieve value from class setting definition
+		// retrieve value from class setting definition
 		if (static::hasConfig($attribute)) {
 			return static::getConfig($attribute);
 		}
 		
-		##
+		//
 		$key = false;
 		
-		##
+		//
 		$schema = static::getSchema();
 
-        ##
+        //
         foreach ($schema as $field => &$attributes) {
 
-            ##
+            //
             if ($attributes['Key'] == 'PRI') {
 	
-				##
+				//
 				$key = $field;
                 
-				##
+				//
 				break;
             }
         }
 			
-		## store as setting for future request
+		// store as setting for future request
 		static::setConfig($attribute, $key);
 								
-        ## return primary key field name
+        // return primary key field name
         return $key;
     }
 	
@@ -64,39 +64,39 @@ class ModelFields extends ModelSchema
 	 */
     protected static function getMainField()
     {
-		##
+		//
 		$attribute = 'MainField';
 		
-		## retrieve value from class setting definition
+		// retrieve value from class setting definition
 		if (static::hasConfig($attribute)) {
 			return static::getConfig($attribute);
 		}
 			
-		##
+		//
 		$mainField = false;
 		
-		##
+		//
 		$schema = static::getSchema();
 
-        ##
+        //
         foreach ($schema as $field => &$attributes) {
 
-            ##
+            //
             if ($attributes['Key'] == 'PRI') {
 				continue;	
             }
 			
-			##
+			//
 			$mainField = $field;
 			
-			##
+			//
 			break;
         }
         		
-		## store as setting for future request
+		// store as setting for future request
 		static::setConfig($attribute, $mainField);
 								
-        ## return primary key field name
+        // return primary key field name
         return $mainField;
     }
 	
@@ -107,21 +107,21 @@ class ModelFields extends ModelSchema
 	 */
     protected static function getDefaultFields()
     {
-		##
+		//
 		$attribute = 'DefaultFields';
 		
-		## retrieve value from class setting definition
+		// retrieve value from class setting definition
 		if (static::hasConfig($attribute)) {
 			return static::getConfig($attribute);
 		}
 		
-		##
+		//
 		$fields = array();
         
-		##
+		//
 		$schema = static::getSchema();
 		
-		##
+		//
 		foreach($schema as $field => $attributes) {
 			if (isset($attributes['Class'])) {
 				$class = $attributes['Class'];
@@ -131,10 +131,10 @@ class ModelFields extends ModelSchema
 			}			
 		}
 						
-		## store as setting for future request
+		// store as setting for future request
 		static::setConfig($attribute, $fields);
 								
-        ## return primary key field name
+        // return primary key field name
         return $fields;
     }
 	

@@ -1,26 +1,26 @@
 <?php
 
-##
+//
 require_once '../../src/SourceForge/SchemaDB/autoload.php';
 
-##
+//
 use SourceForge\SchemaDB;
 
-##
+//
 $notations = array(	
 		
-	## String 
+	// String 
 	"",
 	"Hello World!",
 	SchemaDB\Table::VARCHAR,
 	SchemaDB\Table::TEXT,
 	 
-	##
+	//
 	
-	## Enum and set
+	// Enum and set
 	array(0,1,2),
 	
-	## Date and time
+	// Date and time
 	SchemaDB\Table::DATE,
 	SchemaDB\Table::DATETIME,
 );

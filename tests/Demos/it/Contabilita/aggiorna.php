@@ -1,18 +1,18 @@
 <?php
 
-## richiamo la libreria SchemaDB
+// richiamo la libreria SchemaDB
 require_once 
 '../../../src/SourceForge/SchemaDB/autoload.php';
 
-## richiamo i parametri di configurazione
+// richiamo i parametri di configurazione
 require_once 
 'config.php';
 
-## utilizza il namespace della libreria
-## per poter richiamare le classi
+// utilizza il namespace della libreria
+// per poter richiamare le classi
 use SourceForge\SchemaDB;
 
-## connette al database mysql da utilizzare
+// connette al database mysql da utilizzare
 $db = new SchemaDB\Database(array(
 	'host' => $host,
 	'user' => $user,
@@ -21,10 +21,10 @@ $db = new SchemaDB\Database(array(
 	'pref' => $pref,
 ));
 
-##
+//
 $ok = $db->apply(array(
 	
-	## tabella utenti
+	// tabella utenti
 	'Utenti' => array(
 		'id' => 0,
 		'username' => '',
@@ -33,20 +33,20 @@ $ok = $db->apply(array(
 		'ip' => 0,
 	),
 	
-	##
+	//
 	'Clienti' => array(
 		'RagioneSociale' => '',
 		'Email' => '',
 	),
 	
-	##
+	//
 	'Fatture' => array(
 		'Cliente' => 0,
 		'Totale' => 0,		
 	), 	
 ));
 
-##
+//
 if ($ok) {
 	echo 
 	'Il database &egrave; stato aggiornato correttamente!';

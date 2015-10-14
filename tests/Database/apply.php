@@ -1,15 +1,15 @@
 <?php
 
-## require connection parametrs
+// require connection parametrs
 require_once 'common.php'; 
 
-## drop all database tables
+// drop all database tables
 #$db->drop('confirm');
 
-## Apply schema create or update database tables
+// Apply schema create or update database tables
 $db->apply(array( 
 	
-	## define users table
+	// define users table
 	'User' => array(
 		'userid'	=> $db::PRIMARY_KEY,
 		'password'	=> '',
@@ -18,7 +18,7 @@ $db->apply(array(
 		'tipe'		=> $db::INT_20,
 	),
 	
-	## define articles table
+	// define articles table
 	'Article' => array(
 		'articleid' => $db::PRIMARY_KEY,
 		'title'		=> '',
@@ -26,8 +26,8 @@ $db->apply(array(
 	),	
 ));
 
-##
+//
 $db->dump();
 
-## 
+// 
 $db->benchmark();

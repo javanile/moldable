@@ -1,24 +1,24 @@
 <?php
 
-##
+//
 require_once '../../src/SourceForge/SchemaDB/autoload.php';
 
-##
+//
 use SourceForge\SchemaDB;
 
-##
+//
 $notations = array(	
 		
-	## String 
+	// String 
 	null,
 	
-	##
+	//
 	true,
 	
-	##
+	//
 	false,
 	
-	##
+	//
 	SchemaDB\Table::PRIMARY_KEY,
 );
 

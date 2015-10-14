@@ -1,22 +1,22 @@
 <?php
 
-##
+//
 require_once 'common.php'; 
 
-##
+//
 use SourceForge\SchemaDB;
 
-##
+//
 class Fields extends SchemaDB\Storable {
 	
-	##	
+	//	
 	static $__Define__ = array(
 		'DefaultVarcharSize'	=> 10,
 		'DefaultPrimaryKeySize' => 12,
 		'DefaultStringType'		=> 'text',
 	);   
 	
-	## key
+	// key
 	public $id = self::PRIMARY_KEY;
 	
 	/* string * /
@@ -60,10 +60,10 @@ class Fields extends SchemaDB\Storable {
 SchemaDB\Database::getDefault()->dump();
 
 
-##
+//
 $Fields = new Fields();
 
 
 
-##
+//
 $Fields->store();

@@ -1,15 +1,15 @@
 <?php
 
-##
+//
 require_once '../../src/SourceForge/SchemaDB/autoload.php';
 
-##
+//
 use SourceForge\SchemaDB;
 
-##
+//
 $notations = array(	
 		
-	## String 
+	// String 
 	"",
 	"Hello World!",
 	SchemaDB\Table::VARCHAR,

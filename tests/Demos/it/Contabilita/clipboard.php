@@ -1,7 +1,7 @@
 <?php
 
 
-##
+//
 $ok = $db->apply(array(
 	
 	'Utenti' => array(
@@ -10,7 +10,7 @@ $ok = $db->apply(array(
 	
 ));
 
-##
+//
 if ($ok) {
 	echo 
 	'Il database è stato aggiornato correttamente!';

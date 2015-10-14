@@ -1,6 +1,6 @@
 <?php
 
-/*\
+/*
  * 
 \*/
 namespace Javanile\SchemaDB;
@@ -33,22 +33,22 @@ class DatabaseSocketPDO
 	 * 
 	 */
 	public function connect($args) {
-		##
+		//
 		$dsn = "mysql:host={$args['host']};dbname={$args['name']}";
 		
-		##
+		//
 		$opt = array(
 			PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8',
 		); 
 
-		##
+		//
 		$this->pdo = new PDO($dsn,$args['user'],$args['pass'],$opt);		
 	
-		##
+		//
 		$this->pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 		#$this->pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_SILENT);
 		
-		##
+		//
 		$this->prefix = $args['pref'];		
 	}
 	
@@ -58,7 +58,7 @@ class DatabaseSocketPDO
 	 */
 	public function query($sql) {
 			 	
-		##
+		//
 		$this->pdo->query($sql);		
 	}
 
@@ -69,13 +69,13 @@ class DatabaseSocketPDO
 	 */
 	public function getRow($sql) {
 		
-		##
+		//
 		$s = $this->pdo->prepare($sql);
 		
-		##
+		//
 		$s->execute();
 
-		##
+		//
 		return $s->fetch(PDO::FETCH_ASSOC);
 	}
 	
@@ -86,23 +86,23 @@ class DatabaseSocketPDO
 	 */
 	public function getResults($sql) {
 
-		##
+		//
 		$statament = $this->pdo->prepare($sql);
 
-		##
+		//
 		try {
 			$statament->execute();
 		} 
 		
-		##
+		//
 		catch (PDOException  $Exception) {			
 			throw new DatabaseException( $Exception->getMessage( ) , (int)$Exception->getCode( ) );
 		}
 		
-		##
+		//
 		$results = $statament->fetchAll(PDO::FETCH_ASSOC);
 				
-		##
+		//
 		return $results;
 	}
 	
@@ -114,21 +114,21 @@ class DatabaseSocketPDO
 	 */
 	public function getColumn($sql) {
 		
-		##
+		//
 		$statament = $this->pdo->prepare($sql);
 		
-		##
+		//
 		$statament->execute();
 
-		##
+		//
 		$column = array(); 
 		
-		##
+		//
 		while($row = $statament->fetch()){
 			$column[] = $row[0];
 		}
 				
-		##
+		//
 		return $column;		
 	}
 	
@@ -140,13 +140,13 @@ class DatabaseSocketPDO
 	 */
 	public function getValue($sql) {
 		
-		##
+		//
 		$statament = $this->pdo->prepare($sql);
 		
-		##
+		//
 		$statament->execute();
 		
-		##
+		//
 		return $statament->fetchColumn(0);
 	}
 	
@@ -157,7 +157,7 @@ class DatabaseSocketPDO
 	 */
 	public function getPrefix()
 	{	
-		##
+		//
 		return $this->prefix;		
 	}
 	
@@ -168,7 +168,7 @@ class DatabaseSocketPDO
 	 */
 	public function lastInsertId() 
 	{
-		##
+		//
 		return $this->pdo->lastInsertId();		
 	}
 	
@@ -178,7 +178,7 @@ class DatabaseSocketPDO
 	 */
 	public function transact() {
 		
-		##
+		//
 		$this->pdo->beginTransaction();		
 	}
 	
@@ -187,7 +187,7 @@ class DatabaseSocketPDO
 	 */
 	public function commit() {
 
-		##
+		//
 		$this->pdo->commit();				
 	}
 	
@@ -196,7 +196,7 @@ class DatabaseSocketPDO
 	 */
 	public function rollback() {
 
-		##
+		//
 		$this->pdo->rollBack();				
 	}
 }

@@ -1,15 +1,15 @@
 <?php
 
-##
+//
 require_once '../../src/Javanile/SchemaDB/autoload.php';
 
-##
+//
 use Javanile\SchemaDB;
 
-##
+//
 $notations = array(	
 		
-	## Enum and set
+	// Enum and set
 	array(0,1,2),
 	array('sa','admin','public'),
 	array(null,'apple','banana','cocco'),

@@ -1,6 +1,6 @@
 <?php
 
-/*\
+/*
  * 
  * 
 \*/
@@ -21,15 +21,15 @@ class Storable extends ModelPublicAPI
 	 */
 	public function __construct($values=null) {
 		
-		## call anchesto constr
+		// call anchesto constr
 		parent::__construct();
 						
-		## fill created object with passed values
+		// fill created object with passed values
 		if ($values) {
 			$this->fill($values);
 		}
 		
-		## update related table
+		// update related table
 		static::updateTable();
 	}
 
@@ -40,26 +40,26 @@ class Storable extends ModelPublicAPI
      */
     public function store($values=null)
     {		
-		##
+		//
 		if (is_array($values)) {
 			
-			##
+			//
 			foreach ($values as $field => $value) {
 			
-				##
+				//
 				$this->{$field} = $value;
 			}
 		}
 		
-        ## retrieve primary key
+        // retrieve primary key
         $key = static::getPrimaryKey();
 
-        ## based on primary key store action
+        // based on primary key store action
         if ($key && $this->{$key}) {
             return $this->storeUpdate();
         } 
 		
-		##
+		//
 		else {
             return $this->storeInsert();
         }
@@ -72,52 +72,52 @@ class Storable extends ModelPublicAPI
 	 */
     public function storeUpdate()
     {
-        ## update database schema
+        // update database schema
         static::updateTable();
 
-        ##
+        //
         $k = static::getPrimaryKey();
 
-        ##
+        //
         $e = array();
 
-		##
+		//
 		$fields = static::getSchemaFields();
 		
-        ##
+        //
         foreach ($fields as $field) {
 
-            ##
+            //
             if ($field == $k) { continue; }
 
-            ##
+            //
             $value = $this->{$field};
 			
-            ##
+            //
             $e[] = "{$field} = '{$value}'";
         }
 
-        ##
+        //
         $s = implode(',',$e);
 
-        ##
+        //
         $t = static::getTable();
 
-        ##
+        //
         $i = $this->{$k};
 
-        ##
+        //
         $q = "UPDATE {$t} SET {$s} WHERE {$k}='{$i}'";
 
-        ##
+        //
         static::getDatabase()->query($q);
 
-        ##
+        //
         if ($k) {
             return $this->{$k};
         }
 
-        ##
+        //
         else {
             return true;
         }
@@ -131,72 +131,72 @@ class Storable extends ModelPublicAPI
 	 */
     public function storeInsert($force=false)
     {
-        ## update table if needed
+        // update table if needed
         static::updateTable();
 
-        ## collect field names for sql query
+        // collect field names for sql query
         $fieldsArray = array();
 		
-		## collect values for sql query
+		// collect values for sql query
         $valuesArray = array();
         
-		## get primary field name
+		// get primary field name
 		$key = static::getPrimaryKey();
 				
-		## get complete fields schema
+		// get complete fields schema
 		$schema = static::getSchema();
 				
-		##
+		//
         foreach ($schema as $field => &$column) {
 
-            ##
+            //
             if ($field == $key && !$force) { continue; }
 
-            ## get current value of attribute of object
+            // get current value of attribute of object
             $value = static::insertRelationBefore($this->{$field}, $column);
             
-            ##
+            //
             $fieldsArray[] = $field;
             $valuesArray[] = "'".$value."'";
         }
 
-        ##
+        //
         $fields = implode(',', $fieldsArray);
         $values = implode(',', $valuesArray);
 
-        ##
+        //
         $table = static::getTable();
 		
-		##
+		//
         $sql = "INSERT INTO {$table} ({$fields}) VALUES ({$values})";
 
-        ##
+        //
         static::getDatabase()->query($sql);
 
-        ##
+        //
         if ($key) {
 			
-			##
+			//
             $index = static::getDatabase()->getLastId();
         
-			##
+			//
 			foreach ($schema as $field => &$column) {
 				
-				##
+				//
 				if ($field == $key && !$force) { continue; }
 
-				##
+				//
 				static::insertRelationAfter($this->{$field}, $column);				
 			}
 			
-			##
+			//
 			$this->{$key} = $index;
 
-			##
+			//
             return $index;
         }
 
-        ##        
+        //        
 		return true;        
     }
 
@@ -206,18 +206,18 @@ class Storable extends ModelPublicAPI
 	 */
 	private static function insertRelationBefore($value, &$column) {
 		
-		##
+		//
 		if (!is_array($value)) {
 			return $value;					
 		}
 			
-		##
+		//
 		switch ($column['Relation']) {
 		
-			##
+			//
 			case '1:1': return static::insertRelationOneToOne($value, $column);
 			
-			##
+			//
 			case '1:*':	return static::insertRelationOneToMany($value, $column);			
 		}
 				
@@ -228,16 +228,16 @@ class Storable extends ModelPublicAPI
 	 */
 	private static function insertRelationOneToOne($value, &$column) {
 		
-		##
+		//
 		$class = $column['Class'];
 
-		##
+		//
 		$object = new $class($value);
 
-		##
+		//
 		$index = $object->store();
 
-		##
+		//
 		return $index;
 	}
 	
@@ -247,15 +247,15 @@ class Storable extends ModelPublicAPI
 	 */
 	private static function insertRelationAfter($value, &$column) {
 		
-		##
+		//
 		if (!is_array($value)) {
 			return $value;					
 		}
 			
-		##
+		//
 		switch ($column['Relation']) {
 		
-			##
+			//
 			case '1:*':	return static::insertRelationOneToMany($value, $column);			
 		}				
 	}
@@ -265,20 +265,20 @@ class Storable extends ModelPublicAPI
 	 */
 	private static function insertRelationOneToMany($values, &$column) {
 		
-		##
+		//
 		$class = $column['Class'];
 
-		##
+		//
 		foreach($values as $value) {
 			
-			##
+			//
 			$object = new $class($value);
 
-			##
+			//
 			$index = $object->store();
 		}
 		
-		##
+		//
 		return $index;
 	}	
 }

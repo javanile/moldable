@@ -1,6 +1,6 @@
 <?php
 
-/*\
+/*
  * 
  * 
 \*/
@@ -42,10 +42,10 @@ class ModelClass extends SchemaNotation
 	 */ 
     protected static function getClass()
     {
-		##
+		//
 		$attribute = 'Class';
 		
-        ##
+        //
         return static::optDefine($attribute, static::getCalledClass());
     }
 
@@ -56,13 +56,13 @@ class ModelClass extends SchemaNotation
 	 */ 
     protected static function getClassName()
     {
-		##
+		//
 		$class = static::getClass();
 		
-		##
+		//
 		$point = strrpos($class, '\\');
 		
-		##
+		//
 		return $point === false ? $class : substr($class, $point + 1);
     }
 
@@ -72,7 +72,7 @@ class ModelClass extends SchemaNotation
 	 */
 	protected static function getCalledClass() {
 
-		##
+		//
 		return get_called_class();		
 	}
 
@@ -81,7 +81,7 @@ class ModelClass extends SchemaNotation
 	 */
 	protected static function hasGlobal($attribute) {
 				
-		##
+		//
 		return isset(static::$__Global__[$attribute]);		
 	}
 
@@ -90,7 +90,7 @@ class ModelClass extends SchemaNotation
 	 */
 	protected static function getGlobal($attribute) {
 		
-		##
+		//
 		return static::$__Global__[$attribute];		
 	}
 
@@ -99,7 +99,7 @@ class ModelClass extends SchemaNotation
 	 */
 	protected static function setGlobal($attribute, $value) {
 		
-		##
+		//
 		static::$__Global__[$attribute] = $value;		
 	}
 
@@ -109,7 +109,7 @@ class ModelClass extends SchemaNotation
 	 */
 	protected static function delGlobal($attribute) {
 		
-		## clear cached
+		// clear cached
         unset(static::$__Global__[$attribute]);		
 	}
 	
@@ -118,10 +118,10 @@ class ModelClass extends SchemaNotation
 	 */
 	protected static function hasConfig($attribute) {
 			
-		##
+		//
 		$class = static::getClass();
 			
-		##
+		//
 		return isset(static::$__Config__[$attribute][$class]);		
 	}
 
@@ -130,10 +130,10 @@ class ModelClass extends SchemaNotation
 	 */
 	protected static function getConfig($attribute) {
 					
-		##
+		//
 		$class = static::getClass();
 		
-		##
+		//
 		return static::$__Config__[$attribute][$class];		
 	}
 
@@ -142,10 +142,10 @@ class ModelClass extends SchemaNotation
 	 */
 	protected static function setConfig($attribute, $value) {
 		
-		##
+		//
 		$class = static::getClass();
 		
-		##
+		//
 		static::$__Config__[$attribute][$class] = $value;		
 	}
 
@@ -155,10 +155,10 @@ class ModelClass extends SchemaNotation
 	 */
 	protected static function delConfig($attribute) {
 		
-		##
+		//
 		$class = static::getClass();
 		
-		## clear cached
+		// clear cached
         unset(static::$__Config__[$attribute][$class]);		
 	}
 	
@@ -167,7 +167,7 @@ class ModelClass extends SchemaNotation
 	 */
 	protected static function hasDefine($attribute) {
 				
-		##
+		//
 		return isset(static::$__Define__[$attribute]);		
 	}
 
@@ -176,7 +176,7 @@ class ModelClass extends SchemaNotation
 	 */
 	protected static function getDefine($attribute) {
 		
-		##
+		//
 		return static::$__Define__[$attribute];		
 	}
 
@@ -185,7 +185,7 @@ class ModelClass extends SchemaNotation
 	 */
 	protected static function setDefine($attribute, $value) {
 		
-		##
+		//
 		static::$__Define__[$attribute] = $value;		
 	}
 
@@ -195,7 +195,7 @@ class ModelClass extends SchemaNotation
 	 */
 	protected static function delDefine($attribute) {
 		
-		## clear cached
+		// clear cached
         unset(static::$__Define__[$attribute]);		
 	}
 
@@ -205,7 +205,7 @@ class ModelClass extends SchemaNotation
 	 */
 	protected static function optDefine($attribute, $default=null) {
 		
-		##
+		//
 		return isset(static::$__Define__) 
 			&& isset(static::$__Define__[$attribute]) 
 			 ? static::$__Define__[$attribute] 
@@ -219,24 +219,24 @@ class ModelClass extends SchemaNotation
 	 */
 	protected static function getMethodsByPrefix($prefix=null) {
 	
-		##
+		//
 		$attribute = 'MethodsByPrefix:'.$prefix;
 		
-		##
+		//
 		if (static::hasConfig($attribute)) {
 			return static::getConfig($attribute);
 		}
 		
-		##
+		//
 		$class = static::getClass();
 		
-		##
+		//
 		$allMethods = get_class_methods($class);
 		
-		##
+		//
 		$methods = array();
 		
-		##
+		//
 		if (count($allMethods) > 0) {					
 			foreach($allMethods as $method) {
 				if (preg_match('/^'.$prefix.'/i',$method)) {
@@ -245,13 +245,13 @@ class ModelClass extends SchemaNotation
 			}			
 		} 
 		
-		##
+		//
 		asort($methods);
 		
-		##
+		//
 		static::setConfig($attribute, $methods);
 		
-		##
+		//
 		return $methods;
 	} 
 }

@@ -1,12 +1,12 @@
 <?php
 
-##
+//
 require_once 'common.php';
 
-##
+//
 $id = 1;
 
-##
+//
 $Person = Person::query(array(
 	'field' => array(
 		'name',	
@@ -15,5 +15,5 @@ $Person = Person::query(array(
 	),
 ));
 
-##
+//
 var_Dump($Person);

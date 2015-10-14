@@ -1,12 +1,12 @@
 <?php
 
-##
+//
 require_once 'common.php';
 
-##
+//
 Person::drop('confirm');
 
-##
+//
 Person::import(array(
 	array(
 		'name' => 'Mario', 
@@ -24,13 +24,13 @@ Person::import(array(
 	),	
 ));
 
-##
+//
 Person::dump();
 
-##
+//
 Address::drop('confirm');
 
-##
+//
 Address::import(array(
 	array(
 		'name' => 'Via Palestro',
@@ -46,5 +46,5 @@ Address::import(array(
 	),
 ));
 
-##
+//
 Address::dump();

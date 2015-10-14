@@ -1,38 +1,38 @@
 <?php
 
-## 
+// 
 require_once 'common.php';
 
-##
+//
 use Javanile\SchemaDB;
 
-##
+//
 SchemaDB\Database::getDefault()->drop('confirm');
 
-##
+//
 class Invoice extends SchemaDB\Storable {
 		
-	##
+	//
 	public $code = '';
 	
-	##
+	//
 	public $product = '<<Product>>';
 }
 
-##
+//
 class Product extends SchemaDB\Storable {
 
-	##
+	//
 	public $id = self::PRIMARY_KEY;
 	
-	##
+	//
 	public $name = '';
 	
-	##
+	//
 	public $price = .0;	
 }
 
-##
+//
 $Invoice0 = new Invoice(array(
 	'code' => 'FAT1',
 	'product' => array(
@@ -41,17 +41,17 @@ $Invoice0 = new Invoice(array(
 	),
 ));
 
-##
+//
 $Invoice0->store();
 
-##
+//
 Invoice::dump();
 
-##
+//
 Product::dump();
 
-##
+//
 $Invoice1 = Invoice::load('FAT1');
 
-##
+//
 SchemaDB\Debug::var_Dump($Invoice1);

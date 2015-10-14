@@ -1,5 +1,5 @@
 <?php
-/*\
+/*
  *
  * Copyright (c) 2012-2015 Bianco Francesco
  *
@@ -23,7 +23,7 @@
  *
 \*/
 
-/*\
+/*
  *
  * Thanks to SourceForge.net
  * for your mission on the web
@@ -36,7 +36,7 @@ namespace Javanile\SchemaDB;
  *
  * <code>
  * <?php
- * ## Create SchemaDB connection
+ * // Create SchemaDB connection
  * $conn = new SchemaDB(array(
  *		'host' => 'localhost',
  *		'user' => 'root',
@@ -45,7 +45,7 @@ namespace Javanile\SchemaDB;
  *		'pref' => 'tbl_',
  * ));
  *
- * ## Create Table on database
+ * // Create Table on database
  * $conn->update(array(
  *		'Table1' => array(
  *			'Field1' => 0,
@@ -82,13 +82,13 @@ class Database extends DatabaseCommon
      */
     public function __construct($args)
     {
-		##
+		//
 		$this->ts = microtime();	
 
-		## 
+		// 
 		parent::__construct($args);
 
-        ##
+        //
         static::setDefault($this);
     }
 
@@ -100,23 +100,23 @@ class Database extends DatabaseCommon
 	 */
     public function desc()
     {
-        ##
+        //
 		$tables = $this->getTables();
 		
-        ##
+        //
         if (!$tables) { return; }
       
-		##
+		//
 		$desc = array();
 		
-        ##
+        //
         foreach ($tables as $table) {
             
-            ##
+            //
             $desc[$table] = $this->descTable($table);
         }
 
-        ##
+        //
         return $desc;
     }
 
@@ -128,37 +128,37 @@ class Database extends DatabaseCommon
 	 */
     public function descTable($table)
     {
-        ##
+        //
         $sql = "DESC {$table}";
 
-        ##
+        //
         $fields = $this->getResults($sql);
 
-        ##
+        //
         $desc = array();
 
-        ##
+        //
         $count = 0;
 
-        ##
+        //
         $before = false;
 
-        ##
+        //
         foreach ($fields as $field) {
 			
-			##
+			//
 			$field['First'] = $count === 0;
             $field['Before'] = $before;
             
-			##
+			//
 			$desc[$field['Field']] = $field;
             
-			##
+			//
 			$before = $field['Field'];
             $count++;
         }
 
-        ##
+        //
         return $desc;
     }
 		
@@ -170,20 +170,20 @@ class Database extends DatabaseCommon
      */
     public function apply($schema)
     {
-        ## retrive queries
+        // retrive queries
         $queries = $this->diff($schema);
 
-        ## execute queries
+        // execute queries
         if (!$queries) {
 			return;
 		}
 
-		## send all queries to align database
+		// send all queries to align database
 		foreach ($queries as $sql) {
 			$this->query($sql);
 		}
 			
-        ## return queries
+        // return queries
         return $queries;
     }
 
@@ -197,21 +197,21 @@ class Database extends DatabaseCommon
      */
     public function applyTable($table, $schema, $parse=true)
     {
-        ## retrive queries
+        // retrive queries
         $queries = $this->diffTable($table, $schema, $parse);
 
-        ## execute queries
+        // execute queries
         if ($queries && count($queries) > 0) {
 
-            ## loop throu all queries calculated and execute it
+            // loop throu all queries calculated and execute it
             foreach ($queries as $sql) {
 
-                ## execute each queries
+                // execute each queries
                 $this->query($sql);
             }
         }
 
-        ## return queries
+        // return queries
         return $queries;
     }
 
@@ -225,30 +225,30 @@ class Database extends DatabaseCommon
      */
     public function diff($schema,$parse=true)
     {
-        ## prepare
+        // prepare
         if ($parse) { 
 			SchemaParser::parseSchemaDB($schema);
 		}
 
-        ## get prefix string
+        // get prefix string
         $prefix = $this->getPrefix();
 
-        ## output container for rescued SQL query
+        // output container for rescued SQL query
         $queries = array();
 
-        ## loop throu the schema
+        // loop throu the schema
         foreach ($schema as $table => &$attributes) {
 
-            ## 
+            // 
             $sql = $this->diffTable($prefix.$table, $attributes, false);
 
-            ##
+            //
             if (count($sql) > 0) {
                 $queries = array_merge($queries, $sql);
             }
         }
 
-        ## return estimated sql query
+        // return estimated sql query
         return $queries;
     }
 
@@ -262,27 +262,27 @@ class Database extends DatabaseCommon
      */
     public function diffTable($table, $schema, $parse=true)
     {
-        ## parse input schema if required
+        // parse input schema if required
         if ($parse) { 
 			
-			##
+			//
 			SchemaParser::parseSchemaTable($schema);
 			
-			##
+			//
 			$table = $this->getPrefix() . $table;
 		}
 				
-        ## if table no exists return sql statament for creating this
+        // if table no exists return sql statament for creating this
         if (!$this->tableExists($table, false)) {
 			
-			## 
+			// 
             return array(MysqlComposer::createTable($table, $schema));
         }
 
-		##
+		//
 		$queries = $this->diffTableQueries($table, $schema);
 		
-		##
+		//
 		return $queries; 
 	}
 		
@@ -296,19 +296,19 @@ class Database extends DatabaseCommon
      */
     private function diffTableQueries($table, &$schema)
     {
-        ## first order queries used as output array
+        // first order queries used as output array
         $foQueries = array();
 
-        ## second order queries used as output array
+        // second order queries used as output array
         $soQueries = array();
 
-        ## describe table get current table description
+        // describe table get current table description
         $fields = $this->descTable($table);
 
-        ## test field definition
+        // test field definition
         foreach ($schema as $field => &$attributes) {
 
-            ##
+            //
             $this->diffTableField(
 				$table,
 				$field,
@@ -319,7 +319,7 @@ class Database extends DatabaseCommon
 			);
         }
 
-		##
+		//
 		return $this->diffTableMergeQueries($table, $fields, $foQueries, $soQueries);
 	}
 	
@@ -331,26 +331,26 @@ class Database extends DatabaseCommon
 	 */
 	private function diffTableMergeQueries($table, &$fields, &$foQueries, &$soQueries) {
 
-		##
+		//
         $key = $this->diffTableFieldPrimaryKey($fields);
 
-        ##
+        //
         if ($key && count($foQueries) > 0) {
 			
-			##
+			//
             $foQueries[] = MysqlComposer::alterTableDropPrimaryKey($table);
             
-			##
+			//
 			$fields[$key]['Key'] = '';
             
-			##
+			//
 			$fields[$key]['Extra'] = '';
             
-			##
+			//
 			$foQueries[] = MysqlComposer::alterTableChange($table, $key, $fields[$key]);
         }
 
-        ##
+        //
         return array_merge(array_reverse($foQueries), $soQueries);
     }
 	
@@ -365,35 +365,35 @@ class Database extends DatabaseCommon
 	 */
     private function diffTableField($table, $field, &$attributes, &$fields, &$foQueries,&$soQueries)
     {
-        ## check if column exists in current db
+        // check if column exists in current db
         if (!isset($fields[$field])) {
 
-            ##
+            //
             $sql = MysqlComposer::alterTableAdd($table, $field, $attributes);
 
-            ## add primary key column
+            // add primary key column
             if ($attributes['Key'] == 'PRI') {
                 $foQueries[] = $sql;
             }
 
-            ## add normal column
+            // add normal column
             else {
                 $soQueries[] = $sql;
             }
         }
 
-        ## check if column need to be updated
+        // check if column need to be updated
         else if ($this->diffTableFieldAttributes($field, $attributes, $fields)) {
 
-            ## compose alter table query with attributes
+            // compose alter table query with attributes
             $sql = MysqlComposer::alterTableChange($table, $field, $attributes);
 
-            ## alter column that lose primary key
+            // alter column that lose primary key
             if ($fields[$field]['Key'] == 'PRI' || $attributes['Key'] == 'PRI') {
                 $foQueries[] = $sql;
             }
 
-            ## alter colum than not interact with primary key
+            // alter colum than not interact with primary key
             else {
                 $soQueries[] = $sql;
             }
@@ -411,25 +411,25 @@ class Database extends DatabaseCommon
      */
     private function diffTableFieldAttributes($field, &$attributes, &$fields)
     {
-        ## loop throd current column property
+        // loop throd current column property
         foreach ($fields[$field] as $key => $value) {            
             
-			## if have a difference
+			// if have a difference
             if ($attributes[$key] == $value) { 
 				continue;
 			}	
 			
-			##
+			//
             if (static::DEBUG) {
 				echo '<pre style="background:#E66;color:#000;margin:0 0 1px 0;padding:2px 6px 3px 6px;border:1px solid #000;">';
 				echo $field.'['.$key.']: "'.$attributes[$key].'" != "'.$value.'"</pre>';
 			}
 			
-			##			
+			//			
 			return true; 							
         }
 
-        ##
+        //
         return false;
     }
 
@@ -441,16 +441,16 @@ class Database extends DatabaseCommon
 	 */
     private function diffTableFieldPrimaryKey(&$fields)
     {
-        ## loop throd current column property
+        // loop throd current column property
         foreach ($fields as $field => &$attributes) {
 
-            ## lookitup by equal
+            // lookitup by equal
             if ($attributes['Key'] == 'PRI') { 
 				return $field; 				
 			}
         }
 
-        ##
+        //
         return false;
     }
 
@@ -461,7 +461,7 @@ class Database extends DatabaseCommon
      */
     public static function getDefault()
     {
-        ## return static $default
+        // return static $default
         return static::$default;
     }
 
@@ -473,10 +473,10 @@ class Database extends DatabaseCommon
      */
     private static function setDefault($database)
     {
-        ## if no default SchemaDB connection auto-set then-self
+        // if no default SchemaDB connection auto-set then-self
         if (static::$default === null) {
 
-            ## set current SchemaDB connection to default
+            // set current SchemaDB connection to default
             static::$default = &$database;
         }
     }
@@ -493,21 +493,21 @@ class Database extends DatabaseCommon
 			return;
 		}
 		
-		##
+		//
 		$tables = $this->getTables();
 		
-		##
+		//
 		if (!$tables) {
 			return;		
 		}
 		
-		##
+		//
 		foreach($tables as $table) {
 			
-			##
+			//
 			$sql = "DROP TABLE {$table}";
 			
-			##
+			//
 			$this->query($sql);			
 		}		
 	}
@@ -517,49 +517,49 @@ class Database extends DatabaseCommon
      */
     public function dump()
     {
-        ## describe databse
+        // describe databse
         $schema = $this->desc();
 
-        ##
+        //
         echo '<pre><table border="1" style="text-align:center">';
 
-        ##
+        //
         if (!$schema) {
             echo '<tr><th>No database tables</th></tr></table></pre>';
 		}
 		
-		##
+		//
 		foreach ($schema as $table => $fields) {
 
-			##
+			//
 			echo '<tr><th colspan="9">'.$table.'</th></tr><tr><td>&nbsp;</td>';
 
-			##
+			//
 			$first = key($fields);
 			
-			##
+			//
 			foreach (array_keys($fields[$first]) as $attributeName) {
 				echo '<th>'.$attributeName.'</th>';
 			}
 			
-			##
+			//
 			echo '</tr>';
 			
-			##
+			//
 			foreach ($fields as $field => $attributes) {
 			
-				##
+				//
 				echo '<tr><th>'.$field.'</th>';
 				
-				##
+				//
 				foreach ($attributes as $value) { echo '<td>'.$value.'</td>'; }
 								
-				##
+				//
 				echo '</tr>';
 			}
 		}
        			
-        ##
+        //
         echo '</table></pre>';
     }
 	
@@ -568,7 +568,7 @@ class Database extends DatabaseCommon
 	 */
 	public function benchmark() {
 		
-		## 
+		// 
 		echo '<pre style="background:#333;color:#fff;padding:2px 6px 3px 6px;border:1px solid #000">Time: '.(microtime()-$this->ts).' Mem: '.memory_get_usage(true).'</pre>';
 	}
 }
