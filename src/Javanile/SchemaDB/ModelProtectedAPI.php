@@ -1,18 +1,15 @@
 <?php
-
 /**
  * ModelProtectedAPI.php
  *
  * PHP version 5
  *
- * @category tag in file comment
- * @package tag in file comment
- * @author tag in file comment
- * @license tag in file comment
- * @link ciao
- *
- */
-
+ * @category  tag in file comment
+ * @package   tag in file comment
+ * @license   tag in file comment
+ * @link      ciao
+ * @author    Francesco Bianco <bianco@javanile.org>
+\*/
 namespace Javanile\SchemaDB;
 
 /**
