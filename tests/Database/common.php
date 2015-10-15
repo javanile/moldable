@@ -4,7 +4,7 @@
 require_once '../common.php'; 
 
 //
-require_once '../../src/Javanile/SchemaDB/autoload.php';
+require_once '../../../../autoload.php';
 
 //
 use Javanile\SchemaDB;
