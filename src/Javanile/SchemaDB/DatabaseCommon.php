@@ -80,16 +80,16 @@ class DatabaseCommon extends SchemaNotation
      * @param  type $sql
      * @return type
      */
-    public function execute($sql)
+    public function execute($sql, $values)
     {
 		//
 		$this->connect();
 
 		//
-		static::log('execute', $sql);
+		static::log('execute', $sql, $values);
 
 		//
-		return $this->_socket->query($sql);
+		return $this->_socket->query($sql, $values);
     }
 
     /**
@@ -97,16 +97,16 @@ class DatabaseCommon extends SchemaNotation
      *
      * @return type
      */
-    public function getPrefix()
+    public function getPrefix($table=null)
     {
 		//
 		$this->connect();
 
 		//
-		$perfix = $this->_socket->getPrefix();
+		$prefix = $this->_socket->getPrefix();
 				
 		//
-		return $perfix;
+		return $table ? $prefix . $table : $prefix;
     }
 
     /**

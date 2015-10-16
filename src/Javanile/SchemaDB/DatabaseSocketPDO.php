@@ -56,11 +56,21 @@ class DatabaseSocketPDO
 	 * 
 	 * @param type $sql
 	 */
-	public function query($sql) {
-			 	
-		//
-		$this->pdo->query($sql);		
-	}
+	public function query($sql, $values=null) {
+
+        //
+        $stmt = $this->pdo->prepare($sql);
+
+        //
+        if (is_array($values)) {
+            foreach($values as $token => $value) {
+                $stmt->bindParam($token, $value);
+            }
+        }
+
+        //
+        $stmt->execute();
+    }
 
 	/**
 	 * 

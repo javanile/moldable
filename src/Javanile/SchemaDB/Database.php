@@ -96,76 +96,46 @@ class Database extends DatabaseSchema
      *
      * @param type $list
      */
-    public function insert($table, $record, $map) {
+    public function insert($table, $record, $map=null) {
 
         // collect field names for sql query
         $fieldsArray = array();
 
+        // collect tokens for sql query
+        $tokensArray = array();
+
 		// collect values for sql query
-        $valuesArray = array();
+        $values = array();
 
-		// get primary field name
-		$key = $this->getPrimaryKey();
-
-		// get complete fields schema
-		$schema = static::getSchema();
-
-		//
-        foreach ($record as $field => &$column) {
-
+        //
+        foreach ($record as $field => $value) {
+            
             //
-            if ($field == $key && !$force) { continue; }
-
-            // get current value of attribute of object
-            $value = static::insertRelationBefore($this->{$field}, $column);
-
+            $token = ':'.$field;
+            
             //
             $fieldsArray[] = $field;
-            $valuesArray[] = "'".$value."'";
+            $tokensArray[] = $token;
+            
+            //
+            $values[$token] = $value;
         }
 
         //
         $fields = implode(',', $fieldsArray);
-        $values = implode(',', $valuesArray);
-
+        $tokens = implode(',', $tokensArray);
+       
         //
-        $table = static::getTable();
+        $table = $this->getPrefix($table);
 
 		//
-        $sql = "INSERT INTO {$table} ({$fields}) VALUES ({$values})";
+        $sql = "INSERT INTO `{$table}` ({$fields}) VALUES ({$tokens})";
 
         //
-        static::getDatabase()->execute($sql);
-
-        //
-        if ($key) {
-
-			//
-            $index = static::getDatabase()->getLastId();
-
-			//
-			foreach ($schema as $field => &$column) {
-
-				//
-				if ($field == $key && !$force) { continue; }
-
-				//
-				static::insertRelationAfter($this->{$field}, $column);
-			}
-
-			//
-			$this->{$key} = $index;
-
-			//
-            return $index;
-        }
+        $this->execute($sql, $values);
 
         //
 		return true;
-
-
-
-
     }
 
     /**
