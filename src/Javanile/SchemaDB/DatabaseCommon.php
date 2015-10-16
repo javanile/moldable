@@ -1,6 +1,6 @@
 <?php
 
-/*
+/**
  * 
  * 
 \*/
@@ -16,18 +16,18 @@ class DatabaseCommon extends SchemaNotation
 	/**
 	 * 
 	 */
-	private $args = null;
+	private $_args = null;
 
 	/**
      *
      * @var type
      */
-    private $sock = null;
+    private $_socket = null;
 
 	/**
      * Constant to enable debug print-out
      */
-    private $debug = 0;
+    private $_debug = 0;
 	
 	/**
 	 * 
@@ -39,10 +39,10 @@ class DatabaseCommon extends SchemaNotation
         # TODO: controls $args field for validate id
 
 		//
-		$this->args = $args;
+		$this->_args = $args;
 		
 		//
-        $this->sock = new DatabaseSocketPDO();
+        $this->_socket = new DatabaseSocketPDO();
 		
 		//
 		$this->link = false;
@@ -64,10 +64,10 @@ class DatabaseCommon extends SchemaNotation
 		if (!$this->link) 
 		{	
 			//
-			static::log('connect', $this->args);
+			static::log('connect', $this->_args);
 
 			//
-			$this->sock->connect($this->args);
+			$this->_socket->connect($this->_args);
 			
 			//
 			$this->link = true;
@@ -89,7 +89,7 @@ class DatabaseCommon extends SchemaNotation
 		static::log('execute', $sql);
 
 		//
-		return $this->sock->query($sql);
+		return $this->_socket->query($sql);
     }
 
     /**
@@ -103,7 +103,7 @@ class DatabaseCommon extends SchemaNotation
 		$this->connect();
 
 		//
-		$perfix = $this->sock->getPrefix();
+		$perfix = $this->_socket->getPrefix();
 				
 		//
 		return $perfix;
@@ -119,7 +119,7 @@ class DatabaseCommon extends SchemaNotation
 		$this->connect();
 
 		//
-		$id = $this->sock->lastInsertId();
+		$id = $this->_socket->lastInsertId();
 
 		//
 		static::log('getLastId', $id);
@@ -143,7 +143,7 @@ class DatabaseCommon extends SchemaNotation
 		static::log('getRow', $sql);
 
 		//
-		return $this->sock->getRow($sql);
+		return $this->_socket->getRow($sql);
     }
 
     /**
@@ -162,7 +162,7 @@ class DatabaseCommon extends SchemaNotation
 		static::log('getResults', $sql);
 
 		//
-		return $this->sock->getResults($sql);
+		return $this->_socket->getResults($sql);
     }
 
     /**
@@ -179,7 +179,7 @@ class DatabaseCommon extends SchemaNotation
 		static::log('getValue', $sql);
 
 		//
-		return $this->sock->getValue($sql);
+		return $this->_socket->getValue($sql);
     }
 
 	 /**
@@ -196,7 +196,7 @@ class DatabaseCommon extends SchemaNotation
 		static::log('getValues', $sql);
 
 		//
-		return $this->sock->getColumn($sql);
+		return $this->_socket->getColumn($sql);
     }
 
 	/**
@@ -251,7 +251,7 @@ class DatabaseCommon extends SchemaNotation
 	public function setDebug($flag) {
 		
 		//
-		$this->debug = (boolean) $flag;
+		$this->_debug = (boolean) $flag;
 	}
 	
 	/**
@@ -259,7 +259,7 @@ class DatabaseCommon extends SchemaNotation
 	 * 
 	 */
 	protected function getDebug() {
-		return $this->debug; 
+		return $this->_debug;
 	}
 	
 	/**

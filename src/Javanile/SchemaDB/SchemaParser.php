@@ -68,6 +68,9 @@ class SchemaParser
         // look-to type
         switch ($type) {
 
+            //
+			case 'schema': break;
+
             // notation contain a field attributes written in json 
 			case 'json': static::parseSchemaTableFieldJson($field, $notation, $before); break;
 
@@ -106,7 +109,7 @@ class SchemaParser
 
 			//
 			case 'null': static::parseSchemaTableFieldNull($field, $notation, $before); break; 
-			
+
 			//
 			default: trigger_error('Error parse type: '.$field.'('.$type.')');
         }

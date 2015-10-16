@@ -4,14 +4,14 @@
 require_once 'common.php'; 
 
 // drop all database tables
-$db->drop('confirm');
+#$db->drop('confirm');
 
 // Alter schema create or update database tables
 $db->alter(array(
 	
 	// define users table
 	'User' => array(		
-		'name' => '',
+		'name' => 0,
 	),
 ));
 

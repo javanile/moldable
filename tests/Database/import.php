@@ -4,7 +4,7 @@
 require_once 'common.php';
 
 //
-require_once __BASE__.'/vendor/autoload.php';
+use Javanile\SchemaDB;
 
 //
 $db->apply(array(
