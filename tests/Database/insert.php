@@ -7,18 +7,18 @@ require_once 'common.php';
 $db->drop('confirm');
 
 //
-$db->alter('People',array(
+$db->alter('People', array(
     'name'  => '',
     'age'   => 0,
 ));
 
-// import Persons from array-of-array
+// import one People
 $db->insert('People', array(
-    'name' => 'Francesco',
+    'name'   => 'Francesco',
     'ageing' => 10
 ),array(
     'ageing'=>'age',
 ));
 
-// printout table record before delete
+// printout table record
 $db->dump('People');
