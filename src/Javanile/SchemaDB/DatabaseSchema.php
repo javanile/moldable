@@ -76,7 +76,7 @@ class DatabaseSchema extends DatabaseCommon
     public function descTable($table)
     {
         //
-        $sql = "DESC {$table}";
+        $sql = "DESC `{$table}`";
 
         //
         $fields = $this->getResults($sql);

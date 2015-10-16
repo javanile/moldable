@@ -213,9 +213,12 @@ class DatabaseCommon extends SchemaNotation
 			//
 			$table = $this->getPrefix() . $table;			
 		}
-		
+
+        //
+        $escapedTable = str_replace('_', '\\_', $table);
+
 		// sql query to test table exists
-        $sql = "SHOW TABLES LIKE '{$table}'";
+        $sql = "SHOW TABLES LIKE '{$escapedTable}'";
 
         // test if table exists
         $exists = $this->getRow($sql);

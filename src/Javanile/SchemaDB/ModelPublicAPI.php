@@ -396,7 +396,7 @@ class ModelPublicAPI extends ModelProtectedAPI
         $t = static::getTable();
 
         //
-        $q = "DROP TABLE IF EXISTS {$t}";
+        $q = "DROP TABLE IF EXISTS `{$t}`";
 
 		//
 		static::delConfig('update');
