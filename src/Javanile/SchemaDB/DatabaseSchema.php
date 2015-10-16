@@ -408,11 +408,18 @@ class DatabaseSchema extends DatabaseCommon
      *
      * @param type $schema
      */
-    public function alter($schema) {
+    public function alter($schema, $column=null, $notation=null) {
 
         //
+        if (is_string($schema)) {
+            $schema = array(
+                $schema => $column,
+            );
+        }
+        
+        //
         $desc = $this->desc();
-
+        
         //
         foreach($schema as $table => $fields) {
 
@@ -431,7 +438,7 @@ class DatabaseSchema extends DatabaseCommon
 	/**
      * printout database status and info
      */
-    public function dump()
+    public function dumpSchema()
     {
         //
         $debug = $this->getDebug();
@@ -449,10 +456,10 @@ class DatabaseSchema extends DatabaseCommon
         if (!$schema) {
             echo '<tr><th>No database tables</th></tr></table></pre>';
 		}
-        
+
         //
         else {
-		
+
             //
             foreach ($schema as $table => $fields) {
 
@@ -487,7 +494,7 @@ class DatabaseSchema extends DatabaseCommon
             //
             echo '</table></pre>';
         }
-        
+
         //
         $this->setDebug($debug);
     }

@@ -3,10 +3,21 @@
 //
 require_once 'common.php';
 
+//
+$db->drop('confirm');
+
+//
+$db->alter('People',array(
+    'name'  => '',
+    'age'   => 0,
+));
+
 // import Persons from array-of-array
 $db->insert('People', array(
     'name' => 'Francesco',
-    'age' => 10
+    'ageing' => 10
+),array(
+    'ageing'=>'age',
 ));
 
 // printout table record before delete

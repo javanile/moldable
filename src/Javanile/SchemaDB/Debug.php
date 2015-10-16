@@ -20,7 +20,42 @@ class Debug
 		var_dump($var);
 		echo '</pre>';
 	} 
-	
+
+    public static function grid_dump($title, $content) {
+
+        //
+        $a = &$content;
+
+        //
+        $r = key($a);
+
+        //
+        $n = count($a) > 0 ? count((array) $a[$r]) : 1;
+
+        //
+        echo '<pre><table border="1" style="text-align:center"><thead><tr><th colspan="'.$n.'">'.$title.'</th></tr>';
+
+        //
+        echo '<tr>';
+        foreach ($a[$r] as $f=>$v) {
+            echo '<th>'.$f.'</th>';
+        }
+        echo '</tr></thead><tbody>';
+
+        //
+        foreach ($a as $i=>$r) {
+            echo '<tr>';
+            foreach ($r as $f=>$v) {
+                echo '<td>'.$v.'</td>';
+            }
+            echo '</tr>';
+        }
+
+        //
+        echo '</tbody></table></pre>';
+
+
+    }
 	
 	
 }

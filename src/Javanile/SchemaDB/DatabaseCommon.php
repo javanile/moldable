@@ -80,7 +80,7 @@ class DatabaseCommon extends SchemaNotation
      * @param  type $sql
      * @return type
      */
-    public function execute($sql, $values)
+    public function execute($sql, $values=null)
     {
 		//
 		$this->connect();
@@ -266,12 +266,16 @@ class DatabaseCommon extends SchemaNotation
 	 * 
 	 * 
 	 */
-	private function log($method, $args=null) {
+	private function log($method, $arg1=null, $arg2=null) {
 	
 		// debug the queries
         if ($this->getDebug()) {
             echo '<pre style="border:1px solid #9F6000;margin:0 0 1px 0;padding:2px 6px 3px 6px;color:#9F6000;background:#FEEFB3;">';
-			echo '<strong>'.str_pad($method,14,' ',STR_PAD_LEFT).'</strong>'.($args?': '.json_encode($args):'').'</pre>';
+			echo '<strong>'.str_pad($method,12,' ',STR_PAD_LEFT).'</strong>'.($arg1?': #1 -> '.json_encode($arg1):'');
+            if (isset($arg2)) {
+                echo "\n".str_pad('#2 -> ',20,' ',STR_PAD_LEFT).json_encode($arg2);
+            }
+            echo '</pre>';
         }
 	}	
 }

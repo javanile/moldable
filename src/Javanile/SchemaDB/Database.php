@@ -93,10 +93,31 @@ class Database extends DatabaseSchema
     }
 
     /**
+	 *
+	 *
+	 * @param type $fields
+	 * @return type
+	 */
+    public function all($model, $fields=null)
+    {
+        //
+        $table = $this->getPrefix($model);
+
+        //
+        $sql = "SELECT * FROM `{$table}`";
+
+        //
+        $results = $this->getResults($sql);
+
+		//
+        return $results;
+    }
+
+    /**
      *
      * @param type $list
      */
-    public function insert($table, $record, $map=null) {
+    public function insert($model, $values, $map=null) {
 
         // collect field names for sql query
         $fieldsArray = array();
@@ -105,20 +126,23 @@ class Database extends DatabaseSchema
         $tokensArray = array();
 
 		// collect values for sql query
-        $values = array();
+        $valuesArray = array();
 
         //
-        foreach ($record as $field => $value) {
+        foreach ($values as $field => $value) {
             
             //
-            $token = ':'.$field;
+            $field = isset($map[$field]) ? $map[$field] : $field;
+
+            //
+            $token = ':'.$field;  
             
             //
             $fieldsArray[] = $field;
             $tokensArray[] = $token;
             
             //
-            $values[$token] = $value;
+            $valuesArray[$token] = $value;
         }
 
         //
@@ -126,13 +150,13 @@ class Database extends DatabaseSchema
         $tokens = implode(',', $tokensArray);
        
         //
-        $table = $this->getPrefix($table);
+        $table = $this->getPrefix($model);
 
 		//
         $sql = "INSERT INTO `{$table}` ({$fields}) VALUES ({$tokens})";
 
         //
-        $this->execute($sql, $values);
+        $this->execute($sql, $valuesArray);
 
         //
 		return true;
@@ -219,6 +243,30 @@ class Database extends DatabaseSchema
 		// 
 		echo '<pre style="background:#333;color:#fff;padding:2px 6px 3px 6px;border:1px solid #000">Time: '.(microtime()-$this->ts).' Mem: '.memory_get_usage(true).'</pre>';
 	}
+
+    /**
+     *
+     *
+     */
+    public function dump($model=null) {
+
+        //
+        if ($model) {
+          
+            //
+            $all = $this->all($model);
+
+            //
+            Debug::grid_dump($model,$all);
+        }
+
+        //
+        else {
+            $this->dumpSchema();
+        }
+
+    }
+
 }
 
 

@@ -64,10 +64,10 @@ class DatabaseSocketPDO
         //
         if (is_array($values)) {
             foreach($values as $token => $value) {
-                $stmt->bindParam($token, $value);
+                $stmt->bindValue($token, $value);
             }
         }
-
+        
         //
         $stmt->execute();
     }
