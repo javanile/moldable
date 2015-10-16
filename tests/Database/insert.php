@@ -1,35 +1,19 @@
 <?php
 
 //
-error_reporting(E_ALL);
-ini_set('display_errors',true);
+require_once '../common.php';
 
 //
-require_once '../data.php'; 
+require_once __BASE__.'/vendor/autoload.php';
 
 //
-require_once '../../SchemaDB.php';
+use Javanile\SchemaDB;
 
 //
-use SourceForge\SchemaDB\SchemaDB;
-
-//
-use SourceForge\SchemaDB\Storable;
-
-//
-new SchemaDB(array(
-	'host' => $host,
-	'user' => $user,
-	'pass' => $pass,
-	'name' => $name,
-	'pref' => $pref,
-));
-
-//
-class Person extends Storable {
+class Person extends SchemaDB\Storable {
 	
 	//
-	public $id = static::PRIMARY_KEY;
+	public $id = self::PRIMARY_KEY;
 	
 	//
 	public $name = "";
@@ -53,7 +37,10 @@ Person::import(array(
 Person::dump();
 
 // delete Person with 10 years old 
-Person::delete(array('age' => 10));
+$Person = Person::exitsts(array('age' => 10));
 
 // printout table record after delete
 Person::dump();
+
+//
+SchemaDB\Debug::var_dump($Person);

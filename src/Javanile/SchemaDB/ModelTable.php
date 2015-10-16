@@ -97,9 +97,15 @@ class ModelTable extends ModelFields
     {		
 		//
 		$attribute = 'Database';
-		
+
         //
-        return static::hasConfig($attribute) ? static::getConfig($attribute) : Database::getDefault();
+        $database = static::hasConfig($attribute) ? static::getConfig($attribute) : Database::getDefault();
+
+        //
+        // TODO: check if no have database connected $database == null
+
+        //
+        return $database;
     }
 
 	/**

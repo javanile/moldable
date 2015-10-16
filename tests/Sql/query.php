@@ -23,6 +23,6 @@ $db = new SchemaDB\Source(array(
 ));
 
 //
-$db->query("UPDATE {$pref}Person SET name='Ciao' WHERE id=1");
+$db->execute("UPDATE {$pref}Person SET name='Ciao' WHERE id=1");
 
 

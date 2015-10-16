@@ -101,10 +101,13 @@ class Database extends DatabaseCommon
     public function desc()
     {
         //
+        $prefix = strlen($this->getPrefix());
+
+        //
 		$tables = $this->getTables();
 		
         //
-        if (!$tables) { return; }
+        if (!$tables) { return array(); }
       
 		//
 		$desc = array();
@@ -113,7 +116,7 @@ class Database extends DatabaseCommon
         foreach ($tables as $table) {
             
             //
-            $desc[$table] = $this->descTable($table);
+            $desc[substr($table, $prefix)] = $this->descTable($table);
         }
 
         //
@@ -180,7 +183,7 @@ class Database extends DatabaseCommon
 
 		// send all queries to align database
 		foreach ($queries as $sql) {
-			$this->query($sql);
+			$this->execute($sql);
 		}
 			
         // return queries
@@ -207,7 +210,7 @@ class Database extends DatabaseCommon
             foreach ($queries as $sql) {
 
                 // execute each queries
-                $this->query($sql);
+                $this->execute($sql);
             }
         }
 
@@ -223,7 +226,7 @@ class Database extends DatabaseCommon
      * @param  type $parse
      * @return type
      */
-    public function diff($schema,$parse=true)
+    public function diff($schema, $parse=true)
     {
         // prepare
         if ($parse) { 
@@ -239,8 +242,11 @@ class Database extends DatabaseCommon
         // loop throu the schema
         foreach ($schema as $table => &$attributes) {
 
+            //
+            $table = $parse ? $prefix . $table : $table;
+
             // 
-            $sql = $this->diffTable($prefix.$table, $attributes, false);
+            $sql = $this->diffTable($table, $attributes, false);
 
             //
             if (count($sql) > 0) {
@@ -455,6 +461,36 @@ class Database extends DatabaseCommon
     }
 
     /**
+     *
+     * @param type $schema
+     */
+    public function alter($schema) {
+
+        //
+        $desc = $this->desc();
+
+        //
+        Debug::var_dump($desc);
+        
+        //
+        foreach($schema as $table => $fields) {
+
+            //
+            $desc [$table]
+                = isset($desc[$table])
+               && is_array($desc[$table])
+                ? array_merge($desc[$table], $fields)
+                : $fields;
+        }
+        
+        //
+        Debug::var_dump($desc);
+
+        //
+        $this->apply($desc);
+    }
+    
+    /**
      * Retrieve default SchemaDB connection
      *
      * @return type
@@ -508,7 +544,7 @@ class Database extends DatabaseCommon
 			$sql = "DROP TABLE {$table}";
 			
 			//
-			$this->query($sql);			
+			$this->execute($sql);
 		}		
 	}
 	
@@ -517,6 +553,12 @@ class Database extends DatabaseCommon
      */
     public function dump()
     {
+        //
+        $debug = $this->getDebug();
+
+        //
+        $this->setDebug(false);
+
         // describe databse
         $schema = $this->desc();
 
@@ -527,40 +569,47 @@ class Database extends DatabaseCommon
         if (!$schema) {
             echo '<tr><th>No database tables</th></tr></table></pre>';
 		}
-		
-		//
-		foreach ($schema as $table => $fields) {
-
-			//
-			echo '<tr><th colspan="9">'.$table.'</th></tr><tr><td>&nbsp;</td>';
-
-			//
-			$first = key($fields);
-			
-			//
-			foreach (array_keys($fields[$first]) as $attributeName) {
-				echo '<th>'.$attributeName.'</th>';
-			}
-			
-			//
-			echo '</tr>';
-			
-			//
-			foreach ($fields as $field => $attributes) {
-			
-				//
-				echo '<tr><th>'.$field.'</th>';
-				
-				//
-				foreach ($attributes as $value) { echo '<td>'.$value.'</td>'; }
-								
-				//
-				echo '</tr>';
-			}
-		}
-       			
+        
         //
-        echo '</table></pre>';
+        else {
+		
+            //
+            foreach ($schema as $table => $fields) {
+
+                //
+                echo '<tr><th colspan="9">'.$table.'</th></tr><tr><td>&nbsp;</td>';
+
+                //
+                $first = key($fields);
+
+                //
+                foreach (array_keys($fields[$first]) as $attributeName) {
+                    echo '<th>'.$attributeName.'</th>';
+                }
+
+                //
+                echo '</tr>';
+
+                //
+                foreach ($fields as $field => $attributes) {
+
+                    //
+                    echo '<tr><th>'.$field.'</th>';
+
+                    //
+                    foreach ($attributes as $value) { echo '<td>'.$value.'</td>'; }
+
+                    //
+                    echo '</tr>';
+                }
+            }
+
+            //
+            echo '</table></pre>';
+        }
+        
+        //
+        $this->setDebug($debug);
     }
 	
 	/**

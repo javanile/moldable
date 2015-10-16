@@ -110,7 +110,7 @@ class Storable extends ModelPublicAPI
         $q = "UPDATE {$t} SET {$s} WHERE {$k}='{$i}'";
 
         //
-        static::getDatabase()->query($q);
+        static::getDatabase()->execute($q);
 
         //
         if ($k) {
@@ -171,7 +171,7 @@ class Storable extends ModelPublicAPI
         $sql = "INSERT INTO {$table} ({$fields}) VALUES ({$values})";
 
         //
-        static::getDatabase()->query($sql);
+        static::getDatabase()->execute($sql);
 
         //
         if ($key) {

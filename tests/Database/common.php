@@ -17,3 +17,7 @@ $db = new SchemaDB\Database(array(
 	'name' => $name,
 	'pref' => 't1_',
 ));
+
+//
+$db->setDebug(true);
+

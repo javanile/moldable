@@ -80,13 +80,13 @@ class DatabaseCommon extends SchemaNotation
      * @param  type $sql
      * @return type
      */
-    public function query($sql)
+    public function execute($sql)
     {
 		//
 		$this->connect();
 
 		//
-		static::log('query', $sql);
+		static::log('execute', $sql);
 
 		//
 		return $this->sock->query($sql);
@@ -104,10 +104,7 @@ class DatabaseCommon extends SchemaNotation
 
 		//
 		$perfix = $this->sock->getPrefix();
-		
-		//
-		static::log('getPrefix', $perfix);
-		
+				
 		//
 		return $perfix;
     }
@@ -233,16 +230,16 @@ class DatabaseCommon extends SchemaNotation
 	 * @return array
 	 */
 	public function getTables() {
-	
-		//
-        $prefix = $this->getPrefix();
+
+        // escape underscore
+        $prefix = str_replace('_', '\\_', $this->getPrefix());
 
         //
         $sql = "SHOW TABLES LIKE '{$prefix}%'";
 
         //
 		$tables = $this->getValues($sql);
-		
+
 		//
         return $tables; 
 	}

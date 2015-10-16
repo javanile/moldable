@@ -6,6 +6,9 @@ ini_set('display_errors',true);
 if (function_exists('xdebug_disable')) { xdebug_disable(); }
 
 //
+define('__BASE__', dirname(dirname(dirname(dirname(__DIR__)))));
+
+//
 if (!file_exists(__DIR__.'/override.php')) {
 
 	//

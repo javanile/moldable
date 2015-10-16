@@ -220,15 +220,13 @@ class ModelPublicAPI extends ModelProtectedAPI
         $where = count($whereConditions)>0 ? 'WHERE '.implode(' AND ',$whereConditions) : '';
 
         //
-        $s = "SELECT * FROM {$table} {$where} LIMIT 1";
+        $s = "SELECT * FROM `{$table}` {$where} LIMIT 1";
 
         //
         $r = static::getDatabase()->getRow($s);
 
-        //
-        if ($r) {
-            return self::make($r);
-        }
+        //        
+        return $r ? self::make($r) : false;
     }
 
     /**
@@ -341,7 +339,7 @@ class ModelPublicAPI extends ModelProtectedAPI
             $s = "DELETE FROM {$t} {$w}";
 
             // execute query
-            static::getSchemaDB()->query($s);
+            static::getSchemaDB()->execute($s);
         }
 
         //
@@ -357,7 +355,7 @@ class ModelPublicAPI extends ModelProtectedAPI
             $q = "DELETE FROM {$t} WHERE {$k}='{$i}' LIMIT 1";
 
             // execute query
-            static::getDatabase()->query($q);
+            static::getDatabase()->execute($q);
         }
     }
 	
@@ -404,7 +402,7 @@ class ModelPublicAPI extends ModelProtectedAPI
 		static::delConfig('update');
 		
         // execute query
-        static::getDatabase()->query($q);
+        static::getDatabase()->execute($q);
     }
 	
 	/**
