@@ -6,9 +6,9 @@ require_once 'common.php';
 // drop all database tables
 #$db->drop('confirm');
 
-// Apply schema create or update database tables
-$db->apply(array( 
-	
+//
+$schema = array(
+
 	// define users table
 	'User' => array(
 		'userid'	=> $db::PRIMARY_KEY,
@@ -17,14 +17,17 @@ $db->apply(array(
 		'username'	=> '',
 		'tipe'		=> $db::INT_20,
 	),
-	
+
 	// define articles table
 	'Article' => array(
 		'articleid' => $db::PRIMARY_KEY,
 		'title'		=> '',
 		'content'	=> '',
-	),	
-));
+	),
+);
+
+// Apply schema create or update database tables
+$db->apply($schema);
 
 //
 $db->dump();

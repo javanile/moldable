@@ -15,8 +15,8 @@ $db->alter(array(
 	),
 ));
 
-//
+// print-out schema
 $db->dump();
 
-// 
+// print-out debug info
 $db->benchmark();

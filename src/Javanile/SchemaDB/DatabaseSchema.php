@@ -115,8 +115,18 @@ class DatabaseSchema extends DatabaseCommon
      * @param  type $schema
      * @return type
      */
-    public function apply($schema)
+    public function apply($schema, $columns=null, $notation=null)
     {
+        // 
+        if (is_string($schema)) {
+            $schema = array(
+                $schema 
+                    => is_string($columns)
+                     ? array($columns => $notation)
+                     : $columns,
+            );
+        }
+
         // retrive queries
         $queries = $this->diff($schema);
 
@@ -434,7 +444,16 @@ class DatabaseSchema extends DatabaseCommon
         //
         $this->apply($desc);
     }
-        	
+
+    /**
+     *
+     * @param type $schema
+     */
+    public function alterTable($schema, $column=null, $notation=null) {
+    
+        // TODO: da fare
+    }
+
 	/**
      * printout database status and info
      */

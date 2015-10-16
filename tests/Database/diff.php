@@ -1,26 +1,15 @@
 <?php
 
 // title
-echo '<h1>Database desc with var_dump</h1>';
+echo '<h1>Database diff with var_dump</h1>';
 
 // require connection parametrs
-require_once '../common.php'; 
+require_once 'common.php';
 
-// require library
-require_once '../../src/Javanile/SchemaDB/autoload.php';
-
-// retrive main class to enstablish connection
+//
 use Javanile\SchemaDB;
 
-// Connect to MySQL database
-$db = new SchemaDB\Database(array(
-	'host' => $host,
-	'user' => $user,
-	'pass' => $pass,
-	'name' => $name,
-	'pref' => 't100_',
-));
-
+//
 $schema = array(
 	
 	// define users table
@@ -45,9 +34,7 @@ $schema = array(
 $diff = $db->diff($schema);
 
 //
-echo '<pre style="padding:2px;background:#eee;border:1px solid #ccc;">';
-var_dump($diff);
-echo '</pre>';
+SchemaDB\Debug::var_dump($diff);
 
 // 
 $db->benchmark();

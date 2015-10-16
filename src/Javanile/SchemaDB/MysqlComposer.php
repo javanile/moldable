@@ -83,7 +83,7 @@ class MysqlComposer
 			$column = static::columnDefinition($attributes, false);
 			
             //
-			$columnsArray[] = "{$field} {$column}";
+			$columnsArray[] = "`{$field}` {$column}";
         }
 
         // implode
