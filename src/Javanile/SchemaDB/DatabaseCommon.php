@@ -11,7 +11,7 @@ namespace Javanile\SchemaDB;
  *
  *
  */
-class DatabaseCommon extends SchemaNotation
+class DatabaseCommon extends Notations
 {
 	/**
 	 * 

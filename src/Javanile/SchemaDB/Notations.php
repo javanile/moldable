@@ -13,18 +13,26 @@ namespace Javanile\SchemaDB;
  *
  *
  */
-class SchemaNotation 
+class Notations
 {
     /**
 	 * schemadb mysql constants for rapid fields creation
 	 */
     const PRIMARY_KEY			= '<<#primary_key>>';
-    const PRIMARY_KEY_INT_20	= '<<#primary_key>>'; 
+
+    /**
+     *
+     */
+    const PRIMARY_KEY_INT_20	= '<<#primary_key>>';
     
 	/**
 	 * 
 	 */
 	const VARCHAR		= '<<{"Type":"varchar(255)"}>>';
+    
+    /**
+     * 
+     */
     const VARCHAR_32	= '<<{"Type":"varchar(32)"}>>';
     const VARCHAR_64	= '<<{"Type":"varchar(64)"}>>';
     const VARCHAR_128	= '<<{"Type":"varchar(128)"}>>';
@@ -45,16 +53,40 @@ class SchemaNotation
 	/**
 	 * 
 	 */
-	const DECIMAL	= '<<{"Type":"decimal(10,2)"}>>';
-    const NUMERIC	= '<<{"Type":"decimal(10,2)"}>>';
-    const REAL		= '<<{"Type":"real"}>>';
-    const FLOAT		= '<<{"Type":"float"}>>';
-    const DOUBLE	= '<<{"Type":"double"}>>';
+	const DECIMAL = '<<{"Type":"decimal(10,2)"}>>';
+    
+    /**
+     * 
+     */
+    const NUMERIC = '<<{"Type":"decimal(10,2)"}>>';
+
+    /**
+     *
+     */
+    const REAL = '<<{"Type":"real"}>>';
+
+    /**
+     *
+     */
+    const FLOAT = '<<{"Type":"float"}>>';
+    
+    /**
+     * 
+     */
+    const DOUBLE = '<<{"Type":"double"}>>';
     	
 	/**
 	 * 
 	 */
-	const TIME				= '00:00:00';
-    const DATE				= '0000-00-00';
-    const DATETIME			= '0000-00-00 00:00:00';
+	const TIME = '00:00:00';
+    
+    /**
+     * 
+     */
+    const DATE = '0000-00-00';
+    
+    /**
+     * 
+     */
+    const DATETIME = '0000-00-00 00:00:00';
 }
