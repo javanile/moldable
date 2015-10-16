@@ -1,19 +1,23 @@
 <?php
 
 //
-require_once '../../src/SourceForge/SchemaDB/autoload.php';
+require_once '../common.php';
 
 //
-use SourceForge\SchemaDB;
+require_once __BASE__.'/vendor/autoload.php';
+
+//
+use Javanile\SchemaDB;
 
 //
 $notations = array(	
 		
 	// String 
-	"",
+	null,
+    "",
 	"Hello World!",
-	SchemaDB\Table::VARCHAR,
-	SchemaDB\Table::TEXT,	 
+	SchemaDB\Notations::VARCHAR,
+	SchemaDB\Notations::TEXT,
 );
 
 ?>
@@ -24,9 +28,9 @@ $notations = array(
 	<?php foreach($notations as $notation) { ?>
 		<tr>
 			<td><pre><?php var_dump($notation); ?></pre></td>
-			<td align="center"><?=SchemaDB\Parser::getNotaionValue($notation)?></td>
-			<td align="center"><strong><?=SchemaDB\Parser::getNotationType($notation)?></strong></td>
-			<td><pre><?=var_dump(SchemaDB\Parser::parseSchemaTableField(null,$notation,null))?></pre></td>
+			<td align="center"><?=SchemaDB\SchemaParser::getNotaionValue($notation)?></td>
+			<td align="center"><strong><?=SchemaDB\SchemaParser::getNotationType($notation)?></strong></td>
+			<td><pre><?=var_dump(SchemaDB\SchemaParser::parseSchemaTableField(null,$notation,null))?></pre></td>
 		</tr>
 	<?php } ?>
 </table>

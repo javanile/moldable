@@ -184,17 +184,20 @@ class SchemaParser
 	 */
 	private static function parseSchemaTableFieldString($field, &$notation, $before) {
 		
+        //
+        $default = (string) $notation;
+
+        //
+        $notation = static::parseSchemaTableFieldDefault($field, $before);
+
 		//
-		$notation = array(
-			'Field'		=> $field,
-			'Before'	=> $before,
-			'Type'		=> 'varchar(255)',
-			'Key'		=> '',
-            'Default'	=> (string) $notation,
-            'Extra'		=> '',
-            'First'		=> !$before,
-			'Null'		=> 'NO',
-		);		
+		$notation['Type'] = 'varchar(255)';
+
+        //
+        $notation['Default'] = $default;
+        
+        //
+        $notation['Null'] = 'NO';
 	}
 	
 	/**
@@ -332,36 +335,41 @@ class SchemaParser
 	 * 
 	 */
 	private static function parseSchemaTableFieldNull($field, &$notation, $before) {
-	
+        
 		//
-		$notation = array(
-			'Field'		=> $field,
-			'Before'	=> $before,
-			'Type'		=> 'varchar(255)',
-			'Key'		=> '',
-            'Default'	=> '',
-            'Extra'		=> '',
-            'First'		=> !$before,
-			'Null'		=> 'YES',
-		);		
+		$notation = static::parseSchemaTableFieldDefault($field, $before);
+
+        //
+        $notation['Type'] = 'varchar(255)';
 	}
 	
 	/**
 	 * 
 	 */
 	private static function parseSchemaTableFieldDefault($field, $before) {
-		
-		//
-		return array(
-			'Field'		=> $field,
-			'First'		=> !$before,
-			'Before'	=> $before,
+
+        //
+        $notation = array(			
 			'Null'		=> 'YES',
 			'Default'	=> '',
 			'Key'		=> '',
 			'Type'		=> '',
 			'Extra'		=> '',
-		);		
+		);
+
+        //
+        if (!is_null($field)) {
+            $notation['Field'] = $field;
+        }
+
+        //
+        if (!is_null($before)) {
+            $notation['First'] = !$before;
+			$notation['Before']	= $before;
+        }
+
+		//
+		return $notation;
 	}
 	
 	
