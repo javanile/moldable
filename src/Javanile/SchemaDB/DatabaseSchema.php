@@ -184,7 +184,7 @@ class DatabaseSchema extends DatabaseCommon
     {
         // prepare
         if ($parse) { 
-			SchemaParser::parseSchemaDB($schema);
+			SchemaParser::parse($schema);
 		}
 
         // get prefix string

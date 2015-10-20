@@ -12,17 +12,10 @@ use Javanile\SchemaDB;
 //
 $notations = array(	
 		
-	// String 
-	null,
-	
-	//
-	true,
-	
-	//
-	false,
-	
-	//
-	SchemaDB\Notations::PRIMARY_KEY,
+	// Date & Time
+	0.,
+	.0,
+	0.0,
 );
 
 ?>
@@ -43,9 +36,9 @@ $notations = array(
                     <?=SchemaDB\SchemaParser::getNotationType($notation)?>
                 </strong>
             </td>
-            <td>
+			<td>
                 <pre>
-                    <?=var_dump(SchemaDB\SchemaParser::getNotationAttributes($notation))?>
+                    <?php var_dump(SchemaDB\SchemaParser::getNotationAttributes($notation))?>
                 </pre>
             </td>
 		</tr>

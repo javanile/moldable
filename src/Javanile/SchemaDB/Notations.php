@@ -68,18 +68,23 @@ class Notations
     /**
      *
      */
-    const FLOAT = '<<{"Type":"float"}>>';
+    const FLOAT = '<<#float>>';
     
     /**
      * 
      */
-    const DOUBLE = '<<{"Type":"double"}>>';
+    const DOUBLE = '<<#double>>';
     	
 	/**
 	 * 
 	 */
-	const TIME = '00:00:00';
+	const TIMESTAMP = '<<#timestamp>>';
     
+    /**
+	 *
+	 */
+	const TIME = '00:00:00';
+
     /**
      * 
      */

@@ -147,15 +147,14 @@ class DatabaseRecord extends DatabaseModel
      *
      * @param type $list
      */
-    public function import($table, $list, $map) {
+    public function import($model, $records, $map=null) {
 
         //
-        foreach($list as $record) {
+        foreach($records as $record) {
 
             //
-            $this->insert($table, $record);
+            $this->insert($model, $record);
         }
-
     }
 
 

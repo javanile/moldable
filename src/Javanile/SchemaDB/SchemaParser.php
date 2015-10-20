@@ -1,9 +1,9 @@
 <?php
 
-/*
+/**
  * 
  * 
-\*/
+ */
 namespace Javanile\SchemaDB;
 
 /**
@@ -20,13 +20,13 @@ class SchemaParser
 	 * @param type $schema
 	 * @return type
 	 */
-    public static function parseSchemaDB(&$schema)
+    public static function parse(&$schema)
     {		
         // loop throh tables on the schema
         foreach($schema as &$table) {
 
             // parse each table
-            static::parseSchemaTable($table);
+            static::parseTable($table);
         }
     }
 
@@ -36,16 +36,16 @@ class SchemaParser
 	 * @param type $schema
 	 * @return type
 	 */
-    public static function parseSchemaTable(&$table)
+    public static function parseTable(&$table)
     {        
         // for first field no have before 
-        $before = null;
+        $before = false;
 
         // loop throuh fields on table
         foreach ($table as $field => &$notation) {
 
             // parse notation for this field
-            static::parseSchemaTableField($field, $notation, $before);
+            $notation = static::getNotationAttributes($notation, $field, $before);
 
             // update before for next
             $before = $field;
@@ -60,7 +60,7 @@ class SchemaParser
      * @param  type   $before
      * @return string
      */ 
-    public static function parseSchemaTableField($field, &$notation, $before=null)
+    public static function getNotationAttributes($notation, $field=null, $before=null)
     {        		
 		// get notation type 
         $type = static::getNotationType($notation);
@@ -69,183 +69,228 @@ class SchemaParser
         switch ($type) {
 
             //
-			case 'schema': break;
+            case 'schema': return $notation;
 
             // notation contain a field attributes written in json 
-			case 'json': static::parseSchemaTableFieldJson($field, $notation, $before); break;
+            case 'json': return static::getNotationAttributesJson($notation, $field, $before);
 
 			// notation contain a date format string
-			case 'date': static::parseSchemaTableFieldDate($field, $notation, $before); break;
+            case 'date': return static::getNotationAttributesDate($notation, $field, $before);
 				
 			// 	
-			case 'datetime': static::parseSchemaTableFieldDatetime($field, $notation, $before); break;
+            case 'datetime': return static::getNotationAttributesDatetime($notation, $field, $before);
             
 			// 	
-			case 'timestamp': static::parseSchemaTableFieldTimestamp($field, $notation, $before); break;
+			case 'timestamp': return static::getNotationAttributesTimestamp($notation, $field, $before);
             	  	
 			// 
-			case 'primary_key': static::parseSchemaTableFieldPrimaryKey($field, $notation, $before); break;
+			case 'primary_key': return static::getNotationAttributesPrimaryKey($notation, $field, $before);
                
 			//
-			case 'string': static::parseSchemaTableFieldString($field, $notation, $before); break;
+			case 'string': return static::getNotationAttributesString($notation, $field, $before);
                
             //
-			case 'boolean': static::parseSchemaTableFieldBoolean($field, $notation, $before); break;                
+			case 'boolean': return static::getNotationAttributesBoolean($notation, $field, $before);
 
 			//
-			case 'integer': static::parseSchemaTableFieldInteger($field, $notation, $before); break;   
+			case 'integer': return static::getNotationAttributesInteger($notation, $field, $before);
                 
 			//
-			case 'float': static::parseSchemaTableFieldFloat($field, $notation, $before); break;   
-                
-			//
-			case 'enum': static::parseSchemaTableFieldEnum($field, $notation, $before); break;                   
+			case 'float': return static::getNotationAttributesFloat($notation, $field, $before);
+            
+            //
+			case 'double': return static::getNotationAttributesDouble($notation, $field, $before);
 
 			//
-			case 'class': static::parseSchemaTableFieldClass($field, $notation, $before); break;                   
+			case 'enum': return static::getNotationAttributesEnum($notation, $field, $before);
 
 			//
-			case 'vector': static::parseSchemaTableFieldVector($field, $notation, $before); break;                   
+			case 'class': return static::getNotationAttributesClass($notation, $field, $before);
 
 			//
-			case 'null': static::parseSchemaTableFieldNull($field, $notation, $before); break; 
+			case 'vector': return static::getNotationAttributesVector($notation, $field, $before);
 
 			//
-			default: trigger_error('Error parse type: '.$field.'('.$type.')');
+			case 'null': return static::getNotationAttributesNull($notation, $field, $before);
+
+			//
+			default: trigger_error('Error parse type: '.$field.' ('.$type.')');
         }
-		
-		//
-		return $notation;
     }
 
 	/**
 	 * 
 	 * 
 	 */
-	private static function parseSchemaTableFieldJson($field, &$notation, $before) {
+	private static function getNotationAttributesJson($notation, $field, $before) {
 
 		// decode json object into notation
 		$json = json_decode(trim($notation,'<>'), true);
 
 		// set with default attributes
-		$notation = static::parseSchemaTableFieldDefault($field, $before);
+		$attributes = static::getNotationAttributesDefault($field, $before);
 		
 		// override default with json passed
 		foreach ($json as $key => $value) {
-			$notation[$key] = $value;
+			$attributes[$key] = $value;
 		}
+
+        //
+        return $attributes;
 	}
     
 	/**
 	 * 
 	 */
-	private static function parseSchemaTableFieldPrimaryKey($field, &$notation, $before) {
+	private static function
+    getNotationAttributesPrimaryKey($notation, $field, $before) {
 	
 		//
-		$notation = array(
-			'Field'		=> $field,
-			'Before'	=> $before,
-			'First'		=> !$before,
-			'Type'		=> 'int(11)',
-			'Default'	=> '',
-			'Null'		=> 'NO',
-			'Key'		=> 'PRI',
-			'Extra'		=> 'auto_increment',
-		);		
+		$attributes = static::getNotationAttributesDefault($field, $before);
+		
+        //
+        $attributes['Type']	= 'int(11)';
+        			
+        //
+        $attributes['Key'] = 'PRI';
+
+        //
+        $attributes['Null'] = 'NO';
+
+        //
+        $attributes['Default'] = '';
+
+        //
+		$attributes['Extra'] = 'auto_increment';
+
+        //
+        return $attributes;
 	}
 	
 	/**
 	 * 
 	 */
-	private static function parseSchemaTableFieldDate($field, &$notation, $before) {
+	private static function getNotationAttributesDate($notation, $field, $before) {
 		
 		//
-		$notation = static::parseSchemaTableFieldDefault($field, $before);
+		$attributes = static::getNotationAttributesDefault($field, $before);
 					
 		//
-		$notation['Type'] = 'datetime';
+		$attributes['Type'] = 'date';
+
+        //
+        $attributes['Default'] = $notation;
+
+        //
+        return $attributes;
 	}
-	
 	
 	/**
 	 * 
 	 */
-	private static function parseSchemaTableFieldDatetime($field, &$notation, $before) {
+	private static function getNotationAttributesDatetime($notation, $field, $before) {
 		
 		//
-		$notation = static::parseSchemaTableFieldDefault($field, $before);
+		$attributes = static::getNotationAttributesDefault($field, $before);
 					
 		//
-		$notation['Type'] = 'datetime';
+		$attributes['Type'] = 'datetime';
+
+        //
+        $attributes['Default'] = $notation;
+
+        //
+        return $attributes;
 	}
-	
+
+    /**
+	 *
+	 */
+	private static function getNotationAttributesTimestamp($notation, $field, $before) {
+
+		//
+		$attributes = static::getNotationAttributesDefault($field, $before);
+
+		//
+		$attributes['Type'] = 'timestamp';
+
+        //
+        $attributes['Null'] = 'NO';
+
+        //
+        $attributes['Default'] = 'CURRENT_TIMESTAMP';
+
+        //
+        return $attributes;
+	}
+
 	/**
 	 * 
 	 */
-	private static function parseSchemaTableFieldString($field, &$notation, $before) {
+	private static function getNotationAttributesString($notation, $field, $before) {
 		
         //
-        $default = (string) $notation;
-
-        //
-        $notation = static::parseSchemaTableFieldDefault($field, $before);
+        $attributes = static::getNotationAttributesDefault($field, $before);
 
 		//
-		$notation['Type'] = 'varchar(255)';
+		$attributes['Type'] = 'varchar(255)';
 
         //
-        $notation['Default'] = $default;
+        $attributes['Default'] = $notation;
         
         //
-        $notation['Null'] = 'NO';
+        $attributes['Null'] = 'NO';
+
+        //
+        return $attributes;
 	}
 	
 	/**
 	 * 
 	 */
-	private static function parseSchemaTableFieldBoolean($field, &$notation, $before) {
-	
-		//
-		$notation = array();
+	private static function getNotationAttributesBoolean($notation, $field, $before) {
+
+        //
+        $attributes = static::getNotationAttributesDefault($field, $before);
 		
 		//
-		$notation['Field'] = $field;
+		$attributes['Type'] = 'tinyint(1)';
 		
 		//
-		$notation['Before'] = $before;
-		
-		//
-		$notation['Type'] = 'tinyint(1)';
-		
-		//
-		$notation['Default'] = (int) $notation;
+		$attributes['Default'] = (int) $notation;
           
 		//
-		$notation['Null'] = 'NO';                
+		$attributes['Null'] = 'NO';
+
+        //
+        return $attributes;
 	}
 	
 	/**
 	 * 
 	 */
-	private static function parseSchemaTableFieldInteger($field, &$notation, $before) {
+	private static function getNotationAttributesInteger($notation, $field, $before) {
+
+        //
+        $attributes = static::getNotationAttributesDefault($field, $before);
 
 		//
-		$notation = array(
-			'Field'		=> $field,
-			'Before'	=> $before,
-			'First'		=> !$before,
-			'Type'		=> 'int(11)',
-			'Key'		=> '',
-			'Default'	=> (int) $notation,
-			'Null'		=> 'NO',
-			'Extra'		=> '',
-		);
+		$attributes['Type']	= 'int(11)';
+        
+        //
+        $attributes['Default']	= (int) $notation;
+
+        //
+        $attributes['Null'] = 'NO';
+			        
+        //
+        return $attributes;
 	}
 	
 	/**
 	 * 
 	 */
-	private static function parseSchemaTableFieldClass($field, &$notation, $before) {
+	private static function getNotationAttributesClass($notation, $field, $before) {
 
 		//
 		$notation = array(
@@ -265,7 +310,7 @@ class SchemaParser
 	/**
 	 * 
 	 */
-	private static function parseSchemaTableFieldVector($field, &$notation, $before) {
+	private static function getNotationAttributesVector($notation, $field, $before) {
 
 		//
 		$notation = array(
@@ -285,31 +330,55 @@ class SchemaParser
 	/**
 	 * 
 	 */
-	private static function parseSchemaTableFieldFloat($field, &$notation, $before)
-	{	
-		//
-		$notation = array(
-			'Field'		=> $field,
-			'Before'	=> $before,
-			'First'		=> !$before,
-			'Type'		=> 'float(12,2)',
-			'Default'	=> (float) $notation,
-			'Null'		=> 'NO',
-			'Key'		=> '',
-			'Extra'		=> '',
-		);			
+	private static function getNotationAttributesFloat($notation, $field, $before)
+	{
+        //
+        $attributes = static::getNotationAttributesDefault($field, $before);
+
+        //
+        $attributes['Null']	= 'NO';
+        
+        //
+        $attributes['Type']	= 'float(12,2)';
+
+        //
+        $attributes['Default']	= (float) $notation;
+
+        //
+        return $attributes;
 	}
-	
+
+    /**
+	 *
+	 */
+	private static function getNotationAttributesDouble($notation, $field, $before)
+	{
+        //
+        $attributes = static::getNotationAttributesDefault($field, $before);
+
+        //
+        $attributes['Null']	= 'NO';
+
+        //
+        $attributes['Type']	= 'double(10,4)';
+
+        //
+        $attributes['Default']	= (double) $notation;
+
+        //
+        return $attributes;
+	}
+
 	/**
 	 * 
 	 */
-	private static function parseSchemaTableFieldEnum($field, &$notation, $before) {
+	private static function getNotationAttributesEnum($notation, $field, $before) {
 					
 		//
 		$enum = $notation;
 		
 		//
-		$notation = static::parseSchemaTableFieldDefault($field, $before);
+		$notation = static::getNotationAttributesDefault($field, $before);
 				
 		//
 		$notation['Default'] = $enum[0];
@@ -334,44 +403,49 @@ class SchemaParser
 	/**
 	 * 
 	 */
-	private static function parseSchemaTableFieldNull($field, &$notation, $before) {
+	private static function getNotationAttributesNull($notation, $field, $before) {
         
 		//
-		$notation = static::parseSchemaTableFieldDefault($field, $before);
+		$attributes = static::getNotationAttributesDefault($field, $before);
 
         //
-        $notation['Type'] = 'varchar(255)';
+        $attributes['Type'] = 'varchar(255)';
+
+        //
+        $attributes['Default'] = $notation;
+
+        //
+        return $attributes;
 	}
 	
 	/**
 	 * 
 	 */
-	private static function parseSchemaTableFieldDefault($field, $before) {
+	private static function getNotationAttributesDefault($field, $before) {
 
         //
-        $notation = array(			
-			'Null'		=> 'YES',
-			'Default'	=> '',
-			'Key'		=> '',
-			'Type'		=> '',
-			'Extra'		=> '',
+        $attributes = array(
+			'Key' => '',
+			'Type' => '',
+			'Null' => 'YES',
+			'Extra' => '',
+			'Default' => 'NO',
 		);
 
         //
         if (!is_null($field)) {
-            $notation['Field'] = $field;
+            $attributes['Field'] = $field;
         }
 
         //
         if (!is_null($before)) {
-            $notation['First'] = !$before;
-			$notation['Before']	= $before;
+            $attributes['First'] = !$before;
+			$attributes['Before']	= $before;
         }
 
 		//
-		return $notation;
+		return $attributes;
 	}
-	
 	
     /**
 	 * 
@@ -478,7 +552,7 @@ class SchemaParser
 	 * @param type $notation
 	 * @return type
 	 */
-    public static function getNotaionValue($notation)
+    public static function getNotationValue($notation)
     {
         //
         $type = static::getNotationType($notation);
@@ -502,6 +576,9 @@ class SchemaParser
 			case 'float': return (float) $notation;
 
             //
+			case 'double': return (double) $notation;
+  
+            //
 			case 'class': return null;
 
 			//
@@ -514,10 +591,16 @@ class SchemaParser
 			case 'enum': return isset($notation[0]) && !is_null($notation[0]) ? $notation[0] : null;
 
             //
+			case 'time': return static::parseTime($notation);
+
+            //
 			case 'date': return static::parseDate($notation);
 
             //
 			case 'datetime': return static::parseDatetime($notation);
+
+            //
+			case 'timestamp': return null;
 
             //
 			case 'schema': return null;

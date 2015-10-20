@@ -13,7 +13,7 @@ namespace Javanile\SchemaDB;
 class MysqlComposer
 {
     //
-    private $defaults = array(
+    private static $defaults = array(
         'Attributes' => array(
             'Type' => 'int(11)',
         ),
@@ -24,24 +24,34 @@ class MysqlComposer
     {
 		//
 		$a = &$attributes;
-		
+
+        //
+		$Key = isset($a['Key']) && $a['Key'] == 'PRI' ? 'PRIMARY KEY' : '';
+
         //
         $Type = isset($a['Type']) ? strtolower($a['Type']) : static::$defaults['Attributes']['Type'];
         
 		//
-		$Null = isset($a['Null']) && ($a['Null'] == "NO" || !$a['Null']) ? 'NOT NULL' : 'NULL';
-        
-		//
-		$Default = isset($a['Default']) && $a['Default'] ? "DEFAULT '$a[Default]'" : '';
-        
-		//
-		$Key = isset($a['Key']) && $a['Key'] == 'PRI' ? 'PRIMARY KEY' : '';
+		$Null = isset($a['Null']) && ($a['Null'] == 'NO' || !$a['Null']) ? 'NOT NULL' : 'NULL';
 
 		//
 		$Extra = isset($a['Extra']) ? $a['Extra'] : '';
-        
+
         //
-		$sql = "{$Type} {$Null} {$Default} {$Key} {$Extra}";
+        if (isset($a['Default']) && (!$a['Key'])) {
+            $Default = 'DEFAULT '.
+                ( $a['Default'] != 'CURRENT_TIMESTAMP' 
+                ? "'{$a['Default']}'" 
+                : $a['Default'] ); 
+        }
+
+        //
+        else {
+            $Default = '';
+        }
+
+        //
+		$sql = trim("{$Type} {$Null} {$Default} {$Key} {$Extra}");
 
         //
         if ($order) {

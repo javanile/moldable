@@ -20,7 +20,7 @@ class Storable extends ModelPublicAPI
 	 * 
 	 */
 	public function __construct($values=null) {
-		
+
 		// call anchesto constr
 		parent::__construct();
 						
@@ -150,7 +150,9 @@ class Storable extends ModelPublicAPI
         foreach ($schema as $field => &$column) {
 
             //
-            if ($field == $key && !$force) { continue; }
+            if (($field == $key || is_null($this->{$field})) && !$force) {
+                continue;
+            }
 
             // get current value of attribute of object
             $value = static::insertRelationBefore($this->{$field}, $column);

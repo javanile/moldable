@@ -9,6 +9,9 @@ if (function_exists('xdebug_disable')) { xdebug_disable(); }
 define('__BASE__', dirname(dirname(dirname(dirname(__DIR__)))));
 
 //
+echo '<style>pre{padding:0;margin:0;}</style>';
+
+//
 if (!file_exists(__DIR__.'/override.php')) {
 
 	//

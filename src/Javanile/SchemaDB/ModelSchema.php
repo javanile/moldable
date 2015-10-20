@@ -1,13 +1,11 @@
 <?php
 
-
-
-/*
+/**
  * 
  * 
  * 
  * 
-\*/
+ */
 namespace Javanile\SchemaDB;
 
 /**
@@ -46,7 +44,7 @@ class ModelSchema extends ModelClass
 		}
 	
 		//			
-		SchemaParser::parseSchemaTable($schema);		
+		SchemaParser::parseTable($schema);		
 			
 		//
 		static::setConfig($attribute, $schema);
