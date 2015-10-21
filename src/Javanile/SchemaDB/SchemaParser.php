@@ -372,32 +372,33 @@ class SchemaParser
 	/**
 	 * 
 	 */
-	private static function getNotationAttributesEnum($notation, $field, $before) {
-					
-		//
-		$enum = $notation;
-		
-		//
-		$notation = static::getNotationAttributesDefault($field, $before);
+	private static function
+    getNotationAttributesEnum($notation, $field, $before)
+    {
+        //
+		$attributes = static::getNotationAttributesDefault($field, $before);
 				
 		//
-		$notation['Default'] = $enum[0];
+		$attributes['Default'] = $notation[0];
         
 		//
-		$notation['Null'] = in_array(null, $enum) ? 'YES' : 'NO';
+		$attributes['Null'] = in_array(null, $notation) ? 'YES' : 'NO';
         
 		//
 		$t = array();
         
 		//
-		foreach ($enum as $i) {
+		foreach ($notation as $i) {
 			if ($i !== null) {
 				$t[] = "'{$i}'";
 			}
 		}
 
 		//
-		$notation['Type'] = 'enum('.implode(',',$t).')';		
+		$attributes['Type'] = 'enum('.implode(',',$t).')';
+
+        //
+        return $attributes;
 	}
 	
 	/**
