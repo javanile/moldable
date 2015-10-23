@@ -144,20 +144,24 @@ class ModelTable extends ModelFields
             return $record ? static::make($record): null;
 		}
 
-        //
-        //else if
-		
-        // requested a single value
-        else if ($value) {
-		
-	    }
+        // requested a single record
+		else if ($array && !$value && $cast) {
 
-        //
-        else {
-            $result = static::getDatabase()->getValue($sql);
-        }
-			
-		return $result;
+            //
+            $records = static::getDatabase()->getResults($sql, $values);
+
+            //
+            if ($records) {
+                foreach($records as &$record) {
+                    $record = static::make($record);
+                }
+            }
+            
+            //
+            return $records;
+		}
+
+
     }
 	
 	

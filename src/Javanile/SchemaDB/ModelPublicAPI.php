@@ -174,7 +174,7 @@ class ModelPublicAPI extends ModelProtectedAPI
 				
 		//
 		try {
-			$results = static::fetch($sql, null, true);
+			$results = static::fetch($sql, null, true, is_string($fields), is_null($fields));
 		} 
 		
 		//
@@ -494,8 +494,16 @@ class ModelPublicAPI extends ModelProtectedAPI
         //
         $t = static::getTable();
 
+        var_Dump($a);
+
         //
-        $r = key($a);
+        if (!$a) {
+            echo '<pre><table><tr><th>'.$t.'</th></tr><tr><td>no record</td></table>';
+            return;
+        }
+
+        //
+        $r = key((array)$a);
 
         //
         $n = count($a) > 0 ? count((array) $a[$r]) : 1;
