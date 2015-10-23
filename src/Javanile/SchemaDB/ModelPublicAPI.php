@@ -147,6 +147,14 @@ class ModelPublicAPI extends ModelProtectedAPI
         static::applyTable();
 
         //
+        if (isset($fields['limit'])) {
+            $limit = 'LIMIT '.$fields['limit'];
+            unset($fields['limit']);
+        } else {
+            $limit = '';
+        }
+
+        //
         $table = static::getTable();
 
 		//
@@ -159,11 +167,14 @@ class ModelPublicAPI extends ModelProtectedAPI
 		$selectFields = MysqlComposer::selectFields($fields, $class, $join);
 		
         //
-        $sql = "SELECT {$selectFields} FROM {$table} AS {$class} {$join}";
+        $sql = "SELECT {$selectFields} "
+             .   "FROM {$table} AS {$class} "
+             .        "{$join} "
+             .        "{$limit} ";
 				
 		//
 		try {
-			$results = static::fetch($sql, true);
+			$results = static::fetch($sql, null, true);
 		} 
 		
 		//

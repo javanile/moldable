@@ -127,22 +127,30 @@ class ModelTable extends ModelFields
      *
      * @param type $array
      */
-    protected static function fetch($sql, $values, $array=false, $value=false, $cast=true)
-    {	
-		//
-		if ($array) {
-			$result = static::getDatabase()->getResults($sql);			
+    protected static function fetch(
+        $sql,
+        $values=null,
+        $array=false,
+        $value=false,
+        $cast=true
+    ) {
+		// requested a single record
+		if (!$array && !$value && $cast) {
+
+            //
+            $record = static::getDatabase()->getRow($sql, $values);
+
+            //
+            return $record ? static::make($record): null;
 		}
-		
+
         //
-        else if (!$value) {
+        //else if
 		
-			//
-			$row = static::getDatabase()->getRow($sql, $values);
-			
-			//
-			return $cast ? static::make($row) : (object) $row; 
-        }
+        // requested a single value
+        else if ($value) {
+		
+	    }
 
         //
         else {

@@ -54,7 +54,7 @@ class ModelProtectedAPI extends ModelRecord {
              . "  LIMIT 1";
 
         // fetch data on database and return it
-        return static::fetch($sql, false, is_string($fields), is_null($fields));
+        return static::fetch($sql, $values, false, is_string($fields), is_null($fields));
     }
 
     /**
@@ -90,7 +90,7 @@ class ModelProtectedAPI extends ModelRecord {
              . "  LIMIT 1";
 
         // fetch data on database and return it
-        return static::fetch($sql, false, is_string($fields));
+        return static::fetch($sql, $values, false, is_string($fields));
     }
 
     /**
@@ -149,7 +149,7 @@ class ModelProtectedAPI extends ModelRecord {
         $sql = "SELECT {$selectFields} "
              .   "FROM {$table} AS {$alias} {$join} "
              .  "WHERE {$where} "
-             .  "LIMIT (1)";
+             .  "LIMIT 1";
 
         // fetch data on database and return it
         return static::fetch($sql, $values, false, is_string($fields), is_null($fields));

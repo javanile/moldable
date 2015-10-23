@@ -70,7 +70,7 @@ class DatabaseSocketPDO
 	public function getRow($sql, $values=null) {
 		
         //
-        $this->execute($sql, $values);
+        $stmt = $this->execute($sql, $values);
 		
 		//
 		return $stmt->fetch(PDO::FETCH_ASSOC);
