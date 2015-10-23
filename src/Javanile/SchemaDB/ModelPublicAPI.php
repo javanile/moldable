@@ -493,9 +493,7 @@ class ModelPublicAPI extends ModelProtectedAPI
 
         //
         $t = static::getTable();
-
-        var_Dump($a);
-
+       
         //
         if (!$a) {
             echo '<pre><table><tr><th>'.$t.'</th></tr><tr><td>no record</td></table>';
