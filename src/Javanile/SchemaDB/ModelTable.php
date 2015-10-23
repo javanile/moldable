@@ -127,7 +127,7 @@ class ModelTable extends ModelFields
      *
      * @param type $array
      */
-    protected static function fetch($sql, $array=false, $value=false, $cast=true)
+    protected static function fetch($sql, $values, $array=false, $value=false, $cast=true)
     {	
 		//
 		if ($array) {
@@ -138,7 +138,7 @@ class ModelTable extends ModelFields
         else if (!$value) {
 		
 			//
-			$row = static::getDatabase()->getRow($sql);
+			$row = static::getDatabase()->getRow($sql, $values);
 			
 			//
 			return $cast ? static::make($row) : (object) $row; 

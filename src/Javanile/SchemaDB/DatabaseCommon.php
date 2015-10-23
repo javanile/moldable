@@ -134,16 +134,16 @@ class DatabaseCommon extends Notations
      * @param  type $sql
      * @return type
      */
-    public function getRow($sql)
+    public function getRow($sql, $values=null)
     {
 		//
 		$this->connect();
 		
 		//
-		static::log('getRow', $sql);
+		static::log('getRow', $sql, $values);
 
 		//
-		return $this->_socket->getRow($sql);
+		return $this->_socket->getRow($sql, $values);
     }
 
     /**

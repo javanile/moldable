@@ -32,7 +32,8 @@ class DatabaseSocketPDO
 	/**
 	 * 
 	 */
-	public function connect($args) {
+	public function connect($args)
+    {
 		//
 		$dsn = "mysql:host={$args['host']};dbname={$args['name']}";
 		
@@ -46,12 +47,11 @@ class DatabaseSocketPDO
 	
 		//
 		$this->pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-		#$this->pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_SILENT);
 		
 		//
 		$this->prefix = $args['pref'];		
 	}
-	
+
 	/**
 	 * 
 	 * @param type $sql
@@ -59,17 +59,7 @@ class DatabaseSocketPDO
 	public function query($sql, $values=null) {
 
         //
-        $stmt = $this->pdo->prepare($sql);
-
-        //
-        if (is_array($values)) {
-            foreach($values as $token => $value) {
-                $stmt->bindValue($token, $value);
-            }
-        }
-        
-        //
-        $stmt->execute();
+        $this->execute($sql, $values);
     }
 
 	/**
@@ -77,21 +67,11 @@ class DatabaseSocketPDO
 	 * @param type $sql
 	 * @return type
 	 */
-	public function getRow($sql) {
+	public function getRow($sql, $values=null) {
 		
-		//
-		$stmt = $this->pdo->prepare($sql);
+        //
+        $this->execute($sql, $values);
 		
-		//
-		try {
-			$stmt->execute();
-		}
-
-		//
-		catch (PDOException  $Exception) {
-			throw new DatabaseException( $Exception->getMessage( ) , (int)$Exception->getCode( ) );
-		}
-
 		//
 		return $stmt->fetch(PDO::FETCH_ASSOC);
 	}
@@ -101,26 +81,13 @@ class DatabaseSocketPDO
 	 * @param type $sql
 	 * @return type
 	 */
-	public function getResults($sql) {
+	public function getResults($sql, $values=null) {
 
 		//
-		$statament = $this->pdo->prepare($sql);
-
-		//
-		try {
-			$statament->execute();
-		} 
+		$stmt = $this->execute($sql, $values);
 		
 		//
-		catch (PDOException  $Exception) {			
-			throw new DatabaseException( $Exception->getMessage( ) , (int)$Exception->getCode( ) );
-		}
-		
-		//
-		$results = $statament->fetchAll(PDO::FETCH_ASSOC);
-				
-		//
-		return $results;
+		return $stmt->fetchAll(PDO::FETCH_ASSOC);
 	}
 	
 	/**
@@ -129,19 +96,16 @@ class DatabaseSocketPDO
 	 * @param type $sql
 	 * @return type
 	 */
-	public function getColumn($sql) {
+	public function getColumn($sql, $values=null) {
 		
 		//
-		$statament = $this->pdo->prepare($sql);
-		
-		//
-		$statament->execute();
+		$stmt = $this->execute($sql, $values);
 
 		//
 		$column = array(); 
 		
 		//
-		while($row = $statament->fetch()){
+		while($row = $stmt->fetch()){
 			$column[] = $row[0];
 		}
 				
@@ -155,16 +119,13 @@ class DatabaseSocketPDO
 	 * @param type $sql
 	 * @return type
 	 */
-	public function getValue($sql) {
+	public function getValue($sql, $values=null) {
 		
 		//
-		$statament = $this->pdo->prepare($sql);
+		$stmt = $this->execute($sql, $values);
 		
 		//
-		$statament->execute();
-		
-		//
-		return $statament->fetchColumn(0);
+		return $stmt->fetchColumn(0);
 	}
 	
 	/**
@@ -216,4 +177,33 @@ class DatabaseSocketPDO
 		//
 		$this->pdo->rollBack();				
 	}
+
+    /**
+     *
+     */
+    private function execute($sql, $values)
+    {
+        //
+		$stmt = $this->pdo->prepare($sql);
+
+        //
+        if (is_array($values)) {
+            foreach($values as $token => $value) {
+                $stmt->bindValue($token, $value);
+            }
+        }
+
+		//
+		try {
+			$stmt->execute();
+		}
+
+		//
+		catch (PDOException  $Exception) {
+			throw new DatabaseException( $Exception->getMessage( ) , (int)$Exception->getCode( ) );
+		}
+
+        //
+        return $stmt;
+    }
 }

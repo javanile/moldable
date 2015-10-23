@@ -121,35 +121,38 @@ class ModelProtectedAPI extends ModelRecord {
 
         //
         if (isset($query['where'])) {
-            $whereConditions[] = "(".$query['where'].")";
-        }
 
-        //
-        $exclude = array('order','where');
+            //
+            $whereConditions[] = "(".$query['where'].")";
+
+            //
+            unset($query['where']);
+        }
 
         //
         foreach ($query as $field => $value) {
 
             //
-            if (in_array($field, $exclude)) {
-                continue;
-            }
+            $token = ':'.$field;
 
             //
-            $whereConditions[] = "{$field} = '{$value}'";
+            $whereConditions[] = "{$field} = {$token}";
+
+            //
+            $values[$field] = $value;
         }
 
         //
         $where = implode(' AND ', $whereConditions);
 
         // prepare SQL query
-        $sql = " SELECT {$selectFields} "
-             . "   FROM {$table} AS {$alias} {$join} "
-             . "  WHERE {$where} "
-             . "  LIMIT 1";
+        $sql = "SELECT {$selectFields} "
+             .   "FROM {$table} AS {$alias} {$join} "
+             .  "WHERE {$where} "
+             .  "LIMIT (1)";
 
         // fetch data on database and return it
-        return static::fetch($sql, false, is_string($fields), is_null($fields));
+        return static::fetch($sql, $values, false, is_string($fields), is_null($fields));
     }
 
     /**
