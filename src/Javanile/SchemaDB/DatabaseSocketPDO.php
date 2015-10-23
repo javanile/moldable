@@ -80,13 +80,20 @@ class DatabaseSocketPDO
 	public function getRow($sql) {
 		
 		//
-		$s = $this->pdo->prepare($sql);
+		$stmt = $this->pdo->prepare($sql);
 		
 		//
-		$s->execute();
+		try {
+			$stmt->execute();
+		}
 
 		//
-		return $s->fetch(PDO::FETCH_ASSOC);
+		catch (PDOException  $Exception) {
+			throw new DatabaseException( $Exception->getMessage( ) , (int)$Exception->getCode( ) );
+		}
+
+		//
+		return $stmt->fetch(PDO::FETCH_ASSOC);
 	}
 	
 	/**

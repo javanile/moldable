@@ -198,16 +198,12 @@ class ModelProtectedAPI extends ModelRecord {
      * @param type $trace
      * @param type $error
      */
-    protected static function error($trace,$error) {
-
-        echo 1/0;
-
-        echo '<pre>';
-        echo 'Database error: '.$error->getMessage()."\n";
-        echo 'Triggered at: '.$trace[0]['file']."\n";
-
-
-        echo '</pre>';
-        exit();
+    protected static function error($trace,$error) {        
+        echo '<br>'
+           . '<b>Fatal error</b>: '
+           . $error->getMessage().' in method <strong>'.$trace[0]['function'].'</strong> '
+           . 'called at <strong>'.$trace[0]['file'].'</strong> on line <strong>'
+           . $trace[0]['line'].'</strong>'."<br>";
+        die();
     }
 }

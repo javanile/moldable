@@ -59,7 +59,7 @@ class ModelTable extends ModelFields
 	 * 
 	 * @return type
 	 */ 
-    public static function updateTable()
+    public static function applyTable()
     {        
 		// if model is not connectect to any db return
 		if (!static::getDatabase()) {

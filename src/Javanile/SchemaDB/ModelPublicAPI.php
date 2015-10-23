@@ -19,7 +19,7 @@ class ModelPublicAPI extends ModelProtectedAPI
     public static function connect($database=null)
     {
 		//
-		static::updateTable();       
+		static::applyTable();
     }
 
 	/**
@@ -50,23 +50,35 @@ class ModelPublicAPI extends ModelProtectedAPI
      */
     public static function load($index, $fields=null)
     {
-		// 
-		if (is_array($index)) {
-			return static::loadByQuery($index, $fields); 
-		}
+        // update table schema on DB
+        static::applyTable();
+
+        //
+		try {
+            //
+            if (is_array($index)) {
+                return static::loadByQuery($index, $fields);
+            }
+
+            //
+            $key = static::getPrimaryKey();
+
+            //
+            if ($key) {
+                return static::loadByPrimaryKey($index, $fields);
+            }
+
+            //
+            else {
+                return static::loadByMainField($index, $fields);
+            }
+        }
 
 		//
-		$key = static::getPrimaryKey();
-		
-		// 
-		if ($key) {			
-			return static::loadByPrimaryKey($index, $fields); 			
-		} 
-		
-		// 
-		else {
-			return static::loadByMainField($index, $fields); 								
+		catch (DatabaseException $ex) {
+			static::error(debug_backtrace(), $ex);
 		}
+
     }
 	
     //
@@ -132,7 +144,7 @@ class ModelPublicAPI extends ModelProtectedAPI
     public static function all($fields=null)
     {
         //
-        static::updateTable();
+        static::applyTable();
 
         //
         $table = static::getTable();
@@ -191,7 +203,7 @@ class ModelPublicAPI extends ModelProtectedAPI
     public static function exists($query)
     {
         //
-        static::updateTable();
+        static::applyTable();
 
         //
         $table = self::getTable();
@@ -237,6 +249,8 @@ class ModelPublicAPI extends ModelProtectedAPI
 	 */
     public static function submit($query)
     {
+
+
         //
         $object = static::exists($query);
 

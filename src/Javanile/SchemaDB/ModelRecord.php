@@ -19,7 +19,7 @@ class ModelRecord extends ModelTable
     public function __construct()
     {
         // update database schema
-        static::updateTable();
+        static::applyTable();
 
         // prepare field values strip schema definitions
         foreach (static::getSchemaFields() as $field) {

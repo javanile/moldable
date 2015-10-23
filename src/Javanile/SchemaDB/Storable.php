@@ -30,7 +30,7 @@ class Storable extends ModelPublicAPI
 		}
 		
 		// update related table
-		static::updateTable();
+		static::applyTable();
 	}
 
 	/**
@@ -73,7 +73,7 @@ class Storable extends ModelPublicAPI
     public function storeUpdate()
     {
         // update database schema
-        static::updateTable();
+        static::applyTable();
 
         //
         $k = static::getPrimaryKey();
@@ -132,7 +132,7 @@ class Storable extends ModelPublicAPI
     public function storeInsert($force=false)
     {
         // update table if needed
-        static::updateTable();
+        static::applyTable();
 
         // collect field names for sql query
         $fieldsArray = array();
