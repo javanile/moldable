@@ -145,18 +145,106 @@ class DatabaseRecord extends DatabaseModel
 
     /**
      *
+     */
+    public function exists($model, $query)
+    {
+        //
+        $valuesArray = array();
+
+		//
+		$whereConditions = array();
+
+        //
+        if (isset($query['where'])) {
+            $whereConditions[] = $query['where'];
+            unset($query['where']);
+        }
+
+        //
+        $schema = $this->getFields($model);
+        
+        //
+        foreach ($schema as $field) {
+            
+            //
+            if (!isset($query[$field])) {
+                continue;
+            }
+
+            //
+            $value = $query[$field];
+            
+            //
+            $token = ':'.$field;
+        
+            //
+            $valuesArray[$token] = $value;
+
+            //
+            $whereConditions[] = "{$field} = {$token}";
+        }
+
+        //
+        $where = count($whereConditions)>0 ? 'WHERE '.implode(' AND ',$whereConditions) : '';
+
+        //
+        $table = $this->getPrefix($model);
+
+        //
+        $sql = "SELECT * FROM `{$table}` {$where} LIMIT 1";
+
+        //
+        $row = $this->getRow($sql, $valuesArray);
+
+        //
+        return $row;
+    }
+
+
+    /**
+     *
      * @param type $list
      */
     public function import($model, $records, $map=null) {
 
         //
+        if (!is_array($records[0]) || !$records) {
+            return;
+        }
+
+        //
         foreach($records as $record) {
+            
+            //
+            $schema = array();
 
             //
-            $this->insert($model, $record);
+            foreach(array_keys($record) as $field) {
+                $schema[$field] = '';
+            }
+
+            //
+            $this->apply($model, $schema);
+
+            //
+            $this->submit($model, $record);
         }
     }
 
+    /**
+     *
+     */
+    public function submit($model, $values) {
 
+        //
+        $exists = $this->exists($model, $values);
 
+        //
+        if (!$exists) {
+            $exists = $this->insert($model, $values);
+        }
+        
+        //
+        return $exists;
+    }
 }

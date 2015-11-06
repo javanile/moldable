@@ -65,14 +65,14 @@ class Database extends DatabaseRecord
 	/**
 	 * Timestamp for benchmark
 	 */
-	private $ts = null;
+	protected $_ts = null;
 		
     /**
      *
      *
      * @var type
      */
-    private static $default = null;
+    protected static $_default = null;
 
     /**
      * Construct and connect a SchemaDB drive
@@ -83,7 +83,7 @@ class Database extends DatabaseRecord
     public function __construct($args)
     {
 		//
-		$this->ts = microtime();	
+		$this->_ts = microtime();	
 
 		// 
 		parent::__construct($args);
@@ -101,7 +101,7 @@ class Database extends DatabaseRecord
     public static function getDefault()
     {
         // return static $default
-        return static::$default;
+        return static::$_default;
     }
 
     /**
@@ -110,13 +110,13 @@ class Database extends DatabaseRecord
 	 * 
      * @param type $database
      */
-    private static function setDefault($database)
+    public static function setDefault($database)
     {
         // if no default SchemaDB connection auto-set then-self
-        if (static::$default === null) {
+        if (static::$_default === null) {
 
             // set current SchemaDB connection to default
-            static::$default = &$database;
+            static::$_default = &$database;
         }
     }
 	
@@ -157,7 +157,7 @@ class Database extends DatabaseRecord
 	public function benchmark() {
 		
 		// 
-		echo '<pre style="background:#333;color:#fff;padding:2px 6px 3px 6px;border:1px solid #000">Time: '.(microtime()-$this->ts).' Mem: '.memory_get_usage(true).'</pre>';
+		echo '<pre style="background:#333;color:#fff;padding:2px 6px 3px 6px;border:1px solid #000">Time: '.(microtime()-$this->_ts).' Mem: '.memory_get_usage(true).'</pre>';
 	}
 
     /**

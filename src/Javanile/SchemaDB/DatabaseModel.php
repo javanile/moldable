@@ -4,8 +4,7 @@ namespace Javanile\SchemaDB;
 
 
 class DatabaseModel extends DatabaseSchema
-{
-    
+{   
     /**
      * 
      */
@@ -14,7 +13,6 @@ class DatabaseModel extends DatabaseSchema
         //
         return $this->getPrefix($model);
     }
-
 
     /**
      *
@@ -38,7 +36,6 @@ class DatabaseModel extends DatabaseSchema
         return false;
     }
 
-
     /**
      *
      * @param type $model
@@ -61,4 +58,22 @@ class DatabaseModel extends DatabaseSchema
         }
     }
 
+    /**
+     *
+     * @param type $model
+     */
+    public function getFields($model) {
+
+        //
+        $table = $this->getTable($model);
+
+        //
+        $desc = $this->descTable($table);
+
+        //
+        $fields = array_keys($desc);
+
+        //
+        return $fields;
+    }
 }
