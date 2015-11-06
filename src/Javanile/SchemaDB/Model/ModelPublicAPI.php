@@ -1,6 +1,5 @@
 <?php
-
-/*
+/**
  * 
  * 
 \*/
@@ -81,7 +80,11 @@ class ModelPublicAPI extends ModelProtectedAPI
 
     }
 	
-    //
+    /**
+     *
+     * @param type $query
+     * @return type
+     */
     public static function query($query)
     {
         //
@@ -186,7 +189,10 @@ class ModelPublicAPI extends ModelProtectedAPI
         return $results;
     }
 
-    //
+    /**
+     *
+     * @return type
+     */
     public static function first()
     {
         //
@@ -275,7 +281,11 @@ class ModelPublicAPI extends ModelProtectedAPI
         return $object;
     }
 
-    //
+    /**
+     *
+     * @param type $values
+     * @return type
+     */
     public static function insert($values)
     {
         //

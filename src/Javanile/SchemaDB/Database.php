@@ -1,5 +1,5 @@
 <?php
-/*
+/**
  *
  * Copyright (c) 2012-2015 Bianco Francesco
  *
@@ -22,40 +22,18 @@
  * THE SOFTWARE.
  *
 \*/
-
-/*
- *
- * Thanks to SourceForge.net
- * for your mission on the web
- *
-\*/
 namespace Javanile\SchemaDB;
+
+/**
+ *
+ */
+use Javanile\SchemaDB\Database\DatabaseAPI;
 
 /**
  * Main class prototyping a SchemaDB connection with MySQL database
  *
- * <code>
- * <?php
- * // Create SchemaDB connection
- * $conn = new SchemaDB(array(
- *		'host' => 'localhost',
- *		'user' => 'root',
- *		'pass' => 'root',
- *		'name' => 'db_schemadb',
- *		'pref' => 'tbl_',
- * ));
- *
- * // Create Table on database
- * $conn->update(array(
- *		'Table1' => array(
- *			'Field1' => 0,
- *			'Field2' => "",
- *		)
- * ));
- * ?>
- * </code>
  */
-class Database extends DatabaseRecord
+class Database extends DatabaseAPI
 {
     /**
      * Currenti release version number
@@ -72,7 +50,7 @@ class Database extends DatabaseRecord
      *
      * @var type
      */
-    protected static $_default = null;
+    protected static $_defaultDatabase = null;
 
     /**
      * Construct and connect a SchemaDB drive
@@ -91,7 +69,6 @@ class Database extends DatabaseRecord
         //
         static::setDefault($this);
     }
-
     
     /**
      * Retrieve default SchemaDB connection
@@ -101,7 +78,7 @@ class Database extends DatabaseRecord
     public static function getDefault()
     {
         // return static $default
-        return static::$_default;
+        return static::$_defaultDatabase;
     }
 
     /**
@@ -113,44 +90,13 @@ class Database extends DatabaseRecord
     public static function setDefault($database)
     {
         // if no default SchemaDB connection auto-set then-self
-        if (static::$_default === null) {
+        if (static::$_defaultDatabase === null) {
 
             // set current SchemaDB connection to default
-            static::$_default = &$database;
+            static::$_defaultDatabase = &$database;
         }
     }
 	
-	/**
-	 * 
-	 * 
-	 * @param type $confirm
-	 * @return type
-	 */
-	public function drop($confirm) {
-		
-		if ($confirm != 'confirm') {
-			return;
-		}
-		
-		//
-		$tables = $this->getTables();
-		
-		//
-		if (!$tables) {
-			return;		
-		}
-		
-		//
-		foreach($tables as $table) {
-			
-			//
-			$sql = "DROP TABLE `{$table}`";
-			
-			//
-			$this->execute($sql);
-		}		
-	}
-		
 	/**
 	 * 
 	 */
@@ -159,30 +105,6 @@ class Database extends DatabaseRecord
 		// 
 		echo '<pre style="background:#333;color:#fff;padding:2px 6px 3px 6px;border:1px solid #000">Time: '.(microtime()-$this->_ts).' Mem: '.memory_get_usage(true).'</pre>';
 	}
-
-    /**
-     *
-     *
-     */
-    public function dump($model=null) {
-
-        //
-        if ($model) {
-          
-            //
-            $all = $this->all($model);
-
-            //
-            Debug::grid_dump($model,$all);
-        }
-
-        //
-        else {
-            $this->dumpSchema();
-        }
-
-    }
-
 }
 
 

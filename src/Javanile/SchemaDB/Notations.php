@@ -1,6 +1,5 @@
 <?php
-
-/*
+/**
  * 
  * 
  * 
@@ -18,26 +17,42 @@ class Notations
     /**
 	 * schemadb mysql constants for rapid fields creation
 	 */
-    const PRIMARY_KEY			= '<<#primary_key>>';
+    const PRIMARY_KEY = '<<#primary_key>>';
 
     /**
      *
      */
-    const PRIMARY_KEY_INT_20	= '<<#primary_key>>';
+    const PRIMARY_KEY_INT_20 = '<<#primary_key>>';
     
 	/**
 	 * 
 	 */
-	const VARCHAR		= '<<{"Type":"varchar(255)"}>>';
+	const VARCHAR = '<<{"Type":"varchar(255)"}>>';
     
     /**
      * 
      */
-    const VARCHAR_32	= '<<{"Type":"varchar(32)"}>>';
-    const VARCHAR_64	= '<<{"Type":"varchar(64)"}>>';
-    const VARCHAR_128	= '<<{"Type":"varchar(128)"}>>';
-    const VARCHAR_255	= '<<{"Type":"varchar(255)"}>>';
-    const TEXT			= '<<{"Type":"text"}>>';
+    const VARCHAR_32 = '<<{"Type":"varchar(32)"}>>';
+    
+    /**
+     * 
+     */
+    const VARCHAR_64 = '<<{"Type":"varchar(64)"}>>';
+    
+    /**
+     * 
+     */
+    const VARCHAR_128 = '<<{"Type":"varchar(128)"}>>';
+    
+    /**
+     * 
+     */
+    const VARCHAR_255 = '<<{"Type":"varchar(255)"}>>';
+    
+    /**
+     * 
+     */
+    const TEXT = '<<{"Type":"text"}>>';
     
 	/**
 	 * 

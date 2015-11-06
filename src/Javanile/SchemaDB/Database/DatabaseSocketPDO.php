@@ -1,9 +1,14 @@
 <?php
-
-/*
+/**
+ *
+ *
+ *
+ *
+ *
+ *
  * 
 \*/
-namespace Javanile\SchemaDB;
+namespace Javanile\SchemaDB\Database;
 
 /**
  * 
@@ -51,26 +56,16 @@ class DatabaseSocketPDO
 		//
 		$this->prefix = $args['pref'];		
 	}
-
-	/**
-	 * 
-	 * @param type $sql
-	 */
-	public function query($sql, $values=null) {
-
-        //
-        $this->execute($sql, $values);
-    }
-
+    
 	/**
 	 * 
 	 * @param type $sql
 	 * @return type
 	 */
-	public function getRow($sql, $values=null) {
+	public function getRow($sql, $params=null) {
 		
         //
-        $stmt = $this->execute($sql, $values);
+        $stmt = $this->execute($sql, $params);
 		
 		//
 		return $stmt->fetch(PDO::FETCH_ASSOC);
@@ -81,15 +76,29 @@ class DatabaseSocketPDO
 	 * @param type $sql
 	 * @return type
 	 */
-	public function getResults($sql, $values=null) {
+	public function getResults($sql, $params=null) {
 
 		//
-		$stmt = $this->execute($sql, $values);
+		$stmt = $this->execute($sql, $params);
 		
 		//
 		return $stmt->fetchAll(PDO::FETCH_ASSOC);
 	}
-	
+
+    /**
+	 *
+	 * @param type $sql
+	 * @return type
+	 */
+	public function getResultsAsObjects($sql, $params=null) {
+
+		//
+		$stmt = $this->execute($sql, $params);
+
+		//
+		return $stmt->fetchAll(PDO::FETCH_OBJ);
+	}
+
 	/**
 	 * 
 	 * 

@@ -22,20 +22,15 @@
  * THE SOFTWARE.
  *
 \*/
+namespace Javanile\SchemaDB\Database;
 
-/*
+/**
  *
- * Thanks to SourceForge.net
- * for your mission on the web
  *
-\*/
-namespace Javanile\SchemaDB;
-
-
+ * 
+ */
 class DatabaseSchema extends DatabaseCommon
 {
-    
-
 	/**
 	 * Describe database each tables 
 	 * with the specific prefix and her fields
@@ -449,8 +444,8 @@ class DatabaseSchema extends DatabaseCommon
      *
      * @param type $schema
      */
-    public function alterTable($schema, $column=null, $notation=null) {
-    
+    public function alterTable($schema, $column=null, $notation=null)
+    {
         // TODO: da fare
     }
 

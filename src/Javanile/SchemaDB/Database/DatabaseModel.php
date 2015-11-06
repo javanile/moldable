@@ -1,8 +1,12 @@
 <?php
+/**
+ *
+ */
+namespace Javanile\SchemaDB\Database;
 
-namespace Javanile\SchemaDB;
-
-
+/**
+ *
+ */
 class DatabaseModel extends DatabaseSchema
 {   
     /**

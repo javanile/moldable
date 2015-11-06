@@ -1,10 +1,14 @@
 <?php
-
 /**
  * 
  * 
 \*/
-namespace Javanile\SchemaDB;
+namespace Javanile\SchemaDB\Database;
+
+/**
+ *
+ */
+use Javanile\SchemaDB\Notations;
 
 /**
  *
@@ -24,10 +28,18 @@ class DatabaseCommon extends Notations
      */
     private $_socket = null;
 
+    /**
+     *
+     * @var type
+     */
+    private $_connected = null;
+
 	/**
      * Constant to enable debug print-out
+     * 
+     * @var boolean
      */
-    private $_debug = 0;
+    private $_debug = false;
 	
 	/**
 	 * 
@@ -45,7 +57,7 @@ class DatabaseCommon extends Notations
         $this->_socket = new DatabaseSocketPDO();
 		
 		//
-		$this->link = false;
+		$this->_connected = false;
 	}
 
     /**
@@ -61,7 +73,7 @@ class DatabaseCommon extends Notations
     private function connect()
     {
 		//
-		if (!$this->link) 
+		if (!$this->_connected)
 		{	
 			//
 			static::log('connect', $this->_args);
@@ -70,7 +82,7 @@ class DatabaseCommon extends Notations
 			$this->_socket->connect($this->_args);
 			
 			//
-			$this->link = true;
+			$this->_connected = true;
 		}
     }
 
@@ -98,10 +110,7 @@ class DatabaseCommon extends Notations
      * @return type
      */
     public function getPrefix($table=null)
-    {
-		//
-		$this->connect();
-
+    {		
 		//
 		$prefix = $this->_socket->getPrefix();
 				
@@ -134,16 +143,16 @@ class DatabaseCommon extends Notations
      * @param  type $sql
      * @return type
      */
-    public function getRow($sql, $values=null)
+    public function getRow($sql, $params=null)
     {
 		//
 		$this->connect();
 		
 		//
-		static::log('getRow', $sql, $values);
+		static::log('getRow', $sql, $params);
 
 		//
-		return $this->_socket->getRow($sql, $values);
+		return $this->_socket->getRow($sql, $params);
     }
 
     /**
@@ -153,16 +162,35 @@ class DatabaseCommon extends Notations
      * @param  string $sql
      * @return array
      */
-    public function getResults($sql)
+    public function getResults($sql, $params=null)
     {
 		//
 		$this->connect();
 
 		//
-		static::log('getResults', $sql);
+		static::log('getResults', $sql, $params);
 
 		//
-		return $this->_socket->getResults($sql);
+		return $this->_socket->getResults($sql, $params);
+    }
+
+    /**
+     * Get a list/array of record from database
+     * based on SQL query passed
+     *
+     * @param  string $sql
+     * @return array
+     */
+    public function getResultsAsObjects($sql, $params=null)
+    {
+		//
+		$this->connect();
+
+		//
+		static::log('getResults', $sql, $params);
+
+		//
+		return $this->_socket->getResultsAsObjects($sql, $params);
     }
 
     /**
@@ -170,33 +198,33 @@ class DatabaseCommon extends Notations
      * @param  type $sql
      * @return type
      */
-    public function getValue($sql)
+    public function getValue($sql, $params=null)
     {
 		//
 		$this->connect();
 
 		//
-		static::log('getValue', $sql);
+		static::log('getValue', $sql, $params);
 
 		//
-		return $this->_socket->getValue($sql);
+		return $this->_socket->getValue($sql, $params);
     }
 
-	 /**
+    /**
      *
      * @param  type $sql
      * @return type
      */
-    public function getValues($sql)
+    public function getValues($sql, $params=null)
     {
 		//
 		$this->connect();
 
 		//
-		static::log('getValues', $sql);
+		static::log('getValues', $sql, $params);
 
 		//
-		return $this->_socket->getColumn($sql);
+		return $this->_socket->getColumn($sql, $params);
     }
 
 	/**
@@ -262,6 +290,8 @@ class DatabaseCommon extends Notations
 	 * 
 	 */
 	protected function getDebug() {
+        
+        //
 		return $this->_debug;
 	}
 	

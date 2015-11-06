@@ -1,8 +1,9 @@
 <?php
-
-/*
+/**
  * 
- * 
+ *
+ *
+ *
 \*/
 namespace Javanile\SchemaDB;
 

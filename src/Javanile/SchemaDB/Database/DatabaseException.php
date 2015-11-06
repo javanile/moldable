@@ -4,7 +4,7 @@
  * 
  * 
 \*/
-namespace Javanile\SchemaDB;
+namespace Javanile\SchemaDB\Database;
 
 /**
  * 

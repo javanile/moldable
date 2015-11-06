@@ -1,11 +1,15 @@
 <?php
-
 /**
+ *
+ *
+ *
  * 
  */
-namespace Javanile\SchemaDB;
+namespace Javanile\SchemaDB\Database;
 
 /**
+ *
+ *
  *
  */
 class DatabaseRecord extends DatabaseModel
