@@ -28,7 +28,7 @@ namespace Javanile\SchemaDB;
  *
  */
 use Javanile\SchemaDB\Database\DatabaseAPI;
-
+ 
 /**
  * Main class prototyping a SchemaDB connection with MySQL database
  *

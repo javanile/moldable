@@ -318,8 +318,14 @@ class DatabaseSchema extends DatabaseCommon
 	 * @param type $foQueries
 	 * @param type $soQueries
 	 */
-    private function diffTableField($table, $field, &$attributes, &$fields, &$foQueries,&$soQueries)
-    {
+    private function diffTableField(
+        $table,
+        $field,
+        &$attributes,
+        &$fields,
+        &$foQueries,
+        &$soQueries
+    ) {
         // check if column exists in current db
         if (!isset($fields[$field])) {
 

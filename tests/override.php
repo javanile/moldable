@@ -13,8 +13,8 @@ $name = 'javanile02517';		// database name
 $pref = 'd1_';					// table prefix
 /*/
 $host = 'localhost';	// database host
-$user = 'root';		// database username
-$pass = 'root';			// database password
-$name = 'SchemaDB';		// database name
-$pref = '';					// table prefix
+$user = 'eggplant';		// database username
+$pass = 'milano';			// database password
+$name = 'db_eggplant_medipav_dev';		// database name
+$pref = 'demo_';					// table prefix
 /**/

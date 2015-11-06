@@ -18,4 +18,4 @@ $db->dump('People');
 $Person = $db->exitsts('Person', array('age' => 10));
 
 //
-SchemaDB\Debug::var_dump($Person);
+SchemaDB\Debug::varDump($Person);

@@ -1,7 +1,12 @@
 <?php
 
+//
+error_reporting(E_ALL);
+ini_set('display_errors',true);
+if (function_exists('xdebug_disable')) { xdebug_disable(); }
+
 // require connection parametrs
-require_once 'common.php'; 
+require_once '../common.php';
 
 // drop all database tables
 #$db->drop('confirm');

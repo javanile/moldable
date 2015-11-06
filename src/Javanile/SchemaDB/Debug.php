@@ -12,17 +12,25 @@ namespace Javanile\SchemaDB;
  *
  */
 class Debug 
-{
-	
-	
-	public static function var_dump($var) {
+{	
+	/**
+     *
+     * @param type $var
+     */
+	public static function varDump($var)
+    {
 		echo '<pre style="padding:4px 6px 2px 6px; background:#eee;border:1px solid #ccc; margin:0 0 1px 0;">';			
 		var_dump($var);
 		echo '</pre>';
 	} 
 
-    public static function grid_dump($title, $content) {
-
+    /**
+     *
+     * @param type $title
+     * @param type $content
+     */
+    public static function gridDump($title, $content)
+    {
         //
         $a = &$content;
 
@@ -53,9 +61,5 @@ class Debug
 
         //
         echo '</tbody></table></pre>';
-
-
     }
-	
-	
 }

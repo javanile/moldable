@@ -43,4 +43,4 @@ $Person = Person::exitsts(array('age' => 10));
 Person::dump();
 
 //
-SchemaDB\Debug::var_dump($Person);
+SchemaDB\Debug::varDump($Person);

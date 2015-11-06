@@ -13,7 +13,7 @@ $db->dump('Address');
 $Person0 = $db->load('Person', 1);
 
 //
-SchemaDB\Debug::var_dump($Person0);
+SchemaDB\Debug::varDump($Person0);
 
 //
 $Person1 = $db->load('Person', 1, array(
@@ -25,4 +25,4 @@ $Person1 = $db->load('Person', 1, array(
 ));
 
 //
-SchemaDB\Debug::var_Dump($Person1);
+SchemaDB\Debug::varDump($Person1);

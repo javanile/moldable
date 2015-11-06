@@ -54,4 +54,4 @@ Product::dump();
 $Invoice1 = Invoice::load('FAT1');
 
 //
-SchemaDB\Debug::var_Dump($Invoice1);
+SchemaDB\Debug::varDump($Invoice1);

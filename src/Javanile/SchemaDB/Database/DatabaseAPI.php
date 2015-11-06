@@ -2,10 +2,12 @@
 /**
  *
  *
+ * 
+ *
 \*/
 namespace Javanile\SchemaDB\Database;
 
-/**
+/** 
  *
  *
  *
@@ -18,8 +20,9 @@ class DatabaseAPI extends DatabaseCommon
 	 * @param type $confirm
 	 * @return type
 	 */
-	public function drop($confirm) {
-
+	public function drop($confirm)
+    {
+        //
 		if ($confirm != 'confirm') {
 			return;
 		}
@@ -63,6 +66,5 @@ class DatabaseAPI extends DatabaseCommon
         else {
             $this->dumpSchema();
         }
-
     }
 }

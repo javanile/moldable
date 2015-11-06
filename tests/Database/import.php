@@ -43,4 +43,4 @@ $Person = $db->exists('People', array(
 ));
 
 // 
-SchemaDB\Debug::var_dump($Person);
+SchemaDB\Debug::varDump($Person);

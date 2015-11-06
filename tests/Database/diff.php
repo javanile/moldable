@@ -34,7 +34,7 @@ $schema = array(
 $diff = $db->diff($schema);
 
 //
-SchemaDB\Debug::var_dump($diff);
+SchemaDB\Debug::varDump($diff);
 
 // 
 $db->benchmark();

@@ -1,10 +1,15 @@
 <?php
 
 //
-require_once '../common.php'; 
+error_reporting(E_ALL);
+ini_set('display_errors',true);
+if (function_exists('xdebug_disable')) { xdebug_disable(); }
 
 //
-require_once '../../../../autoload.php';
+require_once __DIR__.'/../common.php';
+
+//
+require_once __DIR__.'/../../../../autoload.php';
 
 //
 use Javanile\SchemaDB;

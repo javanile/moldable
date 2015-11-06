@@ -23,7 +23,7 @@ $db->applyTable('User', $fields);
 $diff = $db->diffTable('User', $fields);
 
 //
-SchemaDB\Debug::var_dump($diff);
+SchemaDB\Debug::varDump($diff);
 
 //
 $db->benchmark();
