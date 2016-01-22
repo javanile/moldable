@@ -12,7 +12,7 @@ namespace Javanile\SchemaDB;
  *
  *
  */
-class Notations
+interface Notations
 {
     /**
 	 * schemadb mysql constants for rapid fields creation
@@ -59,10 +59,30 @@ class Notations
 	 * 
 	 */
 	const TINYINT	= '<<{"Type":"tinyint(4)"}>>';
+
+    /**
+     *
+     */
     const SMALLINT	= '<<{"Type":"smallint(6)"}>>';
+
+    /**
+     *
+     */
     const MEDIUMINT	= '<<{"Type":"mediumint(9)"}>>';
+    
+    /**
+     * 
+     */
     const INT		= '<<{"Type":"int(11)"}>>';
+
+    /**
+     *
+     */
     const INT_20	= '<<{"Type":"int(20)"}>>';
+
+    /**
+     *
+     */
     const BIGINT	= '<<{"Type":"bigint(20)"}>>';
     
 	/**

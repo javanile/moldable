@@ -2,29 +2,36 @@
 /**
  * 
  *
- *
- *
-\*/
+ */
+
 namespace Javanile\SchemaDB;
 
-/**
- * canonical name
- *
- *
- */
-class Storable extends ModelPublicAPI
+class Storable implements Notations
 {
+    use Model\ClassApi;
+    use Model\TableApi;
+    use Model\FieldApi;
+    use Model\SchemaApi;
+    use Model\PublicApi;
+
 	/**
 	 * Construct a storable object 
 	 * with filled fields by values 
 	 * 
 	 * 
 	 */
-	public function __construct($values=null) {
+	public function __construct($values=null) 
+    {
+        //
+        $parser = static::getDatabase()->getParser();
 
-		// call anchesto constr
-		parent::__construct();
-						
+        // prepare field values strip schema definitions
+        foreach (static::getSchemaFields() as $field) {
+
+            //
+            $this->{$field} = $parser->getNotationValue($this->{$field});
+        }
+				
 		// fill created object with passed values
 		if ($values) {
 			$this->fill($values);

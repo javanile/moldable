@@ -1,49 +1,64 @@
 <?php
 /**
  *
- * Copyright (c) 2012-2015 Bianco Francesco
  *
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files "schemadb", to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
- *
- * The above copyright notice and this permission notice shall be included in
- * all copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
- * THE SOFTWARE.
- *
-\*/
+ */
+
 namespace Javanile\SchemaDB;
 
-/**
- *
- */
-use Javanile\SchemaDB\Database\DatabaseAPI;
- 
-/**
- * Main class prototyping a SchemaDB connection with MySQL database
- *
- */
-class Database extends DatabaseAPI
+use Javanile\SchemaDB\Database\Socket;
+
+class Database implements Notations
 {
+    use Database\ModelApi;
+    use Database\SocketApi;
+    use Database\SchemaApi;
+
     /**
      * Currenti release version number
      */
     const VERSION = '0.3.0';
 
+    /**
+	 *
+	 */
+	private $_args = null;
+
+	/**
+     *
+     * @var type
+     */
+    private $_socket = null;
+
+    /**
+     *
+     * @var type
+     */
+    private $_composer = null;
+
+    /**
+     *
+     * @var type
+     */
+    private $_parser = null;
+
+    /**
+     *
+     * @var type
+     */
+    private $_ready = null;
+
+	/**
+     * Constant to enable debug print-out
+     *
+     * @var boolean
+     */
+    private $_debug = false;
+
 	/**
 	 * Timestamp for benchmark
 	 */
-	protected $_ts = null;
+	private $_ts = null;
 		
     /**
      *
@@ -60,12 +75,34 @@ class Database extends DatabaseAPI
      */
     public function __construct($args)
     {
+        // check arguments for connection
+        foreach(array('host','dbname','password','username') as $attr) {
+            if (!isset($args[$attr])) {
+                Utils::error(
+                    debug_backtrace(),
+                    "required attribute: {$attr}"
+                );
+            }
+        }
+
 		//
 		$this->_ts = microtime();	
 
-		// 
-		parent::__construct($args);
+        //
+		$this->_args = $args;
 
+		//
+        $this->_socket = new Socket($this->_args);
+
+        //
+        $this->_parser = new Parser\Mysql();
+
+        //
+        $this->_composer = new Composer\Mysql();
+
+		//
+		$this->_ready = false;
+        
         //
         static::setDefault($this);
     }
@@ -96,14 +133,59 @@ class Database extends DatabaseAPI
             static::$_defaultDatabase = &$database;
         }
     }
-	
+
+    /**
+     *
+     */
+    public function isReady()
+    {
+        //
+        if (!$this->_ready) {
+            $this->enquire();
+        }
+
+        //
+        return $this->_ready;
+    }
+
+    /**
+     *
+     *
+     */
+    public function getParser()
+    {
+        //
+        return $this->_parser;
+    }
+
+    /**
+     *
+     *
+     */
+    public function getComposer()
+    {
+        //
+        return $this->_composer;
+    }
+
 	/**
-	 * 
+	 *
+     *
 	 */
 	public function benchmark() {
-		
+
+        //
+        $style = 'background:#333;'
+               . 'color:#fff;'
+               . 'padding:2px 6px 3px 6px;'
+               . 'border:1px solid #000';
+
+        //
+        $infoline = 'Time: '.(microtime()-$this->_ts).' '
+                  . 'Mem: '.memory_get_usage(true);
+
 		// 
-		echo '<pre style="background:#333;color:#fff;padding:2px 6px 3px 6px;border:1px solid #000">Time: '.(microtime()-$this->_ts).' Mem: '.memory_get_usage(true).'</pre>';
+		echo '<pre style="'.$style.'">'.$infoline.'</pre>';
 	}
 }
 
