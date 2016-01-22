@@ -1,41 +1,46 @@
 <?php
 
 //
-require_once '../../src/SourceForge/SchemaDB/autoload.php';
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
 
 //
-use SourceForge\SchemaDB;
+require_once __DIR__.'/../../../../autoload.php';
 
 //
 $notations = array(	
 		
-	// String 
-	"",
-	"Hello World!",
-	SchemaDB\Table::VARCHAR,
-	SchemaDB\Table::TEXT,
-	 
-	//
-	
-	// Enum and set
-	array(0,1,2),
-	
-	// Date and time
-	SchemaDB\Table::DATE,
-	SchemaDB\Table::DATETIME,
+    \Javanile\SchemaDB\Notations::INT_20,
 );
+
+//
+$parser = new Javanile\SchemaDB\Parser\Mysql();
 
 ?>
 
 <table border=1 cellpadding=4>
-	<tr><th>Notation</th><th>Value</th><th>Type</th><th>Column</th></tr>
+
+    <tr>
+        <th>Notation</th>
+        <th>Value</th>
+        <th>Type</th>
+        <th>Column</th>
+    </tr>
 	
 	<?php foreach($notations as $notation) { ?>
 		<tr>
-			<td><?php var_dump($notation); ?></td>
-			<td align="center"><?=SchemaDB\Parser::getNotaionValue($notation)?></td>
-			<td align="center"><strong><?=SchemaDB\Parser::getNotationType($notation)?></strong></td>
-			<td><pre><?=var_dump(SchemaDB\Parser::schema_parse_table_column($value))?></pre></td>
+			<td>
+                <?php var_dump($notation); ?>
+            </td>
+			<td align="center">
+                <?=$parser->getNotationValue($notation)?>
+            </td>
+			<td align="center">
+                <strong><?=$parser->getNotationType($notation)?></strong>
+            </td>
+			<td>
+                <pre><?=var_dump($parser->getNotationAttributes($notation))?></pre>
+            </td>
 		</tr>
 	<?php } ?>
 </table>

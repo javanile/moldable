@@ -4,10 +4,10 @@
 require_once '../common.php'; 
 
 //
-require_once '../../src/SourceForge/SchemaDB/autoload.php';
+require_once __DIR__.'/../../../../autoload.php';
 
 //
-use SourceForge\SchemaDB; 
+use Javanile\SchemaDB;
 
 // 
 new SchemaDB\Database(array(

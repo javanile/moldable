@@ -5,19 +5,16 @@ error_reporting(E_ALL);
 ini_set('display_errors',true);
 
 //
-require_once '../data.php'; 
+require_once 'common.php';
 
 //
-require_once '../../SchemaDB.php';
+use Javanile\SchemaDB\Database;
 
 //
-use SourceForge\SchemaDB\SchemaDB;
+use Javanile\SchemaDB\Storable;
 
 //
-use SourceForge\SchemaDB\Storable;
-
-//
-new SchemaDB(array(
+new Database(array(
 	'host' => $host,
 	'user' => $user,
 	'pass' => $pass,

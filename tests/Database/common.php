@@ -12,10 +12,10 @@ require_once __DIR__.'/../common.php';
 require_once __DIR__.'/../../../../autoload.php';
 
 //
-use Javanile\SchemaDB;
+use Javanile\SchemaDB\Database;
 
 //
-$db = new SchemaDB\Database(array(
+$db = new Database(array(
 	'host' => $host,
 	'user' => $user,
 	'pass' => $pass,
