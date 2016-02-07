@@ -8,12 +8,13 @@ namespace Javanile\SchemaDB;
 
 class Storable implements Notations
 {
+    use Model\LoadApi;
     use Model\ClassApi;
     use Model\TableApi;
     use Model\FieldApi;
     use Model\SchemaApi;
     use Model\PublicApi;
-
+    
 	/**
 	 * Construct a storable object 
 	 * with filled fields by values 
@@ -31,12 +32,10 @@ class Storable implements Notations
             //
             $this->{$field} = $parser->getNotationValue($this->{$field});
         }
-				
-		// fill created object with passed values
-		if ($values) {
-			$this->fill($values);
-		}
-		
+
+        //
+        $this->fill($values);
+
 		// update related table
 		static::applyTable();
 	}
@@ -84,10 +83,13 @@ class Storable implements Notations
         static::applyTable();
 
         //
-        $k = static::getPrimaryKey();
+        $key = static::getPrimaryKey();
 
         //
-        $e = array();
+        $setArray = array();
+
+        //
+        $valuesArray = array();
 
 		//
 		$fields = static::getSchemaFields();
@@ -96,33 +98,36 @@ class Storable implements Notations
         foreach ($fields as $field) {
 
             //
-            if ($field == $k) { continue; }
+            if ($field == $key) { continue; }
 
             //
-            $value = $this->{$field};
-			
+            $token = ':'.$field;
+
             //
-            $e[] = "{$field} = '{$value}'";
+            $setArray[] = $field.' = '.$token;
+
+            //
+            $valuesArray[$token] = $this->{$field};
         }
 
         //
-        $s = implode(',',$e);
+        $set = implode(',', $setArray);
 
         //
-        $t = static::getTable();
+        $table = static::getTable();
 
         //
-        $i = $this->{$k};
+        $index = $this->{$key};
 
         //
-        $q = "UPDATE {$t} SET {$s} WHERE {$k}='{$i}'";
+        $sql = "UPDATE {$table} SET {$set} WHERE {$key}='{$index}'";
 
         //
-        static::getDatabase()->execute($q);
+        static::getDatabase()->execute($sql, $valuesArray);
 
         //
-        if ($k) {
-            return $this->{$k};
+        if ($key) {
+            return $this->{$key};
         }
 
         //

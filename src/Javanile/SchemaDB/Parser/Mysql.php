@@ -100,7 +100,8 @@ class Mysql
                 return static::getNotationAttributesBoolean($notation, $field, $before);
 
 			//
-			case 'integer': return static::getNotationAttributesInteger($notation, $field, $before);
+			case 'integer':
+                return static::getNotationAttributesInteger($notation, $field, $before);
                 
 			//
 			case 'float': return static::getNotationAttributesFloat($notation, $field, $before);
@@ -148,7 +149,8 @@ class Mysql
 	}
     
 	/**
-	 * 
+	 *
+     * 
 	 */
 	private static function
     getNotationAttributesPrimaryKey($notation, $field, $before) {
@@ -176,9 +178,11 @@ class Mysql
 	}
 	
 	/**
-	 * 
+	 *
+     * 
 	 */
-	private static function getNotationAttributesDate($notation, $field, $before) {
+	private static function
+    getNotationAttributesDate($notation, $field, $before) {
 		
 		//
 		$attributes = static::getNotationAttributesDefault($field, $before);
@@ -194,9 +198,11 @@ class Mysql
 	}
 	
 	/**
+     * 
 	 * 
 	 */
-	private static function getNotationAttributesDatetime($notation, $field, $before) {
+	private static function
+    getNotationAttributesDatetime($notation, $field, $before) {
 		
 		//
 		$attributes = static::getNotationAttributesDefault($field, $before);
@@ -256,8 +262,8 @@ class Mysql
 	/**
 	 * 
 	 */
-	private static function getNotationAttributesBoolean($notation, $field, $before) {
-
+	private static function getNotationAttributesBoolean($notation, $field, $before)
+    {
         //
         $attributes = static::getNotationAttributesDefault($field, $before);
 		
@@ -277,8 +283,11 @@ class Mysql
 	/**
 	 * 
 	 */
-	private static function getNotationAttributesInteger($notation, $field, $before) {
-
+	private static function getNotationAttributesInteger(
+        $notation,
+        $field,
+        $before
+    ) {       
         //
         $attributes = static::getNotationAttributesDefault($field, $before);
 

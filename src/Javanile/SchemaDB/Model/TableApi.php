@@ -31,33 +31,22 @@ trait TableApi
 		$attribute = 'Table';
 
 		// retrieve value from class setting definition
-		if (static::hasConfig($attribute)) {
-			return static::getConfig($attribute);
-		}
-		
-		// 
-		else if (isset(static::$table)) {
-            $name = static::$table;
-        } 
-		
-		//
-		elseif (isset(static::$class)) {
-            $name = static::$class;
-        } 
-		
-		//
-		else {
-            $name = static::getClassName();
+		if (!static::hasClassAttribute($attribute)) {
+
+            //
+            $name = isset(static::$table)
+                  ? static::$table
+                  : static::getClassName();
+            
+            // get prefix
+            $table = static::getDatabase()->getPrefix() . $name;
+
+            // store as setting for future request
+            static::setClassAttribute($attribute, $table);
         }
 
-		// get prefix
-        $table = static::getDatabase()->getPrefix() . $name;
-
-		// store as setting for future request
-		static::setConfig($attribute, $table);
-								
         // return complete table name
-        return $table;
+        return static::getClassAttribute($attribute);
     }
    	
     /**
@@ -65,35 +54,38 @@ trait TableApi
 	 * @return type
 	 */ 
     public static function applyTable()
-    {        
-		// if model is not connectect to any db return
-		if (!static::getDatabase()) {
-			throw new \Javanile\SchemaDB\Exception("No database");
-        }
-
-		$attribute = 'TableUpdated';
-		
-		// avoid re-update by check the cache
-        if (static::hasConfig($attribute)) {	
-			return;
-		}
-
-        // get table name
-        $table = static::getTable();
-
-		// 
-		$schema = static::getSchema();
-
+    {
         //
-        if (!$schema) {
-			throw new \Javanile\SchemaDB\Exception("Empty model class");
+		$attribute = 'ApplyTableExecuted';
+
+		// avoid re-update by check the cache
+        if (!static::hasClassAttribute($attribute)) {
+
+            //
+            $database = static::getDatabase();
+            
+            // if model is not connectect to any db return
+            if (!$database) {
+                throw new \Javanile\SchemaDB\Exception("No database");
+            }
+
+            // get table name
+            $table = static::getTable();
+
+            //
+            $schema = static::getSchema();
+
+            //
+            if (!$schema) {
+                throw new \Javanile\SchemaDB\Exception("Empty model class");
+            }
+
+            // have a valid schema update db table
+            static::getDatabase()->applyTable($table, $schema, false);
+
+            // cache last update avoid multiple call
+            static::setClassAttribute($attribute, time());
         }
-
-        // have a valid schema update db table
-        static::getDatabase()->applyTable($table, $schema, false);
-
-        // cache last update avoid multiple call
-        static::setConfig($attribute, time());
     }
 	
 	/**
@@ -107,13 +99,24 @@ trait TableApi
 		$attribute = 'Database';
 
         //
-        $database = static::hasConfig($attribute) ? static::getConfig($attribute) : Database::getDefault();
+        if (!static::hasClassAttribute($attribute)) {
 
-        //
-        // TODO: check if no have database connected $database == null
+            //
+            $database = Database::getDefault();
 
+            //
+            // TODO: check if no have database connected $database == null
+            if (!$database) {
+                die('no default database!!!!');
+                debug_print_backtrace();
+            }
+
+            //
+            static::setClassAttribute($attribute, $database);
+        }
+       
         //
-        return $database;
+        return static::getClassAttribute($attribute);
     }
 
 	/**

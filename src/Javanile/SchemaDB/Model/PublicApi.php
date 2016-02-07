@@ -7,6 +7,7 @@
 namespace Javanile\SchemaDB\Model;
 
 use Javanile\SchemaDB\Utils;
+use Javanile\SchemaDB\Exception;
 
 trait PublicApi 
 {	
@@ -38,45 +39,6 @@ trait PublicApi
 
         //
         return $object;
-    }
-	
-	/**
-     * Load item from DB
-     *
-     * @param  type $id
-     * @return type
-     */
-    public static function load($index, $fields=null)
-    {
-        // update table schema on DB
-        static::applyTable();
-
-        //
-		try {
-            //
-            if (is_array($index)) {
-                return static::loadByQuery($index, $fields);
-            }
-
-            //
-            $key = static::getPrimaryKey();
-
-            //
-            if ($key) {
-                return static::loadByPrimaryKey($index, $fields);
-            }
-
-            //
-            else {
-                return static::loadByMainField($index, $fields);
-            }
-        }
-
-		//
-		catch (DatabaseException $ex) {
-			static::error(debug_backtrace(), $ex);
-		}
-
     }
 	
     /**
@@ -160,7 +122,7 @@ trait PublicApi
         $table = static::getTable();
 
 		//
-		$join = "";
+		$join = '';
 		
 		//
 		$class = static::getClassName();
@@ -200,22 +162,67 @@ trait PublicApi
      *
      * @return type
      */
-    public static function first()
+    public static function first($query=null)
     {
         //
-        $t = static::getTable();
+        static::applyTable();
 
         //
-        $s = "SELECT * FROM {$t} LIMIT 1";
+        $table = static::getTable();
 
         //
-        $r = schemadb::execute('row',$s);
+        $order = isset($query['order'])
+               ? 'ORDER BY '.$query['order']
+               : '';
+        
+        //
+        unset($query['order']);
 
         //
-        if ($r) {
-            return static::build($r);
+        $whereArray = [];
+
+        //
+        $valueArray = [];
+
+        //
+        if (count($query) > 0) {
+
+            //
+            $schema = static::getSchemaFields();
+
+            //
+            foreach ($schema as $field) {
+             
+                //
+                if (!isset($query[$field])) { continue; }
+
+                //
+                $token = ':'.$field;
+
+                //
+                $whereArray[] = "`{$field}` = {$token}";
+
+                //
+                $valueArray[$token] = $query[$field];
+            }
         }
 
+        //
+        $where = $whereArray
+               ? 'WHERE '.implode(' AND ', $whereArray)
+               : '';
+        
+        //
+        $sql = "SELECT * FROM {$table} {$where} {$order} LIMIT 1";
+
+        //
+		try { $row = static::getDatabase()->getRow($sql, $valueArray); }
+		
+		//
+		catch (Exception $ex) { static::error(debug_backtrace(), $ex); }
+
+        //        
+        return $row ? static::make($row) : null;
     }
 
     /**
@@ -253,7 +260,9 @@ trait PublicApi
         }
 
         //
-        $where = count($whereConditions)>0 ? 'WHERE '.implode(' AND ',$whereConditions) : '';
+        $where = count($whereConditions)>0 
+               ? 'WHERE '.implode(' AND ',$whereConditions)
+               : '';
 
         //
         $s = "SELECT * FROM `{$table}` {$where} LIMIT 1";
@@ -273,8 +282,6 @@ trait PublicApi
 	 */
     public static function submit($query)
     {
-
-
         //
         $object = static::exists($query);
 
@@ -314,7 +321,9 @@ trait PublicApi
     public static function update($query, $values)
     {
         //
-        $o = static::build($query);
+        $o = static::make($query);
+
+        //
         $o->storeUpdate();
 
         //
@@ -328,10 +337,9 @@ trait PublicApi
      * @param  type $$values
      * @return type
      */
-    public static function encode($values, $map=null)
+    public function encode()
     {
-		//
-		return static::filter($value, 'decode_', $map);		
+        // . . .
     }
 
     /**
@@ -340,10 +348,9 @@ trait PublicApi
 	 * @param type $values
 	 * @return type
 	 */
-    public static function decode($values, $map=null)
+    public function decode()
     {					
-		//
-		return static::filter($value, 'decode_', $map);		
+		// . . .
     }
 
     /**
@@ -435,16 +442,16 @@ trait PublicApi
         }
 
         // prepare sql query
-        $t = static::getTable();
+        $table = static::getTable();
 
         //
-        $q = "DROP TABLE IF EXISTS `{$t}`";
-
-		//
-		static::delConfig('update');
+        $sql = "DROP TABLE IF EXISTS `{$table}`";
 		
         // execute query
-        static::getDatabase()->execute($q);
+        static::getDatabase()->execute($sql);
+
+        //
+		static::delClassAttribute('ApplyTableExecuted');
     }
 	
 	/**

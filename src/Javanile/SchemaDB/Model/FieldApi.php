@@ -19,35 +19,34 @@ trait FieldApi
 		$attribute = 'PrimaryKey';
 		
 		// retrieve value from class setting definition
-		if (static::hasConfig($attribute)) {
-			return static::getConfig($attribute);
-		}
-		
-		//
-		$key = false;
-		
-		//
-		$schema = static::getSchema();
-
-        //
-        foreach ($schema as $field => &$attributes) {
+		if (!static::hasClassAttribute($attribute)) {
+			
+            //
+            $key = false;
 
             //
-            if ($attributes['Key'] == 'PRI') {
-	
-				//
-				$key = $field;
-                
-				//
-				break;
+            $schema = static::getSchema();
+
+            //
+            foreach ($schema as $field => &$attributes) {
+
+                //
+                if ($attributes['Key'] == 'PRI') {
+
+                    //
+                    $key = $field;
+
+                    //
+                    break;
+                }
             }
+
+            // store as setting for future request
+            static::setClassAttribute($attribute, $key);
         }
-			
-		// store as setting for future request
-		static::setConfig($attribute, $key);
-								
+	
         // return primary key field name
-        return $key;
+        return static::getClassAttribute($attribute);
     }
 	
 	/**
@@ -61,36 +60,35 @@ trait FieldApi
 		$attribute = 'MainField';
 		
 		// retrieve value from class setting definition
-		if (static::hasConfig($attribute)) {
-			return static::getConfig($attribute);
-		}
+		if (!static::hasClassAttribute($attribute)) {
 			
-		//
-		$mainField = false;
-		
-		//
-		$schema = static::getSchema();
-
-        //
-        foreach ($schema as $field => &$attributes) {
+            //
+            $mainField = false;
 
             //
-            if ($attributes['Key'] == 'PRI') {
-				continue;	
+            $schema = static::getSchema();
+
+            //
+            foreach ($schema as $field => &$attributes) {
+
+                //
+                if ($attributes['Key'] == 'PRI') {
+                    continue;
+                }
+
+                //
+                $mainField = $field;
+
+                //
+                break;
             }
-			
-			//
-			$mainField = $field;
-			
-			//
-			break;
+
+            // store as setting for future request
+            static::setClassAttribute($attribute, $mainField);
         }
-        		
-		// store as setting for future request
-		static::setConfig($attribute, $mainField);
-								
+
         // return primary key field name
-        return $mainField;
+        return static::getClassAttribute($attribute);
     }
 	
 	/**
@@ -104,31 +102,46 @@ trait FieldApi
 		$attribute = 'DefaultFields';
 		
 		// retrieve value from class setting definition
-		if (static::hasConfig($attribute)) {
-			return static::getConfig($attribute);
-		}
+		if (!static::hasClassAttribute($attribute)) {
 		
-		//
-		$fields = array();
-        
-		//
-		$schema = static::getSchema();
-		
-		//
-		foreach($schema as $field => $attributes) {
-			if (isset($attributes['Class'])) {
-				$class = $attributes['Class'];
-				$fields[$field] = call_user_func($class.'::join', $field);
-			} else {
-				$fields[] = $field;
-			}			
-		}
-						
-		// store as setting for future request
-		static::setConfig($attribute, $fields);
-								
+            //
+            $fields = array();
+
+            //
+            $schema = static::getSchema();
+
+            //
+            foreach($schema as $field => $attributes) {
+                if (isset($attributes['Class'])) {
+                    $class = $attributes['Class'];
+                    $fields[$field] = call_user_func($class.'::join', $field);
+                } else {
+                    $fields[] = $field;
+                }
+            }
+
+            // store as setting for future request
+            static::setClassAttribute($attribute, $fields);
+        }
+    
         // return primary key field name
-        return $fields;
+		return static::getClassAttribute($attribute);
+    }
+
+    /**
+     *
+     *
+     */
+    public static function getFieldValues($field)
+    {
+        //
+        $fields = get_class_vars(static::getClass());
+
+        //
+        return isset($fields[$field])
+            && is_array($fields[$field])
+             ? $fields[$field]
+             : null;
     }
 
     /**

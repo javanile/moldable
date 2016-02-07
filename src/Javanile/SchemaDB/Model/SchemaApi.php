@@ -1,13 +1,10 @@
 <?php
-
 /**
  * 
  * 
  */
 
 namespace Javanile\SchemaDB\Model;
-
-use Javanile\SchemaDB\SchemaParser;
 
 trait SchemaApi
 {
@@ -16,37 +13,36 @@ trait SchemaApi
 	 *  
 	 * @return type
 	 */
-    protected static function getSchema()
+    public static function getSchema()
     {		
 		//
 		$attribute = 'Schema';	
 
 		//
-		if (static::hasConfig($attribute)) {
-			return static::getConfig($attribute);
-		}
+		if (!static::hasClassAttribute($attribute)) {
 		
-		//
-		$fields = static::getSchemaFieldsWithValues();
-			
-        //
-        $schema = array();
+            //
+            $fields = static::getSchemaFieldsWithValues();
+
+            //
+            $schema = array();
+
+            //
+            if ($fields && count($fields) > 0) {
+                foreach ($fields as $name => $value) {
+                    $schema[$name] = $value;
+                }
+            }
+
+            //
+            static::getDatabase()->getParser()->parseTable($schema);
+
+            //
+            static::setClassAttribute($attribute, $schema);
+        }
 
         //
-		if ($fields && count($fields) > 0) {
-			foreach ($fields as $name => $value) {
-				$schema[$name] = $value;
-			}
-		}
-	
-		//			
-		static::getDatabase()->getParser()->parseTable($schema);
-        
-		//
-		static::setConfig($attribute, $schema);
-		
-        //
-        return $schema;
+        return static::getClassAttribute($attribute);
     }
 	
 	/**
@@ -58,37 +54,36 @@ trait SchemaApi
     {
 		//
 		$attribute	= 'SchemaFields';
-		
-		//
-		$exclude	= 'SchemaExcludedFields';
-		
-		//
-		if (static::hasConfig($attribute)) {
-			return static::getConfig($attribute);
+
+        //
+		if (!static::hasClassAttribute($attribute)) {
+
+            //
+            $attibuteLookup = 'SchemaExcludedFields';
+
+            //
+            $allFields = array_keys(get_class_vars(static::getClass()));
+
+            //
+            $fields = array_diff(
+                $allFields,
+                static::getClassGlobal($attibuteLookup)
+            );
+
+            //
+            if (static::hasClassConfig($attibuteLookup)) {
+                $fields = array_diff(
+                    $fields,
+                    static::getClassConfig($attibuteLookup)
+                );
+            }
+
+            //
+            static::setClassAttribute($attribute, $fields);
 		}
-		
-		//
-		$allFields = array_keys(get_class_vars(static::getClass()));
-	
-		//
-		$fields = array_diff(
-			$allFields, 
-			static::getGlobal($exclude)
-		);
 
 		//
-		if (static::hasConfig($exclude)) {
-			$fields = array_diff(
-				$fields, 
-				static::getConfig($exclude)
-			);
-		}
-		
-		//
-		static::setConfig($attribute, $fields);
-		
-		//
-		return $fields; 		
+		return static::getClassAttribute($attribute);
 	}
 	
 	/**
@@ -100,37 +95,33 @@ trait SchemaApi
 	{	
 		//
 		$attribute = 'SchemaFieldsWithValues';
-		
-		//
-		$exclude = 'SchemaExcludedFields';
-		
-		//
-		if (static::hasConfig($attribute)) {
-			return static::getConfig($attribute);
-		}
-		
-		//
-		$fields = get_class_vars(static::getClass());
-		
-		//
-		foreach(static::getGlobal($exclude) as $field) {
-			unset($fields[$field]);
-		}
-		
-		//
-		if (static::hasConfig($exclude)) {
-			foreach(static::getConfig($exclude) as $field) {
-				unset($fields[$field]);
-			}
-		}
-		
-		//
-		static::setConfig($attribute, $fields);
-		
-		//
-		return $fields; 		
-	}
-	
-    
-	
+
+        //
+		if (!static::hasClassAttribute($attribute)) {
+
+            //
+            $attributeLookup = 'SchemaExcludedFields';
+
+            //
+            $fields = get_class_vars(static::getClass());
+
+            //
+            foreach(static::getClassGlobal($attributeLookup) as $field) {
+                unset($fields[$field]);
+            }
+
+            //
+            if (static::hasClassConfig($attributeLookup)) {
+                foreach(static::getConfig($attributeLookup) as $field) {
+                    unset($fields[$field]);
+                }
+            }
+
+            //
+            static::setClassAttribute($attribute, $fields);
+        }
+
+    	//
+        return static::getClassAttribute($attribute);
+    }
 }

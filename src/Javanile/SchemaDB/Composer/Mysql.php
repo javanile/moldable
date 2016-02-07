@@ -21,7 +21,7 @@ class Mysql
 
     //
     public static function columnDefinition($attributes, $order=true)
-    {
+    {        
 		//
 		$a = &$attributes;
 
@@ -46,7 +46,7 @@ class Mysql
         } 
         
         //
-        else if ($a['Default'] == 'CURRENT_TIMESTAMP') {
+        else if ($a['Default'] === 'CURRENT_TIMESTAMP') {
             $Default = 'DEFAULT CURRENT_TIMESTAMP';                        
         } 
         

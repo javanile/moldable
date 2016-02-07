@@ -1,58 +1,66 @@
 <?php
+/**
+ * 
+ * 
+ */
 
-/*
- * 
- * 
-\*/
 namespace Javanile\SchemaDB\Model;
 
-/**
- *
- */
-use Javanile\SchemaDB\Notations;
-
-/**
- *
- *
- *
- *
- */
 trait ClassApi
 {
 	/**
-	 * Bundle to collect info and stored cache
+	 * Global setting class attributes
 	 * 
 	 * @var type 
 	 */
-    protected static $__Global__ = array(
-		'SchemaExcludedFields' => array(
-            '__Define__',
-            '__Global__',
-            '__Config__',
-        ),		
-	); 
-	
+    protected static $__global__ = [
+		'SchemaExcludedFields' => [
+            '__global__',
+            '__attributes__',
+            '__config__',
+            'class',
+            'table',
+            'model',
+        ],
+	];
+
+    /**
+	 * Per-class attributes used as cache
+	 *
+	 * @var type
+	 */
+    protected static $__attributes__ = [];
+
 	/**
 	 *
 	 * @var type 
 	 */
-	protected static $__Config__ = array(
-		'SchemaExcludedFields' => array(),
-	); 
-			
+	public static $__config__ = [];
+    		
 	/**
-	 * Retrieve static class name
+	 * Retrieve static class complete name
+     * with namespace prepended
 	 * 
 	 * @return type
 	 */ 
     protected static function getClass()
     {
-		//
-		$attribute = 'Class';
-		
         //
-        return static::optDefine($attribute, static::getCalledClass());
+        return isset(static::$class)
+             ? static::$class
+             : static::getCalledClass();
     }
+
+    /**
+	 *
+     * 
+	 * @return type
+	 */
+	protected static function getCalledClass()
+    {
+		//
+		return trim(get_called_class(),'\\');
+	}
 
 	/**
 	 * Retrieve static class name
@@ -60,204 +68,120 @@ trait ClassApi
 	 * @return type
 	 */ 
     protected static function getClassName()
+    {		
+        //
+        $attribute = 'ClassName';
+
+        //
+        if (!static::hasClassAttribute($attribute)) {
+
+            //
+            $class = static::getClass();
+
+            //
+            $point = strrpos($class, '\\');
+
+            //
+            $className = $point === false ? $class : substr($class, $point + 1);
+            
+            //
+            static::setClassAttribute($attribute, $className);
+        } 
+        
+        //
+        return static::getClassAttribute($attribute);
+    }
+	
+	/**
+	 *
+     * 
+	 */
+	protected static function hasClassAttribute($attribute)
+    {
+		//
+		$class = static::getClass();
+			
+		//
+		return isset(static::$__attributes__[$class][$attribute]);
+	}
+
+	/**
+     * 
+	 * 
+	 */
+	protected static function getClassAttribute($attribute)
+    {
+		//
+		$class = static::getClass();
+      
+		//
+		return static::$__attributes__[$class][$attribute];
+	}
+
+	/**
+	 *
+     * 
+	 */
+	protected static function setClassAttribute($attribute, $value)
     {
 		//
 		$class = static::getClass();
 		
 		//
-		$point = strrpos($class, '\\');
-		
+		static::$__attributes__[$class][$attribute] = $value;
+	}
+
+    /**
+	 *
+     *
+	 */
+	protected static function delClassAttribute($attribute)
+    {
 		//
-		return $point === false ? $class : substr($class, $point + 1);
+		$class = static::getClass();
+
+		//
+		unset(static::$__attributes__[$class][$attribute]);
+	}
+
+    /**
+     *
+     *
+     */
+    protected static function getClassGlobal($attribute)
+    {
+        //
+        return static::$__global__[$attribute];
     }
 
-	/**
-	 * 
-	 * @return type
-	 */
-	protected static function getCalledClass() {
+    /**
+     *
+     *
+     */
+    protected static function hasClassGlobal($attribute)
+    {
+        //
+        return isset(static::$__global__[$attribute]);
+    }
 
-		//
-		return get_called_class();		
-	}
+    /**
+     *
+     *
+     */
+    protected static function getClassConfig($attribute)
+    {
+        //
+        return static::$__config__[$attribute];
+    }
 
-	/**
-	 * 
-	 */
-	protected static function hasGlobal($attribute) {
-				
-		//
-		return isset(static::$__Global__[$attribute]);		
-	}
-
-	/**
-	 * 
-	 */
-	protected static function getGlobal($attribute) {
-		
-		//
-		return static::$__Global__[$attribute];		
-	}
-
-	/**
-	 * 
-	 */
-	protected static function setGlobal($attribute, $value) {
-		
-		//
-		static::$__Global__[$attribute] = $value;		
-	}
-
-	/**
-	 * 
-	 * @param type $attribute
-	 */
-	protected static function delGlobal($attribute) {
-		
-		// clear cached
-        unset(static::$__Global__[$attribute]);		
-	}
-	
-	/**
-	 * 
-	 */
-	protected static function hasConfig($attribute) {
-			
-		//
-		$class = static::getClass();
-			
-		//
-		return isset(static::$__Config__[$attribute][$class]);		
-	}
-
-	/**
-	 * 
-	 */
-	protected static function getConfig($attribute) {
-					
-		//
-		$class = static::getClass();
-		
-		//
-		return static::$__Config__[$attribute][$class];		
-	}
-
-	/**
-	 * 
-	 */
-	protected static function setConfig($attribute, $value) {
-		
-		//
-		$class = static::getClass();
-		
-		//
-		static::$__Config__[$attribute][$class] = $value;		
-	}
-
-	/**
-	 * 
-	 * @param type $attribute
-	 */
-	protected static function delConfig($attribute) {
-		
-		//
-		$class = static::getClass();
-		
-		// clear cached
-        unset(static::$__Config__[$attribute][$class]);		
-	}
-	
-	/**
-	 * 
-	 */
-	protected static function hasDefine($attribute) {
-				
-		//
-		return isset(static::$__Define__[$attribute]);		
-	}
-
-	/**
-	 * 
-	 */
-	protected static function getDefine($attribute) {
-		
-		//
-		return static::$__Define__[$attribute];		
-	}
-
-	/**
-	 * 
-	 */
-	protected static function setDefine($attribute, $value) {
-		
-		//
-		static::$__Define__[$attribute] = $value;		
-	}
-
-	/**
-	 * 
-	 * @param type $attribute
-	 */
-	protected static function delDefine($attribute) {
-		
-		// clear cached
-        unset(static::$__Define__[$attribute]);		
-	}
-
-	/**
-	 * 
-	 * @param type $attribute
-	 */
-	protected static function optDefine($attribute, $default=null) {
-		
-		//
-		return isset(static::$__Define__) 
-			&& isset(static::$__Define__[$attribute]) 
-			 ? static::$__Define__[$attribute] 
-			 : $default;
-	}
-	
-	/**
-	 * 
-	 * @param type $prefix
-	 * @return type
-	 */
-	protected static function getMethodsByPrefix($prefix=null) {
-	
-		//
-		$attribute = 'MethodsByPrefix:'.$prefix;
-		
-		//
-		if (static::hasConfig($attribute)) {
-			return static::getConfig($attribute);
-		}
-		
-		//
-		$class = static::getClass();
-		
-		//
-		$allMethods = get_class_methods($class);
-		
-		//
-		$methods = array();
-		
-		//
-		if (count($allMethods) > 0) {					
-			foreach($allMethods as $method) {
-				if (preg_match('/^'.$prefix.'/i',$method)) {
-					$methods[] = $method;
-				}
-			}			
-		} 
-		
-		//
-		asort($methods);
-		
-		//
-		static::setConfig($attribute, $methods);
-		
-		//
-		return $methods;
-	} 
+    /**
+     *
+     *
+     */
+    protected static function hasClassConfig($attribute)
+    {
+        //
+        return isset(static::$__config__[$attribute]);
+    }
 }
 
