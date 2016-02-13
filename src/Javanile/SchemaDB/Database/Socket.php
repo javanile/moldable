@@ -189,6 +189,17 @@ class Socket
 		return $this->_pdo->lastInsertId();
 	}
 	
+    /**
+	 * Return last insert id 
+	 * 
+	 * @return type
+	 */
+	public function quote($string)
+	{
+		//
+		return $this->_pdo->quote($string);
+	}
+	   
 	/**
 	 * 
 	 * 

@@ -237,7 +237,20 @@ trait SocketApi
 		//
         return $tables;  
 	}
-			
+
+    /**
+     *
+     *
+     */
+    public function quote($string)
+    {
+        //
+		$this->connect();
+        
+        //
+        return $this->_socket->quote($string);
+    }
+
 	/**
 	 * Debug mode setter
 	 * 
