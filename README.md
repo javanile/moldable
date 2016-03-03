@@ -55,6 +55,16 @@ $db->apply(array(
 
 ```
 
+# Talk about
+ - http://www.php-forum.com/phpforum/viewtopic.php?f=30&t=26732&p=4413131&hilit=schemadb#p4413131
+ - https://www.reddit.com/r/PHP/comments/3okj7x/schemadb_a_modern_and_coincise_database/?ref=readnext_4
+ - https://www.reddit.com/r/PHP/comments/427zvg/schemadb_adapt_schema_of_mysql_db_based_on_class/
+ - http://fudforum.org/forum/index.php?S=Google%20%5BBot%5D&t=msg&th=123561
+ - http://www.codingforums.com/php/374551-manipulate-database-schema.html#post1497472
+ - http://forums.phpfreaks.com/topic/300920-manipulate-database-schema-with-orm/
+ - http://www.giorgiotave.it/forum/php-mysql/241550-manipolare-lo-schema-del-database.html#post1205019
+ - http://www.iprogrammatori.it/forum-programmazione/php/manipolare-schema-del-database-t27275.html
+
 # Roadmap
 
  - Manage table to store key-value pair like Setting or Config or MetaField
