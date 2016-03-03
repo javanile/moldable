@@ -3,6 +3,10 @@
 SchemaDB is an abstraction layer to manage MySQL database 
 with improved function to alter-state and manipulate database schema
 
+# Ebook
+
+A free ebook for italians: https://leanpub.com/schemadb-capitolo-zero/
+
 # How to: Connect to database
 
 ```php
