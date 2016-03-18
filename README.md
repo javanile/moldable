@@ -12,16 +12,16 @@ A free ebook for italians: https://leanpub.com/schemadb-capitolo-zero/
 ```php
 <?php
 // library namespace 
-use Javanile\SchamaDB;
+use Javanile\SchamaDB\Database;
 
 // initialize a database connection object 
-$db = new SchemaDB\Database(array(
+$db = new Database([
 	'host'     => 'localhost',
 	'dbname'   => 'db_marketing',
 	'usernane' => 'root',
 	'password' => 'p4ssw0rd',
 	'prefix'   => 'prefix_',
-));
+]);
 
 // '$db' is ready to use for your manipulation
 ```
