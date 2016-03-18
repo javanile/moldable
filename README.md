@@ -16,11 +16,11 @@ use Javanile\SchamaDB;
 
 // initialize a database connection object 
 $db = new SchemaDB\Database(array(
-	'host' => 'localhost',
-	'user' => 'root',
-	'pass' => 'p4ssw0rd',
-	'name' => 'db_marketing',
-	'pref' => 'prefix_',
+	'host'     => 'localhost',
+	'dbname'   => 'db_marketing',
+	'usernane' => 'root',
+	'password' => 'p4ssw0rd',
+	'prefix'   => 'prefix_',
 ));
 
 // '$db' is ready to use for your manipulation
@@ -34,10 +34,10 @@ $db = new SchemaDB\Database(array(
 
 // apply method send queries to create 
 // or align database to defined schema 
-$db->apply(array(
+$db->apply([
 
 	// customer table name
-	'Customer' => array(
+	'Customer' => [
 		
 		// customer fields
 		'id' => $db::PRIMARY_KEY,	// define field as a primary key
@@ -45,18 +45,17 @@ $db->apply(array(
 		'points' => 0,				// 0 (zero) define field as INT(11)
 		'born' => $db::DATE,		// use to define as date field
 		'biography' => $db::TEXT,	// text for large string and contents
-	),
+	],
 
 	// products table name
-	'Products' => array(
+	'Products' => [
 
 		// products fields		
 		'id' => $db::PRIMARY_KEY,	// define field as a primary key
 		'name' => '',				// empty string define field as VARCHAR	
 		'price' => .0,				// for float number init field with point-zero ".0"	
- 	),
+ 	],
 ));
-
 ```
 
 # Talk about
