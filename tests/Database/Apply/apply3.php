@@ -1,13 +1,23 @@
 <?php
 
 // require connection parametrs
-require_once 'common.php'; 
+require_once '../common.php';
 
 // drop all database tables
-#$db->drop('confirm');
+// $db->drop('*','confirm');
 
 //
-$db->apply('Nome della tabella', 'nome del campo', 0);
+$notations = [
+    '',
+    0,
+    .0,
+    $db::VARCHAR_10
+];
+
+//
+foreach ($notations as $notation) {
+    $db->apply('User', 'entryrole', $notation);
+}
 
 //
 $db->dump();

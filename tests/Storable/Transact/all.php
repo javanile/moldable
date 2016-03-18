@@ -4,7 +4,7 @@
 require_once 'common.php';
 
 //
-Person::getSchemaDB()->transact();
+Person::getDatabase()->transact();
 
 //
 $Persons = Person::update([
@@ -14,11 +14,10 @@ $Persons = Person::update([
 
 //
 if (assert()) {
-	Person::getSchemaDB()->commit();	
+	Person::getDatabase()->commit();
 } else {
-	Person::getSchemaDB()->rollback();
+	Person::getDatabase()->rollback();
 }
-
 
 //
 Person::dump($Persons);

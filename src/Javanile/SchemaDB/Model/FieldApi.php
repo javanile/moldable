@@ -13,7 +13,7 @@ trait FieldApi
 	 *  
 	 * @return boolean
 	 */
-    protected static function getPrimaryKey()
+    public static function getPrimaryKey()
     {
 		//
 		$attribute = 'PrimaryKey';
@@ -49,12 +49,28 @@ trait FieldApi
         return static::getClassAttribute($attribute);
     }
 	
+    /**
+     * 
+     * 
+     */
+    public function getPrimaryKeyValue()
+    {
+        //
+        $key = static::getPrimaryKey();
+
+        //
+        return $key
+            && isset($this->{$key})
+             ? $this->{$key}
+             : null;
+    }
+
 	/**
 	 * Retrieve primary key field name
 	 *  
 	 * @return boolean
 	 */
-    protected static function getMainField()
+    public static function getMainField()
     {
 		//
 		$attribute = 'MainField';
@@ -90,8 +106,37 @@ trait FieldApi
         // return primary key field name
         return static::getClassAttribute($attribute);
     }
-	
-	/**
+
+    /**
+     *
+     *
+     */
+    public function getMainFieldValue()
+    {
+        //
+        $mainField = static::getMainField();
+
+        //
+        return $mainField
+            && isset($this->{$mainField})
+             ? $this->{$mainField}
+             : null;
+    }
+
+    /**
+     *
+     *
+     */
+    protected static function getPrimaryKeyOrMainField()
+    {
+        //
+        $key = static::getPrimaryKey();
+
+        //
+        return $key ? $key : static::getMainField(); 
+    }
+
+    /**
 	 * Retrieve primary key field name
 	 *  
 	 * @return boolean
@@ -111,9 +156,9 @@ trait FieldApi
             $schema = static::getSchema();
 
             //
-            foreach($schema as $field => $attributes) {
-                if (isset($attributes['Class'])) {
-                    $class = $attributes['Class'];
+            foreach($schema as $field => $aspects) {
+                if (isset($aspects['Class']) && $aspects['Relation'] == '1:1') {
+                    $class = $aspects['Class'];
                     $fields[$field] = call_user_func($class.'::join', $field);
                 } else {
                     $fields[] = $field;
@@ -149,12 +194,29 @@ trait FieldApi
 	 *
 	 * @param type $values
 	 */
-    public function fill($values)
+    public function fill($values, $map=null, $prefix=null)
     {
 		//
-        foreach (static::getSchemaFields() as $field) {
+        foreach (static::getSchema() as $field => $aspects) {
 
-			//
+            //
+            if (isset($aspects['Class']) && $aspects['Relation'] == '1:1') {
+
+                //
+                $class = $aspects['Class'];
+
+                //
+                $this->{$field} = $class::make(
+                    $values,
+                    $map,
+                    $prefix . $field . '__'
+                );
+            }
+
+            //
+            $field = $prefix . $field;
+
+            //           
 			if (isset($values[$field])) {
                 $this->{$field} = $values[$field];
             }
@@ -163,10 +225,13 @@ trait FieldApi
 		//
         $key = $this->getPrimaryKey();
 
+        //
+        $field = $prefix . $key;
+
 		//
         if ($key) {
-            $this->{$key} = isset($values[$key])
-                          ? (int) $values[$key]
+            $this->{$key} = isset($values[$field])
+                          ? (int) $values[$field]
                           : (int) $this->{$key};
         }
     }

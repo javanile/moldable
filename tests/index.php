@@ -1,28 +1,60 @@
 <?php
 
 //
-echo '<h1>Tests</h1>';
+echo '<h1>SchemaDB tests</h1>';
 
 //
-foreach(scandir('.') as $folder) {
+function tests_tree($base, $head=false) {
 
-	//
-	if (!is_dir($folder) || $folder[0] == '.') {
-		continue;
-	}
+    //
+    $realpath = realpath($base);
 
-	//
-	echo '<h3>'.$folder.'</h3><ul>';
-	
-	//
-	foreach(scandir($folder) as $file) {
-		
-		if (is_dir($folder.'/'.$file) || $file[0] == '.' || $file == 'common.php') {
-			continue;
-		}
-		
-		echo '<li><a href="'.$folder.'/'.$file.'" target="_blank">'.$file.'</a></li>';
-	}
-	
-	echo '</ul>';
+    //
+    $exclude = [
+        '.',
+        '..',
+        'index.php',
+        'config.php',
+        'common.php',
+        'override.php',
+    ];
+
+    //
+    if ($head) {
+        echo '<b>'.basename($realpath).'</b>';
+    }
+    
+    //
+    echo '<ul>';
+
+    //
+    foreach (scandir($base) as $file) {
+
+        //
+        if (in_array($file, $exclude)) { continue; }
+
+        //
+        echo '<li>';
+
+        //
+        $path = $base.'/'.$file;
+
+        //
+        if (is_dir($path)) {
+            tests_tree($path, true);
+        } else {
+            echo '<a href="'.$path.'" target="_blank">'.$file.'</a>';
+        }
+        
+        //
+        echo '</li>';
+    }
+    
+    //
+    echo '</ul>';
 }
+
+//
+tests_tree('.');
+
+

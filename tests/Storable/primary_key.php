@@ -4,10 +4,10 @@
 require_once 'common.php'; 
 
 //
-use Javanile\SchemaDB;
+use Javanile\SchemaDB\Storable;
 
 // extremely coincise model definition
-class Invoices extends SchemaDB\Storable 
+class Invoices extends Storable 
 {	
 	// with a private key field
 	public $id = self::PRIMARY_KEY;
@@ -18,11 +18,6 @@ class Invoices extends SchemaDB\Storable
 	// . . .
 	public $created = self::DATE;
 }
-
-
-
-
-
 
 //
 $Person = new Person();

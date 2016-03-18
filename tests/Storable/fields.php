@@ -4,11 +4,11 @@
 require_once 'common.php'; 
 
 //
-use SourceForge\SchemaDB;
+use Javanile\SchemaDB\Storable;
 
 //
-class Fields extends SchemaDB\Storable {
-	
+class Fields extends Storable
+{	
 	//	
 	static $__Define__ = array(
 		'DefaultVarcharSize'	=> 10,
@@ -55,15 +55,14 @@ class Fields extends SchemaDB\Storable {
 	/* */
 }
 
+//
 #Fields::drop('confirm');
 
-SchemaDB\Database::getDefault()->dump();
-
+//
+Database::getDefault()->dump();
 
 //
 $Fields = new Fields();
-
-
 
 //
 $Fields->store();

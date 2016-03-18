@@ -9,10 +9,14 @@ namespace Javanile\SchemaDB;
 class Storable implements Notations
 {
     use Model\LoadApi;
+    use Model\ErrorApi;
     use Model\ClassApi;
     use Model\TableApi;
     use Model\FieldApi;
     use Model\SchemaApi;
+    use Model\UpdateApi;
+    use Model\JoinApi;
+    use Model\DebugApi;
     use Model\PublicApi;
     
 	/**
@@ -47,7 +51,7 @@ class Storable implements Notations
      */
     public function store($values=null)
     {		
-		//
+		// update values before store
 		if (is_array($values)) {
 			
 			//
@@ -148,10 +152,13 @@ class Storable implements Notations
         static::applyTable();
 
         // collect field names for sql query
-        $fieldsArray = array();
+        $fieldsArray = [];
 		
 		// collect values for sql query
-        $valuesArray = array();
+        $valuesArray = [];
+
+        // collect tokens value for pdo parametric
+        $tokensArray = [];
         
 		// get primary field name
 		$key = static::getPrimaryKey();
@@ -169,14 +176,24 @@ class Storable implements Notations
 
             // get current value of attribute of object
             $value = static::insertRelationBefore($this->{$field}, $column);
-            
+
+            //
+            $token = ':'.$field;
+
             //
             $fieldsArray[] = $field;
-            $valuesArray[] = "'".$value."'";
-        }
+
+            //
+            $valuesArray[] = $token;
+
+            //
+            $tokensArray[$token] = $value;
+        } 
 
         //
         $fields = implode(',', $fieldsArray);
+
+        //
         $values = implode(',', $valuesArray);
 
         //
@@ -186,41 +203,36 @@ class Storable implements Notations
         $sql = "INSERT INTO {$table} ({$fields}) VALUES ({$values})";
 
         //
-        static::getDatabase()->execute($sql);
+        static::getDatabase()->execute($sql, $tokensArray);
+        
+        //
+        foreach ($schema as $field => &$column) {
+
+            //
+            if (!$force && $field == $key) { continue; }
+
+            //
+            static::insertRelationAfter($this->{$field}, $column);
+        }
 
         //
         if ($key) {
-			
-			//
             $index = static::getDatabase()->getLastId();
-        
-			//
-			foreach ($schema as $field => &$column) {
-				
-				//
-				if ($field == $key && !$force) { continue; }
-
-				//
-				static::insertRelationAfter($this->{$field}, $column);				
-			}
-			
-			//
-			$this->{$key} = $index;
-
-			//
-            return $index;
+            $this->{$key} = $index;
+        } else {
+            $index = static::getMainFieldValue();
         }
-
-        //        
-		return true;        
+        
+        //
+        return $index;
     }
 
 	/**
 	 * 
 	 * @param type $value
 	 */
-	private static function insertRelationBefore($value, &$column) {
-		
+	private static function insertRelationBefore($value, &$column)
+    {
 		//
 		if (!is_array($value)) {
 			return $value;					
@@ -239,10 +251,11 @@ class Storable implements Notations
 	}
 	
 	/**
-	 * 
+	 *
+     * 
 	 */
-	private static function insertRelationOneToOne($value, &$column) {
-		
+	private static function insertRelationOneToOne($value, &$column)
+    {
 		//
 		$class = $column['Class'];
 
@@ -260,8 +273,8 @@ class Storable implements Notations
 	 * 
 	 * @param type $value
 	 */
-	private static function insertRelationAfter($value, &$column) {
-		
+	private static function insertRelationAfter($value, &$column)
+    {
 		//
 		if (!is_array($value)) {
 			return $value;					
@@ -276,10 +289,11 @@ class Storable implements Notations
 	}
 	
 	/**
-	 * 
+	 *
+     * 
 	 */
-	private static function insertRelationOneToMany($values, &$column) {
-		
+	private static function insertRelationOneToMany($values, &$column)
+    {
 		//
 		$class = $column['Class'];
 

@@ -4,18 +4,14 @@
 require_once 'common.php';
 
 //
-$id = 1;
-
-
-
-//
-$Person = Person::query(array(
-	'field' => array(
+$Persons = Person::query([
+	'field' => [
 		'name',	
 		'a1_*' => Address::join(),
 		'a2_*' => Address::join(),		
-	),
-));
+	],
+]);
 
 //
-var_Dump($Person);
+var_Dump($Persons);
+

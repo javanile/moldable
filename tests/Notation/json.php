@@ -6,25 +6,18 @@ require_once '../common.php';
 //
 $notations = [
 
-    '<<Class>>',
-	'<<Class*>>',
-	'<<Class**>>',
+    //
+    '<<{"Type":"int(2)"}>>',
 
-    '<<Class lookupField>>',
-	'<<Class lookupField*>>',
-    '<<Class lookupField**>>',
+    //
+    '<<["","value1"]>>',
 
-    '<<Name\\Class>>',
-    '<<Name\\Space\\Class*>>',
-    '<<Name\\Space\\Class**>>',
+    // error json only with double quotes
+    "<<['','kg','lt']>>",
 
-    '<<Name\\Space\\Class lookupField>>',
-    '<<Name\\Space\\Class lookupField*>>',
-    '<<Name\\Space\\Class lookupField**>>',
-
-    '<<Name\\Space\\Class lookupField secondLookupField>>',
-    '<<Name\\Space\\Class lookupField secondLookupField*>>',
-    '<<Name\\Space\\Class lookupField secondLookupField**>>',
+    '<<["","pz","kg","mt","mq",
+        "mc","lt","gal","nr","rt","set","ton"]>>',
+    
 ];
 
 //

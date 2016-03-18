@@ -27,14 +27,14 @@ trait PublicApi
 	 * @param type $map
 	 * @return \static
 	 */
-    public static function make($values=null, $map=null)
+    public static function make($values=null, $map=null, $prefix=null)
     {
         //
         $object = new static();
 
         //
         if ($values) {
-            $object->fill($values);
+            $object->fill($values, $map, $prefix);
         }
 
         //
@@ -45,9 +45,12 @@ trait PublicApi
      *
      * @param type $query
      * @return type
-     */
+     */ 
     public static function query($query)
-    {
+    { 
+        //
+        static::applyTable(); 
+
         //
         $x = $query;
 
@@ -85,7 +88,7 @@ trait PublicApi
 
         // build query
         $q = "SELECT * FROM {$t} {$w} {$o} {$l}";
-
+       
         // fetch res
         $r = static::getDatabase()->getResults($q);
 
@@ -95,7 +98,6 @@ trait PublicApi
         }
 
         //
-
         return $r;
     }
 
@@ -129,7 +131,7 @@ trait PublicApi
 		
 		// 
 		$selectFields = static::getDatabase()
-                     -> getComposer()
+                     -> getWriter()
                      -> selectFields($fields, $class, $join);
 		
         //
@@ -143,7 +145,7 @@ trait PublicApi
 			$results = static::fetch(
                 $sql,
                 null,
-                true,
+                false,
                 is_string($fields),
                 is_null($fields)
             );
@@ -162,7 +164,7 @@ trait PublicApi
      *
      * @return type
      */
-    public static function first($query=null)
+    public static function first($query=null, $fields=null)
     {
         //
         static::applyTable();
@@ -182,13 +184,19 @@ trait PublicApi
         $whereArray = [];
 
         //
+        if (isset($query['where'])) {
+            $whereArray[] = '('.$query['where'].')';
+            unset($query['where']);
+        }
+        
+        //
         $valueArray = [];
 
         //
         if (count($query) > 0) {
 
             //
-            $schema = static::getSchemaFields();
+            $schema = static::getSchemaFields(); 
 
             //
             foreach ($schema as $field) {
@@ -216,13 +224,16 @@ trait PublicApi
         $sql = "SELECT * FROM {$table} {$where} {$order} LIMIT 1";
 
         //
-		try { $row = static::getDatabase()->getRow($sql, $valueArray); }
-		
-		//
-		catch (Exception $ex) { static::error(debug_backtrace(), $ex); }
+        $result = static::fetch(
+            $sql,
+            $valueArray,
+            true,
+            is_string($fields),
+            is_null($fields)
+        );
 
-        //        
-        return $row ? static::make($row) : null;
+        //
+        return $result;
     }
 
     /**
@@ -240,35 +251,39 @@ trait PublicApi
         $table = self::getTable();
         
 		//
-		$whereConditions = array();
+		$whereArray = [];
+
+        //
+        $valuesArray = [];
 
         //
         if (isset($query['where'])) {
-            $whereConditions[] = $query['where'];
+            $whereArray[] = $query['where'];
             unset($query['where']);
         }
 
 		//
-		$schema = static::getSchema();
+		$schema = static::getSchemaFields();
 				
         //
-        foreach ($schema as $field => $d) {
+        foreach ($schema as $field) {
             if (isset($query[$field])) {
-                $value = $query[$field];
-				$whereConditions[] = "{$field} = '{$value}'";
+                $token = ':'.$field;
+				$whereArray[] = "`{$field}` = {$token}";
+                $valuesArray[$token] = $query[$field];
             }
         }
 
         //
-        $where = count($whereConditions)>0 
-               ? 'WHERE '.implode(' AND ',$whereConditions)
+        $where = count($whereArray)>0
+               ? 'WHERE '.implode(' AND ',$whereArray)
                : '';
 
         //
-        $s = "SELECT * FROM `{$table}` {$where} LIMIT 1";
+        $sql = "SELECT * FROM `{$table}` {$where} LIMIT 1";
 
         //
-        $r = static::getDatabase()->getRow($s);
+        $r = static::getDatabase()->getRow($sql, $valuesArray);
 
         //        
         return $r ? self::make($r) : false;
@@ -311,48 +326,7 @@ trait PublicApi
         //
         return $object;
     }
-
-    /**
-     *
-     * @param  type $query
-     * @param  type $values
-     * @return type
-     */
-    public static function update($query, $values)
-    {
-        //
-        $o = static::make($query);
-
-        //
-        $o->storeUpdate();
-
-        //
-        return $o;
-    }
-
-    /**
-     * Encode/manipulate field on object
-     * based on encode_ static method of class
-     *
-     * @param  type $$values
-     * @return type
-     */
-    public function encode()
-    {
-        // . . .
-    }
-
-    /**
-	 * 
-	 * 
-	 * @param type $values
-	 * @return type
-	 */
-    public function decode()
-    {					
-		// . . .
-    }
-
+    
     /**
      * Delete element by primary key or query
      *
@@ -360,6 +334,9 @@ trait PublicApi
      */
     public static function delete($query)
     {
+        //
+        static::applyTable();
+
         //
         $t = static::getTable();
 
@@ -388,7 +365,7 @@ trait PublicApi
             $s = "DELETE FROM {$t} {$w}";
 
             // execute query
-            static::getSchemaDB()->execute($s);
+            static::getDatabase()->execute($s);
         }
 
         //
@@ -408,25 +385,44 @@ trait PublicApi
         }
     }
 	
-	/**
-	 * 
+    /**
+     *
+     *
+     */
+    public static function ping(&$query)
+    {
+        //
+        $exist = static::exists($query);
+        
+        //
+        $query = $exist ? $exist : static::make($query);
+
+        //
+        return $exist;
+    }
+
+    /**
+     * Encode/manipulate field on object
+     * based on encode_ static method of class
+     *
+     * @param  type $$values
+     * @return type
+     */
+    public function encode()
+    {
+        // . . .
+    }
+
+    /**
+	 *
+	 *
+	 * @param type $values
+	 * @return type
 	 */
-	public static function join($fieldFrom, $fieldTo = null) {
-		
-		//
-		if (!is_string($fieldFrom)) {
-			trigger_error('Required field to join', E_USER_ERROR);
-		}
-		
-		//
-		return array(
-			'Table'		=> static::getTable(),			
-			'Class'		=> static::getClassName(),
-			'FieldFrom'	=> $fieldFrom,		
-			'FieldTo'	=> $fieldTo ? $fieldTo : static::getMainField(),
-			'JoinKey'	=> static::getPrimaryKey(),
-		);		
-	} 
+    public function decode()
+    {
+		// . . .
+    }
 	
 	/**
 	 * Drop table

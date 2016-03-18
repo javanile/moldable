@@ -7,29 +7,32 @@ namespace Javanile\SchemaDB\Database;
 
 trait SchemaApi
 {
-	/**
-	 * Describe database each tables 
-	 * with the specific prefix and her fields
-	 * 
-	 * @return array Return and array with database description schema 
-	 */
+
+    /**
+     * Describe database each tables
+     * with the specific prefix and her fields
+     *
+     * @return array return an array with database description schema
+     */
     public function desc()
     {
         //
         $prefix = strlen($this->getPrefix());
 
         //
-		$tables = $this->getTables();
-		
+        $tables = $this->getTables();
+
         //
-        if (!$tables) { return array(); }
-      
-		//
-		$desc = array();
-		
+        if (!$tables) {
+            return [];
+        }
+
+        //
+        $desc = [];
+
         //
         foreach ($tables as $table) {
-            
+
             //
             $desc[substr($table, $prefix)] = $this->descTable($table);
         }
@@ -39,11 +42,11 @@ trait SchemaApi
     }
 
     /**
-	 * describe table
-	 * 
-	 * @param type $table
-	 * @return type
-	 */
+     * describe table
+     *
+     * @param type $table
+     * @return type
+     */
     public function descTable($table)
     {
         //
@@ -63,37 +66,35 @@ trait SchemaApi
 
         //
         foreach ($fields as $field) {
-			
-			//
-			$field['First'] = $count === 0;
+
+            //
+            $field['First']  = $count === 0;
             $field['Before'] = $before;
-            
-			//
-			$desc[$field['Field']] = $field;
-            
-			//
-			$before = $field['Field'];
+
+            //
+            $desc[$field['Field']] = $field;
+
+            //
+            $before = $field['Field'];
             $count++;
         }
 
         //
         return $desc;
     }
-		
+
     /**
      * Apply schema on the database
      *
      * @param  type $schema
      * @return type
      */
-    public function apply($schema, $columns=null, $notation=null)
+    public function apply($schema, $columns = null, $notation = null)
     {
         // 
         if (is_string($schema)) {
             $schema = array(
-                $schema => is_string($columns)
-                         ? array($columns => $notation)
-                         : $columns,
+                $schema => is_string($columns) ? array($columns => $notation) : $columns,
             );
         }
 
@@ -102,14 +103,14 @@ trait SchemaApi
 
         // execute queries
         if (!$queries) {
-			return;
-		}
- 
-		// send all queries to align database
-		foreach ($queries as $sql) {
-			$this->execute($sql);
-		}
-			
+            return;
+        }
+
+        // send all queries to align database
+        foreach ($queries as $sql) {
+            $this->execute($sql);
+        }
+
         // return queries
         return $queries;
     }
@@ -122,7 +123,7 @@ trait SchemaApi
      * @param  type   $parse
      * @return type
      */
-    public function applyTable($table, $schema, $parse=true)
+    public function applyTable($table, $schema, $parse = true)
     {
         // retrive queries
         $queries = $this->diffTable($table, $schema, $parse);
@@ -150,12 +151,16 @@ trait SchemaApi
      * @param  type $parse
      * @return type
      */
-    public function diff($schema, $parse=true)
+    public function diff($schema, $parse = true)
     {
         // prepare
-        if ($parse) { 
-			$this->_parser->parse($schema);
-		}
+        if ($parse) {
+            $this->_parser->parse($schema);
+        }
+
+        echo '<pre>';
+        var_dump($schema);
+        echo '</pre>';
 
         // get prefix string
         $prefix = $this->getPrefix();
@@ -167,7 +172,7 @@ trait SchemaApi
         foreach ($schema as $table => &$attributes) {
 
             //
-            $table = $parse ? $prefix . $table : $table;
+            $table = $parse ? $prefix.$table : $table;
 
             // 
             $sql = $this->diffTable($table, $attributes, false);
@@ -190,32 +195,37 @@ trait SchemaApi
      * @param  type $parse
      * @return type
      */
-    public function diffTable($table, $schema, $parse=true)
+    public function diffTable($table, $schema, $parse = true)
     {
         // parse input schema if required
-        if ($parse) { 
-			
-			//
-			$this->_parser->parseSchemaTable($schema);
-			
-			//
-			$table = $this->getPrefix() . $table;
-		}
-				
-        // if table no exists return sql statament for creating this
-        if (!$this->tableExists($table, false)) {
-			
-			// 
-            return array($this->_composer->createTable($table, $schema));
+        if ($parse) {
+
+            //
+            $this->getParser()->parseSchemaTable($schema);
+
+            //
+            $table = $this->getPrefix().$table;
         }
 
-		//
-		$queries = $this->diffTableQueries($table, $schema);
-		
-		//
-		return $queries; 
-	}
-		
+        // if table no exists return sql statament for creating this
+        if (!$this->tableExists($table, false)) {
+
+            //
+            $sql = $this
+                ->getWriter()
+                ->createTable($table, $schema);
+
+            //
+            return [$sql];
+        }
+
+        //
+        $queries = $this->diffTableQueries($table, $schema);
+
+        //
+        return $queries;
+    }
+
     /**
      * generate query to align table
      *
@@ -240,72 +250,72 @@ trait SchemaApi
 
             //
             $this->diffTableField(
-				$table,
-				$field,
-				$attributes,
-				$fields,
-				$foQueries,
-				$soQueries
-			);
+                $table, $field, $attributes, $fields, $foQueries, $soQueries
+            );
         }
 
-		//
-		return $this->diffTableMergeQueries($table, $fields, $foQueries, $soQueries);
-	}
-	
-	/**
-	 * 
-	 * 
-	 * 
-	 * @return type
-	 */
-	private function diffTableMergeQueries($table, &$fields, &$foQueries, &$soQueries) {
+        //
+        return $this->diffTableMergeQueries(
+                $table, $fields, $foQueries, $soQueries
+        );
+    }
 
-		//
+    /**
+     *
+     *
+     *
+     * @return type
+     */
+    private function
+    diffTableMergeQueries($table, &$fields, &$foQueries, &$soQueries)
+    {
+        //
         $key = $this->diffTableFieldPrimaryKey($fields);
 
         //
         if ($key && count($foQueries) > 0) {
-			
-			//
-            $foQueries[] = MysqlComposer::alterTableDropPrimaryKey($table);
-            
-			//
-			$fields[$key]['Key'] = '';
-            
-			//
-			$fields[$key]['Extra'] = '';
-            
-			//
-			$foQueries[] = MysqlComposer::alterTableChange($table, $key, $fields[$key]);
+
+            //
+            $foQueries[] = $this
+                ->getWriter()
+                ->alterTableDropPrimaryKey($table);
+
+            //
+            $fields[$key]['Key'] = '';
+
+            //
+            $fields[$key]['Extra'] = '';
+
+            //
+            $foQueries[] = $this
+                ->getWriter()
+                ->alterTableChange($table, $key, $fields[$key]);
         }
 
         //
         return array_merge(array_reverse($foQueries), $soQueries);
     }
-	
+
     /**
-	 * 
-	 * @param type $table
-	 * @param type $field
-	 * @param type $attributes
-	 * @param type $fields
-	 * @param type $foQueries
-	 * @param type $soQueries
-	 */
+     *
+     * @param type $table
+     * @param type $field
+     * @param type $attributes
+     * @param type $fields
+     * @param type $foQueries
+     * @param type $soQueries
+     */
     private function diffTableField(
-        $table,
-        $field,
-        &$attributes,
-        &$fields,
-        &$foQueries,
-        &$soQueries
-    ) {
+    $table, $field, &$attributes, &$fields, &$foQueries, &$soQueries
+    )
+    {
         // check if column exists in current db
         if (!isset($fields[$field])) {
 
             //
-            $sql = $this->_composer->alterTableAdd($table, $field, $attributes);
+            $sql = $this
+                ->getWriter()
+                ->alterTableAdd($table, $field, $attributes);
 
             // add primary key column
             if ($attributes['Key'] == 'PRI') {
@@ -322,7 +332,9 @@ trait SchemaApi
         else if ($this->diffTableFieldAttributes($field, $attributes, $fields)) {
 
             // compose alter table query with attributes
-            $sql = $this->_composer->alterTableChange($table, $field, $attributes);
+            $sql = $this
+                ->getWriter()
+                ->alterTableChange($table, $field, $attributes);
 
             // alter column that lose primary key
             if ($fields[$field]['Key'] == 'PRI' || $attributes['Key'] == 'PRI') {
@@ -338,7 +350,7 @@ trait SchemaApi
 
     /**
      * Evaluate diff between a field and their attributes
-	 * vs fields set definitions releaved direct from db
+     * vs fields set definitions releaved direct from db
      *
      * @param  type $field
      * @param  type $attributes
@@ -348,21 +360,21 @@ trait SchemaApi
     private function diffTableFieldAttributes($field, &$attributes, &$fields)
     {
         // loop throd current column property
-        foreach ($fields[$field] as $key => $value) {            
-            
-			// if have a difference
-            if ($attributes[$key] == $value) { 
-				continue;
-			}	
-			
-			//
+        foreach ($fields[$field] as $key => $value) {
+
+            // if have a difference
+            if ($attributes[$key] == $value) {
+                continue;
+            }
+
+            //
             if ($this->getDebug()) {
-				echo '<pre style="background:#E66;color:#000;margin:0 0 1px 0;padding:2px 6px 3px 6px;border:1px solid #000;">';
-				echo $field.'['.$key.']: "'.$attributes[$key].'" != "'.$value.'"</pre>';
-			}
-			
-			//			
-			return true; 							
+                echo '<pre style="background:#E66;color:#000;margin:0 0 1px 0;padding:2px 6px 3px 6px;border:1px solid #000;">';
+                echo '  difference: "'.$attributes[$key].'" != "'.$value.'" in '.$field.'['.$key.']</pre>';
+            }
+
+            //
+            return true;
         }
 
         //
@@ -370,20 +382,20 @@ trait SchemaApi
     }
 
     /**
-	 * Return primary field name if have one
-	 * 
-	 * @param type $fields
-	 * @return boolean
-	 */
+     * Return primary field name if have one
+     *
+     * @param type $fields
+     * @return boolean
+     */
     private function diffTableFieldPrimaryKey(&$fields)
     {
         // loop throd current column property
         foreach ($fields as $field => &$attributes) {
 
             // lookitup by equal
-            if ($attributes['Key'] == 'PRI') { 
-				return $field; 				
-			}
+            if ($attributes['Key'] == 'PRI') {
+                return $field;
+            }
         }
 
         //
@@ -394,30 +406,27 @@ trait SchemaApi
      *
      * @param type $schema
      */
-    public function alter($schema, $columns=null, $notation=null) {
+    public function alter($schema, $columns = null, $notation = null)
+    {
 
         //
         if (is_string($schema)) {
             $schema = array(
-                $schema => is_string($columns)
-                         ? array($columns => $notation)
-                         : $columns,
+                $schema => is_string($columns) ? array($columns => $notation) : $columns,
             );
         }
-        
+
         //
         $desc = $this->desc();
-        
+
         //
-        foreach($schema as $table => $fields) {
+        foreach ($schema as $table => $fields) {
 
             //
-            $desc[$table] = isset($desc[$table])
-                         && is_array($desc[$table])
-                          ? array_merge($desc[$table], $fields)
-                          : $fields;
+            $desc[$table] = isset($desc[$table]) && is_array($desc[$table]) ? array_merge($desc[$table],
+                    $fields) : $fields;
         }
-        
+
         //
         $this->apply($desc);
     }
@@ -426,7 +435,7 @@ trait SchemaApi
      *
      * @param type $schema
      */
-    public function alterTable($schema, $column=null, $notation=null)
+    public function alterTable($schema, $column = null, $notation = null)
     {
         // TODO: da fare
     }
@@ -435,14 +444,12 @@ trait SchemaApi
      *
      * @param type $schema
      */
-    public function adapt($schema, $columns=null, $notation=null) {
-
+    public function adapt($schema, $columns = null, $notation = null)
+    {
         //
         if (is_string($schema)) {
             $schema = array(
-                $schema => is_string($columns)
-                         ? array($columns => $notation)
-                         : $columns,
+                $schema => is_string($columns) ? array($columns => $notation) : $columns,
             );
         }
 
@@ -450,14 +457,14 @@ trait SchemaApi
         $desc = $this->desc();
 
         //
-        foreach($schema as $table => $fields) {
+        foreach ($schema as $table => $fields) {
 
             if (!isset($desc[$table])) {
                 $desc[$table] = $fields;
                 continue;
             }
 
-            foreach($fields as $field => $attribute) {
+            foreach ($fields as $field => $attribute) {
                 if (!isset($desc[$table][$field])) {
                     $desc[$table][$field] = $attribute;
                 }
@@ -470,23 +477,25 @@ trait SchemaApi
 
     /**
      *
+     *
      */
     public function profile($values)
     {
         //
-        $profile = array();
+        $profile = [];
 
         //
-        foreach(array_keys($values) as $field) {
-            $profile[$field] = ""; 
+        foreach (array_keys($values) as $field) {
+            $profile[$field] = '';
         }
 
         //
         return $profile;
     }
 
-	/**
+    /**
      * printout database status and info
+     *
      */
     public function dumpSchema()
     {
@@ -500,12 +509,15 @@ trait SchemaApi
         $schema = $this->desc();
 
         //
-        echo '<pre><table border="1" style="text-align:center">';
+        $style = 'text-align:center;margin-bottom:1px;';
+
+        //
+        echo '<pre><table border="1" style="'.$style.'">';
 
         //
         if (!$schema) {
             echo '<tr><th>No database tables</th></tr></table></pre>';
-		}
+        }
 
         //
         else {
@@ -534,7 +546,9 @@ trait SchemaApi
                     echo '<tr><th>'.$field.'</th>';
 
                     //
-                    foreach ($attributes as $value) { echo '<td>'.$value.'</td>'; }
+                    foreach ($attributes as $value) {
+                        echo '<td>'.$value.'</td>';
+                    }
 
                     //
                     echo '</tr>';
@@ -549,5 +563,3 @@ trait SchemaApi
         $this->setDebug($debug);
     }
 }
-
-

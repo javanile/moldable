@@ -73,13 +73,24 @@ class Socket
 		); 
 
 		//
-		$this->_pdo = new PDO(
-            $dsn,
-            $this->_args['username'],
-            $this->_args['password'],
-            $opt
-        );
-	
+        try {
+            $this->_pdo = new PDO(
+                $dsn,
+                $this->_args['username'],
+                $this->_args['password'],
+                $opt
+            );
+        }
+
+		// wrap PDOException with SDBException
+		catch (PDOException $ex) {
+			throw new Exception(
+                $ex->getMessage(),
+                intval($ex->getCode())
+            );
+		}
+
+
 		//
 		$this->_pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
@@ -177,7 +188,18 @@ class Socket
 		//
 		return $this->_prefix;
 	}
-	
+
+    /**
+	 * Return prefix passed on init attribute
+	 *
+	 * @return type
+	 */
+	public function setPrefix($prefix)
+	{
+		//
+		$this->_prefix = $prefix;
+	}
+
 	/**
 	 * Return last insert id 
 	 * 
@@ -249,7 +271,7 @@ class Socket
 			$stmt->execute();
 		}
 
-		//
+		// wrap PDOException with SDBException
 		catch (PDOException $ex) {
 			throw new Exception(
                 $ex->getMessage(),

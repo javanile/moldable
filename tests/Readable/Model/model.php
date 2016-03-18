@@ -4,19 +4,22 @@
 require_once 'common.php';
 
 //
-use SourceForge\SchemaDB;
+use Javanile\Liberty\Storable;
 
 //
-class Invoice extends SchemaDB\Storable {
+class Product extends Storable {
+
+    //
+    public $name = "";
+
+    //
+    public $price = .0;
+}
+
+//
+class Invoice extends Storable {
 	
 	//
 	public $product = '<<Product>>';
 }
 
-echo '<pre>';
-
-var_dump(Invoice::getSchemaFields());
-
-var_dump(Invoice::getSchemaFieldsWithValues());
-
-echo '</pre>';

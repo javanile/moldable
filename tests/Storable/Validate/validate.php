@@ -3,17 +3,14 @@
 // require connection parametrs
 require_once '../common.php'; 
 
-// require library
-require_once '../../src/SourceForge/SchemaDB/autoload.php';
-
 // retrive main class to enstablish connection
-use SourceForge\SchemaDB;
+use Javanile\SchemaDB\Storable;
 
 //
-class ModelDecoder extends SchemaDB\Storable {	
-	
+class Validable extends Storable
+{		
 	//
-	public $pid = self::PRIMARY_KEY;
+	public $id = self::PRIMARY_KEY;
 	
 	//
 	public $name = self::VARCHAR;	
@@ -22,7 +19,7 @@ class ModelDecoder extends SchemaDB\Storable {
 	public $ts = self::DATETIME;
 	
 	//
-	public function decode_ts($ts) {
+	public function decode() {
 	
 		//
 		return date('d/m/Y', $ts);
@@ -30,9 +27,7 @@ class ModelDecoder extends SchemaDB\Storable {
 }
 
 // 
-$decoded = ModelDecoder::decode(array(
-	'ts' => time(), 
-));
+$decoded = Validable::decode();
 
 //
 echo '<pre>';

@@ -1,10 +1,5 @@
 <?php
 
-//
-error_reporting(E_ALL);
-ini_set('display_errors',true);
-if (function_exists('xdebug_disable')) { xdebug_disable(); }
-
 // require connection parametrs
 require_once '../common.php';
 
@@ -12,24 +7,25 @@ require_once '../common.php';
 #$db->drop('confirm');
 
 //
-$schema = array(
+$schema = [
 
 	// define users table
-	'User' => array(
-		'userid'	=> $db::PRIMARY_KEY,
-		'password'	=> '',
-		'type'		=> 1,
+	'User' => [
+		'user_id'	=> $db::PRIMARY_KEY,
+		'password'	=> '<<string 10>>',
+		'type'		=> 2,
 		'username'	=> '',
 		'tipe'		=> $db::INT_20,
-	),
+        'bom'       => ['a','b','t'],
+	],
 
 	// define articles table
-	'Article' => array(
-		'articleid' => $db::PRIMARY_KEY,
+	'Article' => [
+		'article_id' => $db::PRIMARY_KEY,
 		'title'		=> '',
-		'content'	=> '',
-	),
-);
+		'content'	=> $db::DATE,
+	],
+];
 
 // Apply schema create or update database tables
 $db->apply($schema);

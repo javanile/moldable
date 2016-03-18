@@ -14,6 +14,12 @@ namespace Javanile\SchemaDB\Parser;
 class Mysql
 {
     /**
+     *
+     *
+     */
+    const CLASSREGEX = '([A-Za-z_][0-9A-Za-z_]*(\\\\[A-Za-z_][0-9A-Za-z_]*)*)([^\*.]*)';
+
+    /**
 	 * parse a multi-table schema to sanitize end explode implicit info
 	 * 
 	 * @param type $schema
@@ -26,6 +32,21 @@ class Mysql
 
             // parse each table
             static::parseTable($table);
+        }
+
+        // loop throh tables on the schema
+        foreach($schema as &$table) {
+
+            //
+            foreach($table as $aspects) {
+
+                //
+                if (isset($aspects['Relation']) && $aspects['Relation'] == '*:*') {
+                    $schema['Cioa'] = [
+                        []
+                    ];
+                }
+            }
         }
     }
 
@@ -42,7 +63,7 @@ class Mysql
 
         // loop throuh fields on table
         foreach ($table as $field => &$notation) {
-            
+                       
             // parse notation for this field
             $notation = static::getNotationAttributes($notation, $field, $before);
 
@@ -59,11 +80,15 @@ class Mysql
      * @param  type   $before
      * @return string
      */ 
-    public static function getNotationAttributes($notation, $field=null, $before=null)
-    {        		
+    public static function
+    getNotationAttributes($notation, $field=null, $before=null)
+    {
+        //
+        $params = null;
+
 		// get notation type 
-        $type = static::getNotationType($notation);
-		
+        $type = static::getNotationType($notation, $params);
+       
         // look-to type
         switch ($type) {
 
@@ -73,53 +98,78 @@ class Mysql
 
             // notation contain a field attributes written in json 
             case 'json':
-                return static::getNotationAttributesJson($notation, $field, $before);
+                return static::getNotationAttributesJson
+                    ($notation, $field, $before);
 
 			// notation contain a date format string
             case 'date':
-                return static::getNotationAttributesDate($notation, $field, $before);
+                return static::getNotationAttributesDate
+                    ($notation, $field, $before);
 				
 			// 	
             case 'datetime':
-                return static::getNotationAttributesDatetime($notation, $field, $before);
+                return static::getNotationAttributesDatetime
+                    ($notation, $field, $before);
             
 			// 	
 			case 'timestamp':
-                return static::getNotationAttributesTimestamp($notation, $field, $before);
+                return static::getNotationAttributesTimestamp
+                    ($notation, $field, $before);
             	  	
 			// 
 			case 'primary_key':
-                return static::getNotationAttributesPrimaryKey($notation, $field, $before);
+                return static::getNotationAttributesPrimaryKey
+                    ($notation, $field, $before, $params);
                
 			//
 			case 'string':
-                return static::getNotationAttributesString($notation, $field, $before);
+                return static::getNotationAttributesString
+                    ($notation, $field, $before);
                
             //
 			case 'boolean':
-                return static::getNotationAttributesBoolean($notation, $field, $before);
+                return static::getNotationAttributesBoolean
+                    ($notation, $field, $before);
 
 			//
 			case 'integer':
-                return static::getNotationAttributesInteger($notation, $field, $before);
+                return static::getNotationAttributesInteger
+                    ($notation, $field, $before);
                 
 			//
-			case 'float': return static::getNotationAttributesFloat($notation, $field, $before);
+			case 'float': 
+                return static::getNotationAttributesFloat
+                    ($notation, $field, $before);
             
             //
-			case 'double': return static::getNotationAttributesDouble($notation, $field, $before);
+			case 'double': 
+                return static::getNotationAttributesDouble
+                    ($notation, $field, $before);
 
 			//
-			case 'enum': return static::getNotationAttributesEnum($notation, $field, $before);
+			case 'enum': 
+                return static::getNotationAttributesEnum
+                    ($notation, $field, $before);
 
 			//
-			case 'class': return static::getNotationAttributesClass($notation, $field, $before);
+			case 'class': 
+                return static::getNotationAttributesClass
+                    ($notation, $field, $before, $params);
 
 			//
-			case 'vector': return static::getNotationAttributesVector($notation, $field, $before);
+			case 'vector': 
+                return static::getNotationAttributesVector
+                    ($notation, $field, $before, $params);
 
 			//
-			case 'null': return static::getNotationAttributesNull($notation, $field, $before);
+			case 'matchs': 
+                return static::getNotationAttributesMatchs
+                    ($notation, $field, $before, $params);
+
+			//
+			case 'null': 
+                return static::getNotationAttributesNull
+                    ($notation, $field, $before);
 
 			//
 			default: trigger_error('Error parse type: '.$field.' ('.$type.')');
@@ -137,7 +187,7 @@ class Mysql
 		$json = json_decode(trim($notation,'<>'), true);
 
 		// set with default attributes
-		$attr = static::getNotationAttributesDefault($field, $before);
+		$attr = static::getNotationAttributesCommon($field, $before);
 		
 		// override default with json passed
 		foreach ($json as $key => $value) {
@@ -153,28 +203,30 @@ class Mysql
      * 
 	 */
 	private static function
-    getNotationAttributesPrimaryKey($notation, $field, $before) {
-	
+    getNotationAttributesPrimaryKey($notation, $field, $before, $params)
+    {
 		//
-		$attributes = static::getNotationAttributesDefault($field, $before);
+		$aspects = static::getNotationAttributesCommon($field, $before);
 		
         //
-        $attributes['Type']	= 'int(11)';
-        			
+        $aspects['Type'] = isset($params[0])
+                         ? 'int('.$params[0].')' 
+                         : 'int(11)';
+        
         //
-        $attributes['Key'] = 'PRI';
+        $aspects['Key'] = 'PRI';
 
         //
-        $attributes['Null'] = 'NO';
+        $aspects['Null'] = 'NO';
 
         //
-        $attributes['Default'] = '';
+        $aspects['Default'] = '';
 
         //
-		$attributes['Extra'] = 'auto_increment';
+		$aspects['Extra'] = 'auto_increment';
 
         //
-        return $attributes;
+        return $aspects;
 	}
 	
 	/**
@@ -182,10 +234,10 @@ class Mysql
      * 
 	 */
 	private static function
-    getNotationAttributesDate($notation, $field, $before) {
-		
+    getNotationAttributesDate($notation, $field, $before)
+    {		
 		//
-		$attributes = static::getNotationAttributesDefault($field, $before);
+		$attributes = static::getNotationAttributesCommon($field, $before);
 					
 		//
 		$attributes['Type'] = 'date';
@@ -202,10 +254,10 @@ class Mysql
 	 * 
 	 */
 	private static function
-    getNotationAttributesDatetime($notation, $field, $before) {
-		
+    getNotationAttributesDatetime($notation, $field, $before)
+    {
 		//
-		$attributes = static::getNotationAttributesDefault($field, $before);
+		$attributes = static::getNotationAttributesCommon($field, $before);
 					
 		//
 		$attributes['Type'] = 'datetime';
@@ -220,10 +272,11 @@ class Mysql
     /**
 	 *
 	 */
-	private static function getNotationAttributesTimestamp($notation, $field, $before) {
-
+	private static function 
+    getNotationAttributesTimestamp($notation, $field, $before)
+    {
 		//
-		$attributes = static::getNotationAttributesDefault($field, $before);
+		$attributes = static::getNotationAttributesCommon($field, $before);
 
 		//
 		$attributes['Type'] = 'timestamp';
@@ -244,7 +297,7 @@ class Mysql
 	private static function getNotationAttributesString($notation, $field, $before) {
 		
         //
-        $attributes = static::getNotationAttributesDefault($field, $before);
+        $attributes = static::getNotationAttributesCommon($field, $before);
 
 		//
 		$attributes['Type'] = 'varchar(255)';
@@ -260,12 +313,14 @@ class Mysql
 	}
 	
 	/**
-	 * 
+	 *
+     * 
 	 */
-	private static function getNotationAttributesBoolean($notation, $field, $before)
+	private static function
+    getNotationAttributesBoolean($notation, $field, $before)
     {
         //
-        $attributes = static::getNotationAttributesDefault($field, $before);
+        $attributes = static::getNotationAttributesCommon($field, $before);
 		
 		//
 		$attributes['Type'] = 'tinyint(1)';
@@ -283,13 +338,11 @@ class Mysql
 	/**
 	 * 
 	 */
-	private static function getNotationAttributesInteger(
-        $notation,
-        $field,
-        $before
-    ) {       
+	private static function
+    getNotationAttributesInteger($notation, $field, $before)
+    {
         //
-        $attributes = static::getNotationAttributesDefault($field, $before);
+        $attributes = static::getNotationAttributesCommon($field, $before);
 
 		//
 		$attributes['Type']	= 'int(11)';
@@ -305,55 +358,73 @@ class Mysql
 	}
 	
 	/**
-	 * 
+	 *
+     *
 	 */
 	private static function
-    getNotationAttributesClass($notation, $field, $before)
+    getNotationAttributesClass($notation, $field, $before, $params)
     {
-		//
-		$notation = array(
-			'Class'		=> trim($notation,'<>'),
-			'Relation'	=> '1:1',
-			'Field'		=> $field,
-			'Before'	=> $before,
-			'First'		=> !$before,
-			'Type'		=> 'int(11)',
-			'Key'		=> '',
-			'Default'	=> null,
-			'Null'		=> 'YES',
-			'Extra'		=> '',
-		);
+        //
+        $attributes = static::getNotationAttributesCommon($field, $before);
+
+        //
+        $attributes['Type'] = 'int(11)';
+        
+        //
+        $attributes['Class'] = $params[0];
+
+        //
+        $attributes['Relation']	= '1:1';
+
+        //
+        return $attributes;
 	}
 	
 	/**
-	 * 
+	 *
+     *
 	 */
 	private static function
-    getNotationAttributesVector($notation, $field, $before)
+    getNotationAttributesVector($notation, $field, $before, $params)
     {
-		//
-		$notation = array(
-			'Class'		=> trim($notation,'<*>'),
-			'Relation'	=> '1:*',
-			'Field'		=> $field,
-			'Before'	=> $before,
-			'First'		=> !$before,
-			'Type'		=> 'int(11)',
-			'Key'		=> '',
-			'Default'	=> null,
-			'Null'		=> 'YES',
-			'Extra'		=> '',
-		);
+        //
+        $aspects = static::getNotationAttributesCommon($field, $before);
+
+        //
+        $aspects['Relation'] = '1:*';
+      
+        //
+        return $aspects;
 	}
-	
+
+    /**
+	 *
+     *
+	 */
+	private static function
+    getNotationAttributesMatchs($notation, $field, $before, $params)
+    {
+        var_Dump($params);
+
+        //
+        $aspects = static::getNotationAttributesCommon($field, $before);
+
+        //
+        $aspects['Relation'] = '*:*';
+
+        //
+        return $aspects;
+	}
+
 	/**
-	 * 
+	 *
+     * 
 	 */
 	private static function
     getNotationAttributesFloat($notation, $field, $before)
 	{
         //
-        $attributes = static::getNotationAttributesDefault($field, $before);
+        $attributes = static::getNotationAttributesCommon($field, $before);
 
         //
         $attributes['Null']	= 'NO';
@@ -370,24 +441,25 @@ class Mysql
 
     /**
 	 *
+     *
 	 */
 	private static function
     getNotationAttributesDouble($notation, $field, $before)
 	{
         //
-        $attributes = static::getNotationAttributesDefault($field, $before);
+        $aspects = static::getNotationAttributesCommon($field, $before);
 
         //
-        $attributes['Null']	= 'NO';
+        $aspects['Null'] = 'NO';
 
         //
-        $attributes['Type']	= 'double(10,4)';
+        $aspects['Type'] = 'double(10,4)';
 
         //
-        $attributes['Default']	= (double) $notation;
+        $aspects['Default']	= (double) $notation;
 
         //
-        return $attributes;
+        return $aspects;
 	}
 
 	/**
@@ -397,13 +469,25 @@ class Mysql
     getNotationAttributesEnum($notation, $field, $before)
     {
         //
-		$attributes = static::getNotationAttributesDefault($field, $before);
+        if (is_string($notation)) {
+
+            //
+            $notation = json_decode(trim($notation,'<>'));
+
+            //
+            if (json_last_error()) {
+                return static::getNotationAttributes('', $field, $before);
+            }
+        }
+
+        //
+		$aspects = static::getNotationAttributesCommon($field, $before);
 				
 		//
-		$attributes['Default'] = $notation[0];
+		$aspects['Default'] = $notation[0];
         
 		//
-		$attributes['Null'] = in_array(null, $notation) ? 'YES' : 'NO';
+		$aspects['Null'] = in_array(null, $notation) ? 'YES' : 'NO';
         
 		//
 		$t = array();
@@ -416,38 +500,40 @@ class Mysql
 		}
 
 		//
-		$attributes['Type'] = 'enum('.implode(',',$t).')';
+		$aspects['Type'] = 'enum('.implode(',',$t).')';
 
         //
-        return $attributes;
+        return $aspects;
 	}
 	
 	/**
-	 * 
+	 *
+     * 
 	 */
-	private static function getNotationAttributesNull($notation, $field, $before) {
-        
+	private static function 
+    getNotationAttributesNull($notation, $field, $before)
+    {
 		//
-		$attributes = static::getNotationAttributesDefault($field, $before);
+		$aspects = static::getNotationAttributesCommon($field, $before);
 
         //
-        $attributes['Type'] = 'varchar(255)';
+        $aspects['Type'] = 'varchar(255)';
 
         //
-        $attributes['Default'] = $notation;
+        $aspects['Default'] = $notation;
 
         //
-        return $attributes;
+        return $aspects;
 	}
 	
 	/**
 	 * 
 	 */
 	private static function 
-    getNotationAttributesDefault($field, $before)
+    getNotationAttributesCommon($field, $before)
     {
         //
-        $attr = array(
+        $aspects = array(
 			'Key'     => '',
 			'Type'    => '',
 			'Null'    => 'YES',
@@ -457,17 +543,17 @@ class Mysql
 
         //
         if (!is_null($field)) {
-            $attr['Field'] = $field;
+            $aspects['Field'] = $field;
         }
 
         //
         if (!is_null($before)) {
-            $attr['First']  = !$before;
-			$attr['Before'] = $before;
+            $aspects['First'] = !$before;
+			$aspects['Before'] = $before;
         }
 
 		//
-		return $attr;
+		return $aspects;
 	}
 	
     /**
@@ -476,16 +562,19 @@ class Mysql
 	 * @param type $notation
 	 * @return string
 	 */
-    public static function getNotationType(&$notation)
+    public static function getNotationType($notation, &$params=null)
     {
         //
         $type = gettype($notation);
 
         //
+        $params = null;
+
+        //
         switch ($type) {
 
             //
-			case 'string': return static::getNotationTypeString($notation);
+            case 'string': return static::getNotationTypeString($notation, $params);
                 				
 			//
 			case 'array': return static::getNotationTypeArray($notation);
@@ -508,30 +597,50 @@ class Mysql
 	 * 
 	 * @param type $notation
 	 */
-	private static function getNotationTypeString(&$notation) {
-				
+	private static function getNotationTypeString($notation, &$params)
+    {
+        //
+        $matchs = null;
+
 		// 
-		$macro = null;
+		$params = null;
+        
+		//
+		if (preg_match('/^<<#([a-z_]+)>>$/i', $notation, $matchs)) {
+            return $matchs[1];
+		}
+
+        //
+        else if (preg_match('/^<<primary key ([1-9][0-9]*)>>$/', $notation, $matchs)) {
+            $params = array_slice($matchs, 1);
+            return 'primary_key';
+        }
 		
 		//
-		if (preg_match('/^<<#([a-z_]+)>>$/i', $notation, $macro)) {
-			return $macro[1];
-		} 
-		
-		//
-		else if (preg_match('/^<<[A-Za-z_][0-9A-Za-z_]*>>$/i', $notation)) {
-			return 'class';
+		else if (static::pregMatchClass($notation, $matchs)) {
+            $params[0] = $matchs[1];
+            return 'class';
 		} 
 
 		//
-		else if (preg_match('/^<<[A-Za-z_][0-9A-Za-z_]*\*>>$/i', $notation)) {
-			return 'vector';
+		else if (static::pregMatchVector($notation, $matchs)) {
+            return 'vector';
 		} 
 
+        //
+		else if (static::pregMatchMatchs($notation, $matchs)) {
+			return 'matchs';
+		}
+
 		//
-		else if (preg_match('/^<<\{.*\}>>$/i', $notation)) {
+		else if (preg_match('/^<<\{.*\}>>$/si', $notation)) {
 			return 'json';
-		} 
+		}
+
+        //
+		else if (preg_match('/^<<\[.*\]>>$/si', $notation)) {
+			return 'enum';
+		}
 
 		//
 		else if (preg_match('/^[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9] [0-9][0-9]:[0-9][0-9]:[0-9][0-9]$/', $notation)) {
@@ -549,6 +658,48 @@ class Mysql
 		}		
 	}
 	
+    /**
+     * 
+     * 
+     */
+    public static function pregMatchClass($notation, &$matchs)
+    {
+        //
+        return preg_match(
+            '/^<<'.static::CLASSREGEX.'>>$/',
+            $notation,
+            $matchs
+        );
+    }
+
+    /**
+     *
+     *
+     */
+    public static function pregMatchVector($notation, &$matchs)
+    {
+        //
+        return preg_match(
+            '/^<<'.static::CLASSREGEX.'\*>>$/',
+            $notation,
+            $matchs
+        );
+    }
+
+    /**
+     *
+     *
+     */
+    public static function pregMatchMatchs($notation, &$matchs)
+    {
+        //
+        return preg_match(
+            '/^<<'.static::CLASSREGEX.'\*\*>>$/',
+            $notation,
+            $matchs
+        );
+    }
+
 	/**
 	 * 
 	 * 
@@ -578,7 +729,7 @@ class Mysql
     public static function getNotationValue($notation)
     {
         //
-        $type = static::getNotationType($notation);
+        $type = static::getNotationType($notation, $params);
 
         //
         switch ($type) {
@@ -608,10 +759,13 @@ class Mysql
 			case 'vector': return null;
 
             //
+			case 'matchs': return null;
+
+            //
 			case 'array': return null;
 
 			//
-			case 'enum': return isset($notation[0]) && !is_null($notation[0]) ? $notation[0] : null;
+            case 'enum': return !is_string($notation) && isset($notation[0]) && !is_null($notation[0]) ? $notation[0] : null;
 
             //
 			case 'time': return static::parseTime($notation);

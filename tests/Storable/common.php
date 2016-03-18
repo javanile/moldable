@@ -1,20 +1,16 @@
 <?php
 
 //
-require_once '../common.php'; 
+require_once '../common.php';
 
 //
-require_once __DIR__.'/../../../../autoload.php';
+use Javanile\SchemaDB\Database;
 
 //
-use Javanile\SchemaDB;
-
-// 
-new SchemaDB\Database(array(
-	'host' => $host,
-	'user' => $user,
-	'pass' => $pass,
-	'name' => $name,
-	'pref' => 's1_',
-));
-
+new Database([
+	'host'     => $host,
+	'dbname'   => $dbname,
+	'username' => $username,
+	'password' => $password,
+	'prefix'   => $prefix,
+]);

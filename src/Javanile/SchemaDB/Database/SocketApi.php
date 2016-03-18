@@ -10,10 +10,12 @@ use Javanile\SchemaDB\Utils;
 use Javanile\SchemaDB\Parser;
 use Javanile\SchemaDB\Composer;
 use Javanile\SchemaDB\Notations;
+use Javanile\SchemaDB\Exception;
 
 trait SocketApi
 {	
     /**
+     *
      * 
      */
     private function connect()
@@ -25,12 +27,28 @@ trait SocketApi
 			$this->log('connect', $this->_args);
 
 			//
-            if ($this->_socket->connect($this->_args)) {
+            try {
+                $this->_ready = $this->_socket->connect($this->_args);
+            }
 
-                //
-                $this->_ready = true;
+            //
+            catch (Exception $ex) {
+                $this->errorConnect($ex);
             }
 		}
+    }
+
+    /**
+     *
+     *
+     */
+    private function reconnect()
+    {
+        //
+        $this->_ready = false;
+
+        //
+        $this->connect();
     }
 
     /**
@@ -79,6 +97,23 @@ trait SocketApi
         
 		//
 		return $table ? $prefix . $table : $prefix;
+    }
+
+    /**
+     * Return current database prefix used
+     *
+     * @return type
+     */
+    public function setPrefix($prefix)
+    {
+        //
+        $this->_args['prefix'] = $prefix;
+
+		//
+        $this->_socket->setPrefix($prefix);
+
+        //
+        $this->reconnect();
     }
 
     /**
@@ -223,8 +258,8 @@ trait SocketApi
 	 * 
 	 * @return array
 	 */
-	public function getTables() {
-
+	public function getTables()
+    {
         // escape underscore
         $prefix = str_replace('_', '\\_', $this->getPrefix());
 
@@ -255,8 +290,8 @@ trait SocketApi
 	 * Debug mode setter
 	 * 
 	 */
-	public function setDebug($flag) {
-		
+	public function setDebug($flag)
+    {
 		//
 		$this->_debug = (boolean) $flag;
 	}
@@ -265,8 +300,8 @@ trait SocketApi
 	 * Debug mode getter
 	 * 
 	 */
-	protected function getDebug() {
-        
+	protected function getDebug()
+    {
         //
 		return $this->_debug;
 	}
@@ -275,16 +310,35 @@ trait SocketApi
 	 * 
 	 * 
 	 */
-	private function log($method, $arg1=null, $arg2=null) {
-	
+	private function log($method, $arg1=null, $arg2=null)
+    {
 		// debug the queries
-        if ($this->getDebug()) {
-            echo '<pre style="border:1px solid #9F6000;margin:0 0 1px 0;padding:2px 6px 3px 6px;color:#9F6000;background:#FEEFB3;">';
-			echo '<strong>'.str_pad($method,12,' ',STR_PAD_LEFT).'</strong>'.($arg1?': #1 -> '.json_encode($arg1):'');
-            if (isset($arg2)) {
-                echo "\n".str_pad('#2 -> ',20,' ',STR_PAD_LEFT).json_encode($arg2);
-            }
-            echo '</pre>';
+        if (!$this->getDebug()) {
+            return;
         }
+
+        //
+        $arg1formatted = is_string($arg1) ? str_replace([
+            'SELECT ',
+            ', ',
+            'FROM ',
+            'LEFT JOIN ',
+            'WHERE ',
+            'LIMIT ',
+        ], [
+            'SELECT ',
+            "\n".'                         , ',
+            "\n".'                      FROM ',
+            "\n".'                 LEFT JOIN ',
+            "\n".'                     WHERE ',
+            "\n".'                     LIMIT ',
+        ], trim($arg1)) : json_encode($arg1);
+
+        echo '<pre style="border:1px solid #9F6000;margin:0 0 1px 0;padding:2px 6px 3px 6px;color:#9F6000;background:#FEEFB3;">';
+        echo '<strong>'.str_pad($method,12,' ',STR_PAD_LEFT).'</strong>'.($arg1?': #1 -> '.$arg1formatted:'');
+        if (isset($arg2)) {
+            echo "\n".str_pad('#2 -> ',20,' ',STR_PAD_LEFT).json_encode($arg2);
+        }
+        echo '</pre>';        
 	}	
 }

@@ -12,11 +12,35 @@ trait ModelApi
 {
     /**
      *
+     *
      */
-    private function getTable($model) {
-
+    private function getTable($model)
+    {
         //
         return $this->getPrefix($model);
+    }
+    
+    /**
+     *
+     *
+     */
+    public function getModels()
+    {
+        //
+        $models = $this->getTables();
+
+        //
+        $prefix = strlen($this->getPrefix());
+
+        //
+        if (count($models) > 0) {
+            foreach ($models as &$table) {
+                $table = substr($table, $prefix);
+            }
+        }
+
+        //
+        return $models;
     }
 
     /**
@@ -272,20 +296,34 @@ trait ModelApi
 		if ($confirm != 'confirm') {
 			return;
 		}
+        
+        //
+        $models = $model == '*'
+                ? $this->getModels()
+                : [$model];
 
 		//
-		$table = $this->getTable($model);
-
-		//
-		if (!$table) {
-			return;
-		}
-		
-        //
-        $sql = "DROP TABLE `{$table}`";
+        if (!count($models)) {
+            return;
+        }
 
         //
-        $this->execute($sql);
+        foreach ($models as $model) {
+
+            //
+            $table = $this->getTable($model);
+
+            //
+            if (!$table) {
+                continue;
+            }
+
+            //
+            $sql = "DROP TABLE `{$table}`";
+
+            //
+            $this->execute($sql);
+        }       
 	}
 
     /**

@@ -11,6 +11,7 @@ use Javanile\SchemaDB\Database\Socket;
 class Database implements Notations
 {
     use Database\ModelApi;
+    use Database\ErrorApi;
     use Database\SocketApi;
     use Database\SchemaApi;
 
@@ -34,7 +35,7 @@ class Database implements Notations
      *
      * @var type
      */
-    private $_composer = null;
+    private $_writer = null;
 
     /**
      *
@@ -54,6 +55,11 @@ class Database implements Notations
      * @var boolean
      */
     private $_debug = false;
+
+    /**
+	 * Timestamp for benchmark
+	 */
+	private $_trace = null;
 
 	/**
 	 * Timestamp for benchmark
@@ -75,18 +81,18 @@ class Database implements Notations
      */
     public function __construct($args)
     {
+        //
+		$this->_ts = microtime();
+
+        //
+        $this->_trace = debug_backtrace();
+        
         // check arguments for connection
-        foreach(array('host','dbname','password','username') as $attr) {
+        foreach(['host','dbname','username'] as $attr) {
             if (!isset($args[$attr])) {
-                Utils::error(
-                    debug_backtrace(),
-                    "required attribute: {$attr}"
-                );
+                $this->errorConnect("Required attribute: '{$attr}'");
             }
         }
-
-		//
-		$this->_ts = microtime();	
 
         //
 		$this->_args = $args;
@@ -98,7 +104,7 @@ class Database implements Notations
         $this->_parser = new Parser\Mysql();
 
         //
-        $this->_composer = new Composer\Mysql();
+        $this->_writer = new Writer\Mysql();
 
 		//
 		$this->_ready = false;
@@ -162,10 +168,10 @@ class Database implements Notations
      *
      *
      */
-    public function getComposer()
+    public function getWriter()
     {
         //
-        return $this->_composer;
+        return $this->_writer;
     }
 
 	/**

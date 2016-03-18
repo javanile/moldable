@@ -32,7 +32,7 @@ trait TableApi
 
 		// retrieve value from class setting definition
 		if (!static::hasClassAttribute($attribute)) {
-
+            
             //
             $name = isset(static::$table)
                   ? static::$table
@@ -140,27 +140,26 @@ trait TableApi
      */
     protected static function fetch(
         $sql,
-        $values=null,
-        $array=false,
-        $value=false,
-        $cast=true
+        $params=null,
+        $singleRecord=false,
+        $singleValue=false,
+        $casting=true
     ) {
 		// requested a single record
-		if (!$array && !$value && $cast) {
+		if ($singleRecord && !$singleValue && $casting) {
 
             //
-            $record = static::getDatabase()->getRow($sql, $values);
-
+            $record = static::getDatabase()->getRow($sql, $params);
+            
             //
             return $record ? static::make($record): null;
 		}
 
         // requested a single record
-		else if ($array && !$value && $cast) {
+		else if (!$singleRecord && !$singleValue && $casting) {
 
             //
-            $records = static::getDatabase()->getResults($sql, $values);
-
+            $records = static::getDatabase()->getResults($sql, $params);
             
             //
             if (!$records) {
@@ -176,8 +175,14 @@ trait TableApi
             return $records;
 		}
 
+        // requested a single value of a single record
+		else if ($singleRecord && $singleValue) {
 
+            //
+            $value = static::getDatabase()->getValue($sql, $params);
+
+            //
+            return $value;
+		}
     }
-	
-	
 }

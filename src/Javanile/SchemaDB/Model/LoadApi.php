@@ -21,39 +21,23 @@ trait LoadApi
      * @param  type $id
      * @return type
      */
-    public static function load($index, $fields=null)
+    public static function load($query, $fields=null)
     {
         // update table schema on DB
         static::applyTable();
 
         //
-		try {
-            
-            //
-            if (is_array($index)) {
-                return static::loadByQuery($index, $fields);
-            }
-
-            //
-            $key = static::getPrimaryKey();
-
-            //
-            if ($key) {
-                return static::loadByPrimaryKey($index, $fields);
-            }
-
-            //
-            else {
-                return static::loadByMainField($index, $fields);
-            }
+        if (is_array($query)) {
+            return static::loadByQuery($query, $fields);
         }
+       
+        //
+        $key = static::getPrimaryKey();
 
-		//
-		catch (DatabaseException $ex) {
-            
-            //
-			static::error(debug_backtrace(), $ex);
-		}
+        //
+        return $key
+             ? static::loadByPrimaryKey($query, $fields)
+             : static::loadByMainField($query, $fields);
     }
 
     /**
@@ -77,27 +61,30 @@ trait LoadApi
         $join = null;
 
         //
-        $allFields = $fields ? $fields : static::getDefaultFields();
+        $requestedFields = $fields ? $fields : static::getDefaultFields();
 
         // parse SQL select fields
         $selectFields = static::getDatabase()
-                     -> getComposer()
-                     -> selectFields($allFields, $alias, $join);
+                     -> getWriter()
+                     -> selectFields($requestedFields, $alias, $join);
      
         // prepare SQL query
         $sql = " SELECT {$selectFields} "
              . "   FROM {$table} AS {$alias} {$join} "
              . "  WHERE {$alias}.{$key}='{$index}' "
              . "  LIMIT 1";
-
+        
         // fetch data on database and return it
-        return static::fetch(
+        $result = static::fetch(
             $sql,
             null,
-            false,
+            true,
             is_string($fields),
             is_null($fields)
         );
+             
+        //
+        return $result;
     }
 
     /**
@@ -106,8 +93,8 @@ trait LoadApi
      * @param type $fields
      * @return type
      */
-    protected static function loadByMainField($value, $fields=null) {
-
+    protected static function loadByMainField($value, $fields=null)
+    {
         //
         $table = static::getTable();
 
@@ -124,16 +111,32 @@ trait LoadApi
         $allFields = $fields ? $fields : static::getDefaultFields();
 
         // parse SQL select fields
-        $selectFields = MysqlComposer::selectFields($allFields, $alias, $join);
+        $selectFields = static::getDatabase()
+                     -> getWriter()
+                     -> selectFields($allFields, $alias, $join);
+
+        //
+        $token = ':'.$field;
+
+        //
+        $values = [$token => $value];
 
         // prepare SQL query
         $sql = " SELECT {$selectFields}"
-             . "   FROM {$table} AS {$alias} {$join} "
-             . "  WHERE {$field} = '{$value}' "
+             . "   FROM {$table} AS {$alias} {$join}"
+             . "  WHERE {$field} = {$token}"
              . "  LIMIT 1";
 
         // fetch data on database and return it
-        return static::fetch($sql, $values, false, is_string($fields));
+        $result = static::fetch(
+            $sql,
+            $values,
+            false,
+            is_string($fields)
+        );
+             
+        //
+        return $result;
     }
 
     /**
@@ -157,7 +160,9 @@ trait LoadApi
         $allFields = $fields ? $fields : static::getDefaultFields();
 
         // parse SQL select fields
-        $selectFields = MysqlComposer::selectFields($allFields, $alias, $join);
+        $selectFields = static::getDatabase()
+                     -> getWriter()
+                     -> selectFields($allFields, $alias, $join);
 
         //
         $whereConditions = array();
@@ -195,23 +200,15 @@ trait LoadApi
              .  "LIMIT 1";
 
         // fetch data on database and return it
-        return static::fetch($sql, $values, false, is_string($fields), is_null($fields));
-    }
-
-    /**
-     *
-     *
-     * @param type $trace
-     * @param type $error
-     */
-    public static function error($trace, $error) {
-
-
-        echo '<br>'
-           . '<b>Fatal error</b>: '
-           . $error->getMessage().' in method <strong>'.$trace[0]['function'].'</strong> '
-           . 'called at <strong>'.$trace[0]['file'].'</strong> on line <strong>'
-           . $trace[0]['line'].'</strong>'."<br>";
-        die();
-    }
+        $result = static::fetch(
+            $sql,
+            $values,
+            true,
+            is_string($fields),
+            is_null($fields)
+        );
+        
+        //
+        return $result;
+    }    
 }
