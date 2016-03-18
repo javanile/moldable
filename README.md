@@ -40,20 +40,20 @@ $db->apply([
 	'Customer' => [
 		
 		// customer fields
-		'id' => $db::PRIMARY_KEY,	// define field as a primary key
-		'name' => '',				// empty string define field as VARCHAR	
-		'points' => 0,				// 0 (zero) define field as INT(11)
-		'born' => $db::DATE,		// use to define as date field
-		'biography' => $db::TEXT,	// text for large string and contents
+		'id'     => $db::PRIMARY_KEY,	// define field as a primary key
+		'name'   => '',			// empty string define field as VARCHAR	
+		'points' => 0,			// 0 (zero) define field as INT(11)
+		'born'   => $db::DATE,		// use to define as date field
+		'bio'    => $db::TEXT,		// text for large string and contents
 	],
 
 	// products table name
 	'Products' => [
 
 		// products fields		
-		'id' => $db::PRIMARY_KEY,	// define field as a primary key
-		'name' => '',				// empty string define field as VARCHAR	
-		'price' => .0,				// for float number init field with point-zero ".0"	
+		'id'    => $db::PRIMARY_KEY,	// define field as a primary key
+		'name'  => '',			// empty string define field as VARCHAR	
+		'price' => .0,			// for float number init field with point-zero ".0"	
  	],
 ));
 ```
