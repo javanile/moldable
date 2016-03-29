@@ -180,12 +180,11 @@ trait FieldApi
     public static function getFieldValues($field)
     {
         //
-        $fields = get_class_vars(static::getClass());
-
+        $schema = static::getSchema();
+        
         //
-        return isset($fields[$field])
-            && is_array($fields[$field])
-             ? $fields[$field]
+        return isset($schema[$field]['Enum'])
+             ? $schema[$field]['Enum']
              : null;
     }
 

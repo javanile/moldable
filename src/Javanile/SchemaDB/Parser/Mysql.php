@@ -469,31 +469,30 @@ class Mysql
     getNotationAttributesEnum($notation, $field, $before)
     {
         //
-        if (is_string($notation)) {
+        $enum = static::parseNotationEnum($notation);
 
-            //
-            $notation = json_decode(trim($notation,'<>'));
-
-            //
-            if (json_last_error()) {
-                return static::getNotationAttributes('', $field, $before);
-            }
+        //
+        if (!$enum) {
+            return static::getNotationAttributes('', $field, $before);
         }
 
         //
 		$aspects = static::getNotationAttributesCommon($field, $before);
-				
+
+        //
+        $aspects['Enum'] = $enum;
+
 		//
-		$aspects['Default'] = $notation[0];
+		$aspects['Default'] = $enum[0];
         
 		//
-		$aspects['Null'] = in_array(null, $notation) ? 'YES' : 'NO';
+		$aspects['Null'] = in_array(null, $enum) ? 'YES' : 'NO';
         
 		//
 		$t = array();
         
 		//
-		foreach ($notation as $i) {
+		foreach ($enum as $i) {
 			if ($i !== null) {
 				$t[] = "'{$i}'";
 			}
@@ -505,7 +504,27 @@ class Mysql
         //
         return $aspects;
 	}
-	
+
+    /**
+     *
+     *
+     */
+    private static function parseNotationEnum($notation)
+    {
+        //
+        if (is_string($notation)) {
+
+            //
+            $notation = json_decode(trim($notation, '<>'));
+
+            //
+            if (json_last_error()) { return null; }
+        }
+
+        //
+        return $notation;
+    }
+
 	/**
 	 *
      * 
