@@ -34,7 +34,7 @@ $db = new Database([
 // library namespace 
 use Javanile\SchamaDB\Storable;
 
-// define ORM model-class
+// define ORM class-model
 class Customer extends Storable {
 	public $id = self::PRIMARY_KEY;
 	public $name = '';
