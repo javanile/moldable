@@ -27,7 +27,7 @@ $db = new Database([
 // '$db' is ready to use for your manipulation
 ```
 
-# How to: Create Model-Class with ORM for persistent objects
+# How to: Create ORM class-model
 
 ```php
 <?php
