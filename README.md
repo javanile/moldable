@@ -1,7 +1,8 @@
 # SchemaDB
 
 SchemaDB is an abstraction layer to manage MySQL database 
-with improved function to alter-state and manipulate database schema
+with improved function to alter-state and manipulate database schema.
+SchemaDB integrates a ORM class for manage persisten objects and adapt database schema
 
 # Ebook
 
@@ -25,6 +26,33 @@ $db = new Database([
 
 // '$db' is ready to use for your manipulation
 ```
+
+# How to: Create Model-Class with ORM for persistent objects
+
+```php
+<?php
+// library namespace 
+use Javanile\SchamaDB\Storable;
+
+// define ORM model-class
+class Customer extends Storable {
+	public $id = self::PRIMARY_KEY;
+	public $name = '';
+}
+
+// instance empty object
+// database tables and fields are automatic generated 
+// or updated if change Customer class
+$Customer = new Customer();
+
+// assign values
+$Customer->name = 'Franky Franco';
+
+// now object persist on DB
+$Customer->store();
+```
+
+
 
 # How to: Create schema (update if exists) 
 
