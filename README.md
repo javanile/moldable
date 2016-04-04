@@ -13,7 +13,7 @@ A free ebook for italians: https://leanpub.com/schemadb-capitolo-zero/
 ```php
 <?php
 // library namespace 
-use Javanile\SchamaDB\Database;
+use Javanile\SchemaDB\Database;
 
 // initialize a database connection object 
 $db = new Database([
@@ -32,7 +32,7 @@ $db = new Database([
 ```php
 <?php
 // library namespace 
-use Javanile\SchamaDB\Storable;
+use Javanile\SchemaDB\Storable;
 
 // define ORM class-model
 class Customer extends Storable {
