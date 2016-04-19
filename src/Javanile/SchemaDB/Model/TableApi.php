@@ -1,37 +1,27 @@
 <?php
+/**
+ * 
+ * 
+ */
 
-/*
- * 
- * 
- * 
- * 
-\*/
 namespace Javanile\SchemaDB\Model;
 
-/**
- *
- */
 use Javanile\SchemaDB\Database;
 
-/**
- * static part of sdbClass
- *
- *
- */
 trait TableApi
-{   	
+{
     /**
-	 * Retrieve table name
-	 * 
-	 * @return string
-	 */
+     * Retrieve table name
+     *
+     * @return string
+     */
     public static function getTable()
     {        
-		// config attribute that contain table name
-		$attribute = 'Table';
+        // config attribute that contain table name
+        $attribute = 'Table';
 
-		// retrieve value from class setting definition
-		if (!static::hasClassAttribute($attribute)) {
+        // retrieve value from class setting definition
+        if (!static::hasClassAttribute($attribute)) {
             
             //
             $name = isset(static::$table)
@@ -48,17 +38,17 @@ trait TableApi
         // return complete table name
         return static::getClassAttribute($attribute);
     }
-   	
+
     /**
-	 * 
-	 * @return type
-	 */ 
+     *
+     * @return type
+     */
     public static function applyTable()
     {
         //
-		$attribute = 'ApplyTableExecuted';
+        $attribute = 'ApplyTableExecuted';
 
-		// avoid re-update by check the cache
+        // avoid re-update by check the cache
         if (!static::hasClassAttribute($attribute)) {
 
             //
@@ -87,16 +77,16 @@ trait TableApi
             static::setClassAttribute($attribute, time());
         }
     }
-	
-	/**
-	 * Retriece linked database or default
-	 * 
-	 * @return type
-	 */
+
+    /**
+     * Retriece linked database or default
+     *
+     * @return type
+     */
     protected static function getDatabase()
-    {		
-		//
-		$attribute = 'Database';
+    {
+        //
+        $attribute = 'Database';
 
         //
         if (!static::hasClassAttribute($attribute)) {
@@ -119,18 +109,18 @@ trait TableApi
         return static::getClassAttribute($attribute);
     }
 
-	/**
-	 * Link specific database to this table
-	 * 
-	 * @return type
-	 */
+    /**
+     * Link specific database to this table
+     *
+     * @return type
+     */
     protected static function setDatabase($database)
     {        
-		//
-		$attribute = 'Database';
-		
-		//
-		static::setConfig($attribute, $database);
+        //
+        $attribute = 'Database';
+
+        //
+        static::setConfig($attribute, $database);
     }
 
     /**
@@ -145,18 +135,18 @@ trait TableApi
         $singleValue=false,
         $casting=true
     ) {
-		// requested a single record
-		if ($singleRecord && !$singleValue && $casting) {
+        // requested a single record
+        if ($singleRecord && !$singleValue && $casting) {
 
             //
             $record = static::getDatabase()->getRow($sql, $params);
             
             //
             return $record ? static::make($record): null;
-		}
+        }
 
         // requested a single record
-		else if (!$singleRecord && !$singleValue && $casting) {
+        else if (!$singleRecord && !$singleValue && $casting) {
 
             //
             $records = static::getDatabase()->getResults($sql, $params);
@@ -173,16 +163,16 @@ trait TableApi
 
             //
             return $records;
-		}
+        }
 
         // requested a single value of a single record
-		else if ($singleRecord && $singleValue) {
+        else if ($singleRecord && $singleValue) {
 
             //
             $value = static::getDatabase()->getValue($sql, $params);
 
             //
             return $value;
-		}
+        }
     }
 }

@@ -10,23 +10,23 @@ use Javanile\SchemaDB\Utils;
 use Javanile\SchemaDB\Exception;
 
 trait PublicApi 
-{	
-	/**
-	 * 
-	 * @param type $database
-	 */
+{
+    /**
+     *
+     * @param type $database
+     */
     public static function connect($database=null)
     {
-		//
-		static::applyTable();
+        //
+        static::applyTable();
     }
 
-	/**
-	 * 
-	 * @param type $values
-	 * @param type $map
-	 * @return \static
-	 */
+    /**
+     *
+     * @param type $values
+     * @param type $map
+     * @return \static
+     */
     public static function make($values=null, $map=null, $prefix=null)
     {
         //
@@ -40,7 +40,7 @@ trait PublicApi
         //
         return $object;
     }
-	
+
     /**
      *
      * @param type $query
@@ -101,12 +101,12 @@ trait PublicApi
         return $r;
     }
 
-	/**
-	 * 
-	 * 
-	 * @param type $fields
-	 * @return type
-	 */
+    /**
+     *
+     *
+     * @param type $fields
+     * @return type
+     */
     public static function all($fields=null)
     {
         //
@@ -123,40 +123,40 @@ trait PublicApi
         //
         $table = static::getTable();
 
-		//
-		$join = '';
-		
-		//
-		$class = static::getClassName();
-		
-		// 
-		$selectFields = static::getDatabase()
+        //
+        $join = '';
+
+        //
+        $class = static::getClassName();
+
+        //
+        $selectFields = static::getDatabase()
                      -> getWriter()
                      -> selectFields($fields, $class, $join);
-		
+
         //
         $sql = "SELECT {$selectFields} "
              .   "FROM {$table} AS {$class} "
              .       " {$join} "
              .       " {$limit} ";
-				
-		//
-		try {
-			$results = static::fetch(
+
+        //
+        try {
+            $results = static::fetch(
                 $sql,
                 null,
                 false,
                 is_string($fields),
                 is_null($fields)
             );
-		} 
-		
-		//
-		catch (DatabaseException $ex) {
-			static::error(debug_backtrace(), $ex);			
-		}
-		
-		//
+        }
+
+        //
+        catch (DatabaseException $ex) {
+            static::error(debug_backtrace(), $ex);
+        }
+
+        //
         return $results;
     }
 
@@ -237,11 +237,11 @@ trait PublicApi
     }
 
     /**
-	 * Alias of ping
-	 * 
-	 * @param type $query
-	 * @return type
-	 */
+     * Alias of ping
+     *
+     * @param type $query
+     * @return type
+     */
     public static function exists($query)
     {
         //
@@ -250,8 +250,8 @@ trait PublicApi
         //
         $table = self::getTable();
         
-		//
-		$whereArray = [];
+        //
+        $whereArray = [];
 
         //
         $valuesArray = [];
@@ -262,14 +262,14 @@ trait PublicApi
             unset($query['where']);
         }
 
-		//
-		$schema = static::getSchemaFields();
-				
+        //
+        $schema = static::getSchemaFields();
+
         //
         foreach ($schema as $field) {
             if (isset($query[$field])) {
                 $token = ':'.$field;
-				$whereArray[] = "`{$field}` = {$token}";
+                $whereArray[] = "`{$field}` = {$token}";
                 $valuesArray[$token] = $query[$field];
             }
         }
@@ -290,11 +290,11 @@ trait PublicApi
     }
 
     /**
-	 * 
-	 * 
-	 * @param type $query
-	 * @return type
-	 */
+     *
+     *
+     * @param type $query
+     * @return type
+     */
     public static function submit($query)
     {
         //
@@ -320,8 +320,8 @@ trait PublicApi
         //
         $object = static::make($values);
         
-		//
-		$object->storeInsert();
+        //
+        $object->storeInsert();
 
         //
         return $object;
@@ -384,7 +384,7 @@ trait PublicApi
             static::getDatabase()->execute($q);
         }
     }
-	
+
     /**
      *
      *
@@ -414,22 +414,22 @@ trait PublicApi
     }
 
     /**
-	 *
-	 *
-	 * @param type $values
-	 * @return type
-	 */
+     *
+     *
+     * @param type $values
+     * @return type
+     */
     public function decode()
     {
-		// . . .
+        // . . .
     }
-	
-	/**
-	 * Drop table
-	 * 
-	 * @param type $confirm
-	 * @return type
-	 */ 
+
+    /**
+     * Drop table
+     *
+     * @param type $confirm
+     * @return type
+     */
     public static function drop($confirm=null)
     {
         //
@@ -442,15 +442,15 @@ trait PublicApi
 
         //
         $sql = "DROP TABLE IF EXISTS `{$table}`";
-		
+
         // execute query
         static::getDatabase()->execute($sql);
 
         //
-		static::delClassAttribute('ApplyTableExecuted');
+        static::delClassAttribute('ApplyTableExecuted');
     }
-	
-	/**
+
+    /**
      * Import records from a source
      *
      * @param type $source
@@ -464,11 +464,11 @@ trait PublicApi
             static::insert($record);
         }
     }
-	
-	/**
-	 *
+
+    /**
+     *
      * 
-	 */
+     */
     public static function desc()
     {
         //
@@ -483,7 +483,7 @@ trait PublicApi
         //
         $attributes = array_keys(reset($desc));
 
-		//
+        //
         echo '<tr>';
         foreach ($attributes as $attribute) {
             echo '<th>'.$attribute.'</th>';
@@ -503,10 +503,10 @@ trait PublicApi
         echo '</table>';
     }
 
-	/**
-	 * 
-	 * @param type $list
-	 */
+    /**
+     *
+     * @param type $list
+     */
     public static function dump($list=null)
     {       
         //
@@ -514,5 +514,5 @@ trait PublicApi
             static::getTable(),
             $list ? $list : static::all()
         );
-    }	
+    }
 }

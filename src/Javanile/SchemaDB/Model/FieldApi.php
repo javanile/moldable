@@ -9,18 +9,18 @@ namespace Javanile\SchemaDB\Model;
 trait FieldApi
 {
 	/**
-	 * Retrieve primary key field name
-	 *  
-	 * @return boolean
-	 */
+     * Retrieve primary key field name
+     *
+     * @return boolean
+     */
     public static function getPrimaryKey()
     {
-		//
-		$attribute = 'PrimaryKey';
-		
-		// retrieve value from class setting definition
-		if (!static::hasClassAttribute($attribute)) {
-			
+        //
+        $attribute = 'PrimaryKey';
+
+        // retrieve value from class setting definition
+        if (!static::hasClassAttribute($attribute)) {
+
             //
             $key = false;
 
@@ -44,11 +44,11 @@ trait FieldApi
             // store as setting for future request
             static::setClassAttribute($attribute, $key);
         }
-	
+
         // return primary key field name
         return static::getClassAttribute($attribute);
     }
-	
+
     /**
      * 
      * 
@@ -65,19 +65,19 @@ trait FieldApi
              : null;
     }
 
-	/**
-	 * Retrieve primary key field name
-	 *  
-	 * @return boolean
-	 */
+    /**
+     * Retrieve primary key field name
+     *
+     * @return boolean
+     */
     public static function getMainField()
     {
-		//
-		$attribute = 'MainField';
-		
-		// retrieve value from class setting definition
-		if (!static::hasClassAttribute($attribute)) {
-			
+        //
+        $attribute = 'MainField';
+
+        // retrieve value from class setting definition
+        if (!static::hasClassAttribute($attribute)) {
+
             //
             $mainField = false;
 
@@ -137,18 +137,18 @@ trait FieldApi
     }
 
     /**
-	 * Retrieve primary key field name
-	 *  
-	 * @return boolean
-	 */
+     * Retrieve primary key field name
+     *
+     * @return boolean
+     */
     protected static function getDefaultFields()
     {
-		//
-		$attribute = 'DefaultFields';
-		
-		// retrieve value from class setting definition
-		if (!static::hasClassAttribute($attribute)) {
-		
+        //
+        $attribute = 'DefaultFields';
+
+        // retrieve value from class setting definition
+        if (!static::hasClassAttribute($attribute)) {
+
             //
             $fields = array();
 
@@ -170,7 +170,7 @@ trait FieldApi
         }
     
         // return primary key field name
-		return static::getClassAttribute($attribute);
+        return static::getClassAttribute($attribute);
     }
 
     /**
@@ -189,13 +189,13 @@ trait FieldApi
     }
 
     /**
-	 *
-	 *
-	 * @param type $values
-	 */
+     *
+     *
+     * @param type $values
+     */
     public function fill($values, $map=null, $prefix=null)
     {
-		//
+        //
         foreach (static::getSchema() as $field => $aspects) {
 
             //
@@ -216,18 +216,18 @@ trait FieldApi
             $field = $prefix . $field;
 
             //           
-			if (isset($values[$field])) {
+            if (isset($values[$field])) {
                 $this->{$field} = $values[$field];
             }
         }
 
-		//
+        //
         $key = $this->getPrimaryKey();
 
         //
         $field = $prefix . $key;
 
-		//
+        //
         if ($key) {
             $this->{$key} = isset($values[$field])
                           ? (int) $values[$field]

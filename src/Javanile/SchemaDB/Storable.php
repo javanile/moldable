@@ -19,13 +19,13 @@ class Storable implements Notations
     use Model\DebugApi;
     use Model\PublicApi;
     
-	/**
-	 * Construct a storable object 
-	 * with filled fields by values 
-	 * 
-	 * 
-	 */
-	public function __construct($values=null) 
+    /**
+     * Construct a storable object
+     * with filled fields by values
+     *
+     *
+     */
+    public function __construct($values=null)
     {
         //
         $parser = static::getDatabase()->getParser();
@@ -40,28 +40,28 @@ class Storable implements Notations
         //
         $this->fill($values);
 
-		// update related table
-		static::applyTable();
-	}
+        // update related table
+        static::applyTable();
+    }
 
-	/**
+    /**
      * Auto-store element method
      *
      * @return type
      */
     public function store($values=null)
-    {		
-		// update values before store
-		if (is_array($values)) {
-			
-			//
-			foreach ($values as $field => $value) {
-			
-				//
-				$this->{$field} = $value;
-			}
-		}
-		
+    {
+        // update values before store
+        if (is_array($values)) {
+
+            //
+            foreach ($values as $field => $value) {
+
+                //
+                $this->{$field} = $value;
+            }
+        }
+
         // retrieve primary key
         $key = static::getPrimaryKey();
 
@@ -69,18 +69,18 @@ class Storable implements Notations
         if ($key && $this->{$key}) {
             return $this->storeUpdate();
         } 
-		
-		//
-		else {
+
+        //
+        else {
             return $this->storeInsert();
         }
     }  
-		
-	/**
-	 * 
-	 * 
-	 * @return boolean
-	 */
+
+    /**
+     *
+     *
+     * @return boolean
+     */
     public function storeUpdate()
     {
         // update database schema
@@ -95,9 +95,9 @@ class Storable implements Notations
         //
         $valuesArray = array();
 
-		//
-		$fields = static::getSchemaFields();
-		
+        //
+        $fields = static::getSchemaFields();
+
         //
         foreach ($fields as $field) {
 
@@ -141,11 +141,11 @@ class Storable implements Notations
     }
 
     /**
-	 * 
-	 * 
-	 * @param type $force
-	 * @return boolean
-	 */
+     *
+     *
+     * @param type $force
+     * @return boolean
+     */
     public function storeInsert($force=false)
     {
         // update table if needed
@@ -153,20 +153,20 @@ class Storable implements Notations
 
         // collect field names for sql query
         $fieldsArray = [];
-		
-		// collect values for sql query
+
+        // collect values for sql query
         $valuesArray = [];
 
         // collect tokens value for pdo parametric
         $tokensArray = [];
         
-		// get primary field name
-		$key = static::getPrimaryKey();
-				
-		// get complete fields schema
-		$schema = static::getSchema();
-				
-		//
+        // get primary field name
+        $key = static::getPrimaryKey();
+
+        // get complete fields schema
+        $schema = static::getSchema();
+
+        //
         foreach ($schema as $field => &$column) {
 
             //
@@ -198,8 +198,8 @@ class Storable implements Notations
 
         //
         $table = static::getTable();
-		
-		//
+
+        //
         $sql = "INSERT INTO {$table} ({$fields}) VALUES ({$values})";
 
         //
@@ -227,87 +227,87 @@ class Storable implements Notations
         return $index;
     }
 
-	/**
-	 * 
-	 * @param type $value
-	 */
-	private static function insertRelationBefore($value, &$column)
+    /**
+     *
+     * @param type $value
+     */
+    private static function insertRelationBefore($value, &$column)
     {
-		//
-		if (!is_array($value)) {
-			return $value;					
-		}
-			
-		//
-		switch ($column['Relation']) {
-		
-			//
-			case '1:1': return static::insertRelationOneToOne($value, $column);
-			
-			//
-			case '1:*':	return static::insertRelationOneToMany($value, $column);			
-		}
-				
-	}
-	
-	/**
-	 *
+        //
+        if (!is_array($value)) {
+            return $value;
+        }
+
+        //
+        switch ($column['Relation']) {
+
+            //
+            case '1:1': return static::insertRelationOneToOne($value, $column);
+
+            //
+            case '1:*':    return static::insertRelationOneToMany($value, $column);
+        }
+
+    }
+
+    /**
+     *
      * 
-	 */
-	private static function insertRelationOneToOne($value, &$column)
+     */
+    private static function insertRelationOneToOne($value, &$column)
     {
-		//
-		$class = $column['Class'];
+        //
+        $class = $column['Class'];
 
-		//
-		$object = new $class($value);
+        //
+        $object = new $class($value);
 
-		//
-		$index = $object->store();
+        //
+        $index = $object->store();
 
-		//
-		return $index;
-	}
-	
-	/**
-	 * 
-	 * @param type $value
-	 */
-	private static function insertRelationAfter($value, &$column)
+        //
+        return $index;
+    }
+
+    /**
+     *
+     * @param type $value
+     */
+    private static function insertRelationAfter($value, &$column)
     {
-		//
-		if (!is_array($value)) {
-			return $value;					
-		}
-			
-		//
-		switch ($column['Relation']) {
-		
-			//
-			case '1:*':	return static::insertRelationOneToMany($value, $column);			
-		}				
-	}
-	
-	/**
-	 *
+        //
+        if (!is_array($value)) {
+            return $value;
+        }
+
+        //
+        switch ($column['Relation']) {
+
+            //
+            case '1:*':    return static::insertRelationOneToMany($value, $column);
+        }
+    }
+
+    /**
+     *
      * 
-	 */
-	private static function insertRelationOneToMany($values, &$column)
+     */
+    private static function insertRelationOneToMany($values, &$column)
     {
-		//
-		$class = $column['Class'];
+        //
+        $class = $column['Class'];
 
-		//
-		foreach($values as $value) {
-			
-			//
-			$object = new $class($value);
+        //
+        foreach($values as $value) {
 
-			//
-			$index = $object->store();
-		}
-		
-		//
-		return $index;
-	}	
+            //
+            $object = new $class($value);
+
+            //
+            $index = $object->store();
+        }
+
+        //
+        return $index;
+    }
 }

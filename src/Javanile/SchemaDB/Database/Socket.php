@@ -13,11 +13,11 @@ use Javanile\SchemaDB\Exception;
 
 class Socket 
 {	 
-	/**
-	 *
-	 * @var type 
-	 */
-	private $_pdo = null;
+    /**
+     *
+     * @var type
+     */
+    private $_pdo = null;
 
     /**
      * 
@@ -25,11 +25,11 @@ class Socket
      */
     private $_args = null;
 
-	/**
-	 *
-	 * @var type 
-	 */
-	private $_prefix = null;
+    /**
+     *
+     * @var type
+     */
+    private $_prefix = null;
 
     /**
      *
@@ -48,11 +48,11 @@ class Socket
         }
     }
 
-	/**
-	 *
+    /**
+     *
      * 
-	 */
-	public function connect($args=null)
+     */
+    public function connect($args=null)
     {
         //
         if ($args != null) {
@@ -64,15 +64,15 @@ class Socket
             $this->_prefix = $args['prefix'];
         }
 
-		//
-		$dsn = "mysql:host={$this->_args['host']};dbname={$this->_args['dbname']}";
-		
-		//
-		$opt = array(
-			PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8',
-		); 
+        //
+        $dsn = "mysql:host={$this->_args['host']};dbname={$this->_args['dbname']}";
 
-		//
+        //
+        $opt = array(
+            PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8',
+        );
+
+        //
         try {
             $this->_pdo = new PDO(
                 $dsn,
@@ -82,173 +82,173 @@ class Socket
             );
         }
 
-		// wrap PDOException with SDBException
-		catch (PDOException $ex) {
-			throw new Exception(
+        // wrap PDOException with SDBException
+        catch (PDOException $ex) {
+            throw new Exception(
                 $ex->getMessage(),
                 intval($ex->getCode())
             );
-		}
+        }
 
 
-		//
-		$this->_pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        //
+        $this->_pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
         //
         return true;
     }
     
-	/**
-	 * 
-	 * @param type $sql
-	 * @return type
-	 */
-	public function getRow($sql, $params=null)
+    /**
+     *
+     * @param type $sql
+     * @return type
+     */
+    public function getRow($sql, $params=null)
     {
         //
         $stmt = $this->execute($sql, $params);
-		
-		//
-		return $stmt->fetch(PDO::FETCH_ASSOC);
-	}
-	
-	/**
-	 * 
-	 * @param type $sql
-	 * @return type
-	 */
-	public function getResults($sql, $params=null)
-    {
-		//
-		$stmt = $this->execute($sql, $params);
-		
-		//
-		return $stmt->fetchAll(PDO::FETCH_ASSOC);
-	}
+
+        //
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
 
     /**
-	 *
-	 * @param type $sql
-	 * @return type
-	 */
-	public function getResultsAsObjects($sql, $params=null)
+     *
+     * @param type $sql
+     * @return type
+     */
+    public function getResults($sql, $params=null)
     {
-		//
-		$stmt = $this->execute($sql, $params);
+        //
+        $stmt = $this->execute($sql, $params);
 
-		//
-		return $stmt->fetchAll(PDO::FETCH_OBJ);
-	}
-
-	/**
-	 * 
-	 * 
-	 * @param type $sql
-	 * @return type
-	 */
-	public function getColumn($sql, $values=null)
-    {
-		//
-		$stmt = $this->execute($sql, $values);
-
-		//
-		$column = array(); 
-		
-		//
-		while($row = $stmt->fetch()){
-			$column[] = $row[0];
-		}
-				
-		//
-		return $column;		
-	}
-	
-	/**
-	 * 
-	 * 
-	 * @param type $sql
-	 * @return type
-	 */
-	public function getValue($sql, $values=null)
-    {
-		//
-		$stmt = $this->execute($sql, $values);
-		
-		//
-		return $stmt->fetchColumn(0);
-	}
-	
-	/**
-	 * Return prefix passed on init attribute
-	 * 
-	 * @return type
-	 */
-	public function getPrefix()
-	{	
-		//
-		return $this->_prefix;
-	}
+        //
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
 
     /**
-	 * Return prefix passed on init attribute
-	 *
-	 * @return type
-	 */
-	public function setPrefix($prefix)
-	{
-		//
-		$this->_prefix = $prefix;
-	}
+     *
+     * @param type $sql
+     * @return type
+     */
+    public function getResultsAsObjects($sql, $params=null)
+    {
+        //
+        $stmt = $this->execute($sql, $params);
 
-	/**
-	 * Return last insert id 
-	 * 
-	 * @return type
-	 */
-	public function lastInsertId() 
-	{
-		//
-		return $this->_pdo->lastInsertId();
-	}
-	
+        //
+        return $stmt->fetchAll(PDO::FETCH_OBJ);
+    }
+
     /**
-	 * Return last insert id 
-	 * 
-	 * @return type
-	 */
-	public function quote($string)
-	{
-		//
-		return $this->_pdo->quote($string);
-	}
-	   
-	/**
-	 * 
-	 * 
-	 */
-	public function transact() {
-		
-		//
-		$this->_pdo->beginTransaction();
-	}
-	
-	/**
-	 * 
-	 */
-	public function commit()
+     *
+     *
+     * @param type $sql
+     * @return type
+     */
+    public function getColumn($sql, $values=null)
     {
-		//
-		$this->_pdo->commit();
-	}
-	
-	/**
-	 * 
-	 */
-	public function rollback()
+        //
+        $stmt = $this->execute($sql, $values);
+
+        //
+        $column = array();
+
+        //
+        while($row = $stmt->fetch()){
+            $column[] = $row[0];
+        }
+
+        //
+        return $column;
+    }
+
+    /**
+     *
+     *
+     * @param type $sql
+     * @return type
+     */
+    public function getValue($sql, $values=null)
     {
-		//
-		$this->_pdo->rollBack();
-	}
+        //
+        $stmt = $this->execute($sql, $values);
+
+        //
+        return $stmt->fetchColumn(0);
+    }
+
+    /**
+     * Return prefix passed on init attribute
+     *
+     * @return type
+     */
+    public function getPrefix()
+    {
+        //
+        return $this->_prefix;
+    }
+
+    /**
+     * Return prefix passed on init attribute
+     *
+     * @return type
+     */
+    public function setPrefix($prefix)
+    {
+        //
+        $this->_prefix = $prefix;
+    }
+
+    /**
+     * Return last insert id
+     *
+     * @return type
+     */
+    public function lastInsertId()
+    {
+        //
+        return $this->_pdo->lastInsertId();
+    }
+
+    /**
+     * Return last insert id
+     *
+     * @return type
+     */
+    public function quote($string)
+    {
+        //
+        return $this->_pdo->quote($string);
+    }
+
+    /**
+     *
+     *
+     */
+    public function transact() {
+
+        //
+        $this->_pdo->beginTransaction();
+    }
+
+    /**
+     *
+     */
+    public function commit()
+    {
+        //
+        $this->_pdo->commit();
+    }
+
+    /**
+     *
+     */
+    public function rollback()
+    {
+        //
+        $this->_pdo->rollBack();
+    }
 
     /**
      *
@@ -257,7 +257,7 @@ class Socket
     public function execute($sql, $values=null)
     {
         //
-		$stmt = $this->_pdo->prepare($sql);
+        $stmt = $this->_pdo->prepare($sql);
 
         //
         if (is_array($values)) {
@@ -266,18 +266,18 @@ class Socket
             }
         }
 
-		//
-		try {
-			$stmt->execute();
-		}
+        //
+        try {
+            $stmt->execute();
+        }
 
-		// wrap PDOException with SDBException
-		catch (PDOException $ex) {
-			throw new Exception(
+        // wrap PDOException with SDBException
+        catch (PDOException $ex) {
+            throw new Exception(
                 $ex->getMessage(),
                 intval($ex->getCode())
             );
-		}
+        }
 
         //
         return $stmt;

@@ -44,11 +44,11 @@ trait ModelApi
     }
 
     /**
-	 *
-	 *
+     *
+     *
 	 * @param type $fields
-	 * @return type
-	 */
+     * @return type
+     */
     public function all($model, $fields=null)
     {
         //
@@ -60,7 +60,7 @@ trait ModelApi
         //
         $results = $this->getResults($sql);
 
-		//
+        //
         return $results;
     }
 
@@ -79,7 +79,7 @@ trait ModelApi
         // collect tokens for sql query
         $tokensArray = array();
 
-		// collect values for sql query
+        // collect values for sql query
         $valuesArray = array();
 
         //
@@ -106,14 +106,14 @@ trait ModelApi
         //
         $table = $this->getPrefix($model);
 
-		//
+        //
         $sql = "INSERT INTO `{$table}` ({$fields}) VALUES ({$tokens})";
 
         //
         $this->execute($sql, $valuesArray);
 
         //
-		return $this->getLastId();
+        return $this->getLastId();
     }
 
     /**
@@ -187,8 +187,8 @@ trait ModelApi
         //
         $valuesArray = array();
 
-		//
-		$whereConditions = array();
+        //
+        $whereConditions = array();
 
         //
         if (isset($query['where'])) {
@@ -285,24 +285,24 @@ trait ModelApi
     }
 
     /**
-	 *
-	 *
-	 * @param type $confirm
-	 * @return type
-	 */
-	public function drop($model, $confirm)
+     *
+     *
+     * @param type $confirm
+     * @return type
+     */
+    public function drop($model, $confirm)
     {
         //
-		if ($confirm != 'confirm') {
-			return;
-		}
+        if ($confirm != 'confirm') {
+            return;
+        }
         
         //
         $models = $model == '*'
                 ? $this->getModels()
                 : [$model];
 
-		//
+        //
         if (!count($models)) {
             return;
         }
@@ -324,7 +324,7 @@ trait ModelApi
             //
             $this->execute($sql);
         }       
-	}
+    }
 
     /**
      *

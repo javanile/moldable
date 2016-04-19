@@ -9,9 +9,15 @@ namespace Javanile\SchemaDB;
 interface Notations
 {
     /**
-	 *
      *
-	 */
+     *
+     */
+    const KEY = '<<#primary_key>>';
+
+    /**
+     *
+     *
+     */
     const PRIMARY_KEY = '<<#primary_key>>';
 
     /**
@@ -20,11 +26,11 @@ interface Notations
      */
     const PRIMARY_KEY_INT_20 = '<<#primary_key_int_20>>';
     
-	/**
-	 *
+    /**
      *
-	 */
-	const VARCHAR = '<<{"Type":"varchar(255)"}>>';
+     *
+     */
+    const VARCHAR = '<<{"Type":"varchar(255)"}>>';
 
     /**
      *
@@ -62,11 +68,11 @@ interface Notations
      */
     const TEXT = '<<{"Type":"text"}>>';
     
-	/**
-	 * 
-	 * 
-	 */
-	const TINYINT = '<<{"Type":"tinyint(4)"}>>';
+    /**
+     *
+     *
+     */
+    const TINYINT = '<<{"Type":"tinyint(4)"}>>';
 
     /**
      *
@@ -78,7 +84,7 @@ interface Notations
      *
      *
      */
-    const MEDIUMINT	= '<<{"Type":"mediumint(9)"}>>';
+    const MEDIUMINT = '<<{"Type":"mediumint(9)"}>>';
     
     /**
      *
@@ -98,11 +104,11 @@ interface Notations
      */
     const BIGINT = '<<{"Type":"bigint(20)"}>>';
     
-	/**
-	 *
+    /**
      *
-	 */
-	const DECIMAL = '<<{"Type":"decimal(10,2)"}>>';
+     *
+     */
+    const DECIMAL = '<<{"Type":"decimal(10,2)"}>>';
     
     /**
      *
@@ -127,18 +133,18 @@ interface Notations
      *
      */
     const DOUBLE = '<<#double>>';
-    	
-	/**
-	 *
+
+    /**
      *
-	 */
-	const TIMESTAMP = '<<#timestamp>>';
+     *
+     */
+    const TIMESTAMP = '<<#timestamp>>';
     
     /**
-	 *
      *
-	 */
-	const TIME = '00:00:00';
+     *
+     */
+    const TIME = '00:00:00';
 
     /**
      *

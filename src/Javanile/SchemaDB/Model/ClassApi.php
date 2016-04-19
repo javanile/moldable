@@ -9,12 +9,12 @@ namespace Javanile\SchemaDB\Model;
 trait ClassApi
 {
 	/**
-	 * Global setting class attributes
-	 * 
-	 * @var type 
-	 */
+     * Global setting class attributes
+     *
+     * @var type
+     */
     protected static $__global__ = [
-		'SchemaExcludedFields' => [
+        'SchemaExcludedFields' => [
             '__global__',
             '__attributes__',
             '__config__',
@@ -22,27 +22,27 @@ trait ClassApi
             'table',
             'model',
         ],
-	];
+    ];
 
     /**
-	 * Per-class attributes used as cache
-	 *
-	 * @var type
-	 */
+     * Per-class attributes used as cache
+     *
+     * @var type
+     */
     protected static $__attributes__ = [];
 
-	/**
-	 *
-	 * @var type 
-	 */
-	public static $__config__ = [];
-    		
-	/**
-	 * Retrieve static class complete name
+    /**
+     *
+     * @var type
+     */
+    public static $__config__ = [];
+
+    /**
+     * Retrieve static class complete name
      * with namespace prepended
-	 * 
-	 * @return type
-	 */ 
+     *
+     * @return type
+     */
     protected static function getClass()
     {
         //
@@ -52,23 +52,23 @@ trait ClassApi
     }
 
     /**
-	 *
+     *
      * 
-	 * @return type
-	 */
-	protected static function getCalledClass()
+     * @return type
+     */
+    protected static function getCalledClass()
     {
-		//
-		return trim(get_called_class(),'\\');
-	}
+        //
+        return trim(get_called_class(),'\\');
+    }
 
-	/**
-	 * Retrieve static class name
-	 * 
-	 * @return type
-	 */ 
+    /**
+     * Retrieve static class name
+     *
+     * @return type
+     */
     protected static function getClassName()
-    {		
+    {
         //
         $attribute = 'ClassName';
 
@@ -91,58 +91,58 @@ trait ClassApi
         //
         return static::getClassAttribute($attribute);
     }
-	
-	/**
-	 *
-     * 
-	 */
-	protected static function hasClassAttribute($attribute)
-    {
-		//
-		$class = static::getClass();
-			
-		//
-		return isset(static::$__attributes__[$class][$attribute]);
-	}
-
-	/**
-     * 
-	 * 
-	 */
-	protected static function getClassAttribute($attribute)
-    {
-		//
-		$class = static::getClass();
-      
-		//
-		return static::$__attributes__[$class][$attribute];
-	}
-
-	/**
-	 *
-     * 
-	 */
-	protected static function setClassAttribute($attribute, $value)
-    {
-		//
-		$class = static::getClass();
-		
-		//
-		static::$__attributes__[$class][$attribute] = $value;
-	}
 
     /**
-	 *
      *
-	 */
-	protected static function delClassAttribute($attribute)
+     * 
+     */
+    protected static function hasClassAttribute($attribute)
     {
-		//
-		$class = static::getClass();
+        //
+        $class = static::getClass();
 
-		//
-		unset(static::$__attributes__[$class][$attribute]);
-	}
+        //
+        return isset(static::$__attributes__[$class][$attribute]);
+    }
+
+    /**
+     * 
+     *
+     */
+    protected static function getClassAttribute($attribute)
+    {
+        //
+        $class = static::getClass();
+      
+        //
+        return static::$__attributes__[$class][$attribute];
+    }
+
+    /**
+     *
+     * 
+     */
+    protected static function setClassAttribute($attribute, $value)
+    {
+        //
+        $class = static::getClass();
+
+        //
+        static::$__attributes__[$class][$attribute] = $value;
+    }
+
+    /**
+     *
+     *
+     */
+    protected static function delClassAttribute($attribute)
+    {
+        //
+        $class = static::getClass();
+
+        //
+        unset(static::$__attributes__[$class][$attribute]);
+    }
 
     /**
      *

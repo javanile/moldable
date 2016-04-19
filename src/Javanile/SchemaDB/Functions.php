@@ -12,7 +12,7 @@ class Functions
      *
      * @param type $var
      */
-	public static function varDump($var)
+    public static function varDump($var)
     {
         //
         $style = 'padding:4px 6px 2px 6px;'
@@ -22,9 +22,9 @@ class Functions
         
         //
         echo '<pre style="'.$style.'">';
-		var_dump($var);
-		echo '</pre>';
-	} 
+        var_dump($var);
+        echo '</pre>';
+    }
 
     /**
      *

@@ -13,20 +13,20 @@ use Javanile\SchemaDB\Notations;
 use Javanile\SchemaDB\Exception;
 
 trait SocketApi
-{	
+{
     /**
      *
      * 
      */
     private function connect()
     {
-		//
-		if (!$this->_ready) {
-			
-            //
-			$this->log('connect', $this->_args);
+        //
+        if (!$this->_ready) {
 
-			//
+            //
+            $this->log('connect', $this->_args);
+
+            //
             try {
                 $this->_ready = $this->_socket->connect($this->_args);
             }
@@ -35,7 +35,7 @@ trait SocketApi
             catch (Exception $ex) {
                 $this->errorConnect($ex);
             }
-		}
+        }
     }
 
     /**
@@ -57,13 +57,13 @@ trait SocketApi
     private function enquire()
     {
         //
-		$this->connect();
+        $this->connect();
 
-		//
-		static::log('enquire');
+        //
+        static::log('enquire');
 
-		//
-		return $this->_socket->execute('SELECT NOW()');
+        //
+        return $this->_socket->execute('SELECT NOW()');
     }
 
     /**
@@ -75,14 +75,14 @@ trait SocketApi
      */
     public function execute($sql, $values=null)
     {        
-		//
-		$this->connect();
+        //
+        $this->connect();
 
-		//
-		static::log('execute', $sql, $values);
+        //
+        static::log('execute', $sql, $values);
 
-		//
-		return $this->_socket->execute($sql, $values);
+        //
+        return $this->_socket->execute($sql, $values);
     }
 
     /**
@@ -91,12 +91,12 @@ trait SocketApi
      * @return type
      */
     public function getPrefix($table=null)
-    {		
-		//
-		$prefix = $this->_socket->getPrefix();
+    {
+        //
+        $prefix = $this->_socket->getPrefix();
         
-		//
-		return $table ? $prefix . $table : $prefix;
+        //
+        return $table ? $prefix . $table : $prefix;
     }
 
     /**
@@ -109,7 +109,7 @@ trait SocketApi
         //
         $this->_args['prefix'] = $prefix;
 
-		//
+        //
         $this->_socket->setPrefix($prefix);
 
         //
@@ -122,17 +122,17 @@ trait SocketApi
      */
     public function getLastId()
     {
-		//
-		$this->connect();
+        //
+        $this->connect();
 
-		//
-		$id = $this->_socket->lastInsertId();
+        //
+        $id = $this->_socket->lastInsertId();
 
-		//
-		static::log('getLastId', $id);
+        //
+        static::log('getLastId', $id);
 
-		//
-		return $id;
+        //
+        return $id;
     }
 
     /**
@@ -143,14 +143,14 @@ trait SocketApi
      */
     public function getRow($sql, $params=null)
     {
-		//
-		$this->connect();
-		
-		//
-		static::log('getRow', $sql, $params);
+        //
+        $this->connect();
 
-		//
-		return $this->_socket->getRow($sql, $params);
+        //
+        static::log('getRow', $sql, $params);
+
+        //
+        return $this->_socket->getRow($sql, $params);
     }
 
     /**
@@ -162,14 +162,14 @@ trait SocketApi
      */
     public function getResults($sql, $params=null)
     {
-		//
-		$this->connect();
+        //
+        $this->connect();
 
-		//
-		$this->log('getResults', $sql, $params);
+        //
+        $this->log('getResults', $sql, $params);
 
-		//
-		return $this->_socket->getResults($sql, $params);
+        //
+        return $this->_socket->getResults($sql, $params);
     }
 
     /**
@@ -181,14 +181,14 @@ trait SocketApi
      */
     public function getResultsAsObjects($sql, $params=null)
     {
-		//
-		$this->connect();
+        //
+        $this->connect();
 
-		//
-		$this->log('getResults', $sql, $params);
+        //
+        $this->log('getResults', $sql, $params);
 
-		//
-		return $this->_socket->getResultsAsObjects($sql, $params);
+        //
+        return $this->_socket->getResultsAsObjects($sql, $params);
     }
 
     /**
@@ -198,14 +198,14 @@ trait SocketApi
      */
     public function getValue($sql, $params=null)
     {
-		//
-		$this->connect();
+        //
+        $this->connect();
 
-		//
-		$this->log('getValue', $sql, $params);
+        //
+        $this->log('getValue', $sql, $params);
 
-		//
-		return $this->_socket->getValue($sql, $params);
+        //
+        return $this->_socket->getValue($sql, $params);
     }
 
     /**
@@ -215,50 +215,50 @@ trait SocketApi
      */
     public function getValues($sql, $params=null)
     {
-		//
-		$this->connect(); 
+        //
+        $this->connect();
 
-		//
-		$this->log('getValues', $sql, $params);
+        //
+        $this->log('getValues', $sql, $params);
 
-		//
-		return $this->_socket->getColumn($sql, $params);
+        //
+        return $this->_socket->getColumn($sql, $params);
     }
 
-	/**
-	 * Test if a table exists
-	 * 
-	 * @param type $table
-	 * @return type
-	 */
-	public function tableExists($table, $parse=true) {
-		
-		// prepare
+    /**
+     * Test if a table exists
+     *
+     * @param type $table
+     * @return type
+     */
+    public function tableExists($table, $parse=true) {
+
+        // prepare
         if ($parse) { 
-			
-			//
-			$table = $this->getPrefix() . $table;			
-		}
+
+            //
+            $table = $this->getPrefix() . $table;
+        }
 
         //
         $escapedTable = str_replace('_', '\\_', $table);
 
-		// sql query to test table exists
+        // sql query to test table exists
         $sql = "SHOW TABLES LIKE '{$escapedTable}'";
 
         // test if table exists
         $exists = $this->getRow($sql);
 
-		// return and cast test result
-		return (boolean) $exists;
-	}
-	
-	/**
-	 * Get array with current tables on database
-	 * 
-	 * @return array
-	 */
-	public function getTables()
+        // return and cast test result
+        return (boolean) $exists;
+    }
+
+    /**
+     * Get array with current tables on database
+     *
+     * @return array
+     */
+    public function getTables()
     {
         // escape underscore
         $prefix = str_replace('_', '\\_', $this->getPrefix());
@@ -267,11 +267,11 @@ trait SocketApi
         $sql = "SHOW TABLES LIKE '{$prefix}%'";
 
         //
-		$tables = $this->getValues($sql);
+        $tables = $this->getValues($sql);
 
-		//
+        //
         return $tables;  
-	}
+    }
 
     /**
      *
@@ -280,39 +280,39 @@ trait SocketApi
     public function quote($string)
     {
         //
-		$this->connect();
+        $this->connect();
         
         //
         return $this->_socket->quote($string);
     }
 
-	/**
-	 * Debug mode setter
-	 * 
-	 */
-	public function setDebug($flag)
-    {
-		//
-		$this->_debug = (boolean) $flag;
-	}
-	
-	/**
-	 * Debug mode getter
-	 * 
-	 */
-	protected function getDebug()
+    /**
+     * Debug mode setter
+     *
+     */
+    public function setDebug($flag)
     {
         //
-		return $this->_debug;
-	}
-	
-	/**
-	 * 
-	 * 
-	 */
-	private function log($method, $arg1=null, $arg2=null)
+        $this->_debug = (boolean) $flag;
+    }
+
+    /**
+     * Debug mode getter
+     *
+     */
+    protected function getDebug()
     {
-		// debug the queries
+        //
+        return $this->_debug;
+    }
+
+    /**
+     *
+     *
+     */
+    private function log($method, $arg1=null, $arg2=null)
+    {
+        // debug the queries
         if (!$this->getDebug()) {
             return;
         }
@@ -340,5 +340,5 @@ trait SocketApi
             echo "\n".str_pad('#2 -> ',20,' ',STR_PAD_LEFT).json_encode($arg2);
         }
         echo '</pre>';        
-	}	
+    }
 }

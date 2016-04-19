@@ -8,19 +8,19 @@ namespace Javanile\SchemaDB\Model;
 
 trait SchemaApi
 {
-	/**
-	 * Instrospect and retrieve element schema
-	 *  
-	 * @return type
-	 */
+    /**
+     * Instrospect and retrieve element schema
+     *
+     * @return type
+     */
     public static function getSchema()
-    {		
-		//
-		$attribute = 'Schema';	
+    {
+        //
+        $attribute = 'Schema';
 
-		//
-		if (!static::hasClassAttribute($attribute)) {
-		
+        //
+        if (!static::hasClassAttribute($attribute)) {
+
             //
             $fields = static::getSchemaFieldsWithValues();
 
@@ -44,19 +44,19 @@ trait SchemaApi
         //
         return static::getClassAttribute($attribute);
     }
-	
-	/**
-	 * Instrospect and retrieve element schema
-	 *  
-	 * @return type
-	 */
-    protected static function getSchemaFields()			
+
+    /**
+     * Instrospect and retrieve element schema
+     *
+     * @return type
+     */
+    protected static function getSchemaFields()
     {
-		//
-		$attribute	= 'SchemaFields';
+        //
+        $attribute    = 'SchemaFields';
 
         //
-		if (!static::hasClassAttribute($attribute)) {
+        if (!static::hasClassAttribute($attribute)) {
 
             //
             $attibuteLookup = 'SchemaExcludedFields';
@@ -80,24 +80,24 @@ trait SchemaApi
 
             //
             static::setClassAttribute($attribute, $fields);
-		}
-
-		//
-		return static::getClassAttribute($attribute);
-	}
-	
-	/**
-	 * Instrospect and retrieve element schema
-	 *  
-	 * @return type
-	 */
-    protected static function getSchemaFieldsWithValues()			
-	{	
-		//
-		$attribute = 'SchemaFieldsWithValues';
+        }
 
         //
-		if (!static::hasClassAttribute($attribute)) {
+        return static::getClassAttribute($attribute);
+    }
+
+    /**
+     * Instrospect and retrieve element schema
+     *
+     * @return type
+     */
+    protected static function getSchemaFieldsWithValues()
+    {
+        //
+        $attribute = 'SchemaFieldsWithValues';
+
+        //
+        if (!static::hasClassAttribute($attribute)) {
 
             //
             $attributeLookup = 'SchemaExcludedFields';
@@ -121,7 +121,7 @@ trait SchemaApi
             static::setClassAttribute($attribute, $fields);
         }
 
-    	//
+        //
         return static::getClassAttribute($attribute);
     }
 }
