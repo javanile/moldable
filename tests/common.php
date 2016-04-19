@@ -25,7 +25,7 @@ echo '<style>pre{padding:0;margin:0;}</style>';
 
 //
 if (!file_exists(__DIR__.'/override.php')) {
-	require_once __DIR__.'/config.php';
+    require_once __DIR__.'/config.php';
 } else {
     require_once __DIR__.'/override.php';
 }

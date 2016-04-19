@@ -8,11 +8,11 @@ require_once 'common.php';
 
 // Alter schema create or update database tables
 $db->alter(array(
-	
-	// define users table
-	'User' => array(		
-		'name' => 0,
-	),
+    
+    // define users table
+    'User' => array(        
+        'name' => 0,
+    ),
 ));
 
 // print-out schema

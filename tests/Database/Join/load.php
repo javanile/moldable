@@ -17,11 +17,11 @@ SchemaDB\Debug::varDump($Person0);
 
 //
 $Person1 = $db->load('Person', 1, array(
-	'address_name_1' => $db->join('Address', 'address1'),
-	'address_name_2' => $db->join('Address', 'address2'),
-	'address_name_3' => $db->join('Address', 'address1'),
-	'address_name_4' => $db->join('Address', 'address2'),
-	'Address2.city',
+    'address_name_1' => $db->join('Address', 'address1'),
+    'address_name_2' => $db->join('Address', 'address2'),
+    'address_name_3' => $db->join('Address', 'address1'),
+    'address_name_4' => $db->join('Address', 'address2'),
+    'Address2.city',
 ));
 
 //

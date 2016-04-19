@@ -10,28 +10,28 @@ require_once '../../src/SourceForge/SchemaDB/autoload.php';
 use SourceForge\SchemaDB;
 
 //
-class TestModel extends SchemaDB\Storable {	
-	
-	//
-	public $pid = self::PRIMARY_KEY;
-	
-	//
-	public $name = self::VARCHAR;	
-	
-	//
-	public $ts = self::DATETIME;
-	
-	//
-	public static function encode_ts($date) {
-	
-		//
-		return (int) $date;
-	}	
+class TestModel extends SchemaDB\Storable {    
+    
+    //
+    public $pid = self::PRIMARY_KEY;
+    
+    //
+    public $name = self::VARCHAR;    
+    
+    //
+    public $ts = self::DATETIME;
+    
+    //
+    public static function encode_ts($date) {
+    
+        //
+        return (int) $date;
+    }    
 }
 
 // 
 $encoded = TestModel::encode(array(
-	'ts' => '1/1/1981', 
+    'ts' => '1/1/1981', 
 ));
 
 //

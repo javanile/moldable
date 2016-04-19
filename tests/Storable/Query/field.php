@@ -8,9 +8,9 @@ require_once '../../SchemaDB.php';
 
 //
 $list = Person::query(array(
-	'where' => 'age > 11',
-	'order' => 'age ASC',
-	'limit' => 2,
+    'where' => 'age > 11',
+    'order' => 'age ASC',
+    'limit' => 2,
 ));
 
 //

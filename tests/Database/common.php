@@ -8,11 +8,11 @@ use Javanile\SchemaDB\Database;
 
 //
 $db = new Database([
-	'host'     => $host,
-	'dbname'   => $dbname,
-	'username' => $username,
-	'password' => $password,
-	'prefix'   => $prefix,
+    'host'     => $host,
+    'dbname'   => $dbname,
+    'username' => $username,
+    'password' => $password,
+    'prefix'   => $prefix,
 ]);
 
 //

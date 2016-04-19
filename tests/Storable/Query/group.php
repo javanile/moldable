@@ -18,27 +18,27 @@ use SourceForge\SchemaDB\Storable;
 
 //
 new SchemaDB(array(
-	'host' => $host,
-	'user' => $user,
-	'pass' => $pass,
-	'name' => $name,
-	'pref' => $pref,
+    'host' => $host,
+    'user' => $user,
+    'pass' => $pass,
+    'name' => $name,
+    'pref' => $pref,
 ));
 
 //
 class Person extends Storable {
-	
-	//
-	public $id = self::PRIMARY_KEY;
-	
-	//
-	public $name = "";
-	
-	//
-	public $age = 0;	
-	
-	//
-	public $telephone = "";		
+    
+    //
+    public $id = self::PRIMARY_KEY;
+    
+    //
+    public $name = "";
+    
+    //
+    public $age = 0;    
+    
+    //
+    public $telephone = "";        
 }
 
 // remove Person table and complete items list
@@ -46,12 +46,12 @@ Person::drop('confirm');
 
 // import Persons from array-of-array
 Person::import(array(
-	array('name' => 'Francesco',	'age' => 10),
-	array('name' => 'Paolo',		'age' => 12),
-	array('name' => 'Matteo',		'age' => 15),
-	array('name' => 'Piero',		'age' => 10),
-	array('name' => 'Antonio',		'age' => 13),	
-	array('name' => 'Carlo',		'age' => 9),	
+    array('name' => 'Francesco',    'age' => 10),
+    array('name' => 'Paolo',        'age' => 12),
+    array('name' => 'Matteo',        'age' => 15),
+    array('name' => 'Piero',        'age' => 10),
+    array('name' => 'Antonio',        'age' => 13),    
+    array('name' => 'Carlo',        'age' => 9),    
 ));
 
 // printout table record before delete
@@ -59,9 +59,9 @@ Person::dump();
 
 //
 $list = Person::query(array(
-	'where' => "age > 11",
-	'order' => "age ASC",
-	'limit' => "2",
+    'where' => "age > 11",
+    'order' => "age ASC",
+    'limit' => "2",
 ));
 
 //

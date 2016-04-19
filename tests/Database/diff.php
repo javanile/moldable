@@ -11,20 +11,20 @@ use Javanile\SchemaDB;
 
 //
 $schema = array(
-	
-	// define users table
-	'User' => array(
-		'userid'   => $db::VARCHAR,
-		'username' => '',
-		'password' => 0,		
-	),
-	
-	// define articles table
-	'Article' => array(
-		'articleid' => 0,
-		'title'		=> '',
-		'content'	=> '',
-	),	
+    
+    // define users table
+    'User' => array(
+        'userid'   => $db::VARCHAR,
+        'username' => '',
+        'password' => 0,        
+    ),
+    
+    // define articles table
+    'Article' => array(
+        'articleid' => 0,
+        'title'        => '',
+        'content'    => '',
+    ),    
 );
 
 //

@@ -7,14 +7,14 @@ require_once '../../src/SourceForge/SchemaDB/autoload.php';
 use SourceForge\SchemaDB;
 
 //
-$schema = array(	
-	
-	'My_Table' => array(
-		
-		'My_Field' => 1,
-		
-	)
-	
+$schema = array(    
+    
+    'My_Table' => array(
+        
+        'My_Field' => 1,
+        
+    )
+    
 );
 
 //

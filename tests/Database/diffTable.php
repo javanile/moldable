@@ -11,9 +11,9 @@ use Javanile\SchemaDB;
 
 //
 $fields = array(
-	'userid'   => 1,
-	'username' => '',
-	'password' => '',
+    'userid'   => 1,
+    'username' => '',
+    'password' => '',
 );
 
 //

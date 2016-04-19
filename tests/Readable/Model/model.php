@@ -18,8 +18,8 @@ class Product extends Storable {
 
 //
 class Invoice extends Storable {
-	
-	//
-	public $product = '<<Product>>';
+    
+    //
+    public $product = '<<Product>>';
 }
 

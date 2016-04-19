@@ -16,9 +16,9 @@ use Javanile\SchemaDB;
 
 //
 new SchemaDB\Database(array(
-	'host' => $host,
-	'user' => $user,
-	'pass' => $pass,
-	'name' => $name,
-	'pref' => 't105_',
+    'host' => $host,
+    'user' => $user,
+    'pass' => $pass,
+    'name' => $name,
+    'pref' => 't105_',
 ));

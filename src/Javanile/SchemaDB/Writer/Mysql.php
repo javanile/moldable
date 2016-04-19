@@ -1,15 +1,11 @@
 <?php
+/**
+ * 
+ * 
+ */
 
-/*
- * 
- * 
-\*/
 namespace Javanile\SchemaDB\Writer;
 
-/**
- * A collection of MySQL stataments builder
- * used with mysql query template and place-holder replacing
- */
 class Mysql
 {
     //
@@ -22,20 +18,20 @@ class Mysql
     //
     public static function columnDefinition($attributes, $order=true)
     {        
-		//
-		$a = &$attributes;
+        //
+        $a = &$attributes;
 
         //
-		$Key = isset($a['Key']) && $a['Key'] == 'PRI' ? 'PRIMARY KEY' : '';
+        $Key = isset($a['Key']) && $a['Key'] == 'PRI' ? 'PRIMARY KEY' : '';
 
         //
         $Type = isset($a['Type']) ? strtolower($a['Type']) : static::$defaults['Attributes']['Type'];
         
-		//
-		$Null = isset($a['Null']) && ($a['Null'] == 'NO' || !$a['Null']) ? 'NOT NULL' : 'NULL';
+        //
+        $Null = isset($a['Null']) && ($a['Null'] == 'NO' || !$a['Null']) ? 'NOT NULL' : 'NULL';
 
-		//
-		$Extra = isset($a['Extra']) ? $a['Extra'] : '';
+        //
+        $Extra = isset($a['Extra']) ? $a['Extra'] : '';
 
         //
         if (!isset($a['Default']) 
@@ -56,13 +52,13 @@ class Mysql
         }
 
         //
-		$sql = $Type.' '.$Null.' '.$Default.' '.$Key.' '.$Extra;
+        $sql = $Type.' '.$Null.' '.$Default.' '.$Key.' '.$Extra;
 
         //
         if ($order) {
             $First = isset($a['First']) && $a['First'] ? 'FIRST' : '';
             $Before = isset($a['Before']) && $a['Before'] ? 'AFTER '.$a['Before'] : '';
-			$sql .= ' '.$First.' '.$Before;
+            $sql .= ' '.$First.' '.$Before;
         }
 
         //
@@ -77,8 +73,8 @@ class Mysql
      * @return string Sql code statament of CREATE TABLE
      */
     public static function createTable($table, $schema)
-    {		
-		//
+    {
+        //
         $columnsArray = array();
 
         // loop throut schema
@@ -94,16 +90,16 @@ class Mysql
                 $attributes = array();
             }
 
-			//
-			$column = static::columnDefinition($attributes, false);
-			
             //
-			$columnsArray[] = "`{$field}` {$column}";
+            $column = static::columnDefinition($attributes, false);
+
+            //
+            $columnsArray[] = "`{$field}` {$column}";
         }
 
         // implode
         $columns = implode(',', $columnsArray);
-		
+
         // template sql to create table
         $sql = "CREATE TABLE `{$table}` ({$columns})";
 
@@ -112,12 +108,12 @@ class Mysql
     }
 
     /**
-	 * 
-	 * @param type $table
-	 * @param type $field
-	 * @param type $attributes
-	 * @return type
-	 */
+     *
+     * @param type $table
+     * @param type $field
+     * @param type $attributes
+     * @return type
+     */
     public static function alterTableAdd($table, $field, $attributes)
     {
         //
@@ -131,13 +127,13 @@ class Mysql
     }
 
     /**
-	 * Retrieve sql to alter table definition
-	 * 
-	 * @param type $t
-	 * @param type $f
-	 * @param type $d
-	 * @return type
-	 */
+     * Retrieve sql to alter table definition
+     *
+     * @param type $t
+     * @param type $f
+     * @param type $d
+     * @return type
+     */
     public static function alterTableChange($table, $field, $attributes)
     {
         //
@@ -166,7 +162,7 @@ class Mysql
      * @return string
      */
     public static function selectFields($fields, $tableAlias, &$join)
-    {        				
+    {
         //
         if (!$fields) {
             return '*';
@@ -264,32 +260,32 @@ class Mysql
         //
         return implode(', ',$selectFields);
     }
-	
-	/**
-	 * 
-	 * @param type $field
-	 * @return type
-	 */
-	public static function selectFieldsSingletoneField($field, $tableAlias)
+
+    /**
+     *
+     * @param type $field
+     * @return type
+     */
+    public static function selectFieldsSingletoneField($field, $tableAlias)
     {
-		//
-		if (preg_match('/^[a-z_][a-z0-9_]*$/i', $field)) {
-			return $tableAlias ? $tableAlias.'.'.$field : $field;			
-		} 
-		
-		//
-		else {
-			return $field;
-		}		
-	}
-	
-	/**
-	 * Quote table or column names
-	 * 
-	 * 
-	 */
-	protected static function quote($name) {
-		return '`'.$name.'`';
-	} 
+        //
+        if (preg_match('/^[a-z_][a-z0-9_]*$/i', $field)) {
+            return $tableAlias ? $tableAlias.'.'.$field : $field;
+        }
+
+        //
+        else {
+            return $field;
+        }
+    }
+
+    /**
+     * Quote table or column names
+     *
+     *
+     */
+    protected static function quote($name) {
+        return '`'.$name.'`';
+    }
 }
 

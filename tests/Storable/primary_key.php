@@ -8,15 +8,15 @@ use Javanile\SchemaDB\Storable;
 
 // extremely coincise model definition
 class Invoices extends Storable 
-{	
-	// with a private key field
-	public $id = self::PRIMARY_KEY;
-	
-	// . . . 
-	public $number = 0;
-		
-	// . . .
-	public $created = self::DATE;
+{    
+    // with a private key field
+    public $id = self::PRIMARY_KEY;
+    
+    // . . . 
+    public $number = 0;
+        
+    // . . .
+    public $created = self::DATE;
 }
 
 //

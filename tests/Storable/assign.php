@@ -8,6 +8,6 @@ $Person = new Person();
 
 // update before store
 $Person->store([
-	'name' => 'Frank',
+    'name' => 'Frank',
 ]);
 

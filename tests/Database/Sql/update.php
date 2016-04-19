@@ -18,24 +18,24 @@ use SourceForge\SchemaDB\Storable;
 
 //
 new SchemaDB(array(
-	'host' => $host,
-	'user' => $user,
-	'pass' => $pass,
-	'name' => $name,
-	'pref' => $pref,
+    'host' => $host,
+    'user' => $user,
+    'pass' => $pass,
+    'name' => $name,
+    'pref' => $pref,
 ));
 
 //
 class Person extends Storable {
-	
-	//
-	public $id = self::PRIMARY_KEY;
-	
-	//
-	public $name = "";
-	
-	//
-	public $age = 0;	
+    
+    //
+    public $id = self::PRIMARY_KEY;
+    
+    //
+    public $name = "";
+    
+    //
+    public $age = 0;    
 }
 
 // update record with id=10 

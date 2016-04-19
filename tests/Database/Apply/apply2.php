@@ -8,12 +8,12 @@ $db->drop('*', 'confirm');
 
 // define users table
 $db->apply('User', [
-    'userid'	=> '<<primary key int 10>>',
-    'password'	=> '',
-    'type'		=> 1,
-    'username'	=> '',
-    'tipe'		=> $db::INT_20,
-    'floatas'   => '<<int 10>>',
+    'userid'   => '<<primary key int 10>>',
+    'password' => '',
+    'type'     => 1,
+    'username' => '',
+    'tipe'     => $db::INT_20,
+    'floatas'  => '<<int 10>>',
 ]);
 
 //

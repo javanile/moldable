@@ -7,9 +7,9 @@ require_once 'common.php';
 $id = 1;
 
 //
-$list = Person::query(array(	
-	'where' => 'age > 0',
-	'field' => 'name',
+$list = Person::query(array(    
+    'where' => 'age > 0',
+    'field' => 'name',
 ));
 
 //

@@ -15,11 +15,11 @@ use SourceForge\SchemaDB;
 
 // create db schema connection
 $db = new SchemaDB\Source(array(
-	'host' => $host,
-	'user' => $user,
-	'pass' => $pass,
-	'name' => $name,
-	'pref' => $pref,
+    'host' => $host,
+    'user' => $user,
+    'pass' => $pass,
+    'name' => $name,
+    'pref' => $pref,
 ));
 
 //

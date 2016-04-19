@@ -5,8 +5,8 @@ require_once 'common.php';
 
 //
 $Persons = Person::all(array(
-	'name',	
-	'address' => Address::join('name','address'),
+    'name',    
+    'address' => Address::join('name','address'),
 ));
 
 //

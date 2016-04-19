@@ -10,35 +10,35 @@ require_once '../../src/SourceForge/SchemaDB/autoload.php';
 use SourceForge\SchemaDB;
 
 //
-class ModelDecoder extends SchemaDB\Storable {	
-	
-	//
-	public $id = self::PRIMARY_KEY;
+class ModelDecoder extends SchemaDB\Storable {    
+    
+    //
+    public $id = self::PRIMARY_KEY;
 
-	//
-	public $ts = self::DATETIME;
+    //
+    public $ts = self::DATETIME;
 
-	//
-	public $name = self::VARCHAR;		
-	
-	//
-	public function decode_($value) {
-	
-		//
-		return $value;
-	}
-	
-	//
-	public function decode_ts($ts) {
-	
-		//
-		return date('d/m/Y', $ts);
-	}
+    //
+    public $name = self::VARCHAR;        
+    
+    //
+    public function decode_($value) {
+    
+        //
+        return $value;
+    }
+    
+    //
+    public function decode_ts($ts) {
+    
+        //
+        return date('d/m/Y', $ts);
+    }
 }
 
 // 
 $decoded = ModelDecoder::decode(array(
-	'ts' => time(), 
+    'ts' => time(), 
 ));
 
 //

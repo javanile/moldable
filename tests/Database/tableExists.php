@@ -14,11 +14,11 @@ use Javanile\SchemaDB;
 
 //
 $db = new SchemaDB\Database(array(
-	'host' => $host,
-	'user' => $user,
-	'pass' => $pass,
-	'name' => $name,
-	'pref' => 't100_',
+    'host' => $host,
+    'user' => $user,
+    'pass' => $pass,
+    'name' => $name,
+    'pref' => 't100_',
 ));
 
 // drop tables
@@ -29,7 +29,7 @@ $db = new SchemaDB\Database(array(
 
 //
 if ($db->tableExists('Project')) {
-	echo 'Table already exists!';
+    echo 'Table already exists!';
 } else {
-	echo 'No table found.';
+    echo 'No table found.';
 }

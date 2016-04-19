@@ -8,15 +8,15 @@ use Javanile\SchemaDB\Storable;
 
 //
 class Person extends Storable
-{	
-	//
-	public $id = self::PRIMARY_KEY;
-	
-	//
-	public $name = '';
-	
-	//
-	public $age = 0;	
+{    
+    //
+    public $id = self::PRIMARY_KEY;
+    
+    //
+    public $name = '';
+    
+    //
+    public $age = 0;    
 }
 
 // update record with id=10 

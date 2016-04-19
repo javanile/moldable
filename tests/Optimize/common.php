@@ -11,18 +11,18 @@ use SourceForge\SchemaDB;
 
 //
 new SchemaDB\Database(array(
-	'host' => $host,
-	'user' => $user,
-	'pass' => $pass,
-	'name' => $name,
-	'pref' => 't103_',
+    'host' => $host,
+    'user' => $user,
+    'pass' => $pass,
+    'name' => $name,
+    'pref' => 't103_',
 ));
 
 //
 class Person extends SchemaDB\Storable {
-	
-	public $id = self::PRIMARY_KEY;
-	public $name = "";
-	public $age = 0;
-	
+    
+    public $id = self::PRIMARY_KEY;
+    public $name = "";
+    public $age = 0;
+    
 }

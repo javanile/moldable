@@ -8,8 +8,8 @@ ini_set('display_errors', 1);
 require_once __DIR__.'/../../../../autoload.php';
 
 //
-$notations = array(	
-		
+$notations = array(    
+        
     \Javanile\SchemaDB\Notations::INT_20,
 );
 
@@ -26,21 +26,21 @@ $parser = new Javanile\SchemaDB\Parser\Mysql();
         <th>Type</th>
         <th>Column</th>
     </tr>
-	
-	<?php foreach($notations as $notation) { ?>
-		<tr>
-			<td>
+    
+    <?php foreach($notations as $notation) { ?>
+        <tr>
+            <td>
                 <?php var_dump($notation); ?>
             </td>
-			<td align="center">
+            <td align="center">
                 <?=$parser->getNotationValue($notation)?>
             </td>
-			<td align="center">
+            <td align="center">
                 <strong><?=$parser->getNotationType($notation)?></strong>
             </td>
-			<td>
+            <td>
                 <pre><?=var_dump($parser->getNotationAttributes($notation))?></pre>
             </td>
-		</tr>
-	<?php } ?>
+        </tr>
+    <?php } ?>
 </table>

@@ -11,11 +11,11 @@ use Javanile\SchemaDB;
 
 //
 $db = new SchemaDB\Database(array(
-	'host' => $host,
-	'user' => $user,
-	'pass' => $pass,
-	'name' => $name,
-	'pref' => 'Test_Join_',
+    'host' => $host,
+    'user' => $user,
+    'pass' => $pass,
+    'name' => $name,
+    'pref' => 'Test_Join_',
 ));
 
 //
@@ -28,24 +28,24 @@ $db->setDebug(true);
 $db->apply('Person', array(
 
     //
-	'id' => $db::PRIMARY_KEY,
-	//
-	'name' => '',
-	'surname' => "",
-	'age' => 0,
-	'address1' => 0,
-	'address2' => 0,
+    'id' => $db::PRIMARY_KEY,
+    //
+    'name' => '',
+    'surname' => "",
+    'age' => 0,
+    'address1' => 0,
+    'address2' => 0,
 ));
 
 //
 $db->apply('Address', array(
 
     //
-	'id' => $db::PRIMARY_KEY,
+    'id' => $db::PRIMARY_KEY,
 
-	//
-	'name' => "",
-	'latitude' => 0,
-	'longitude' => 0,
-	'city' => "",
+    //
+    'name' => "",
+    'latitude' => 0,
+    'longitude' => 0,
+    'city' => "",
 ));
