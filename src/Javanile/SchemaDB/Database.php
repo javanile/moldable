@@ -21,11 +21,11 @@ class Database implements Notations
     const VERSION = '0.3.0';
 
     /**
-	 *
-	 */
-	private $_args = null;
+     *
+     */
+    private $_args = null;
 
-	/**
+    /**
      *
      * @var type
      */
@@ -49,7 +49,7 @@ class Database implements Notations
      */
     private $_ready = null;
 
-	/**
+    /**
      * Constant to enable debug print-out
      *
      * @var boolean
@@ -57,15 +57,15 @@ class Database implements Notations
     private $_debug = false;
 
     /**
-	 * Timestamp for benchmark
-	 */
-	private $_trace = null;
+     * Timestamp for benchmark
+     */
+    private $_trace = null;
 
-	/**
-	 * Timestamp for benchmark
-	 */
-	private $_ts = null;
-		
+    /**
+     * Timestamp for benchmark
+     */
+    private $_ts = null;
+
     /**
      *
      *
@@ -82,7 +82,7 @@ class Database implements Notations
     public function __construct($args)
     {
         //
-		$this->_ts = microtime();
+        $this->_ts = microtime();
 
         //
         $this->_trace = debug_backtrace();
@@ -95,9 +95,9 @@ class Database implements Notations
         }
 
         //
-		$this->_args = $args;
+        $this->_args = $args;
 
-		//
+        //
         $this->_socket = new Socket($this->_args);
 
         //
@@ -106,8 +106,8 @@ class Database implements Notations
         //
         $this->_writer = new Writer\Mysql();
 
-		//
-		$this->_ready = false;
+        //
+        $this->_ready = false;
         
         //
         static::setDefault($this);
@@ -126,8 +126,8 @@ class Database implements Notations
 
     /**
      * Set global context default database 
-	 * for future use into model management
-	 * 
+     * for future use into model management
+     *
      * @param type $database
      */
     public static function setDefault($database)
@@ -174,11 +174,11 @@ class Database implements Notations
         return $this->_writer;
     }
 
-	/**
-	 *
+    /**
      *
-	 */
-	public function benchmark() {
+     *
+     */
+    public function benchmark() {
 
         //
         $style = 'background:#333;'
@@ -190,9 +190,9 @@ class Database implements Notations
         $infoline = 'Time: '.(microtime()-$this->_ts).' '
                   . 'Mem: '.memory_get_usage(true);
 
-		// 
-		echo '<pre style="'.$style.'">'.$infoline.'</pre>';
-	}
+        //
+        echo '<pre style="'.$style.'">'.$infoline.'</pre>';
+    }
 }
 
 
