@@ -201,7 +201,7 @@ class Database implements Notations
     public function setDebug($flag)
     {
         //
-        $this->_debug = (boolean) $flag;
+        $this->_debug = (bool) $flag;
     }
 
     /**
@@ -223,7 +223,7 @@ class Database implements Notations
     public function benchmark()
     {
         //
-        $delta = microtime()-$this->_ts;
+        $delta = microtime() - $this->_ts;
 
         //
         $style = 'background:#333;'
