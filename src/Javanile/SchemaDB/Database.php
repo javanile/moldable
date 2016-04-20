@@ -6,7 +6,6 @@
  *
  * @author Francesco Bianco
  */
-
 namespace Javanile\SchemaDB;
 
 use Javanile\SchemaDB\Database\Socket;
@@ -20,7 +19,7 @@ class Database implements Notations
 
     /**
      * Release version number.
-     * 
+     *
      * @var string
      */
     const VERSION = '0.3.0';
@@ -127,7 +126,7 @@ class Database implements Notations
         //
         static::setDefault($this);
     }
-    
+
     /**
      * Retrieve default SchemaDB connection.
      *
@@ -214,7 +213,7 @@ class Database implements Notations
         //
         return $this->_debug;
     }
-    
+
     /**
      * Print-out a memory used benchmark.
      *

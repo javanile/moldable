@@ -30,7 +30,7 @@ trait ErrorApi
      * @param object $exception Exception catched with try-catch
      */
     public function errorExecute($exception)
-    { 
+    {
         var_dump($exception);
         die();
     }
