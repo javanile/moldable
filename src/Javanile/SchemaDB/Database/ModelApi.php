@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 /**
  * Trait with utility methods to handle errors.
  *
