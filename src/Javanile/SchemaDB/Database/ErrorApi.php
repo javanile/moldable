@@ -14,7 +14,7 @@ use Javanile\SchemaDB\Functions;
 trait ErrorApi
 {
     /**
-     * Trigger a connection with database error.
+     * Trigger a connection-with-database error.
      *
      * @param object $exception Exception catched with try-catch
      */

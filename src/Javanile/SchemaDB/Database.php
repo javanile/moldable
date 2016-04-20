@@ -1,7 +1,10 @@
 <?php
 /**
+ * Class that handle a connection with database.
  *
+ * PHP version 5.4
  *
+ * @author Francesco Bianco
  */
 
 namespace Javanile\SchemaDB;
@@ -16,60 +19,72 @@ class Database implements Notations
     use Database\SchemaApi;
 
     /**
-     * Currenti release version number
+     * Release version number.
+     * 
+     * @var string 
      */
     const VERSION = '0.3.0';
 
     /**
+     * Constructor arguments passed.
      *
+     * @var array
      */
     private $_args = null;
 
     /**
+     * Connected for database socket
      *
      * @var type
      */
     private $_socket = null;
 
     /**
+     * Connected for database sql writer or composer
      *
-     * @var type
+     * @var object
      */
     private $_writer = null;
 
     /**
+     * Connected for database schema parser or interpreter
      *
-     * @var type
+     * @var object
      */
     private $_parser = null;
 
     /**
+     * Database status ready for queries
      *
-     * @var type
+     * @var bool
      */
     private $_ready = null;
 
     /**
      * Constant to enable debug print-out
      *
-     * @var boolean
+     * @var bool
      */
     private $_debug = false;
 
     /**
-     * Timestamp for benchmark
+     * Trace for debugging
+     *
+     * @var object
      */
     private $_trace = null;
 
     /**
      * Timestamp for benchmark
+     *
+     * @var double
      */
     private $_ts = null;
 
     /**
+     * Database instance for singleton or default implicit call.
      *
-     *
-     * @var type
+     * @var object
      */
     protected static $_defaultDatabase = null;
 
@@ -88,7 +103,7 @@ class Database implements Notations
         $this->_trace = debug_backtrace();
         
         // check arguments for connection
-        foreach(['host','dbname','username'] as $attr) {
+        foreach (['host','dbname','username'] as $attr) {
             if (!isset($args[$attr])) {
                 $this->errorConnect("Required attribute: '{$attr}'");
             }
@@ -142,6 +157,7 @@ class Database implements Notations
 
     /**
      *
+     *
      */
     public function isReady()
     {
@@ -155,8 +171,9 @@ class Database implements Notations
     }
 
     /**
+     * Retrieve current parser.
      *
-     *
+     * @return object Current parser.
      */
     public function getParser()
     {
@@ -165,8 +182,9 @@ class Database implements Notations
     }
 
     /**
+     * Retrieve current writer
      *
-     *
+     * @return object Current writer
      */
     public function getWriter()
     {
