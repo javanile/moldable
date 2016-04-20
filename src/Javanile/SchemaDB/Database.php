@@ -21,7 +21,7 @@ class Database implements Notations
     /**
      * Release version number.
      * 
-     * @var string 
+     * @var string
      */
     const VERSION = '0.3.0';
 
@@ -31,7 +31,7 @@ class Database implements Notations
      * @var array
      */
     private $_args = null;
-    
+
     /**
      * Connected for database socket.
      *
@@ -59,7 +59,7 @@ class Database implements Notations
      * @var bool
      */
     private $_ready = null;
-   
+
     /**
      * Trace for debugging.
      *
@@ -101,7 +101,7 @@ class Database implements Notations
 
         //
         $this->_trace = debug_backtrace();
-        
+
         // check arguments for connection
         foreach (['host', 'dbname', 'username'] as $attr) {
             if (!isset($args[$attr])) {
@@ -123,7 +123,7 @@ class Database implements Notations
 
         //
         $this->_ready = false;
-        
+
         //
         static::setDefault($this);
     }
@@ -140,7 +140,7 @@ class Database implements Notations
     }
 
     /**
-     * Set global context default database 
+     * Set global context default database
      * for future use into model management.
      *
      * @param type $database
@@ -194,8 +194,9 @@ class Database implements Notations
     }
 
     /**
-     * Debug mode setter
+     * Debug mode setter.
      *
+     * @param bool $flag Set True to enable debug mode.
      */
     public function setDebug($flag)
     {
@@ -204,8 +205,9 @@ class Database implements Notations
     }
 
     /**
-     * Debug mode getter
+     * Debug mode getter.
      *
+     * @return bool Return debug mode status.
      */
     protected function getDebug()
     {
