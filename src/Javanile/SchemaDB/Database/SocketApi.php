@@ -1,19 +1,18 @@
 <?php
 /**
- * 
- * 
-\*/
+ * Socket trait comunications and interactions with database.
+ *
+ * PHP version 5.4
+ *
+ * @author Francesco Bianco
+ */
 
 namespace Javanile\SchemaDB\Database;
 
-use Javanile\SchemaDB\Utils;
-use Javanile\SchemaDB\Parser;
-use Javanile\SchemaDB\Composer;
-use Javanile\SchemaDB\Notations;
 use Javanile\SchemaDB\Exception;
 
 trait SocketApi
-{
+{    
     /**
      *
      * 
@@ -285,27 +284,7 @@ trait SocketApi
         //
         return $this->_socket->quote($string);
     }
-
-    /**
-     * Debug mode setter
-     *
-     */
-    public function setDebug($flag)
-    {
-        //
-        $this->_debug = (boolean) $flag;
-    }
-
-    /**
-     * Debug mode getter
-     *
-     */
-    protected function getDebug()
-    {
-        //
-        return $this->_debug;
-    }
-
+  
     /**
      *
      *

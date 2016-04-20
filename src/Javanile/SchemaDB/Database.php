@@ -31,7 +31,7 @@ class Database implements Notations
      * @var array
      */
     private $_args = null;
-
+    
     /**
      * Connected for database socket.
      *
@@ -59,14 +59,7 @@ class Database implements Notations
      * @var bool
      */
     private $_ready = null;
-
-    /**
-     * Constant to enable debug print-out.
-     *
-     * @var bool
-     */
-    private $_debug = false;
-
+   
     /**
      * Trace for debugging.
      *
@@ -77,9 +70,16 @@ class Database implements Notations
     /**
      * Timestamp for benchmark.
      *
-     * @var double
+     * @var float
      */
     private $_ts = null;
+
+    /**
+     * Constant to enable debug print-out.
+     *
+     * @var bool
+     */
+    private $_debug = false;
 
     /**
      * Database instance for singleton or default implicit call.
@@ -103,7 +103,7 @@ class Database implements Notations
         $this->_trace = debug_backtrace();
         
         // check arguments for connection
-        foreach (['host','dbname','username'] as $attr) {
+        foreach (['host', 'dbname', 'username'] as $attr) {
             if (!isset($args[$attr])) {
                 $this->errorConnect("Required attribute: '{$attr}'");
             }
@@ -156,8 +156,9 @@ class Database implements Notations
     }
 
     /**
+     * Get the status of database connection.
      *
-     *
+     * @return bool Database status flag.
      */
     public function isReady()
     {
@@ -193,10 +194,34 @@ class Database implements Notations
     }
 
     /**
-     *
+     * Debug mode setter
      *
      */
-    public function benchmark() {
+    public function setDebug($flag)
+    {
+        //
+        $this->_debug = (boolean) $flag;
+    }
+
+    /**
+     * Debug mode getter
+     *
+     */
+    protected function getDebug()
+    {
+        //
+        return $this->_debug;
+    }
+    
+    /**
+     * Print-out a memory used benchmark.
+     *
+     * @return float Time elapsed.
+     */
+    public function benchmark()
+    {
+        //
+        $delta = microtime()-$this->_ts;
 
         //
         $style = 'background:#333;'
@@ -205,12 +230,13 @@ class Database implements Notations
                . 'border:1px solid #000';
 
         //
-        $infoline = 'Time: '.(microtime()-$this->_ts).' '
+        $infoline = 'Time: '.$delta.' '
                   . 'Mem: '.memory_get_usage(true);
 
         //
         echo '<pre style="'.$style.'">'.$infoline.'</pre>';
+
+        //
+        return $delta;
     }
 }
-
-
