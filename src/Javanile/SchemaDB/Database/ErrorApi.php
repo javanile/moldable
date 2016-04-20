@@ -6,7 +6,6 @@
  *
  * @author Francesco Bianco
  */
-
 namespace Javanile\SchemaDB\Database;
 
 use Javanile\SchemaDB\Functions;

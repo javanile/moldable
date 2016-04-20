@@ -1,9 +1,11 @@
 <?php
 /**
+ * Trait with utility methods to handle errors.
  *
+ * PHP version 5.4
  *
+ * @author Francesco Bianco
  */
-
 namespace Javanile\SchemaDB\Database;
 
 use Javanile\SchemaDB\Utils;
@@ -11,15 +13,17 @@ use Javanile\SchemaDB\Utils;
 trait ModelApi
 {
     /**
+     * Retrieve the table-name of specifc model.
      *
-     *
+     * @param string $model Model name
+     * @return string Return table name by model
      */
     private function getTable($model)
     {
-        //
+        // use prefix on model name
         return $this->getPrefix($model);
     }
-    
+
     /**
      *
      *
@@ -158,6 +162,7 @@ trait ModelApi
     }
 
     /**
+     * 
      *
      */
     private function getUpdateWhere($model, $query, &$values) {
@@ -180,6 +185,7 @@ trait ModelApi
     }
 
     /**
+     *
      *
      */
     public function exists($model, $query)
@@ -236,8 +242,8 @@ trait ModelApi
         return $row;
     }
 
-
     /**
+     *
      *
      * @param type $list
      */
@@ -269,6 +275,7 @@ trait ModelApi
 
     /**
      *
+     *
      */
     public function submit($model, $values) {
 
@@ -285,14 +292,14 @@ trait ModelApi
     }
 
     /**
+     * Drop delete table related to a model.
      *
-     *
-     * @param type $confirm
-     * @return type
+     * @param string $model Model name to drop
+     * @param string $confirm Confirmation string
      */
     public function drop($model, $confirm)
     {
-        //
+        // exit if no correct confirmation string
         if ($confirm != 'confirm') {
             return;
         }
