@@ -1,16 +1,16 @@
-﻿<?php
+<?php
 /**
  * Trait with utility methods to handle errors.
  *
  * PHP version 5.4
  *
- * @author Francesco Bianco
+ * @author Francesco Bianco 
  */
-namespace Javanile\SchemaDB\Database;
+namespace Javanile\SchemaDB\Database; 
 
 use Javanile\SchemaDB\Utils;
 
-trait ModelApi
+trait ModelApi 
 {
     /**
      * Retrieve the table-name of specifc model.
