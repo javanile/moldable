@@ -33,49 +33,49 @@ class Database implements Notations
     private $_args = null;
 
     /**
-     * Connected for database socket
+     * Connected for database socket.
      *
      * @var type
      */
     private $_socket = null;
 
     /**
-     * Connected for database sql writer or composer
+     * Connected for database sql writer or composer.
      *
      * @var object
      */
     private $_writer = null;
 
     /**
-     * Connected for database schema parser or interpreter
+     * Connected for database schema parser or interpreter.
      *
      * @var object
      */
     private $_parser = null;
 
     /**
-     * Database status ready for queries
+     * Database status ready for queries.
      *
      * @var bool
      */
     private $_ready = null;
 
     /**
-     * Constant to enable debug print-out
+     * Constant to enable debug print-out.
      *
      * @var bool
      */
     private $_debug = false;
 
     /**
-     * Trace for debugging
+     * Trace for debugging.
      *
      * @var object
      */
     private $_trace = null;
 
     /**
-     * Timestamp for benchmark
+     * Timestamp for benchmark.
      *
      * @var double
      */
@@ -90,7 +90,7 @@ class Database implements Notations
 
     /**
      * Construct and connect a SchemaDB drive
-     * to mysql database best way to start use it
+     * to mysql database best way to start use it.
      *
      * @param array $args Array with connection parameters
      */
@@ -129,7 +129,7 @@ class Database implements Notations
     }
     
     /**
-     * Retrieve default SchemaDB connection
+     * Retrieve default SchemaDB connection.
      *
      * @return type
      */
@@ -141,7 +141,7 @@ class Database implements Notations
 
     /**
      * Set global context default database 
-     * for future use into model management
+     * for future use into model management.
      *
      * @param type $database
      */
@@ -173,7 +173,7 @@ class Database implements Notations
     /**
      * Retrieve current parser.
      *
-     * @return object Current parser.
+     * @return object Current parser
      */
     public function getParser()
     {
@@ -182,7 +182,7 @@ class Database implements Notations
     }
 
     /**
-     * Retrieve current writer
+     * Retrieve current writer.
      *
      * @return object Current writer
      */
