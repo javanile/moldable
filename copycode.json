@@ -1,0 +1,15 @@
+{
+	"push": [
+		{
+			"txt": "update SchemaDB into Laravel tests",
+			"src": ".",
+			"dir": "..\\..\\tests\\laravel\\vendor\\javanile\\schemadb",
+			"exclude": [				
+				"nbproject",
+				"composer.lock",
+				"copycode.json",
+				"tests\\override.php"
+			]
+		}
+	]
+}
