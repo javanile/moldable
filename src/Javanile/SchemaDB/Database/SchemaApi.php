@@ -14,7 +14,7 @@ trait SchemaApi
      *
      * @return array return an array with database description schema
      */
-    public function desc()
+    public function desc($only=null)
     {
         //
         $prefix = strlen($this->getPrefix());
@@ -31,10 +31,18 @@ trait SchemaApi
         $desc = [];
 
         //
+        if (is_string($only)) { $only = [$only]; }
+
+        //
         foreach ($tables as $table) {
 
             //
-            $desc[substr($table, $prefix)] = $this->descTable($table);
+            $model = substr($table, $prefix);
+            
+            //
+            if (!$only || in_array($model, $only)) {
+                $desc[$model] = $this->descTable($table);
+            }
         }
 
         //
@@ -404,7 +412,6 @@ trait SchemaApi
      */
     public function alter($schema, $columns = null, $notation = null)
     {
-
         //
         if (is_string($schema)) {
             $schema = array(
@@ -454,8 +461,8 @@ trait SchemaApi
         }
 
         //
-        $desc = $this->desc();
-
+        $desc = $this->desc(array_keys($schema));
+        
         //
         foreach ($schema as $table => $fields) {
 

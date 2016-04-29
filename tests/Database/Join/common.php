@@ -4,6 +4,27 @@
 require_once __DIR__.'/../../common.php';
 
 //
+use Javanile\SchemaDB\Database;
+
+//
+$db = new Database([
+
+    //
+    'sokect' => 'Pdo',
+
+    //
+    'host'     => $host,
+    'dbname'   => $dbname,
+    'username' => $username,
+    'password' => $password,
+    'prefix'   => $prefix,
+
+    //
+    'adamant' => false,
+    'debug'   => true,
+]);
+
+//
 $db->drop('Person', 'confirm');
 
 //
@@ -18,9 +39,11 @@ $db->apply('Person', [
 
 //
 $db->import('Person', [
-    ['name' => 'Frank',  'surname' => 'Joy', 'address1' => 1, 'address2' => 3],
-    ['name' => 'Dan',    'surname' => 'Ci',  'address1' => 2, 'address2' => 4],
+    ['name' => 'Frank', 'surname' => 'Joy', 'address1' => 1, 'address2' => 3, 'sex' => 'M'],
+    ['name' => 'Dana',  'surname' => 'Ci',  'address1' => 2, 'address2' => 4, 'sex' => 'F'],
 ]);
+
+die();
 
 //
 $db->drop('Address', 'confirm');
@@ -42,3 +65,4 @@ $db->import('Address', [
     ['name' => 'New Moon',    'lat' => 71.2, 'lng' => 2.6, 'city' => 'Lione'],
 ]);
 
+ 

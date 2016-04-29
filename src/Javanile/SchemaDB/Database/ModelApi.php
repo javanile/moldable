@@ -48,6 +48,35 @@ trait ModelApi
     }
 
     /**
+     * describe table
+     *
+     * @param type $table
+     * @return type
+     */
+    public function getFields($model)
+    {
+        //
+        $table = $this->getTable($model);
+
+        //
+        $sql = "DESC `{$table}`";
+
+        //
+        $results = $this->getResults($sql);
+
+        //
+        $fields = [];
+
+        //
+        foreach ($results as $field) {
+            $fields[] = $field['Field'];
+        }
+
+        //
+        return $fields;
+    }
+
+    /**
      *
      *
 	 * @param type $fields
@@ -191,17 +220,17 @@ trait ModelApi
     public function exists($model, $query)
     {
         //
-        $valuesArray = array();
+        $params = [];
 
         //
-        $whereConditions = array();
+        $whereArray = [];
 
         //
         if (isset($query['where'])) {
-            $whereConditions[] = $query['where'];
+            $whereArray[] = $query['where'];
             unset($query['where']);
         }
-
+        
         //
         $schema = $this->getFields($model);
         
@@ -209,9 +238,7 @@ trait ModelApi
         foreach ($schema as $field) {
             
             //
-            if (!isset($query[$field])) {
-                continue;
-            }
+            if (!isset($query[$field])) { continue; }
 
             //
             $value = $query[$field];
@@ -220,14 +247,15 @@ trait ModelApi
             $token = ':'.$field;
         
             //
-            $valuesArray[$token] = $value;
+            $params[$token] = $value;
 
             //
-            $whereConditions[] = "{$field} = {$token}";
+            $whereArray[] = "{$field} = {$token}";
         }
 
         //
-        $where = count($whereConditions)>0 ? 'WHERE '.implode(' AND ',$whereConditions) : '';
+        $where = count($whereArray) > 0
+               ? 'WHERE '.implode(' AND ', $whereArray) : '';
 
         //
         $table = $this->getPrefix($model);
@@ -236,7 +264,7 @@ trait ModelApi
         $sql = "SELECT * FROM `{$table}` {$where} LIMIT 1";
 
         //
-        $row = $this->getRow($sql, $valuesArray);
+        $row = $this->getRow($sql, $params);
 
         //
         return $row;
@@ -247,10 +275,10 @@ trait ModelApi
      *
      * @param type $list
      */
-    public function import($model, $records, $map=null) {
-
+    public function import($model, $records, $map=null)
+    {
         //
-        if (!is_array($records[0]) || !$records) {
+        if (!$records || !is_array($records[0])) {
             return;
         }
 
@@ -258,16 +286,16 @@ trait ModelApi
         foreach($records as $record) {
             
             //
-            $schema = array();
+            $schema = [];
 
             //
-            foreach(array_keys($record) as $field) {
+            foreach (array_keys($record) as $field) {
                 $schema[$field] = '';
             }
 
             //
-            $this->apply($model, $schema);
-
+            $this->adapt($model, $schema);
+          
             //
             $this->submit($model, $record);
         }
