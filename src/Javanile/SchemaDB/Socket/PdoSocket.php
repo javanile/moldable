@@ -5,13 +5,13 @@
  *
  */
 
-namespace Javanile\SchemaDB\Database;
+namespace Javanile\SchemaDB\Socket;
 
 use PDO;
 use PDOException;
 use Javanile\SchemaDB\Exception;
 
-class Socket 
+class PdoSocket
 {	 
     /**
      *
@@ -35,8 +35,15 @@ class Socket
      *
      * 
      */
-    public function __construct($args=null)
+    public function __construct($database, $args=null)
     {
+        // check arguments for connection
+        foreach (['host', 'dbname', 'username'] as $attr) {
+            if (!isset($args[$attr])) {
+                $database->errorConnect("Required attribute: '{$attr}'");
+            }
+        }
+
         //
         if ($args != null) {
 
@@ -89,7 +96,6 @@ class Socket
                 intval($ex->getCode())
             );
         }
-
 
         //
         $this->_pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);

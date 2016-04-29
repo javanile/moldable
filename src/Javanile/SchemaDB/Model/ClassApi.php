@@ -18,6 +18,7 @@ trait ClassApi
             '__global__',
             '__attributes__',
             '__config__',
+            '__adamant',
             'class',
             'table',
             'model',

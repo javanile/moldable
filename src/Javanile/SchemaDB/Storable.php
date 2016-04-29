@@ -6,19 +6,16 @@
 
 namespace Javanile\SchemaDB;
 
-class Storable implements Notations
+use Javanile\SchemaDB\Readable;
+
+class Storable extends Readable implements Notations
 {
-    use Model\LoadApi;
-    use Model\ErrorApi;
-    use Model\ClassApi;
-    use Model\TableApi;
-    use Model\FieldApi;
-    use Model\SchemaApi;
-    use Model\UpdateApi;
-    use Model\JoinApi;
-    use Model\DebugApi;
-    use Model\PublicApi;
-    
+    /**
+     *
+     * @var type
+     */
+    static $__adamant = false;
+
     /**
      * Construct a storable object
      * with filled fields by values
@@ -32,13 +29,13 @@ class Storable implements Notations
 
         // prepare field values strip schema definitions
         foreach (static::getSchemaFields() as $field) {
-
+            
             //
             $this->{$field} = $parser->getNotationValue($this->{$field});
         }
 
         //
-        $this->fill($values);
+        $this->fillSchemaFields($values);
 
         // update related table
         static::applyTable();
@@ -165,7 +162,7 @@ class Storable implements Notations
 
         // get complete fields schema
         $schema = static::getSchema();
-
+        
         //
         foreach ($schema as $field => &$column) {
 

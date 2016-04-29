@@ -8,8 +8,6 @@
  */
 namespace Javanile\SchemaDB;
 
-use Javanile\SchemaDB\Database\Socket;
-
 class Database implements Notations
 {
     use Database\ModelApi;
@@ -101,18 +99,22 @@ class Database implements Notations
         //
         $this->_trace = debug_backtrace();
 
-        // check arguments for connection
-        foreach (['host', 'dbname', 'username'] as $attr) {
-            if (!isset($args[$attr])) {
-                $this->errorConnect("Required attribute: '{$attr}'");
-            }
-        }
-
         //
         $this->_args = $args;
 
         //
-        $this->_socket = new Socket($this->_args);
+        $socket = isset($args['socket']) ? $args['socket'] : 'Pdo';
+
+        //
+        $socketClass = "\\Javanile\\SchemaDB\\Socket\\{$socket}Socket";
+
+        //
+        if (!class_exists($socketClass)) {
+            $this->errorConnect("Socket not exists: '{$socket}'");
+        }
+        
+        //
+        $this->_socket = new $socketClass($this, $args);
 
         //
         $this->_parser = new Parser\Mysql();
@@ -122,6 +124,11 @@ class Database implements Notations
 
         //
         $this->_ready = false;
+
+        //
+        if (isset($args['debug'])) {
+            $this->setDebug($args['debug']);
+        }
 
         //
         static::setDefault($this);
@@ -134,6 +141,17 @@ class Database implements Notations
      */
     public static function getDefault()
     {
+        //
+        if (static::$_defaultDatabase != null) {
+            return static::$_defaultDatabase;
+        }
+
+        //
+        if (class_exists('\DB')
+         && get_parent_class('\DB') == 'Illuminate\Support\Facades\Facade') {
+            static::$_defaultDatabase = new Database(['socket' => 'Laravel']);
+        }
+
         // return static $default
         return static::$_defaultDatabase;
     }

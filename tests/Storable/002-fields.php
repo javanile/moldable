@@ -1,20 +1,17 @@
 <?php
 
-//
 require_once 'common.php'; 
 
-//
 use Javanile\SchemaDB\Storable;
 
-//
 class Fields extends Storable
 {    
-    //    
-    static $__Define__ = array(
-        'DefaultVarcharSize'    => 10,
-        'DefaultPrimaryKeySize' => 12,
-        'DefaultStringType'        => 'text',
-    );   
+    //
+    static $config = [
+        'StringType'     => 'text',
+        'VarcharSize'    => 10,
+        'PrimaryKeySize' => 12,
+    ];
     
     // key
     public $id = self::PRIMARY_KEY;
@@ -37,7 +34,7 @@ class Fields extends Storable
     public $integer_5 = self::INT; 
     public $integer_6 = self::BIGINT; /**/
 
-    /* integer * /  
+    /* integer * /
     public $float_0 = .0;
     public $float_1 = 1.1;
     public $float_2 = 10.0;
@@ -50,19 +47,18 @@ class Fields extends Storable
     /* date time * /
     public $datetime_0 = self::DATE;
     public $datetime_1 = self::DATETIME;
-    public $datetime_2 = self::TIMESTAMP; /**/
-    
-    /* */
+    public $datetime_2 = self::TIMESTAMP; /**/        
+    /*_*/
 }
 
 //
 #Fields::drop('confirm');
 
 //
-Database::getDefault()->dump();
+$db = Database::getDefault();
 
 //
-$Fields = new Fields();
+$db->setDebug(true);
 
 //
-$Fields->store();
+$db->dump();

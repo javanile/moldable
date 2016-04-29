@@ -23,7 +23,7 @@ trait LoadApi
      */
     public static function load($query, $fields=null)
     {
-        // update table schema on DB
+        //
         static::applyTable();
 
         //
@@ -41,6 +41,7 @@ trait LoadApi
     }
 
     /**
+     * Load a record by primary key.
      *
      * @param type $index
      * @param type $fields
@@ -67,21 +68,24 @@ trait LoadApi
         $selectFields = static::getDatabase()
                      -> getWriter()
                      -> selectFields($requestedFields, $alias, $join);
-     
-        // prepare SQL query
+
+                // prepare SQL query
         $sql = " SELECT {$selectFields} "
              . "   FROM {$table} AS {$alias} {$join} "
-             . "  WHERE {$alias}.{$key}='{$index}' "
+             . "  WHERE {$alias}.{$key}=:index "
              . "  LIMIT 1";
-        
+
+        $params = [
+            'index' => $index,
+        ];
+
         // fetch data on database and return it
-        $result = static::fetch(
-            $sql,
-            null,
-            true,
-            is_string($fields),
-            is_null($fields)
-        );
+        $result = static::fetch($sql, $params, [
+            'SingleRow'     => true,
+            'SingleValue'   => is_string($fields),
+            'CastToObject'  => is_null($fields),
+            'ExpanseObject' => static::isReadable(),
+        ]);
              
         //
         return $result;

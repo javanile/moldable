@@ -6,7 +6,7 @@
 
 namespace Javanile\SchemaDB\Model;
 
-use Javanile\SchemaDB\Database;
+use Javanile\SchemaDB\Exception;
 
 trait TableApi
 {
@@ -41,138 +41,82 @@ trait TableApi
 
     /**
      *
+     *
+     */
+    protected static function isAdamantTable()
+    {
+        // config attribute that contain model table adamant 
+        $attribute = 'Adamant';
+
+        // retrieve value from class setting definition
+        if (!static::hasClassAttribute($attribute)) {
+
+            //
+            $adamant = isset(static::$__adamant__)
+                     ? static::$__adamant__
+                     : isset(static::$adamant)
+                     ? static::$adamant
+                     : isset(static::$__adamant)
+                     ? static::$__adamant
+                     : true;
+
+            // store as setting for future request
+            static::setClassAttribute($attribute, $adamant);
+        }
+
+        // return complete table name
+        return static::getClassAttribute($attribute);
+    }
+
+    /**
+     *
      * @return type
      */
     public static function applyTable()
-    {
+    {        
+        //
+        if (static::isAdamantTable()) {
+            return;
+        }
+
         //
         $attribute = 'ApplyTableExecuted';
 
         // avoid re-update by check the cache
         if (!static::hasClassAttribute($attribute)) {
 
-            //
+            // retrieve database
             $database = static::getDatabase();
             
             // if model is not connectect to any db return
             if (!$database) {
-                throw new \Javanile\SchemaDB\Exception("No database");
+                static::error('Database not found', debug_backtrace(), 2);
+            }
+            
+            // retrieve class model schema
+            $schema = static::getSchema();
+           
+            //
+            if (!$schema) {
+ 
+                //
+                $reflector = new \ReflectionClass(static::getClass());
+                
+                //
+                static::error('Model class without attributes', [[
+                    'file' => $reflector->getFileName(),
+                    'line' => $reflector->getStartLine(),
+                ]]);
             }
 
             // get table name
             $table = static::getTable();
 
-            //
-            $schema = static::getSchema();
-
-            //
-            if (!$schema) {
-                throw new \Javanile\SchemaDB\Exception("Empty model class");
-            }
-
             // have a valid schema update db table
-            static::getDatabase()->applyTable($table, $schema, false);
+            $database->applyTable($table, $schema, false);
 
             // cache last update avoid multiple call
             static::setClassAttribute($attribute, time());
         }
-    }
-
-    /**
-     * Retriece linked database or default
-     *
-     * @return type
-     */
-    protected static function getDatabase()
-    {
-        //
-        $attribute = 'Database';
-
-        //
-        if (!static::hasClassAttribute($attribute)) {
-
-            //
-            $database = Database::getDefault();
-
-            //
-            // TODO: check if no have database connected $database == null
-            if (!$database) {
-                die('no default database!!!!');
-                debug_print_backtrace();
-            }
-
-            //
-            static::setClassAttribute($attribute, $database);
-        }
-       
-        //
-        return static::getClassAttribute($attribute);
-    }
-
-    /**
-     * Link specific database to this table
-     *
-     * @return type
-     */
-    protected static function setDatabase($database)
-    {        
-        //
-        $attribute = 'Database';
-
-        //
-        static::setConfig($attribute, $database);
-    }
-
-    /**
-     *
-     *
-     * @param type $array
-     */
-    protected static function fetch(
-        $sql,
-        $params=null,
-        $singleRecord=false,
-        $singleValue=false,
-        $casting=true
-    ) {
-        // requested a single record
-        if ($singleRecord && !$singleValue && $casting) {
-
-            //
-            $record = static::getDatabase()->getRow($sql, $params);
-            
-            //
-            return $record ? static::make($record): null;
-        }
-
-        // requested a single record
-        else if (!$singleRecord && !$singleValue && $casting) {
-
-            //
-            $records = static::getDatabase()->getResults($sql, $params);
-            
-            //
-            if (!$records) {
-                return;
-            }
-
-            //
-            foreach($records as &$record) {
-                $record = static::make($record);
-            }
-
-            //
-            return $records;
-        }
-
-        // requested a single value of a single record
-        else if ($singleRecord && $singleValue) {
-
-            //
-            $value = static::getDatabase()->getValue($sql, $params);
-
-            //
-            return $value;
-        }
-    }
+    }        
 }

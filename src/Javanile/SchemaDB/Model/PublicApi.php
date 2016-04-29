@@ -6,9 +6,6 @@
 
 namespace Javanile\SchemaDB\Model;
 
-use Javanile\SchemaDB\Utils;
-use Javanile\SchemaDB\Exception;
-
 trait PublicApi 
 {
     /**
@@ -17,6 +14,9 @@ trait PublicApi
      */
     public static function connect($database=null)
     {
+        //
+        static::setDatabase($database);
+
         //
         static::applyTable();
     }

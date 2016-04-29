@@ -191,9 +191,64 @@ trait FieldApi
     /**
      *
      *
+     */
+    protected static function getStaticFields() 
+    {
+        //
+        $attribute = 'StaticFields';
+
+        // retrieve value from class setting definition
+        if (!static::hasClassAttribute($attribute)) {
+        
+            //
+            $class = static::getClass(); 
+
+            //
+            $reflection = new \ReflectionClass($class);
+
+            //
+            $fields = array_keys($reflection->getStaticProperties());
+                  
+            // store as setting for future request
+            static::setClassAttribute($attribute, $fields);
+        }
+        
+        // return primary key field name
+        return static::getClassAttribute($attribute);
+    }
+    
+    /**
+     *
+     *
+     */
+    protected static function getAllFieldsWithValues() 
+    {
+        //
+        $attribute = 'FieldsWithValues';
+
+        // retrieve value from class setting definition
+        if (!static::hasClassAttribute($attribute)) {
+                    
+            //
+            $class = static::getClass(); 
+            
+            //
+            $fields = get_class_vars($class);
+                  
+            // store as setting for future request
+            static::setClassAttribute($attribute, $fields);
+        }
+        
+        // return primary key field name
+        return static::getClassAttribute($attribute);
+    }
+
+    /**
+     *
+     *
      * @param type $values
      */
-    public function fill($values, $map=null, $prefix=null)
+    public function fillSchemaFields($values, $map=null, $prefix=null)
     {
         //
         foreach (static::getSchema() as $field => $aspects) {
@@ -234,4 +289,15 @@ trait FieldApi
                           : (int) $this->{$key};
         }
     }
+
+    /**
+     *
+     *
+     */
+    protected function fillExpanseFields($values, $map=null, $prefix=null)
+    {
+
+        
+    }
+
 }
