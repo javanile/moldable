@@ -1,51 +1,44 @@
 <?php
 
 //
-require_once '../../common.php';
+require_once __DIR__.'/../../common.php';
 
 //
-require_once __BASE__.'/vendor/autoload.php';
+$db->drop('Person', 'confirm');
 
 //
-use Javanile\SchemaDB;
-
-//
-$db = new SchemaDB\Database(array(
-    'host' => $host,
-    'user' => $user,
-    'pass' => $pass,
-    'name' => $name,
-    'pref' => 'Test_Join_',
-));
-
-//
-$db->setDebug(true);
-
-//
-//$db->drop('confirm');
-
-//
-$db->apply('Person', array(
-
-    //
-    'id' => $db::PRIMARY_KEY,
-    //
-    'name' => '',
-    'surname' => "",
-    'age' => 0,
+$db->apply('Person', [
+    'id'       => $db::PRIMARY_KEY,
+    'name'     => '',
+    'surname'  => "",
+    'age'      => 0,
     'address1' => 0,
     'address2' => 0,
-));
+]);
 
 //
-$db->apply('Address', array(
+$db->import('Person', [
+    ['name' => 'Frank',  'surname' => 'Joy', 'address1' => 1, 'address2' => 3],
+    ['name' => 'Dan',    'surname' => 'Ci',  'address1' => 2, 'address2' => 4],
+]);
 
-    //
-    'id' => $db::PRIMARY_KEY,
+//
+$db->drop('Address', 'confirm');
 
-    //
-    'name' => "",
-    'latitude' => 0,
-    'longitude' => 0,
-    'city' => "",
-));
+//
+$db->apply('Address', [
+    'id'   => $db::PRIMARY_KEY,
+    'name' => '',
+    'lat'  => .0,
+    'lng'  => .0,
+    'city' => '',
+]);
+
+//
+$db->import('Address', [
+    ['name' => 'Route Red',   'lat' => 10.1, 'lng' => 1.2, 'city' => 'Palermo'],
+    ['name' => 'Grenn Place', 'lat' => 31.4, 'lng' => 2.6, 'city' => 'Bruxel'],
+    ['name' => 'Every Day',   'lat' => 52.3, 'lng' => 8.6, 'city' => 'Cann'],
+    ['name' => 'New Moon',    'lat' => 71.2, 'lng' => 2.6, 'city' => 'Lione'],
+]);
+

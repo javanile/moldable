@@ -13,8 +13,7 @@ $db = new Database([
     'username' => $username,
     'password' => $password,
     'prefix'   => $prefix,
+    'debug'    => true,
 ]);
 
-//
-$db->setDebug(true);
 

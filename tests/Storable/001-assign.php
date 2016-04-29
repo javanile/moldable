@@ -8,7 +8,8 @@ use Javanile\SchemaDB\Storable;
 
 //
 class Person extends Storable {
-    
+    var $name = '';
+    var $age = 0;
 }
 
 //

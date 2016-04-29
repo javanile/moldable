@@ -14,6 +14,7 @@ class Readable implements Notations
 {
     use Model\LoadApi;
     use Model\JoinApi;
+    use Model\FetchApi;
     use Model\ErrorApi;
     use Model\ClassApi;
     use Model\TableApi;

@@ -6,9 +6,9 @@
  *
  * @author Francesco Bianco 
  */
-namespace Javanile\SchemaDB\Database; 
+namespace Javanile\SchemaDB\Database;
 
-use Javanile\SchemaDB\Utils;
+use Javanile\SchemaDB\Functions;
 
 trait ModelApi 
 {
@@ -346,7 +346,7 @@ trait ModelApi
             $all = $this->all($model);
 
             //
-            Utils::gridDump($model, $all);
+            Functions::gridDump($model, $all);
         }
 
         //

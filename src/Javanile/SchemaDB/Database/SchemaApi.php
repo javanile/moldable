@@ -158,10 +158,6 @@ trait SchemaApi
             $this->_parser->parse($schema);
         }
 
-        echo '<pre>';
-        var_dump($schema);
-        echo '</pre>';
-
         // get prefix string
         $prefix = $this->getPrefix();
 
@@ -412,7 +408,9 @@ trait SchemaApi
         //
         if (is_string($schema)) {
             $schema = array(
-                $schema => is_string($columns) ? array($columns => $notation) : $columns,
+                $schema => is_string($columns) 
+                         ? array($columns => $notation)
+                         : $columns,
             );
         }
 
@@ -423,8 +421,10 @@ trait SchemaApi
         foreach ($schema as $table => $fields) {
 
             //
-            $desc[$table] = isset($desc[$table]) && is_array($desc[$table]) ? array_merge($desc[$table],
-                    $fields) : $fields;
+            $desc[$table] = isset($desc[$table])
+                         && is_array($desc[$table])
+                          ? array_merge($desc[$table], $fields)
+                          : $fields;
         }
 
         //
@@ -509,14 +509,16 @@ trait SchemaApi
         $schema = $this->desc();
 
         //
-        $style = 'text-align:center;margin-bottom:1px;';
+        $style = 'text-align:center;margin:10px 0;width:800px;';
 
         //
-        echo '<pre><table border="1" style="'.$style.'">';
+        echo '<pre>';
 
         //
         if (!$schema) {
-            echo '<tr><th>No database tables</th></tr></table></pre>';
+            echo '<table border="1" style="'.$style.'">'
+               . '<tr><th>No database tables</th></tr></table></pre>'
+               . '</table>';
         }
 
         //
@@ -526,7 +528,8 @@ trait SchemaApi
             foreach ($schema as $table => $fields) {
 
                 //
-                echo '<tr><th colspan="9">'.$table.'</th></tr><tr><td>&nbsp;</td>';
+                echo '<table border="1" style="'.$style.'">'
+                   . '<tr><th colspan="9">'.$table.'</th></tr><tr><td>&nbsp;</td>';
 
                 //
                 $first = key($fields);
@@ -553,10 +556,13 @@ trait SchemaApi
                     //
                     echo '</tr>';
                 }
+
+                //
+                echo '</table>';
             }
 
             //
-            echo '</table></pre>';
+            echo '</pre>';
         }
 
         //

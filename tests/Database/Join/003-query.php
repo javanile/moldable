@@ -4,14 +4,15 @@
 require_once 'common.php';
 
 //
-$Persons = Person::query([
+$results = $db->query('Person', [
     'field' => [
         'name',
-        'a1_*' => Address::join(),
+        'surname',
+        'a1_*' => $db->join(),
         'a2_*' => Address::join(),
     ],
 ]);
 
 //
-var_Dump($Persons);
+$db->dump($results);
 

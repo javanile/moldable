@@ -7,7 +7,7 @@
 namespace Javanile\SchemaDB\Model;
 
 trait FetchApi
-{
+{ 
     /**
      *
      *

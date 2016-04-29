@@ -1,9 +1,15 @@
 <?php
 
+//
 require_once 'common.php'; 
 
+//
+use Javanile\SchemaDB\Database;
+
+//
 use Javanile\SchemaDB\Storable;
 
+//
 class Fields extends Storable
 {    
     //
@@ -18,7 +24,7 @@ class Fields extends Storable
     
     /* string * /
     public $string_0 = '';
-    public $string_1 = 'sample string';
+    public $string_1 = 's';
     public $string_2 = self::VARCHAR_32;
     public $string_3 = self::VARCHAR_64;
     public $string_4 = self::VARCHAR_128;
@@ -44,7 +50,7 @@ class Fields extends Storable
     public $float_6 = self::DOUBLE; 
     public $float_7 = self::DOUBLE; /**/
 
-    /* date time * /
+    /* date time */
     public $datetime_0 = self::DATE;
     public $datetime_1 = self::DATETIME;
     public $datetime_2 = self::TIMESTAMP; /**/        
@@ -52,13 +58,16 @@ class Fields extends Storable
 }
 
 //
-#Fields::drop('confirm');
+Fields::drop('confirm');
+
+//
+Fields::applyTable();
 
 //
 $db = Database::getDefault();
 
 //
-$db->setDebug(true);
-
-//
 $db->dump();
+
+// print-out debug info
+$db->benchmark();
