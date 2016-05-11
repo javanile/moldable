@@ -24,9 +24,12 @@ if (file_exists($autoload)) {
 echo '<style>pre{padding:0;margin:0;}</style>';
 
 //
-if (!file_exists(__DIR__.'/override.php')) {
-    require_once __DIR__.'/config.php';
+$config = __DIR__.'/config.php';
+
+//
+if (file_exists($config)) {
+    include_once $config;
 } else {
-    require_once __DIR__.'/override.php';
+    die("rename config.sample.php to confing.php");
 }
 

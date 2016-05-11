@@ -7,16 +7,16 @@ require_once 'common.php';
 #$db->drop('confirm');
 
 // Alter schema create or update database tables
-$db->alter(array(
+$db->alter([
     
     // define users table
-    'User' => array(        
-        'name' => 0,
-    ),
-));
+    'User' => [
+        'name' => 1,
+    ],
+]);
 
 // print-out schema
-$db->dump();
+$db->info('User');
 
 // print-out debug info
 $db->benchmark();

@@ -24,10 +24,10 @@ Person::drop('confirm');
 
 // import Persons from array-of-array
 Person::import([
-    ['name' => 'Francesco',    'age' => 10],
-    ['name' => 'Paolo',        'age' => 12],
-    ['name' => 'Piero',        'age' => 10],
-    ['name' => 'Antonio',    'age' => 13],
+    ['name' => 'Francesco', 'age' => 10],
+    ['name' => 'Paolo',     'age' => 12],
+    ['name' => 'Piero',     'age' => 10],
+    ['name' => 'Antonio',   'age' => 13],
 ]);
 
 // printout table record before delete

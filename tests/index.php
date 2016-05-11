@@ -14,9 +14,9 @@ function tests_tree($base, $head=false) {
         '.',
         '..',
         'index.php',
+        'common.php',        
         'config.php',
-        'common.php',
-        'override.php',
+        'config.sample.php',
     ];
 
     //
@@ -28,26 +28,32 @@ function tests_tree($base, $head=false) {
     echo '<ul>';
 
     //
+    $directories = [];
+
+    //
     foreach (scandir($base) as $file) {
 
         //
         if (in_array($file, $exclude)) { continue; }
 
         //
-        echo '<li>';
-
-        //
         $path = $base.'/'.$file;
 
         //
-        if (is_dir($path)) {
-            tests_tree($path, true);
+        if (!is_dir($path)) {
+            echo '<li><a href="'.$path.'" target="_blank">'.$file.'</a></li>';
         } else {
-            echo '<a href="'.$path.'" target="_blank">'.$file.'</a>';
+            $directories[] = $path;
         }
-        
-        //
-        echo '</li>';
+    }
+
+    //
+    if ($directories) {
+        foreach ($directories as $path) {
+            echo '<li>';
+            tests_tree($path, true);
+            echo '</li>';
+        }
     }
     
     //

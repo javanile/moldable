@@ -6,8 +6,7 @@
 
 namespace Javanile\SchemaDB\Model;
 
-use Javanile\SchemaDB\Utils;
-use Javanile\SchemaDB\Exception;
+use Javanile\SchemaDB\Functions;
 
 trait PublicApi 
 {
@@ -17,6 +16,9 @@ trait PublicApi
      */
     public static function connect($database=null)
     {
+        //
+        static::setDatabase($database);
+
         //
         static::applyTable();
     }
@@ -34,7 +36,7 @@ trait PublicApi
 
         //
         if ($values) {
-            $object->fill($values, $map, $prefix);
+            $object->fillSchemaFields($values, $map, $prefix);
         }
 
         //
@@ -510,7 +512,7 @@ trait PublicApi
     public static function dump($list=null)
     {       
         //
-        Utils::gridDump(
+        Functions::gridDump(
             static::getTable(),
             $list ? $list : static::all()
         );

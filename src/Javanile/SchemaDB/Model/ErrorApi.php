@@ -6,7 +6,6 @@
 
 namespace Javanile\SchemaDB\Model;
 
-use Javanile\SchemaDB\Utils;
 use Javanile\SchemaDB\Exception;
 
 trait ErrorApi
@@ -17,19 +16,25 @@ trait ErrorApi
      * @param type $trace
      * @param type $error
      */
-    public static function error($exception, $index=0)
+    public static function error($exception, $trace, $offset=0)
     {
         //
-        $trace = debug_backtrace();
-
-        //
-        echo '<br>'
-           . '<b>Fatal error</b>: '
-           . $exception->getMessage().' in method <strong>'.$trace[$index]['function'].'</strong> '
-           . 'called at <strong>'.$trace[$index]['file'].'</strong> on line <strong>'
-           . $trace[$index]['line'].'</strong>'."<br>";
+        $message = is_string($exception)
+                 ? $exception : $exception->getMessage();
         
         //
-        die();
+        echo '<br><b>Fatal error</b>: '.$message;
+           
+        //
+        if (isset($trace[$offset]['function'])) {
+            echo ' in method <strong>'.$trace[$offset]['function'].'</strong> ';
+        }
+                    
+        //
+        echo ' called at <strong>'.$trace[$offset]['file'].'</strong>'
+           . ' on line <strong>'.$trace[$offset]['line'].'</strong><br>';
+        
+        //
+        exit();
     }
 }

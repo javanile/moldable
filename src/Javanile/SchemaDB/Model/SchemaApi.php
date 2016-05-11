@@ -65,11 +65,15 @@ trait SchemaApi
             $allFields = array_keys(get_class_vars(static::getClass()));
 
             //
+            $allStaticFields = static::getStaticFields();
+            
+            //
             $fields = array_diff(
                 $allFields,
+                $allStaticFields,
                 static::getClassGlobal($attibuteLookup)
             );
-
+            
             //
             if (static::hasClassConfig($attibuteLookup)) {
                 $fields = array_diff(
@@ -103,7 +107,12 @@ trait SchemaApi
             $attributeLookup = 'SchemaExcludedFields';
 
             //
-            $fields = get_class_vars(static::getClass());
+            $fields = static::getAllFieldsWithValues();
+
+            //
+            foreach (static::getStaticFields() as $field) {
+                unset($fields[$field]);
+            }
 
             //
             foreach(static::getClassGlobal($attributeLookup) as $field) {
