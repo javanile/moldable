@@ -101,6 +101,11 @@ class Mysql
                 return static::getNotationAttributesDate
                     ($notation, $field, $before);
 
+            // notation contain a date format string
+            case 'time':
+                return static::getNotationAttributesTime
+                    ($notation, $field, $before);
+
             //
             case 'datetime':
                 return static::getNotationAttributesDatetime
@@ -236,6 +241,26 @@ class Mysql
 
         //
         $attributes['Type'] = 'date';
+
+        //
+        $attributes['Default'] = $notation;
+
+        //
+        return $attributes;
+    }
+
+    /**
+     *
+     *
+     */
+    private static function
+    getNotationAttributesTime($notation, $field, $before)
+    {
+        //
+        $attributes = static::getNotationAttributesCommon($field, $before);
+
+        //
+        $attributes['Type'] = 'time';
 
         //
         $attributes['Default'] = $notation;
@@ -664,6 +689,11 @@ class Mysql
         //
         else if (preg_match('/^[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]$/', $notation)) {
             return 'date';
+        }
+
+        //
+        else if (preg_match('/^[0-9][0-9]:[0-9][0-9]:[0-9][0-9]$/', $notation)) {
+            return 'time';
         }
 
         //

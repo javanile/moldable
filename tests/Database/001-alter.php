@@ -10,13 +10,13 @@ require_once 'common.php';
 $db->alter([
     
     // define users table
-    'User' => [
-        'name' => 1,
+    'People' => [
+        'name' => $db::TIME,
     ],
 ]);
 
 // print-out schema
-$db->info('User');
+$db->info(['People', 'Robot']);
 
 // print-out debug info
 $db->benchmark();

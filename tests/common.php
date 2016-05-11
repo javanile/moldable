@@ -13,7 +13,7 @@ if (file_exists($autoload)) {
     include_once $autoload;
 } else {
     spl_autoload_register(function ($class) {
-        $classFile = __DIR__.'/../src/'.$class.'.php';
+        $classFile = __DIR__.'/../src/'.strtr($class,'\\','/').'.php';
         if (file_exists($classFile)) {
             include_once $classFile;
         }
