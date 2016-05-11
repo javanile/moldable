@@ -89,8 +89,9 @@ class Mysql
 
             //
             case 'schema':
-                return $notation;
-
+                return static::getNotationAttributesSchema
+                    ($notation, $field, $before);
+                
             // notation contain a field attributes written in json 
             case 'json':
                 return static::getNotationAttributesJson
@@ -197,7 +198,26 @@ class Mysql
         //
         return $attr;
     }
-    
+
+    /**
+     *
+     *
+     */
+    private static function
+    getNotationAttributesSchema($notation, $field, $before)
+    {
+        // set with default attributes
+        $attr = static::getNotationAttributesCommon($field, $before);
+
+        // override default notation schema passed
+        foreach ($notation as $key => $value) {
+            $attr[$key] = $value;
+        }
+
+        //
+        return $attr;
+    }
+
     /**
      *
      * 
@@ -424,8 +444,6 @@ class Mysql
     private static function
     getNotationAttributesMatchs($notation, $field, $before, $params)
     {
-        var_Dump($params);
-
         //
         $aspects = static::getNotationAttributesCommon($field, $before);
 

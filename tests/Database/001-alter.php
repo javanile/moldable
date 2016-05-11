@@ -11,7 +11,8 @@ $db->alter([
     
     // define users table
     'People' => [
-        'name' => $db::TIME,
+        'name' => '',
+        'age'  => ['Type' => 'int', 'Default' => null],
     ],
 ]);
 

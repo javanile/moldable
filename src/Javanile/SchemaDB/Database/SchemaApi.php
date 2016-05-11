@@ -163,9 +163,9 @@ trait SchemaApi
     {
         // prepare
         if ($parse) {
-            $this->_parser->parse($schema);
+            $this->getParser()->parse($schema);
         }
-
+        
         // get prefix string
         $prefix = $this->getPrefix();
 
@@ -210,7 +210,7 @@ trait SchemaApi
             //
             $table = $this->getPrefix().$table;
         }
-
+        
         // if table no exists return sql statament for creating this
         if (!$this->tableExists($table, false)) {
 
