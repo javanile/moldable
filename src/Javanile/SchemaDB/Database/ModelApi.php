@@ -12,6 +12,9 @@ use Javanile\SchemaDB\Functions;
 
 trait ModelApi 
 {
+    use \Javanile\SchemaDB\Database\FieldApi;
+    use \Javanile\SchemaDB\Database\ModelUpdateApi;
+
     /**
      * Retrieve the table-name of specifc model.
      *
@@ -98,11 +101,20 @@ trait ModelApi
     }
 
     /**
+     * Insert record for specific model with values.
      *
      * @param type $list
      */
     public function insert($model, $values, $map=null) 
     {
+        //
+        if (is_string($values)) {
+            $values = [
+                $values => $map,
+            ];
+            $map = null;
+        }
+        
         //
         $this->adapt($model, $this->profile($values));
 
@@ -148,71 +160,7 @@ trait ModelApi
         //
         return $this->getLastId();
     }
-
-    /**
-     *
-     * @param type $list
-     */
-    public function update($model, $query, $values, $map=null) {
-
-        //
-        $setArray = array();
-
-        //
-        $valuesArray = array();
-
-        //
-        foreach ($values as $field => $value) {
-
-            //
-            $token = ':'.$field;
-
-            //
-            $setArray[] = "{$field} = {$token}";
-
-            //
-            $valuesArray[$token] = $value;
-        }
-
-        //
-        $set = implode(',', $setArray);
-
-        //
-        $table = $this->getPrefix($model);
-
-        //
-        $where = $this->getUpdateWhere($model, $query, $values);
-
-        //
-        $sql = "UPDATE `{$table}` SET {$set} WHERE {$where}";
-
-        //
-        $this->execute($sql, $values);
-    }
-
-    /**
-     * 
-     *
-     */
-    private function getUpdateWhere($model, $query, &$values) {
-
-        if (is_array($query)) {
-
-
-        } else {
-
-            $key = $this->getPrimaryKey($model);
-
-            $field = $key ? $key : $this->getMainField($model) ;
-
-            $token = ':'.$field;
-
-            $values[$token] = $query;
-
-            return "{$field} = {$token}";
-        }
-    }
-
+  
     /**
      *
      *

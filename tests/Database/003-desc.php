@@ -1,8 +1,5 @@
 <?php
 
-// title
-echo '<h1>Database desc with var_dump</h1>';
-
 // require connection parametrs
 require_once 'common.php'; 
 
