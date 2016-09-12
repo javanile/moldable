@@ -8,8 +8,10 @@ namespace Javanile\SchemaDB;
 
 use Javanile\SchemaDB\Readable;
 
-class Storable extends Readable implements Notations
+class Storable extends Readable
 {
+    use Model\ManageApi;
+    
     /**
      *
      * @var type
@@ -28,8 +30,8 @@ class Storable extends Readable implements Notations
         $parser = static::getDatabase()->getParser();
 
         // prepare field values strip schema definitions
-        foreach (static::getSchemaFields() as $field) {
-            
+        foreach (static::getSchemaFields() as $field) 
+        {    
             //
             $this->{$field} = $parser->getNotationValue($this->{$field});
         }
