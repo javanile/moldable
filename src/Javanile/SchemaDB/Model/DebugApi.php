@@ -24,12 +24,12 @@ trait DebugApi
      *
      * @param type $list
      */
-    public static function dump($list=null)
+    public static function dump($list='__null__')
     {       
         //
         Functions::gridDump(
             static::getTable(),
-            $list ? $list : static::all()
+            $list != '__null__' ? $list : static::all()
         );
     }
     

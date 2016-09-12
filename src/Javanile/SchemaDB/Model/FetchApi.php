@@ -30,20 +30,20 @@ trait FetchApi
             return $record ? static::make($record): null;
         }
 
-        // requested a single record
-        else if (!$singleRecord && !$singleValue && $casting) {
+        // requested a multiple records many value per records
+        else if (!$singleRecord && !$singleValue) {
 
             //
             $records = static::getDatabase()->getResults($sql, $params);
 
             //
-            if (!$records) {
-                return;
-            }
+            if (!$records) { return; }
 
             //
-            foreach($records as &$record) {
-                $record = static::make($record);
+            if ($casting) {
+                foreach($records as &$record) {
+                    $record = static::make($record);
+                }
             }
 
             //
