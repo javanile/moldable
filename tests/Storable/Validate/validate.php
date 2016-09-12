@@ -19,10 +19,9 @@ class Validable extends Storable
     public $ts = self::DATETIME;
     
     //
-    public function decode() {
-    
-        //
-        return date('d/m/Y', $ts);
+    public function decode()
+    {
+        $this->ts = date('d/m/Y', $this->ts);
     }    
 }
 
