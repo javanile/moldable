@@ -1,6 +1,5 @@
 <?php
-
-/*
+/**
  * 
  * 
 \*/
@@ -85,5 +84,18 @@ class Functions
 
         //
         exit;
+    }
+    
+    /**
+     * 
+     * 
+     * 
+     */
+    public static function runTest($name)
+    {
+        
+        include __DIR__.'/../../../tests/'.$name.'.php';
+        
+        
     }
 }

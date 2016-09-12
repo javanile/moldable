@@ -20,7 +20,7 @@ class Database implements Notations
      *
      * @var string
      */
-    const VERSION = '0.3.0';
+    const VERSION = '0.4.0';
 
     /**
      * Constructor arguments passed.
@@ -94,7 +94,7 @@ class Database implements Notations
     public function __construct($args)
     {
         //
-        $this->_ts = microtime();
+        $this->_ts = microtime(); 
 
         //
         $this->_trace = debug_backtrace();

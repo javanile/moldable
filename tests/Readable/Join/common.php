@@ -1,26 +1,31 @@
 <?php
 
 //
-require_once '../common.php'; 
+use Javanile\SchemaDB\Database;
+use Javanile\SchemaDB\Readable;
 
 //
-require_once '../../src/Javanile/SchemaDB/autoload.php';
+if (!Database::hasDefault())
+{
+    //
+    require_once '../common.php'; 
+
+    //
+    new Database(array(
+        'host' => $host,
+        'user' => $user,
+        'pass' => $pass,
+        'name' => $name,
+        'pref' => 'Test_Join_',
+    ));
+}
 
 //
-use Javanile\SchemaDB;
+Database::getDefault()->setDebug(true);
 
 //
-new SchemaDB\Database(array(
-    'host' => $host,
-    'user' => $user,
-    'pass' => $pass,
-    'name' => $name,
-    'pref' => 'Test_Join_',
-));
-
-//
-class Person extends SchemaDB\Storable {
-    
+class Person extends Readable 
+{   
     //
     public $id = self::PRIMARY_KEY;     
 
