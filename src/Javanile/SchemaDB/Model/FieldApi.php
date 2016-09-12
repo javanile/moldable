@@ -192,7 +192,7 @@ trait FieldApi
      *
      *
      */
-    protected static function getStaticFields() 
+    protected static function getStaticFields()  
     {
         //
         $attribute = 'StaticFields';

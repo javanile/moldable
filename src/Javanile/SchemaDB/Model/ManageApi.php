@@ -125,4 +125,27 @@ trait ManageApi
             static::getDatabase()->execute($q);
         }
     }
+    
+    /**
+     *
+     *
+     * @param type $query
+     * @return type
+     */
+    public static function submit($query)
+    {
+        //
+        $object = static::exists($query);
+
+        //
+        if (!$object) {
+            $object = static::make($query);
+            $object->store();
+        }
+
+        //
+        return $object;
+    }
+    
+    
 }

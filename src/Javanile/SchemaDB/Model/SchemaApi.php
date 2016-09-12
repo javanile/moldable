@@ -56,8 +56,8 @@ trait SchemaApi
         $attribute    = 'SchemaFields';
 
         //
-        if (!static::hasClassAttribute($attribute)) {
-
+        if (!static::hasClassAttribute($attribute))
+        {
             //
             $attibuteLookup = 'SchemaExcludedFields';
 
@@ -66,7 +66,7 @@ trait SchemaApi
 
             //
             $allStaticFields = static::getStaticFields();
-            
+
             //
             $fields = array_diff(
                 $allFields,

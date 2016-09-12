@@ -203,7 +203,21 @@ trait ReadApi
         return $r ? self::make($r) : false;
     }
 
-    
+    /**
+     *
+     *
+     */
+    public static function ping(&$query)
+    {
+        //
+        $exist = static::exists($query);
+        
+        //
+        $query = $exist ? $exist : static::make($query);
+
+        //
+        return $exist;
+    }
     
     
     

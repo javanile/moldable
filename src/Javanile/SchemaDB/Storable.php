@@ -29,8 +29,11 @@ class Storable extends Readable
         //
         $parser = static::getDatabase()->getParser();
 
+        //
+        $schema = static::getSchemaFields();
+        
         // prepare field values strip schema definitions
-        foreach (static::getSchemaFields() as $field) 
+        foreach ($schema as $field) 
         {    
             //
             $this->{$field} = $parser->getNotationValue($this->{$field});

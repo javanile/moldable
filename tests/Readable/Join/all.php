@@ -1,7 +1,7 @@
 <?php
 
 //
-require_once 'common.php';
+require_once '_common.php';
 
 //
 use Javanile\SchemaDB\Readable;
