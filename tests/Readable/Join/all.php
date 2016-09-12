@@ -36,10 +36,8 @@ class Address extends Readable
 //
 $Persons = Person::all([
     'name',    
-    //'address' => Address::join('name', 'address'),
+    'address' => Address::join('name', 'address'),
 ]);
 
-var_Dump($Persons);
-
 //
-//Person::dump($Persons);
+Person::dump($Persons);

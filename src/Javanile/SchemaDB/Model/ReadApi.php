@@ -42,23 +42,17 @@ trait ReadApi
 
         //
         $class = static::getClassName();
-
-        var_Dump($fields);
         
         //
         $selectFields = static::getDatabase()
                      -> getWriter()
                      -> selectFields($fields, $class, $join);
-
-         var_Dump($selectFields);
         
         //
         $sql = "SELECT {$selectFields} "
              .   "FROM {$table} AS {$class} "
              .       " {$join} "
              .       " {$limit} ";
-
-             var_Dump($sql);
              
         //
         try {
@@ -69,8 +63,6 @@ trait ReadApi
                 is_string($fields),
                 is_null($fields)
             );
-            
-            var_Dump($results);
         }
 
         //

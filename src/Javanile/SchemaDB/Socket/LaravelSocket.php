@@ -83,8 +83,6 @@ class LaravelSocket
         } else {
             $results = DB::select($sql);
         }
-
-        var_Dump($results);
         
         //
         $this->resetFetchMode();
