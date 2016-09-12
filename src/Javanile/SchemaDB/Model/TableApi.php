@@ -6,8 +6,6 @@
 
 namespace Javanile\SchemaDB\Model;
 
-use Javanile\SchemaDB\Exception;
-
 trait TableApi
 {
     /**

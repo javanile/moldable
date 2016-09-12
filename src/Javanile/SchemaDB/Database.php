@@ -148,12 +148,24 @@ class Database implements Notations
 
         //
         if (class_exists('\DB')
-         && get_parent_class('\DB') == 'Illuminate\Support\Facades\Facade') {
+        && get_parent_class('\DB') == 'Illuminate\Support\Facades\Facade') 
+        {
             static::$_defaultDatabase = new Database(['socket' => 'Laravel']);
         }
 
         // return static $default
         return static::$_defaultDatabase;
+    }
+    
+    /**
+     * Test if have a default db connection.
+     *
+     * @return type
+     */
+    public static function hasDefault()
+    {
+        // return static $default
+        return static::getDefault() !== null;
     }
 
     /**

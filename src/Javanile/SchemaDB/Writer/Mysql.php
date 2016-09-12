@@ -240,16 +240,19 @@ class Mysql
                 $join .= " LEFT JOIN {$joinTable} AS {$joinAlias}"
                        . " ON {$joinKey} = {$fieldFrom}";
 
-                foreach ($definition['FieldTo'] as $nextFieldTo) {
+                if (is_array($definition['FieldTo'])) 
+                {
+                    foreach ($definition['FieldTo'] as $nextFieldTo) {
 
-                    //
-                    $fieldAlias = $field.'__'.$nextFieldTo;
+                        //
+                        $fieldAlias = $field.'__'.$nextFieldTo;
 
-                    //
-                    $fieldTo = $joinAlias.'.'.$nextFieldTo;
-                
-                    //
-                    $selectFields[] = $fieldTo.' AS '.$fieldAlias;
+                        //
+                        $fieldTo = $joinAlias.'.'.$nextFieldTo;
+
+                        //
+                        $selectFields[] = $fieldTo.' AS '.$fieldAlias; 
+                    }
                 }
                 
                 //

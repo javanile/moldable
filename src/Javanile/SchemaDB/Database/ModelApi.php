@@ -99,7 +99,7 @@ trait ModelApi
         //
         return $results;
     }
-
+    
     /**
      * Insert record for specific model with values.
      *

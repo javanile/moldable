@@ -1,7 +1,37 @@
 <?php
 
 //
-require_once 'common.php';
+require_once '_common.php';
+
+//
+use Javanile\SchemaDB\Storable;
+
+//
+class Person extends Storable 
+{   
+    //
+    public $id = self::PRIMARY_KEY;     
+
+    //
+    public $name     = "";
+    public $surname  = "";
+    public $age      = 0;
+    public $address1 = 0;    
+    public $address2 = 0;    
+}
+
+//
+class Address extends Storable 
+{
+    //
+    public $id = self::PRIMARY_KEY;
+    
+    //
+    public $name      = "";
+    public $latitude  = 0;
+    public $longitude = 0;
+    public $city      = "";
+}
 
 //
 Person::drop('confirm');
