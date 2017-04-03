@@ -16,10 +16,10 @@ addons:
   - mysql
 
 before_install:
-  - mysql -e "CREATE DATABASE IF NOT EXISTS 'database';"
-  #- mysql -e "CREATE USER 'newuser'@'localhost IDENTIFIED BY 'password';"
-  #- mysql -e "GRANT ALL ON *.* TO 'new_user'@'localhost'";
-  #- mysql -e "FLUSH PRIVILEGES;"
+  - mysql  -u root -e "CREATE DATABASE IF NOT EXISTS 'database';"
+  #- mysql -u root -e "CREATE USER 'newuser'@'localhost IDENTIFIED BY 'password';"
+  #- mysql -u root -e "GRANT ALL ON *.* TO 'new_user'@'localhost'";
+  #- mysql -u root -e "FLUSH PRIVILEGES;"
 
 before_script:
   - mkdir -p build/logs
