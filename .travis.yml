@@ -5,7 +5,13 @@ php:
   - '5.6'
 
 addons:
-  mariadb: '10.0'
+  - mysql
+
+before_install:
+  - mysql -e "CREATE DATABASE IF NOT EXISTS 'database';"
+  - mysql -e "CREATE USER 'newuser'@'localhost IDENTIFIED BY 'password';"
+  - mysql -e "GRANT ALL ON *.* TO 'new_user'@'localhost'";
+  - mysql -e "FLUSH PRIVILEGES;"
 
 before_script:
   - mkdir -p build/logs
