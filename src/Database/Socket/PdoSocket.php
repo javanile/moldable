@@ -35,7 +35,7 @@ class PdoSocket
      *
      * 
      */
-    public function __construct($database, $args=null)
+    public function __construct($database, $args = null)
     {
         // check arguments for connection
         foreach (['host', 'dbname', 'username'] as $attr) {
@@ -46,11 +46,7 @@ class PdoSocket
 
         //
         if ($args != null) {
-
-            //
             $this->_args = $args;
-
-            //
             $this->_prefix = isset($args['prefix']) ? $args['prefix'] : '';
         }
     }
@@ -59,27 +55,20 @@ class PdoSocket
      *
      * 
      */
-    public function connect($args=null)
+    public function connect($args = null)
     {
         //
         if ($args != null) {
-
-            //
             $this->_args = $args;
-
-            //
-            $this->_prefix = $args['prefix'];
+            $this->_prefix = isset($args['prefix']) ? $args['prefix'] : '';
         }
 
         //
         $dsn = "mysql:host={$this->_args['host']};dbname={$this->_args['dbname']}";
-
-        //
-        $opt = array(
+        $opt = [
             PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8',
-        );
+        ];
 
-        //
         try {
             $this->_pdo = new PDO(
                 $dsn,
@@ -97,10 +86,8 @@ class PdoSocket
             );
         }
 
-        //
         $this->_pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-        //
         return true;
     }
     

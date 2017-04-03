@@ -20,5 +20,7 @@ final class DatabaseTest extends TestCase
             'username' => $GLOBALS['DB_USER'],
             'password' => $GLOBALS['DB_USER'],
         ]);
+
+        Producer::log($db->getTables());
     }
 }

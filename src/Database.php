@@ -173,12 +173,10 @@ class Database implements Notations
      */
     public function isReady()
     {
-        //
         if (!$this->_ready) {
             $this->enquire();
         }
 
-        //
         return $this->_ready;
     }
 
