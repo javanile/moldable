@@ -4,7 +4,7 @@
  * 
  */
 
-namespace Javanile\SchemaDB\Writer;
+namespace Javanile\Moldable\Writer\Mysql;
 
 class Mysql
 {

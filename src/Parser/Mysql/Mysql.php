@@ -4,7 +4,7 @@
  * 
  */
 
-namespace Javanile\SchemaDB\Parser;
+namespace Javanile\Moldable\Parser\Mysql;
 
 class Mysql
 {

@@ -51,7 +51,7 @@ class PdoSocket
             $this->_args = $args;
 
             //
-            $this->_prefix = $args['prefix'];
+            $this->_prefix = isset($args['prefix']) ? $args['prefix'] : '';
         }
     }
 
