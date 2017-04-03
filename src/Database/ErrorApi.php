@@ -2,13 +2,13 @@
 /**
  * Trait with utility methods to handle errors.
  *
- * PHP version 5.4
+ * PHP version 5.6
  *
  * @author Francesco Bianco
  */
-namespace Javanile\SchemaDB\Database;
+namespace Javanile\Moldable\Database;
 
-use Javanile\SchemaDB\Functions;
+use Javanile\Moldable\Functions;
 
 trait ErrorApi
 {

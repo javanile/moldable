@@ -11,7 +11,7 @@ namespace Javanile\Moldable;
 class Database implements Notations
 {
     #use Database\ModelApi;
-    #use Database\ErrorApi;
+    use Database\ErrorApi;
     use Database\SocketApi;
     #use Database\SchemaApi;
 
@@ -93,44 +93,27 @@ class Database implements Notations
      */
     public function __construct($args)
     {
-        //
-        $this->_ts = microtime(); 
-
-        //
-        $this->_trace = debug_backtrace();
-
-        //
+        $this->_ts = microtime();
         $this->_args = $args;
-
-        //
-        $socket = isset($args['socket']) ? $args['socket'] : 'Pdo';
-
-        //
-        $socketClass = "\\Javanile\\SchemaDB\\Socket\\{$socket}Socket";
-
-        //
-        if (!class_exists($socketClass)) {
-            $this->errorConnect("Socket not exists: '{$socket}'");
-        }
-        
-        //
-        $this->_socket = new $socketClass($this, $args);
-
-        //
-        $this->_parser = new Parser\Mysql();
-
-        //
-        $this->_writer = new Writer\Mysql();
-
-        //
+        $this->_trace = debug_backtrace();
         $this->_ready = false;
 
-        //
+        $socket = isset($args['socket']) ? $args['socket'] : 'Pdo';
+        $socketClass = "\\Javanile\\Moldable\\Database\\Socket\\{$socket}Socket";
+
+        if (!class_exists($socketClass)) {
+            $this->errorConnect("Socket class not found: '{$socketClass}'");
+        }
+        
+        $this->_socket = new $socketClass($this, $args);
+        $this->_parser = new Parser\Mysql();
+        $this->_writer = new Writer\Mysql();
+
+
         if (isset($args['debug'])) {
             $this->setDebug($args['debug']);
         }
 
-        //
         static::setDefault($this);
     }
 

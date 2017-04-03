@@ -5,7 +5,7 @@
  *
  */
 
-namespace Javanile\SchemaDB\Socket;
+namespace Javanile\Moldable\Database\Socket;
 
 use PDO;
 use PDOException;

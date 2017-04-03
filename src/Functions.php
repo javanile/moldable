@@ -3,7 +3,7 @@
  * 
  * 
 \*/
-namespace Javanile\SchemaDB;
+namespace Javanile\Moldable;
 
 class Functions
 {	
@@ -93,9 +93,6 @@ class Functions
      */
     public static function runTest($name)
     {
-        
         include __DIR__.'/../../../tests/'.$name.'.php';
-        
-        
     }
 }

@@ -6,15 +6,14 @@
  *
  * @author Francesco Bianco
  */
-namespace Javanile\SchemaDB\Database;
+namespace Javanile\Moldable\Database;
 
-use Javanile\SchemaDB\Exception;
+use Javanile\Moldable\Exception;
 
 trait SocketApi
 {    
     /**
-     *
-     * 
+     * Connect to Socket.
      */
     private function connect()
     {
@@ -37,15 +36,12 @@ trait SocketApi
     }
 
     /**
-     *
-     *
+     *  Reconnect to Socket.
      */
     private function reconnect()
     {
-        //
         $this->_ready = false;
 
-        //
         $this->connect();
     }
 
@@ -54,13 +50,10 @@ trait SocketApi
      */
     private function enquire()
     {
-        //
         $this->connect();
 
-        //
         static::log('enquire');
 
-        //
         return $this->_socket->execute('SELECT NOW()');
     }
 
