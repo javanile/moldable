@@ -1,8 +1,9 @@
 {
-    "name": "javanile/schemadb",
+    "name": "javanile/moldable",
     "type": "library",
-    "description": "Powered PHP Database Abstraction Layer",
-    "keywords": ["schemadb", "database", "persistence", "queryobject"],
+    "version": "0.0.1",
+    "description": "Uknown PHP Database Abstraction Layer",
+    "keywords": ["moldable", "schemadb", "database", "persistence", "queryobject"],
     "homepage": "http://www.javanile.org",
     "license": "MIT",
     "authors": [
@@ -12,9 +13,9 @@
         "php": ">=5.4"
     },
     "autoload": {
-        "psr-0": { "Javanile\\SchemaDB\\": "src/" }
+        "psr-4": { "Javanile\\SchemaDB\\": "src/" }
     },
     "autoload-dev": {
-        "psr-0": { "Javanile\\SchemaDB\\Tests\\": "tests/" }
+        "psr-4": { "Javanile\\SchemaDB\\Tests\\": "tests/" }
     }
 }
