@@ -12,7 +12,7 @@ addons:
   - mysql
 
 before_install:
-  - mysql -u root -e "CREATE DATABASE IF NOT EXISTS `database`;"
+  - mysql -u root -e "CREATE DATABASE IF NOT EXISTS \`database\`;"
   - mysql -u root -e "CREATE USER 'username'@'localhost' IDENTIFIED BY 'password';"
   - mysql -u root -e "GRANT ALL ON *.* TO 'username'@'localhost'";
   - mysql -u root -e "FLUSH PRIVILEGES;"
