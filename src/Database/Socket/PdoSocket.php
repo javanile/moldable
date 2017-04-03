@@ -9,7 +9,7 @@ namespace Javanile\Moldable\Database\Socket;
 
 use PDO;
 use PDOException;
-use Javanile\SchemaDB\Exception;
+use Javanile\Moldable\Exception;
 
 class PdoSocket
 {	 

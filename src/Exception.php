@@ -2,9 +2,9 @@
 /**
  * 
  * 
-\*/
+ */
 
-namespace Javanile\SchemaDB;
+namespace Javanile\Moldable;
 
 class Exception extends \Exception
 {

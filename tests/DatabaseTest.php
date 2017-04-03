@@ -21,6 +21,12 @@ final class DatabaseTest extends TestCase
             'password' => $GLOBALS['DB_USER'],
         ]);
 
-        Producer::log($db->getTables());
+        $tables = $db->getTables();
+
+        $this->assertEquals($tables, []);
+
+        $db->createTable("test_table");
+
+        $this->assertEquals($tables, ['test_table']);
     }
 }
