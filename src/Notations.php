@@ -6,7 +6,7 @@
 
 namespace Javanile\SchemaDB;
 
-interface Notations
+trait Notations
 {
     /**
      *

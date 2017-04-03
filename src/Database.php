@@ -2,14 +2,15 @@
 /**
  * Class that handle a connection with database.
  *
- * PHP version 5.4
+ * PHP version 5.6
  *
  * @author Francesco Bianco
  */
-namespace Javanile\SchemaDB;
+namespace Javanile\Moldable;
 
-class Database implements Notations
+class Database
 {
+    use Notations;
     use Database\ModelApi;
     use Database\ErrorApi;
     use Database\SocketApi;
@@ -20,7 +21,7 @@ class Database implements Notations
      *
      * @var string
      */
-    const VERSION = '0.4.0';
+    const VERSION = '0.0.1';
 
     /**
      * Constructor arguments passed.
