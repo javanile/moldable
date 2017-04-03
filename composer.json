@@ -9,13 +9,17 @@
     "authors": [
         {"name": "Francesco Bianco", "email": "info.francescobianco@gmail.com"}
     ],
-    "require": {
-        "php": ">=5.4"
-    },
     "autoload": {
         "psr-4": { "Javanile\\SchemaDB\\": "src/" }
     },
     "autoload-dev": {
         "psr-4": { "Javanile\\SchemaDB\\Tests\\": "tests/" }
+    },
+    "require": {
+        "php": ">=5.4"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^5.7",
+        "codeclimate/php-test-reporter": "dev-master"
     }
 }

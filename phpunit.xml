@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <phpunit colors="true">
+    <php>
+        <var name="DB_NAME" value="database" />
+        <var name="DB_USER" value="username" />
+        <var name="DB_PASS" value="password" />
+    </php>
     <testsuites>
         <testsuite name="Application Test Suite">
             <directory>./tests/</directory>
