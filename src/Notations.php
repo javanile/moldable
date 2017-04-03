@@ -4,9 +4,9 @@
  * 
  */
 
-namespace Javanile\SchemaDB;
+namespace Javanile\Moldable;
 
-trait Notations
+interface Notations
 {
     /**
      *
