@@ -17,21 +17,15 @@ trait SocketApi
      */
     private function connect()
     {
-        //
-        if (!$this->_ready) {
+        if ($this->_ready) {
+            return;
+        }
 
-            //
+        try {
             $this->log('connect', $this->_args);
-
-            //
-            try {
-                $this->_ready = $this->_socket->connect($this->_args);
-            }
-
-            //
-            catch (Exception $ex) {
-                $this->errorConnect($ex);
-            }
+            $this->_ready = $this->_socket->connect($this->_args);
+        } catch (Exception $ex) {
+            $this->errorConnect($ex);
         }
     }
 
