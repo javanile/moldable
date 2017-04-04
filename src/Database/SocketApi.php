@@ -83,10 +83,8 @@ trait SocketApi
      */
     public function getPrefix($table=null)
     {
-        //
         $prefix = $this->_socket->getPrefix();
         
-        //
         return $table ? $prefix . $table : $prefix;
     }
 
@@ -251,17 +249,11 @@ trait SocketApi
      */
     public function getTables()
     {
-        // escape underscore
         $prefix = str_replace('_', '\\_', $this->getPrefix());
-
-        //
         $sql = "SHOW TABLES LIKE '{$prefix}%'";
-
-        //
         $tables = $this->getValues($sql);
 
-        //
-        return $tables;  
+        return $tables;
     }
 
     /**
