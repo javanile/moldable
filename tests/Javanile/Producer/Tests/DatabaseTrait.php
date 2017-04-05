@@ -20,5 +20,3 @@ trait DatabaseTrait
         $this->pdo = null;
     }
 }
-
-
