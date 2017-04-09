@@ -10,10 +10,14 @@
         {"name": "Francesco Bianco", "email": "info.francescobianco@gmail.com"}
     ],
     "autoload": {
-        "psr-4": { "Javanile\\Moldable\\": "src/" }
+        "psr-4": {
+            "": "src/"
+        }
     },
     "autoload-dev": {
-        "psr-4": { "Javanile\\Moldable\\Tests\\": "tests/" }
+        "psr-4": {
+            "": "tests/"
+        }
     },
     "require": {
         "php": ">=5.4"
