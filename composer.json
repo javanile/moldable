@@ -11,12 +11,12 @@
     ],
     "autoload": {
         "psr-4": {
-            "": "src/"
+            "Javanile\\Moldable\\": "src/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "": "tests/"
+            "Javanile\\Moldable\\Tests": "tests/"
         }
     },
     "require": {
