@@ -60,13 +60,10 @@ trait SocketApi
      */
     public function execute($sql, $values=null)
     {        
-        //
         $this->connect();
 
-        //
         static::log('execute', $sql, $values);
 
-        //
         return $this->_socket->execute($sql, $values);
     }
 
@@ -214,12 +211,10 @@ trait SocketApi
      * @param type $table
      * @return type
      */
-    public function tableExists($table, $parse=true) {
-
+    public function tableExists($table, $parse = true)
+    {
         // prepare
         if ($parse) { 
-
-            //
             $table = $this->getPrefix() . $table;
         }
 
@@ -269,12 +264,10 @@ trait SocketApi
      */
     private function log($method, $arg1=null, $arg2=null)
     {
-        // debug the queries
         if (!$this->getDebug()) {
             return;
         }
 
-        //
         $arg1formatted = is_string($arg1) ? str_replace([
             'SELECT ',
             ', ',
