@@ -22,13 +22,14 @@ final class DatabaseTest extends TestCase
         ]);
 
         $tables = $db->getTables();
-
         $this->assertEquals($tables, []);
 
-        $db->apply("test_table");
-
+        $db->execute("CREATE TABLE test_table (field INT)");
         $tables = $db->getTables();
-
         $this->assertEquals($tables, ['test_table']);
+
+        $db->execute("CREATE TABLE other_test_table (field INT)");
+        $tables = $db->getTables();
+        $this->assertEquals($tables, ['test_table', 'other_test_table']);
     }
 }

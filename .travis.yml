@@ -23,7 +23,7 @@ before_script:
 
 script:
   - vendor/bin/phpunit
-    --configuration phpunit.xml
+    --configuration phpunit.travis.xml
     --bootstrap ./vendor/autoload.php
     --coverage-clover build/logs/clover.xml
 
