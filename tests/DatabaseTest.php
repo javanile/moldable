@@ -1,6 +1,6 @@
 <?php
 
-namespace Javanile\Producer\Tests;
+namespace Javanile\Moldable\Tests;
 
 use Javanile\Producer;
 use Javanile\Moldable\Database;
@@ -18,14 +18,16 @@ final class DatabaseTest extends TestCase
             'host'     => $GLOBALS['DB_HOST'],
             'dbname'   => $GLOBALS['DB_NAME'],
             'username' => $GLOBALS['DB_USER'],
-            'password' => $GLOBALS['DB_USER'],
+            'password' => $GLOBALS['DB_PASS'],
         ]);
 
         $tables = $db->getTables();
 
         $this->assertEquals($tables, []);
 
-        $db->createTable("test_table");
+        $db->apply("test_table");
+
+        $tables = $db->getTables();
 
         $this->assertEquals($tables, ['test_table']);
     }

@@ -1,13 +1,16 @@
 <?php
 /**
+ * Schema trait
+ * manipulates database schema.
  *
+ * PHP version 5.6
+ *
+ * @author Francesco Bianco
  */
-
 namespace Javanile\SchemaDB\Database;
 
 trait SchemaApi
 {
-
     /**
      * Describe database each tables
      * with the specific prefix and her fields

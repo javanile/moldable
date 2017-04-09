@@ -1,8 +1,9 @@
 <?php
 /**
- * Socket trait comunications and interactions with database.
+ * Socket trait
+ * comunications and interactions with database.
  *
- * PHP version 5.4
+ * PHP version 5.6
  *
  * @author Francesco Bianco
  */
@@ -251,10 +252,8 @@ trait SocketApi
      */
     public function quote($string)
     {
-        //
         $this->connect();
         
-        //
         return $this->_socket->quote($string);
     }
   

@@ -1,6 +1,6 @@
 <?php
 
-namespace Javanile\Producer\Tests;
+namespace Javanile\Moldable\Tests;
 
 use PDO;
 use Javanile\Producer;
