@@ -42,15 +42,13 @@ class PdoSocket implements SocketInterface
     {
         //
         if (!$args || !is_array($args)) {
-            $message = "required connection arguments.";
-            $database->errorConnect($message);
+            $database->errorConnect("required connection arguments");
         }
 
         //
         foreach (['host', 'dbname', 'username'] as $attr) {
             if (!isset($args[$attr])) {
-                $message = "required connection attribute '{$attr}'";
-                $database->errorConnect($message);
+                $database->errorConnect("required connection attribute '{$attr}'");
             }
         }
 
@@ -58,7 +56,7 @@ class PdoSocket implements SocketInterface
         $this->_args = $args;
         $this->_prefix = isset($args['prefix']) ? $args['prefix'] : '';
 
-        //
+        // now connect to database
         $this->connect();
     }
 
@@ -77,7 +75,7 @@ class PdoSocket implements SocketInterface
         try {
             $this->_pdo = new PDO($dsn, $username, $password, $options);
         } catch (PDOException $ex) {
-            throw new Exception($ex->getMessage(), intval($ex->getCode()));
+            $database->errorConnect($ex);
         }
 
         // set PDO attributes
@@ -117,33 +115,26 @@ class PdoSocket implements SocketInterface
      */
     public function getResultsAsObjects($sql, $params=null)
     {
-        //
         $stmt = $this->execute($sql, $params);
 
-        //
         return $stmt->fetchAll(PDO::FETCH_OBJ);
     }
 
     /**
-     *
+     * Get single column elements.
      *
      * @param type $sql
      * @return type
      */
-    public function getColumn($sql, $values=null)
+    public function getColumn($sql, $params=null)
     {
-        //
-        $stmt = $this->execute($sql, $values);
-
-        //
+        $stmt = $this->execute($sql, $params);
         $column = array();
 
-        //
-        while($row = $stmt->fetch()){
+        while ($row = $stmt->fetch()) {
             $column[] = $row[0];
         }
 
-        //
         return $column;
     }
 
@@ -153,10 +144,10 @@ class PdoSocket implements SocketInterface
      * @param type $sql
      * @return type
      */
-    public function getValue($sql, $values=null)
+    public function getValue($sql, $params=null)
     {
         //
-        $stmt = $this->execute($sql, $values);
+        $stmt = $this->execute($sql, $params);
 
         //
         return $stmt->fetchColumn(0);
@@ -169,7 +160,6 @@ class PdoSocket implements SocketInterface
      */
     public function getPrefix()
     {
-        //
         return $this->_prefix;
     }
 
@@ -180,7 +170,6 @@ class PdoSocket implements SocketInterface
      */
     public function setPrefix($prefix)
     {
-        //
         $this->_prefix = $prefix;
     }
 
@@ -191,7 +180,6 @@ class PdoSocket implements SocketInterface
      */
     public function lastInsertId()
     {
-        //
         return $this->_pdo->lastInsertId();
     }
 
@@ -202,68 +190,56 @@ class PdoSocket implements SocketInterface
      */
     public function quote($string)
     {
-        //
         return $this->_pdo->quote($string);
     }
 
     /**
-     *
+     * Starting a transaction to DB.
      *
      */
-    public function transact() {
-
-        //
+    public function transact()
+    {
         $this->_pdo->beginTransaction();
     }
 
     /**
+     * Transactional commit.
      *
      */
     public function commit()
     {
-        //
         $this->_pdo->commit();
     }
 
     /**
+     * Transactional rollback.
      *
      */
     public function rollback()
     {
-        //
         $this->_pdo->rollBack();
     }
 
     /**
+     * Execute a SQL query on DB with binded values
      *
-     * 
      */
-    public function execute($sql, $values=null)
+    public function execute($sql, $params=null)
     {
-        //
         $stmt = $this->_pdo->prepare($sql);
 
-        //
-        if (is_array($values)) {
-            foreach($values as $token => $value) {
+        if (is_array($params)) {
+            foreach($params as $token => $value) {
                 $stmt->bindValue($token, $value);
             }
         }
 
-        //
         try {
             $stmt->execute();
+        } catch (PDOException $ex) {
+            $this->executeError($ex);
         }
 
-        // wrap PDOException with SDBException
-        catch (PDOException $ex) {
-            throw new Exception(
-                $ex->getMessage(),
-                intval($ex->getCode())
-            );
-        }
-
-        //
         return $stmt;
     }
 }
