@@ -36,19 +36,26 @@ class PdoSocket implements SocketInterface
 
     /**
      *
+     * @var type
+     */
+    private $_database = null;
+
+    /**
+     *
      * @
      */
     public function __construct($database, $args)
     {
-        //
+        $this->_database = $database;
+
         if (!$args || !is_array($args)) {
-            $database->errorConnect("required connection arguments");
+            $this->_database->errorConnect("required connection arguments");
         }
 
         //
         foreach (['host', 'dbname', 'username'] as $attr) {
             if (!isset($args[$attr])) {
-                $database->errorConnect("required connection attribute '{$attr}'");
+                $this->_database->errorConnect("required connection attribute '{$attr}'");
             }
         }
 
@@ -75,7 +82,7 @@ class PdoSocket implements SocketInterface
         try {
             $this->_pdo = new PDO($dsn, $username, $password, $options);
         } catch (PDOException $ex) {
-            $database->errorConnect($ex);
+            $this->_database->errorConnect($ex);
         }
 
         // set PDO attributes
@@ -235,7 +242,7 @@ class PdoSocket implements SocketInterface
         try {
             $stmt->execute();
         } catch (PDOException $ex) {
-            $this->executeError($ex);
+            $this->_database->errorExecute($ex);
         }
 
         return $stmt;

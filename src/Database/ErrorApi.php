@@ -29,6 +29,8 @@ trait ErrorApi
      */
     public function errorExecute($exception)
     {
-        Functions::throwException("Database query error, ", $exception, $this->_trace, 0);
+        $bt = debug_backtrace();
+
+        Functions::throwException("Database query error, ", $exception, $bt, 2);
     }
 }

@@ -33,6 +33,19 @@ final class DatabaseTest extends TestCase
         $this->assertEquals($tables, ['test_table_1', 'test_table_2']);
     }
 
+    public function testNewDatabaseWrongParams()
+    {
+        $this->expectException("Javanile\\Moldable\\Exception");
+        $this->expectExceptionMessageRegExp("/Connection error/i");
+
+        $db = new Database([
+            'host' => $GLOBALS['DB_HOST'],
+            'dbname' => 'wrong dbname',
+            'username' => 'wrong username',
+            'password' => 'wrong password',
+        ]);
+    }
+
     public function testDatabaseConnectionMissingParamsException()
     {
         $this->expectException("Javanile\\Moldable\\Exception");
@@ -60,5 +73,25 @@ final class DatabaseTest extends TestCase
             'host'   => $GLOBALS['DB_HOST'],
             'dbname' => $GLOBALS['DB_NAME'],
         ]);
+    }
+
+    public function testDatabaseGetRow()
+    {
+        $db = new Database([
+            'host' => $GLOBALS['DB_HOST'],
+            'dbname' => $GLOBALS['DB_NAME'],
+            'username' => $GLOBALS['DB_USER'],
+            'password' => $GLOBALS['DB_PASS'],
+        ]);
+
+        $db->execute("CREATE TABLE test_table (test_field_1 INT, test_field_2 VARCHAR(255))");
+        $db->execute("INSERT INTO test_table VALUES (:test_field_1, :test_field_2)", [
+            ':test_field_1' => 100,
+            ':test_field_2' => 'string line',
+        ]);
+
+        $row = $db->getRow("SELECT * FROM test_table");
+
+        $this->assertEquals($row, ['test_field_1' => 100, 'test_field_2' => 'string line']);
     }
 }
