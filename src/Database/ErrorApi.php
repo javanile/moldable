@@ -19,8 +19,7 @@ trait ErrorApi
      */
     public function errorConnect($exception)
     {
-        //
-        Functions::triggerError($exception, $this->_trace, 0);
+        Functions::throwException("Database connection error, ", $exception, $this->_trace, 0);
     }
 
     /**
@@ -30,7 +29,6 @@ trait ErrorApi
      */
     public function errorExecute($exception)
     {
-        var_dump($exception);
-        die();
+        Functions::throwException("Database query error, ", $exception, $this->_trace, 0);
     }
 }

@@ -1,6 +1,7 @@
 <?php
 /**
- * Socket trait comunications and interactions with database.
+ * PDO Socket handle comunications and interactions
+ * with database via PDO library.
  *
  * PHP version 5.6
  *
@@ -13,7 +14,7 @@ use PDO;
 use PDOException;
 use Javanile\Moldable\Exception;
 
-class PdoSocket
+class PdoSocket implements SocketInterface
 {	 
     /**
      *
@@ -35,62 +36,50 @@ class PdoSocket
 
     /**
      *
-     * 
+     * @
      */
-    public function __construct($database, $args = null)
+    public function __construct($database, $args)
     {
-        // check arguments for connection
+        //
+        if (!$args || !is_array($args)) {
+            $database->errorConnect("required connection arguments.");
+        }
+
+        //
         foreach (['host', 'dbname', 'username'] as $attr) {
             if (!isset($args[$attr])) {
-                $database->errorConnect("Required attribute: '{$attr}'");
+                $database->errorConnect("required connection attribute: '{$attr}'");
             }
         }
 
         //
-        if ($args != null) {
-            $this->_args = $args;
-            $this->_prefix = isset($args['prefix']) ? $args['prefix'] : '';
-        }
+        $this->_args = $args;
+        $this->_prefix = isset($args['prefix']) ? $args['prefix'] : '';
+
+        //
+        $this->connect();
     }
 
     /**
-     *
-     * 
+     * Start PDO connection.
      */
-    public function connect($args = null)
+    private function connect()
     {
-        //
-        if ($args != null) {
-            $this->_args = $args;
-            $this->_prefix = isset($args['prefix']) ? $args['prefix'] : '';
-        }
-
-        //
+        // get connection arguments
         $dsn = "mysql:host={$this->_args['host']};dbname={$this->_args['dbname']}";
-        $opt = [
-            PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8',
-        ];
+        $username = $this->_args['username'];
+        $password = $this->_args['password'];
+        $options = [PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8'];
 
+        // try to connect and create singletone
         try {
-            $this->_pdo = new PDO(
-                $dsn,
-                $this->_args['username'],
-                $this->_args['password'],
-                $opt
-            );
+            $this->_pdo = new PDO($dsn, $username, $password, $options);
+        } catch (PDOException $ex) {
+            throw new Exception($ex->getMessage(), intval($ex->getCode()));
         }
 
-        // wrap PDOException with SDBException
-        catch (PDOException $ex) {
-            throw new Exception(
-                $ex->getMessage(),
-                intval($ex->getCode())
-            );
-        }
-
+        // set PDO attributes
         $this->_pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-
-        return true;
     }
     
     /**
@@ -100,10 +89,8 @@ class PdoSocket
      */
     public function getRow($sql, $params=null)
     {
-        //
         $stmt = $this->execute($sql, $params);
 
-        //
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 

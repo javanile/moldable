@@ -70,20 +70,20 @@ class Functions
      * @param type $trace
      * @param type $error
      */
-    public static function triggerError($error, $trace=null, $offset=0)
+    public static function throwException($slug, $exception, $trace=null, $offset=0)
     {
         //
-        $message = is_object($error) ? $error->getMessage() : $error;
-        
-        //
-        echo '<br>'
-           . '<b>Fatal error</b>: '
-           . $message.' in method <strong>'.$trace[$offset]['function'].'</strong> '
-           . 'called at <strong>'.$trace[$offset]['file'].'</strong> on line <strong>'
-           . $trace[$offset]['line'].'</strong>'.'<br>';
+        $info = is_object($exception) ? $exception->getMessage() : $exception;
+        $code = is_object($exception) ? $exception->getCode() : null;
 
         //
-        exit;
+        $message = $slug . $info
+            . ' in method '.$trace[$offset]['function']
+            . ' called at '.$trace[$offset]['file']
+            . ' on line '.$trace[$offset]['line'];
+
+        //
+        throw new Exception($message, $code);
     }
     
     /**

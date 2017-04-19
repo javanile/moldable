@@ -12,46 +12,7 @@ namespace Javanile\Moldable\Database;
 use Javanile\Moldable\Exception;
 
 trait SocketApi
-{    
-    /**
-     * Connect to Socket.
-     */
-    private function connect()
-    {
-        if ($this->_ready) {
-            return;
-        }
-
-        try {
-            $this->log('connect', $this->_args);
-            $this->_ready = $this->_socket->connect($this->_args);
-        } catch (Exception $ex) {
-            $this->errorConnect($ex);
-        }
-    }
-
-    /**
-     *  Reconnect to Socket.
-     */
-    private function reconnect()
-    {
-        $this->_ready = false;
-
-        $this->connect();
-    }
-
-    /**
-     *
-     */
-    private function enquire()
-    {
-        $this->connect();
-
-        static::log('enquire');
-
-        return $this->_socket->execute('SELECT NOW()');
-    }
-
+{
     /**
      * Execute SQL query to database
      *
@@ -61,9 +22,7 @@ trait SocketApi
      */
     public function execute($sql, $values=null)
     {        
-        $this->connect();
-
-        static::log('execute', $sql, $values);
+        $this->log('execute', $sql, $values);
 
         return $this->_socket->execute($sql, $values);
     }
@@ -81,38 +40,15 @@ trait SocketApi
     }
 
     /**
-     * Return current database prefix used
-     *
-     * @return type
-     */
-    public function setPrefix($prefix)
-    {
-        //
-        $this->_args['prefix'] = $prefix;
-
-        //
-        $this->_socket->setPrefix($prefix);
-
-        //
-        $this->reconnect();
-    }
-
-    /**
      *
      * @return type
      */
     public function getLastId()
     {
-        //
-        $this->connect();
-
-        //
         $id = $this->_socket->lastInsertId();
 
-        //
-        static::log('getLastId', $id);
+        $this->log('getLastId', $id);
 
-        //
         return $id;
     }
 
@@ -124,13 +60,8 @@ trait SocketApi
      */
     public function getRow($sql, $params=null)
     {
-        //
-        $this->connect();
+        $this->log('getRow', $sql, $params);
 
-        //
-        static::log('getRow', $sql, $params);
-
-        //
         return $this->_socket->getRow($sql, $params);
     }
 
@@ -143,13 +74,8 @@ trait SocketApi
      */
     public function getResults($sql, $params=null)
     {
-        //
-        $this->connect();
-
-        //
         $this->log('getResults', $sql, $params);
 
-        //
         return $this->_socket->getResults($sql, $params);
     }
 
@@ -162,13 +88,8 @@ trait SocketApi
      */
     public function getResultsAsObjects($sql, $params=null)
     {
-        //
-        $this->connect();
-
-        //
         $this->log('getResults', $sql, $params);
 
-        //
         return $this->_socket->getResultsAsObjects($sql, $params);
     }
 
@@ -179,13 +100,8 @@ trait SocketApi
      */
     public function getValue($sql, $params=null)
     {
-        //
-        $this->connect();
-
-        //
         $this->log('getValue', $sql, $params);
 
-        //
         return $this->_socket->getValue($sql, $params);
     }
 
@@ -196,13 +112,8 @@ trait SocketApi
      */
     public function getValues($sql, $params=null)
     {
-        //
-        $this->connect();
-
-        //
         $this->log('getValues', $sql, $params);
 
-        //
         return $this->_socket->getColumn($sql, $params);
     }
 
@@ -252,8 +163,6 @@ trait SocketApi
      */
     public function quote($string)
     {
-        $this->connect();
-        
         return $this->_socket->quote($string);
     }
   
@@ -261,8 +170,10 @@ trait SocketApi
      *
      *
      */
-    private function log($method, $arg1=null, $arg2=null)
+    private function log($method, $sql = null, $params = null)
     {
+        /*
+
         if (!$this->getDebug()) {
             return;
         }
@@ -288,6 +199,7 @@ trait SocketApi
         if (isset($arg2)) {
             echo "\n".str_pad('#2 -> ',20,' ',STR_PAD_LEFT).json_encode($arg2);
         }
-        echo '</pre>';        
+        echo '</pre>';
+        */
     }
 }

@@ -104,7 +104,7 @@ class Database implements Notations
         if (!class_exists($socketClass)) {
             $this->errorConnect("Socket class not found: '{$socketClass}'");
         }
-        
+
         $this->_socket = new $socketClass($this, $args);
         $this->_parser = new Parser\Mysql\Mysql();
         $this->_writer = new Writer\Mysql\Mysql();
