@@ -20,13 +20,13 @@ before_install:
 before_script:
   - mkdir -p build/logs
   - composer install --no-interaction
-  - composer require codeclimate/php-test-reporter --no-interaction
+  - composer require codeclimate/php-test-reporter:dev-master --no-interaction
 
 script:
   - vendor/bin/phpunit --configuration phpunit.travis.xml
 
 after_success:
-  - ./vendor/bin/test-reporter
+  - vendor/bin/test-reporter
 
 notifications:
   email: "bianco@javanile.org"
