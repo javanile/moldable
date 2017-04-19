@@ -7,14 +7,17 @@ Moldable is an abstraction layer to manage MySQL database
 with improved function to alter-state and manipulate database schema.
 Moldable integrates a ORM class for manage persisten objects and adapt database schema
 
-# searcing for contributors :sunglasses:
+## Searcing for contributors :sunglasses:
 
-# How to: Connect to database
+
+
+
+## How to: Connect to database
 
 ```php
 <?php
 // library namespace 
-use Javanile\SchemaDB\Database;
+use Javanile\Moldable\Database;
 
 // initialize a database connection object 
 $db = new Database([
@@ -28,15 +31,16 @@ $db = new Database([
 // '$db' is ready to use for your manipulation
 ```
 
-# How to: Create ORM class-model
+## How to: Create ORM class-model
 
 ```php
 <?php
 // library namespace 
-use Javanile\SchemaDB\Storable;
+use Javanile\Moldable\Storable;
 
 // define ORM class-model
-class Customer extends Storable {
+class Customer extends Storable 
+{
 	public $id = self::PRIMARY_KEY;
 	public $name = '';
 }
@@ -55,7 +59,7 @@ $Customer->store();
 
 
 
-# How to: Create schema (update if exists) 
+## How to: Create schema (update if exists) 
 
 ```php
 <?php
@@ -87,7 +91,7 @@ $db->apply([
 ));
 ```
 
-# Talk about
+## Talk about
  - http://www.php-forum.com/phpforum/viewtopic.php?f=30&t=26732&p=4413131&hilit=schemadb#p4413131
  - https://www.reddit.com/r/PHP/comments/3okj7x/schemadb_a_modern_and_coincise_database/?ref=readnext_4
  - https://www.reddit.com/r/PHP/comments/427zvg/schemadb_adapt_schema_of_mysql_db_based_on_class/
@@ -97,8 +101,7 @@ $db->apply([
  - http://www.giorgiotave.it/forum/php-mysql/241550-manipolare-lo-schema-del-database.html#post1205019
  - http://www.iprogrammatori.it/forum-programmazione/php/manipolare-schema-del-database-t27275.html
 
-# Roadmap
-
+## Roadmap
  - Manage table to store key-value pair like Setting or Config or MetaField
  - Manage UUID field (large integer or hash string) alternative to PRIMARY_KEY index
  - Flexible join system to extend field of table model on runtime
