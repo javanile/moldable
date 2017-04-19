@@ -7,7 +7,7 @@ Moldable is an abstraction layer to manage MySQL database
 with improved function to alter-state and manipulate database schema.
 Moldable integrates a ORM class for manage persisten objects and adapt database schema
 
-# Searcing for contributors B-)
+# searcing for contributors :sunglasses:
 
 # How to: Connect to database
 
