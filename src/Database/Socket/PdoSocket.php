@@ -42,13 +42,15 @@ class PdoSocket implements SocketInterface
     {
         //
         if (!$args || !is_array($args)) {
-            $database->errorConnect("required connection arguments.");
+            $message = "required connection arguments.";
+            $database->errorConnect($message);
         }
 
         //
         foreach (['host', 'dbname', 'username'] as $attr) {
             if (!isset($args[$attr])) {
-                $database->errorConnect("required connection attribute: '{$attr}'");
+                $message = "required connection attribute '{$attr}'";
+                $database->errorConnect($message);
             }
         }
 
