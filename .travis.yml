@@ -20,6 +20,7 @@ before_install:
 before_script:
   - mkdir -p build/logs
   - composer install --no-interaction
+  - composer require codeclimate/php-test-reporter --no-interaction
 
 script:
   - vendor/bin/phpunit
