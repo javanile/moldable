@@ -68,10 +68,8 @@ $Customer->store();
 // apply method send queries to create 
 // or align database to defined schema 
 $db->apply([
-
 	// customer table name
-	'Customer' => [
-		
+	'Customer' => [		
 		// customer fields
 		'id'     => $db::PRIMARY_KEY,	// define field as a primary key
 		'name'   => '',			// empty string define field as VARCHAR	
@@ -79,10 +77,8 @@ $db->apply([
 		'born'   => $db::DATE,		// use to define as date field
 		'bio'    => $db::TEXT,		// text for large string and contents
 	],
-
 	// products table name
 	'Products' => [
-
 		// products fields		
 		'id'    => $db::PRIMARY_KEY,	// define field as a primary key
 		'name'  => '',			// empty string define field as VARCHAR	
