@@ -1,12 +1,13 @@
-# SchemaDB
+# javanile/moldable
+[![Build Status](https://travis-ci.org/javanile-bot/moldable.svg?branch=master)](https://travis-ci.org/javanile-bot/moldable)
+[![Code Climate](https://codeclimate.com/github/javanile-bot/moldable/badges/gpa.svg)](https://codeclimate.com/github/javanile-bot/moldable)
+[![Test Coverage](https://codeclimate.com/github/javanile-bot/moldable/badges/coverage.svg)](https://codeclimate.com/github/javanile-bot/moldable/coverage)
 
-SchemaDB is an abstraction layer to manage MySQL database 
+Moldable is an abstraction layer to manage MySQL database 
 with improved function to alter-state and manipulate database schema.
-SchemaDB integrates a ORM class for manage persisten objects and adapt database schema
+Moldable integrates a ORM class for manage persisten objects and adapt database schema
 
-# Ebook
-
-A free ebook for italians: https://leanpub.com/schemadb-capitolo-zero/
+# Searcing for contributors B-)
 
 # How to: Connect to database
 
