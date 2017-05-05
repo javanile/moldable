@@ -1,8 +1,8 @@
 <?php
 /**
- * Trait with utility methods to handle errors.
+ * Collect API to handle fields of a model.
  *
- * PHP version 5.4
+ * PHP version 5.6
  *
  * @author Francesco Bianco
  */
@@ -11,7 +11,7 @@ namespace Javanile\Moldable\Database;
 trait FieldApi
 {
     /**
-     * Retrieve primary key name of specific model on table.
+     * Retrieve primary key name of specific model.
      *
      * @param type $model
      * @return type
