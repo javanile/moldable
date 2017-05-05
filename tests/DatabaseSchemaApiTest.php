@@ -8,18 +8,18 @@ use PHPUnit\Framework\TestCase;
 
 Producer::addPsr4(['Javanile\\Moldable\\Tests\\' => __DIR__]);
 
-final class DatabaseFieldApiTest extends TestCase
+final class DatabaseSchemaApiTest extends TestCase
 {
     use DatabaseTrait;
 
     public function testDatabaseSetDebug()
     {
         $db = new Database([
-            'host' => $GLOBALS['DB_HOST'],
-            'dbname' => $GLOBALS['DB_NAME'],
+            'host'     => $GLOBALS['DB_HOST'],
+            'dbname'   => $GLOBALS['DB_NAME'],
             'username' => $GLOBALS['DB_USER'],
             'password' => $GLOBALS['DB_PASS'],
-            'debug' => true,
+            'debug'    => true,
         ]);
 
         $db->apply([
