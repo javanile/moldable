@@ -12,7 +12,7 @@ final class DatabaseSchemaApiTest extends TestCase
 {
     use DatabaseTrait;
 
-    public function testDatabaseSetDebug()
+    public function testDatabaseSchemaDesc()
     {
         $db = new Database([
             'host'     => $GLOBALS['DB_HOST'],

@@ -97,7 +97,9 @@ trait SchemaApi
         // 
         if (is_string($schema)) {
             $schema = [
-                $schema => is_string($columns) ? [$columns => $notation] : $columns,
+                $schema => is_string($columns)
+                    ? [$columns => $notation]
+                    : $columns,
             ];
         }
 
@@ -116,17 +118,13 @@ trait SchemaApi
         // retrive queries
         $queries = $this->diff($schema);
 
-        // execute queries
-        if (!$queries) {
-            return;
-        }
-
         // send all queries to align database
-        foreach ($queries as $sql) {
-            $this->execute($sql);
+        if (count($queries) > 0) {
+            foreach ($queries as $sql) {
+                $this->execute($sql);
+            }
         }
 
-        // return queries
         return $queries;
     }
 
@@ -414,8 +412,8 @@ trait SchemaApi
         if (is_string($schema)) {
             $schema = array(
                 $schema => is_string($columns) 
-                         ? array($columns => $notation)
-                         : $columns,
+                     ? array($columns => $notation)
+                     : $columns,
             );
         }
 
@@ -424,8 +422,6 @@ trait SchemaApi
 
         //
         foreach ($schema as $table => $fields) {
-
-            //
             $desc[$table] = isset($desc[$table])
                          && is_array($desc[$table])
                           ? array_merge($desc[$table], $fields)
@@ -451,24 +447,22 @@ trait SchemaApi
      */
     public function adapt($schema, $columns = null, $notation = null)
     {
-        //
+        // fix one-line params
         if (is_string($schema)) {
             $schema = array(
-                $schema => is_string($columns) ? array($columns => $notation) : $columns,
+                $schema => is_string($columns)
+                    ? array($columns => $notation)
+                    : $columns,
             );
         }
 
-        //
         $desc = $this->desc(array_keys($schema));
         
-        //
         foreach ($schema as $table => $fields) {
-
             if (!isset($desc[$table])) {
                 $desc[$table] = $fields;
                 continue;
             }
-
             foreach ($fields as $field => $attribute) {
                 if (!isset($desc[$table][$field])) {
                     $desc[$table][$field] = $attribute;
@@ -476,8 +470,7 @@ trait SchemaApi
             }
         }
 
-        //
-        $this->apply($desc);
+        return $this->apply($desc);
     }
 
     /**
@@ -578,11 +571,6 @@ trait SchemaApi
 
             //
             echo '</table></pre>';
-            
-
-
-
-
         }
 
         //

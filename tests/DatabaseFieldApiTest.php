@@ -15,11 +15,11 @@ final class DatabaseFieldApiTest extends TestCase
     public function testDatabaseGetPrimaryKey()
     {
         $db = new Database([
-            'host' => $GLOBALS['DB_HOST'],
-            'dbname' => $GLOBALS['DB_NAME'],
+            'host'     => $GLOBALS['DB_HOST'],
+            'dbname'   => $GLOBALS['DB_NAME'],
             'username' => $GLOBALS['DB_USER'],
             'password' => $GLOBALS['DB_PASS'],
-            'debug' => true,
+            'debug'    => true,
         ]);
 
         $db->apply('test_table_1', [

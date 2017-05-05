@@ -40,20 +40,21 @@ trait SocketApi
     }
 
     /**
+     * Get latest insert ID or UUID generated.
      *
      * @return type
      */
     public function getLastId()
     {
-        $id = $this->_socket->lastInsertId();
+        $lastId = $this->_socket->lastInsertId();
 
-        $this->log('getLastId', $id);
+        $this->log('getLastId', $lastId);
 
-        return $id;
+        return $lastId;
     }
 
     /**
-     *
+     * Get a single row of a result set.
      *
      * @param  type $sql
      * @return type
@@ -67,7 +68,7 @@ trait SocketApi
 
     /**
      * Get a list/array of record from database
-     * based on SQL query passed
+     * based on SQL query passed.
      *
      * @param  string $sql
      * @return array
@@ -81,7 +82,7 @@ trait SocketApi
 
     /**
      * Get a list/array of record from database
-     * based on SQL query passed
+     * based on SQL query passed.
      *
      * @param  string $sql
      * @return array
@@ -94,6 +95,7 @@ trait SocketApi
     }
 
     /**
+     * Get single value/first in result set.
      *
      * @param  type $sql
      * @return type
@@ -106,9 +108,11 @@ trait SocketApi
     }
 
     /**
+     * Get all value/first for every row of result set.
      *
-     * @param  type $sql
-     * @return type
+     * @param  string $sql
+     * @param  array  $params
+     * @return array
      */
     public function getValues($sql, $params=null)
     {
@@ -127,19 +131,18 @@ trait SocketApi
     {
         // prepare
         if ($parse) { 
-            $table = $this->getPrefix() . $table;
+            $table = $this->getPrefix($table);
         }
 
-        //
+        // escape table name for query
         $escapedTable = str_replace('_', '\\_', $table);
 
-        // sql query to test table exists
+        // sql query to test if table exists
         $sql = "SHOW TABLES LIKE '{$escapedTable}'";
 
-        // test if table exists
+        // execute test if table exists
         $exists = $this->getRow($sql);
 
-        // return and cast test result
         return (boolean) $exists;
     }
 
@@ -167,7 +170,7 @@ trait SocketApi
     }
   
     /**
-     *
+     * Log called SocketApi into log file
      *
      */
     private function log($method, $sql = null, $params = null)

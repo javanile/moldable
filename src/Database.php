@@ -24,6 +24,7 @@ class Database implements Notations
     use Database\SocketApi;
     use Database\SchemaApi;
     use Database\FieldApi;
+    use Database\InsertApi;
 
     /**
      * Release version number.
@@ -108,7 +109,7 @@ class Database implements Notations
         $this->_trace = debug_backtrace();
         $this->_ready = false;
 
-        $socket = isset($args['socket']) ? $args['socket'] : 'Pdo';
+        $socket = isset($args['socket']) ? ucfirst(strtolower($args['socket'])) : 'Pdo';
         $socketClass = "\\Javanile\\Moldable\\Database\\Socket\\{$socket}Socket";
 
         if (!class_exists($socketClass)) {
