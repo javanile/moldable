@@ -75,6 +75,21 @@ final class DatabaseTest extends TestCase
         ]);
     }
 
+    public function testDatabaseExecuteWrongQuery()
+    {
+        $this->expectException("Javanile\\Moldable\\Exception");
+        $this->expectExceptionMessageRegExp("/Query error/i");
+
+        $db = new Database([
+            'host' => $GLOBALS['DB_HOST'],
+            'dbname' => $GLOBALS['DB_NAME'],
+            'username' => $GLOBALS['DB_USER'],
+            'password' => $GLOBALS['DB_PASS'],
+        ]);
+
+        $db->execute("NO SENSE SQL QUERY");
+    }
+
     public function testDatabaseGetRow()
     {
         $db = new Database([

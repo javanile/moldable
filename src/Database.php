@@ -5,15 +5,25 @@
  * PHP version 5.6
  *
  * @author Francesco Bianco
+ * @elegy  title   ### Use me as ORM
+ * @elegy  after   #
+ * @elegy  before  $ Connection
+ * @elegy  section ORM -> Storable
+ * @elegy  content This is a page content
  */
 namespace Javanile\Moldable;
 
+/**
+ *
+ *
+ */
 class Database implements Notations
 {
     #use Database\ModelApi;
     use Database\ErrorApi;
     use Database\SocketApi;
-    #use Database\SchemaApi;
+    use Database\SchemaApi;
+    use Database\FieldApi;
 
     /**
      * Release version number.
@@ -209,7 +219,6 @@ class Database implements Notations
      */
     public function setDebug($flag)
     {
-        //
         $this->_debug = (bool) $flag;
     }
 
@@ -218,10 +227,9 @@ class Database implements Notations
      *
      * @return bool Return debug mode status.
      */
-    protected function getDebug()
+    public function getDebug()
     {
-        //
-        return $this->_debug;
+        return (bool) $this->_debug;
     }
 
     /**

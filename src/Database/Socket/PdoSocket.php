@@ -151,10 +151,8 @@ class PdoSocket implements SocketInterface
      */
     public function getValue($sql, $params=null)
     {
-        //
         $stmt = $this->execute($sql, $params);
 
-        //
         return $stmt->fetchColumn(0);
     }
 

@@ -6,7 +6,7 @@
  *
  * @author Francesco Bianco
  */
-namespace Javanile\SchemaDB\Database;
+namespace Javanile\Moldable\Database;
 
 trait FieldApi
 {

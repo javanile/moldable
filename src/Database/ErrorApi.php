@@ -33,4 +33,17 @@ trait ErrorApi
 
         Functions::throwException("Database query error, ", $exception, $bt, 2);
     }
+
+    /**
+     * Trigger a error in executed sql query.
+     *
+     * @param object $exception Exception catched with try-catch
+     */
+    public function errorHandler($message)
+    {
+        $bt = debug_backtrace();
+
+        Functions::throwException("Moldable error, ", $message, $bt, 1);
+    }
+
 }

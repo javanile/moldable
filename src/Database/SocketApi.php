@@ -32,7 +32,7 @@ trait SocketApi
      *
      * @return type
      */
-    public function getPrefix($table=null)
+    public function getPrefix($table = null)
     {
         $prefix = $this->_socket->getPrefix();
         

@@ -7,7 +7,9 @@
  *
  * @author Francesco Bianco
  */
-namespace Javanile\SchemaDB\Database;
+namespace Javanile\Moldable\Database;
+
+use Javanile\Moldable\Exception;
 
 trait SchemaApi
 {
@@ -17,39 +19,29 @@ trait SchemaApi
      *
      * @return array return an array with database description schema
      */
-    public function desc($only=null)
+    public function desc($only = null)
     {
-        //
+        $schema = [];
         $prefix = strlen($this->getPrefix());
-
-        //
         $tables = $this->getTables();
 
-        //
         if (!$tables) {
-            return [];
+            return $schema;
         }
 
-        //
-        $desc = [];
+        if (is_string($only)) {
+            $only = [$only];
+        }
 
-        //
-        if (is_string($only)) { $only = [$only]; }
-
-        //
         foreach ($tables as $table) {
-
-            //
             $model = substr($table, $prefix);
-            
-            //
+
             if (!$only || in_array($model, $only)) {
-                $desc[$model] = $this->descTable($table);
+                $schema[$model] = $this->descTable($table);
             }
         }
 
-        //
-        return $desc;
+        return $schema;
     }
 
     /**
@@ -104,9 +96,21 @@ trait SchemaApi
     {
         // 
         if (is_string($schema)) {
-            $schema = array(
-                $schema => is_string($columns) ? array($columns => $notation) : $columns,
-            );
+            $schema = [
+                $schema => is_string($columns) ? [$columns => $notation] : $columns,
+            ];
+        }
+
+        //
+        if (!$schema || count($schema) == 0 || !is_array($schema)) {
+            $this->errorHandler("empty schema not allowed");
+        }
+
+        //
+        foreach ($schema as $model => $attributes) {
+            if (!$attributes || count($attributes) == 0 || !is_array($attributes)) {
+                $this->errorHandler("empty model '{$model}' not allowed");
+            }
         }
 
         // retrive queries
@@ -168,29 +172,20 @@ trait SchemaApi
         if ($parse) {
             $this->getParser()->parse($schema);
         }
-        
-        // get prefix string
-        $prefix = $this->getPrefix();
 
         // output container for rescued SQL query
         $queries = array();
 
         // loop throu the schema
         foreach ($schema as $table => &$attributes) {
+            $table = $parse ? $this->getPrefix($table) : $table;
+            $query = $this->diffTable($table, $attributes, false);
 
-            //
-            $table = $parse ? $prefix.$table : $table;
-
-            // 
-            $sql = $this->diffTable($table, $attributes, false);
-
-            //
-            if (count($sql) > 0) {
-                $queries = array_merge($queries, $sql);
+            if (count($query) > 0) {
+                $queries = array_merge($queries, $query);
             }
         }
 
-        // return estimated sql query
         return $queries;
     }
 

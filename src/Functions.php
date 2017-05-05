@@ -5,6 +5,8 @@
 \*/
 namespace Javanile\Moldable;
 
+use Javanile\Producer;
+
 class Functions
 {	
     /**
@@ -78,7 +80,7 @@ class Functions
 
         //
         $message = $slug . $info
-            . ' in method '.$trace[$offset]['function']
+            . ' in method '."'->".$trace[$offset]['function']."()'"
             . ' called at '.$trace[$offset]['file']
             . ' on line '.$trace[$offset]['line'];
 
