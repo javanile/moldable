@@ -1,16 +1,18 @@
 <?php
 /**
- * 
+ * Trait with utility methods to handle errors.
  *
+ * PHP version 5.6
+ *
+ * @author Francesco Bianco
  */
+namespace Javanile\Moldable;
 
-namespace Javanile\SchemaDB;
-
-use Javanile\SchemaDB\Readable;
+use Javanile\Moldable\Readable;
 
 class Storable extends Readable
 {
-    use Model\ManageApi;
+    #use Model\ManageApi;
     
     /**
      *
@@ -26,10 +28,7 @@ class Storable extends Readable
      */
     public function __construct($values=null)
     {
-        //
         $parser = static::getDatabase()->getParser();
-
-        //
         $schema = static::getSchemaFields();
         
         // prepare field values strip schema definitions

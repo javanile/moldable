@@ -4,9 +4,9 @@
  *
  */
 
-namespace Javanile\SchemaDB\Model;
+namespace Javanile\Moldable\Model;
 
-use Javanile\SchemaDB\Database;
+use Javanile\Moldable\Database;
 
 trait DatabaseApi 
 {
@@ -17,25 +17,18 @@ trait DatabaseApi
      */
     protected static function getDatabase()
     {
-        //
         $attribute = 'Database';
 
-        //
         if (!static::hasClassAttribute($attribute)) {
-
-            //
             $database = Database::getDefault();
 
-            //
             if (!$database) {
                 static::error("Database not found", debug_backtrace(), 1);
             }
 
-            //
             static::setClassAttribute($attribute, $database);
         }
 
-        //
         return static::getClassAttribute($attribute);
     }
 

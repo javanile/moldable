@@ -9,14 +9,12 @@ namespace Javanile\Moldable;
 interface Notations
 {
     /**
-     *
-     *
+     * Primary key notation
      */
     const KEY = '<<#primary_key>>';
 
     /**
-     *
-     *
+     * Primary key notation
      */
     const PRIMARY_KEY = '<<#primary_key>>';
 
