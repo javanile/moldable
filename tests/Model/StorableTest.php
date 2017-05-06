@@ -21,8 +21,15 @@ final class StorableTest extends TestCase
             'dbname'   => $GLOBALS['DB_NAME'],
             'username' => $GLOBALS['DB_USER'],
             'password' => $GLOBALS['DB_PASS'],
+            'prefix'   => 'prefix_',
         ]);
 
         $people = new People();
+
+        $people->store(['name' => 'Frank']);
+
+        $row = $db->getRow("SELECT * FROM prefix_People WHERE id = 1");
+
+        $this->assertEquals($row['name'], 'Frank');
     }
 }

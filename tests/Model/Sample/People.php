@@ -2,13 +2,20 @@
 
 namespace Javanile\Moldable\Tests\Model\Sample;
 
-use Javanile\Producer;
-use Javanile\Moldable\Database;
 use Javanile\Moldable\Storable;
-
-Producer::addPsr4(['Javanile\\Moldable\\Tests\\' => __DIR__]);
 
 final class People extends Storable
 {
+    static $__config = [
+        'custom'  => 'ciaosd',
+        'adamant' => 'yello',
+    ];
+
     public $id = self::PRIMARY_KEY;
+
+    public $name = "";
+
+    public $surname = "";
+
+    public $age = 0;
 }

@@ -12,15 +12,16 @@ use Javanile\Moldable\Notations;
 
 class Readable implements Notations
 {
+    use Model\ClassApi;
+    use Model\TableApi;
+    use Model\FieldApi;
+    use Model\SchemaApi;
     use Model\DatabaseApi;
     #use Model\LoadApi;
     #use Model\ReadApi;
     #use Model\JoinApi;
-    #use Model\TableApi;
     #use Model\FieldApi;
     #use Model\FetchApi;
-    #use Model\ClassApi;
-    #use Model\SchemaApi;
     #use Model\PublicApi;
     #use Model\DebugApi;
     //
@@ -32,6 +33,12 @@ class Readable implements Notations
     //use Model\PublicApi;
     //
 
-    //
-    static $__adamant = true; 
+    /**
+     *
+     * @var type
+     */
+    static $__config = [
+        'adamant' => false,
+        'power'   => 'por',
+    ];
 }

@@ -13,12 +13,14 @@ use Javanile\Moldable\Readable;
 class Storable extends Readable
 {
     #use Model\ManageApi;
-    
     /**
      *
      * @var type
      */
-    static $__adamant = false;
+    static $__config = [
+        'adamant' => "sto",
+        'other' => 'asasdasd',
+    ];
 
     /**
      * Construct a storable object
@@ -26,15 +28,19 @@ class Storable extends Readable
      *
      *
      */
-    public function __construct($values=null)
+    public function __construct($values = null)
+    {
+        $this->values($values);
+    }
+
+    protected function values($values)
     {
         $parser = static::getDatabase()->getParser();
         $schema = static::getSchemaFields();
-        
+
         // prepare field values strip schema definitions
-        foreach ($schema as $field) 
-        {    
-            //
+        foreach ($schema as $field)
+        {
             $this->{$field} = $parser->getNotationValue($this->{$field});
         }
 
@@ -42,7 +48,7 @@ class Storable extends Readable
         $this->fillSchemaFields($values);
 
         // update related table
-        static::applyTable();
+        static::applySchema();
     }
 
     /**
@@ -150,7 +156,7 @@ class Storable extends Readable
     public function storeInsert($force=false)
     {
         // update table if needed
-        static::applyTable();
+        static::applySchema();
 
         // collect field names for sql query
         $fieldsArray = [];

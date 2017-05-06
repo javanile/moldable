@@ -1,10 +1,12 @@
 <?php
 /**
- * 
- * 
+ * Trait with utility methods to handle errors.
+ *
+ * PHP version 5.6
+ *
+ * @author Francesco Bianco
  */
-
-namespace Javanile\SchemaDB\Model;
+namespace Javanile\Moldable\Model;
 
 trait FieldApi
 {
@@ -221,26 +223,26 @@ trait FieldApi
      *
      *
      */
-    protected static function getAllFieldsWithValues() 
+    protected static function getAllFieldsValues()
     {
-        //
-        $attribute = 'FieldsWithValues';
+        $attribute = 'fields-values';
 
-        // retrieve value from class setting definition
         if (!static::hasClassAttribute($attribute)) {
-                    
-            //
-            $class = static::getClass(); 
-            
-            //
+            $class  = static::getClass();
             $fields = get_class_vars($class);
                   
-            // store as setting for future request
             static::setClassAttribute($attribute, $fields);
         }
         
-        // return primary key field name
         return static::getClassAttribute($attribute);
+    }
+
+    /**
+     *
+     */
+    protected static function getAllFields()
+    {
+        return array_keys(get_class_vars(static::getClass()));
     }
 
     /**
@@ -299,5 +301,4 @@ trait FieldApi
 
         
     }
-
 }

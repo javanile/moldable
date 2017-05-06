@@ -1,9 +1,11 @@
 <?php
 /**
- * 
- * 
+ * Trait with utility methods to handle errors.
+ *
+ * PHP version 5.6
+ *
+ * @author Francesco Bianco
  */
-
 namespace Javanile\Moldable;
 
 interface Notations

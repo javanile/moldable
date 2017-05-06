@@ -1,13 +1,63 @@
 <?php
 /**
- * 
- * 
+ * Trait with utility methods to handle errors.
+ *
+ * PHP version 5.6
+ *
+ * @author Francesco Bianco
  */
-
-namespace Javanile\SchemaDB\Model;
+namespace Javanile\Moldable\Model;
 
 trait SchemaApi
 {
+    /**
+     *
+     * @return type
+     */
+    public static function applySchema()
+    {
+        //if (static::isAdamantTable()) {
+        //    return;
+        //}
+
+        $attribute = 'apply-schema';
+
+        // avoid re-update by check the cache
+        if (static::hasClassAttribute($attribute)) {
+            return;
+        }
+
+        // retrieve database
+        $database = static::getDatabase();
+
+        // if model is not connectect to any db return
+        if (!$database) {
+            static::error('Database not found', debug_backtrace(), 2);
+        }
+
+        // retrieve class model schema
+        $schema = static::getSchema();
+
+        //
+        if (!$schema) {
+            $reflector = new \ReflectionClass(static::getClass());
+
+            static::error('Model class without attributes', [[
+                'file' => $reflector->getFileName(),
+                'line' => $reflector->getStartLine(),
+            ]]);
+        }
+
+        // get table name
+        $table = static::getTable();
+
+        // have a valid schema update db table
+        $database->applyTable($table, $schema, false);
+
+        // cache last update avoid multiple call
+        static::setClassAttribute($attribute, time());
+    }
+
     /**
      * Instrospect and retrieve element schema
      *
@@ -15,33 +65,23 @@ trait SchemaApi
      */
     public static function getSchema()
     {
-        //
-        $attribute = 'Schema';
+        $attribute = 'schema';
 
-        //
         if (!static::hasClassAttribute($attribute)) {
-
-            //
-            $fields = static::getSchemaFieldsWithValues();
-
-            //
+            $fields = static::getSchemaFieldsValues();
             $schema = array();
 
-            //
             if ($fields && count($fields) > 0) {
                 foreach ($fields as $name => $value) {
                     $schema[$name] = $value;
                 }
             }
 
-            //
             static::getDatabase()->getParser()->parseTable($schema);
 
-            //
             static::setClassAttribute($attribute, $schema);
         }
 
-        //
         return static::getClassAttribute($attribute);
     }
 
@@ -52,41 +92,47 @@ trait SchemaApi
      */
     protected static function getSchemaFields()
     {
-        //
-        $attribute    = 'SchemaFields';
+        $attribute = 'schema-fields';
 
-        //
-        if (!static::hasClassAttribute($attribute))
-        {
-            //
-            $attibuteLookup = 'SchemaExcludedFields';
+        if (!static::hasClassAttribute($attribute)) {
+            $allFields     = static::getAllFields();
+            $excludeFields = static::getExcludeFields();
+            $schemaFields  = array_diff($allFields, $excludeFields);
 
-            //
-            $allFields = array_keys(get_class_vars(static::getClass()));
+            static::setClassAttribute($attribute, $schemaFields);
+        }
 
-            //
-            $allStaticFields = static::getStaticFields();
+        return static::getClassAttribute($attribute);
+    }
 
-            //
-            $fields = array_diff(
-                $allFields,
-                $allStaticFields,
-                static::getClassGlobal($attibuteLookup)
-            );
-            
-            //
-            if (static::hasClassConfig($attibuteLookup)) {
-                $fields = array_diff(
-                    $fields,
-                    static::getClassConfig($attibuteLookup)
+    /**
+     *
+     *
+     */
+    protected static function getExcludeFields()
+    {
+        $attribute = 'exclude-fields';
+
+        if (!static::hasClassAttribute($attribute)) {
+            $excludeFields = static::getStaticFields();
+
+            if (static::hasClassGlobal($attribute)) {
+                $excludeFields = array_merge(
+                    $excludeFields,
+                    static::getClassGlobal($attribute)
                 );
             }
 
-            //
-            static::setClassAttribute($attribute, $fields);
+            if (static::hasClassConfig($attribute)) {
+                $excludeFields = array_merge(
+                    $excludeFields,
+                    static::getClassGlobal($attribute)
+                );
+            }
+
+            static::setClassAttribute($attribute, $excludeFields);
         }
 
-        //
         return static::getClassAttribute($attribute);
     }
 
@@ -95,42 +141,20 @@ trait SchemaApi
      *
      * @return type
      */
-    protected static function getSchemaFieldsWithValues()
+    protected static function getSchemaFieldsValues()
     {
-        //
-        $attribute = 'SchemaFieldsWithValues';
+        $attribute = 'schema-fields-values';
 
-        //
         if (!static::hasClassAttribute($attribute)) {
+            $fields = static::getAllFieldsValues();
 
-            //
-            $attributeLookup = 'SchemaExcludedFields';
-
-            //
-            $fields = static::getAllFieldsWithValues();
-
-            //
-            foreach (static::getStaticFields() as $field) {
+            foreach (static::getExcludeFields() as $field) {
                 unset($fields[$field]);
             }
 
-            //
-            foreach(static::getClassGlobal($attributeLookup) as $field) {
-                unset($fields[$field]);
-            }
-
-            //
-            if (static::hasClassConfig($attributeLookup)) {
-                foreach(static::getConfig($attributeLookup) as $field) {
-                    unset($fields[$field]);
-                }
-            }
-
-            //
             static::setClassAttribute($attribute, $fields);
         }
 
-        //
         return static::getClassAttribute($attribute);
     }
 }
