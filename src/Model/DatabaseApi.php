@@ -17,9 +17,9 @@ trait DatabaseApi
      *
      * @return type
      */
-    protected static function getDatabase()
+    public static function getDatabase()
     {
-        $attribute = 'Database';
+        $attribute = 'database';
 
         if (!static::hasClassAttribute($attribute)) {
             $database = Database::getDefault();
@@ -39,10 +39,10 @@ trait DatabaseApi
      *
      * @return type
      */
-    protected static function setDatabase($database)
+    public static function setDatabase($database)
     {
         //
-        $attribute = 'Database';
+        $attribute = 'database';
 
         //
         static::setClassAttribute($attribute, $database);

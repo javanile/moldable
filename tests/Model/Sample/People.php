@@ -6,11 +6,6 @@ use Javanile\Moldable\Storable;
 
 final class People extends Storable
 {
-    static $__config = [
-        'custom'  => 'ciaosd',
-        'adamant' => 'yello',
-    ];
-
     public $id = self::PRIMARY_KEY;
 
     public $name = "";

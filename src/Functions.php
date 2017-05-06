@@ -6,6 +6,7 @@
 namespace Javanile\Moldable;
 
 use Javanile\Producer;
+use Javanile\Moldable\Exception;
 
 class Functions
 {	
@@ -74,18 +75,15 @@ class Functions
      */
     public static function throwException($slug, $exception, $trace=null, $offset=0)
     {
-        //
         $info = is_object($exception) ? $exception->getMessage() : $exception;
-        $code = is_object($exception) ? $exception->getCode() : null;
+        $code = is_object($exception) ? $exception->getCode() : 0;
 
-        //
         $message = $slug . $info
             . ' in method '."'->".$trace[$offset]['function']."()'"
             . ' called at '.$trace[$offset]['file']
             . ' on line '.$trace[$offset]['line'];
 
-        //
-        throw new Exception($message, $code);
+        throw new Exception($message);
     }
     
     /**

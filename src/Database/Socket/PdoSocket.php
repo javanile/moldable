@@ -239,8 +239,8 @@ class PdoSocket implements SocketInterface
 
         try {
             $stmt->execute();
-        } catch (PDOException $ex) {
-            $this->_database->errorExecute($ex);
+        } catch (PDOException $exception) {
+            $this->_database->errorExecute($exception);
         }
 
         return $stmt;

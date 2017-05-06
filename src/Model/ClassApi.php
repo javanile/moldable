@@ -63,7 +63,7 @@ trait ClassApi
      */
     protected static function getClassName()
     {
-        $attribute = 'ClassName';
+        $attribute = 'class-name';
 
         if (!static::hasClassAttribute($attribute)) {
             $class = static::getClass();
@@ -139,32 +139,36 @@ trait ClassApi
     }
 
     /**
-     *
+     * Check if called class have configuration value.
      *
      */
-    protected static function hasClassConfig($config)
+    protected static function hasClassConfig($key)
     {
         $config = static::getClassConfigInherit();
 
-        return isset(static::$__config[$config]);
+        return isset($config[$key]);
     }
 
     /**
-     *
+     * Get configuration value of called class
      *
      */
-    protected static function getClassConfig($config)
+    public static function getClassConfig($key)
     {
-        return static::$__config[$config];
+        $config = static::getClassConfigInherit();
+
+        return $config[$key];
     }
 
     /**
-     *
+     * Set configuration value of called class.
      *
      */
-    protected static function setClassConfig($config, $value)
+    protected static function setClassConfig($key, $value)
     {
-        static::$__config[$config] = $value;
+        $config = static::getClassConfigInherit();
+
+        $config[$key] = $value;
     }
 
     /**
@@ -203,5 +207,16 @@ trait ClassApi
         }
 
         return static::getClassAttribute($attribute);
+    }
+
+    /**
+     *
+     *
+     */
+    public static function resetClass()
+    {
+        $class = static::getClass();
+
+        unset(static::$__attrib[$class]);
     }
 }

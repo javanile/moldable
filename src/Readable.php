@@ -38,7 +38,6 @@ class Readable implements Notations
      * @var type
      */
     static $__config = [
-        'adamant' => false,
-        'power'   => 'por',
+        'adamant' => true,
     ];
 }

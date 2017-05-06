@@ -18,8 +18,7 @@ class Storable extends Readable
      * @var type
      */
     static $__config = [
-        'adamant' => "sto",
-        'other' => 'asasdasd',
+        'adamant' => false,
     ];
 
     /**
@@ -58,13 +57,12 @@ class Storable extends Readable
      */
     public function store($values=null)
     {
+        // update database schema
+        static::applySchema();
+
         // update values before store
         if (is_array($values)) {
-
-            //
             foreach ($values as $field => $value) {
-
-                //
                 $this->{$field} = $value;
             }
         }
@@ -77,11 +75,8 @@ class Storable extends Readable
             return $this->storeUpdate();
         } 
 
-        //
-        else {
-            return $this->storeInsert();
-        }
-    }  
+        return $this->storeInsert();
+    }
 
     /**
      *
@@ -91,7 +86,7 @@ class Storable extends Readable
     public function storeUpdate()
     {
         // update database schema
-        static::applyTable();
+        static::applySchema();
 
         //
         $key = static::getPrimaryKey();
