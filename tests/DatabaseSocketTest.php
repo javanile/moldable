@@ -15,12 +15,12 @@ final class DatabaseSocketTest extends TestCase
     public function testDatabaseUndefinedSocket()
     {
         $this->expectException("Javanile\\Moldable\\Exception");
-        $this->expectExceptionMessageRegExp("/Socket class not found/i");
+        $this->expectExceptionMessageRegExp("/Socket class '[a-z0-9_\\\\]+' not found/i");
 
         $db = new Database([
-            'host' => $GLOBALS['DB_HOST'],
-            'socket' => 'Marimba',
-            'dbname' => $GLOBALS['DB_NAME'],
+            'host'     => $GLOBALS['DB_HOST'],
+            'socket'   => 'Marimba',
+            'dbname'   => $GLOBALS['DB_NAME'],
             'username' => $GLOBALS['DB_USER'],
             'password' => $GLOBALS['DB_PASS'],
         ]);

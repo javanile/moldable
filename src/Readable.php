@@ -12,6 +12,7 @@ use Javanile\Moldable\Notations;
 
 class Readable implements Notations
 {
+    use Model\ErrorApi;
     use Model\ClassApi;
     use Model\TableApi;
     use Model\FieldApi;

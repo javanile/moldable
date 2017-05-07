@@ -94,7 +94,7 @@ class Database implements Notations
      *
      * @var object
      */
-    protected static $_defaultDatabase = null;
+    protected static $_default = null;
 
     /**
      * Construct and connect a SchemaDB drive
@@ -113,7 +113,7 @@ class Database implements Notations
         $socketClass = "\\Javanile\\Moldable\\Database\\Socket\\{$socket}Socket";
 
         if (!class_exists($socketClass)) {
-            $this->errorConnect("Socket class not found: '{$socketClass}'");
+            $this->errorConnect("socket class '{$socketClass}' not found");
         }
 
         $this->_socket = new $socketClass($this, $args);
@@ -134,20 +134,15 @@ class Database implements Notations
      */
     public static function getDefault()
     {
-        //
-        if (static::$_defaultDatabase != null) {
-            return static::$_defaultDatabase;
+        if (static::$_default != null) {
+            return static::$_default;
         }
 
-        //
-        if (class_exists('\DB')
-        && get_parent_class('\DB') == 'Illuminate\Support\Facades\Facade') 
-        {
-            static::$_defaultDatabase = new Database(['socket' => 'Laravel']);
+        // check if running into laravel context
+        if (Context::checkLaravel()) {
+            static::$_default = new Database(['socket' => 'Laravel']);
+            return static::$_default;
         }
-
-        // return static $default
-        return static::$_defaultDatabase;
     }
     
     /**
@@ -157,7 +152,6 @@ class Database implements Notations
      */
     public static function hasDefault()
     {
-        // return static $default
         return static::getDefault() !== null;
     }
 
@@ -170,25 +164,22 @@ class Database implements Notations
     public static function setDefault($database)
     {
         // if no default SchemaDB connection auto-set then-self
-        if (static::$_defaultDatabase === null) {
+        if (static::$_default === null) {
 
             // set current SchemaDB connection to default
-            static::$_defaultDatabase = &$database;
+            static::$_default = &$database;
         }
     }
 
     /**
-     * Get the status of database connection.
+     * Set global context default database
+     * for future use into model management.
      *
-     * @return bool Database status flag.
+     * @param type $database
      */
-    public function isReady()
+    public static function resetDefault()
     {
-        if (!$this->_ready) {
-            $this->enquire();
-        }
-
-        return $this->_ready;
+        static::$_default = null;
     }
 
     /**
@@ -240,23 +231,10 @@ class Database implements Notations
      */
     public function benchmark()
     {
-        //
-        $delta = microtime() - $this->_ts;
-
-        //
-        $style = 'background:#333;'
-               . 'color:#fff;'
-               . 'padding:2px 6px 3px 6px;'
-               . 'border:1px solid #000';
-
-        //
-        $infoline = 'Time: '.$delta.' '
-                  . 'Mem: '.memory_get_usage(true);
-
-        //
-        echo '<pre style="'.$style.'">'.$infoline.'</pre>';
-
-        //
-        return $delta;
+        return [
+            'start'  => $this->_ts,
+            'elapse' => microtime() - $this->_ts,
+            'memory' => memory_get_usage(true),
+        ];
     }
 }

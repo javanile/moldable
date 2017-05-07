@@ -219,4 +219,13 @@ trait ClassApi
 
         unset(static::$__attrib[$class]);
     }
+
+    /**
+     *
+     *
+     */
+    public static function resetAllClass()
+    {
+        static::$__attrib = null;
+    }
 }

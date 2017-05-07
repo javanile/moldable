@@ -19,7 +19,7 @@ trait ErrorApi
      */
     public function errorConnect($exception)
     {
-        Functions::throwException("Database connection error, ", $exception, $this->_trace, 0);
+        Functions::throwException("Moldable connection error, ", $exception, $this->_trace, 0);
     }
 
     /**
@@ -31,7 +31,7 @@ trait ErrorApi
     {
         $backtrace = debug_backtrace();
 
-        Functions::throwException("Database query error, ", $exception, $backtrace, 2);
+        Functions::throwException("Moldable query error, ", $exception, $backtrace, 2);
     }
 
     /**
@@ -41,9 +41,8 @@ trait ErrorApi
      */
     public function errorHandler($message)
     {
-        $bt = debug_backtrace();
+        $backtrace = debug_backtrace();
 
-        Functions::throwException("Moldable error, ", $message, $bt, 1);
+        Functions::throwException("Moldable error, ", $message, $backtrace, 1);
     }
-
 }

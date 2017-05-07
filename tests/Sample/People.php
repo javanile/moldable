@@ -1,6 +1,6 @@
 <?php
 
-namespace Javanile\Moldable\Tests\Model\Sample;
+namespace Javanile\Moldable\Tests\Sample;
 
 use Javanile\Moldable\Storable;
 

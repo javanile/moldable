@@ -7,7 +7,6 @@
  *
  * @author Francesco Bianco
  */
-
 namespace Javanile\Moldable\Database\Socket;
 
 use PDO;
@@ -46,24 +45,29 @@ class PdoSocket implements SocketInterface
      */
     public function __construct($database, $args)
     {
-        $this->_database = $database;
-
         if (!$args || !is_array($args)) {
-            $this->_database->errorConnect("required connection arguments");
+            $database->errorConnect("required connection arguments");
         }
 
-        //
+        // init params
+        $this->_args     = $args;
+        $this->_prefix   = isset($args['prefix']) ? $args['prefix'] : '';
+        $this->_database = $database;
+
+        // set custom pdo connection
+        if (isset($args['pdo']) && $args['pdo']) {
+            $this->_pdo = $args['pdo'];
+            return;
+        }
+
+        // check for required connection params
         foreach (['host', 'dbname', 'username'] as $attr) {
             if (!isset($args[$attr])) {
                 $this->_database->errorConnect("required connection attribute '{$attr}'");
             }
         }
 
-        //
-        $this->_args = $args;
-        $this->_prefix = isset($args['prefix']) ? $args['prefix'] : '';
-
-        // now connect to database
+        // create and start pdo
         $this->connect();
     }
 
@@ -72,20 +76,17 @@ class PdoSocket implements SocketInterface
      */
     private function connect()
     {
-        // get connection arguments
-        $dsn = "mysql:host={$this->_args['host']};dbname={$this->_args['dbname']}";
+        $dsn      = "mysql:host={$this->_args['host']};dbname={$this->_args['dbname']}";
         $username = $this->_args['username'];
         $password = $this->_args['password'];
-        $options = [PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8'];
+        $options  = [PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8'];
 
-        // try to connect and create singletone
         try {
             $this->_pdo = new PDO($dsn, $username, $password, $options);
         } catch (PDOException $ex) {
             $this->_database->errorConnect($ex);
         }
 
-        // set PDO attributes
         $this->_pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     }
     

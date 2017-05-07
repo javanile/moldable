@@ -7,7 +7,7 @@ use Javanile\Moldable\Database;
 use PHPUnit\Framework\TestCase;
 use Javanile\Moldable\Readable;
 use Javanile\Moldable\Storable;
-use Javanile\Moldable\Tests\Model\Sample\People;
+use Javanile\Moldable\Tests\Sample\People;
 use Javanile\Moldable\Tests\DatabaseTrait;
 
 Producer::addPsr4(['Javanile\\Moldable\\Tests\\' => __DIR__.'/../']);

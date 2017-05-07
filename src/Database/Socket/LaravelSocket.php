@@ -1,15 +1,16 @@
 <?php
 /**
+ * PDO Socket handle comunications and interactions
+ * with database via PDO library.
  *
+ * PHP version 5.6
  *
- *
+ * @author Francesco Bianco
  */
+namespace Javanile\Moldable\Database\Socket;
 
-namespace Javanile\SchemaDB\Socket;
-
-use DB;
 use PDO;
-use Javanile\SchemaDB\Exception;
+use Illuminate\Database\Capsule\Manager as Capsule;
 
 class LaravelSocket
 {
@@ -21,50 +22,38 @@ class LaravelSocket
     /**
      * @var int
      */
-    private $_tempFetchMode = null;
-    
+    private $_connection = null;
+
     /**
-     *
-     * 
+     * @var int
      */
-    public function __construct($database, $args=null)
-    {
-        //
-        $this->_database = $database;
-    }
+    private $_pdo = null;
+
+    /**
+     * @var int
+     */
+    private $_socket = null;
 
     /**
      *
      * 
      */
-    public function connect($args=null)
+    public function __construct($database, $args = null)
     {
-        //
-        return true;
+        $this->_database   = $database;
+        $this->_connection = Capsule::connection();
+        $this->_pdo        = $this->_connection->getPdo();
+        $this->_socket     = new PdoSocket($this->_database, ['pdo' => $this->_pdo]);
     }
-    
+
     /**
      *
      * @param type $sql
      * @return type
      */
-    public function getRow($sql, $params=null)
+    public function getRow($sql, $params = null)
     {
-        //
-        $this->applyFetchMode(PDO::FETCH_ASSOC);
-
-        //
-        if ($params) {
-            $row = DB::selectOne($sql, $params);
-        } else {
-            $row = DB::selectOne($sql);
-        }
-
-        //
-        $this->resetFetchMode();
-
-        //
-        return $row;
+        return $this->_socket->getRow($sql, $params = null);
     }
 
     /**
@@ -74,21 +63,7 @@ class LaravelSocket
      */
     public function getResults($sql, $params=null)
     {
-        //
-        $this->applyFetchMode(PDO::FETCH_ASSOC);
-
-        //
-        if ($params) {
-            $results = DB::select($sql, $params);
-        } else {
-            $results = DB::select($sql);
-        }
-        
-        //
-        $this->resetFetchMode();
-
-        //
-        return $results;
+        return $this->_socket->getResults($sql, $params = null);
     }
 
     /**
@@ -98,21 +73,7 @@ class LaravelSocket
      */
     public function getResultsAsObjects($sql, $params=null)
     {
-        //
-        $this->applyFetchMode(PDO::FETCH_OBJ);
-
-        //
-        if ($params) {
-            $results = DB::select($sql, $params);
-        } else {
-            $results = DB::select($sql);
-        }
-
-        //
-        $this->resetFetchMode();
-
-        //
-        return $results;
+        return $this->_socket->getResultsAsObjects($sql, $params = null);
     }
 
     /**
@@ -123,19 +84,7 @@ class LaravelSocket
      */
     public function getColumn($sql, $params=null)
     {
-        //
-        $stmt = $this->execute($sql, $params);
-
-        //
-        $column = array();
-
-        //
-        while($row = $stmt->fetch()){
-            $column[] = $row[0];
-        }
-
-        //
-        return $column;
+        return $this->_socket->getColumn($sql, $params = null);
     }
 
     /**
@@ -146,11 +95,7 @@ class LaravelSocket
      */
     public function getValue($sql, $params=null)
     {
-        //
-        $stmt = $this->execute($sql, $params);
-
-        //
-        return $stmt->fetchColumn(0);
+        return $this->_socket->getValue($sql, $params = null);
     }
 
     /**
@@ -158,10 +103,9 @@ class LaravelSocket
      *
      * @return type
      */
-    public function getPrefix()
+    public function getPrefix($table = "")
     {
-        //
-        return DB::getTablePrefix();
+        return $this->_connection->getTablePrefix() . $table;
     }
 
     /**
@@ -171,8 +115,7 @@ class LaravelSocket
      */
     public function setPrefix($prefix)
     {
-        //
-        DB::setTablePrefix($prefix);
+        //DB::setTablePrefix($prefix);
     }
 
     /**
@@ -182,8 +125,7 @@ class LaravelSocket
      */
     public function lastInsertId()
     {
-        //
-        return DB::getPdo()->lastInsertId();
+        return $this->_socket->lastInsertId();
     }
 
     /**
@@ -193,8 +135,7 @@ class LaravelSocket
      */
     public function quote($string)
     {
-        //
-        return DB::getPdo()->quote($string);
+        return $this->_socket->quote($string);
     }
 
     /**
@@ -203,8 +144,7 @@ class LaravelSocket
      */
     public function transact()
     {
-        //
-        DB::getPdo()->beginTransaction();
+        return $this->_socket->transact();
     }
 
     /**
@@ -212,8 +152,7 @@ class LaravelSocket
      */
     public function commit()
     {
-        //
-        DB::getPdo()->commit();
+        return $this->_socket->commit();
     }
 
     /**
@@ -221,52 +160,15 @@ class LaravelSocket
      */
     public function rollback()
     {
-        //
-        DB::getPdo()->rollBack();
+        return $this->_socket->rollBack();
     }
 
     /**
      *
      * 
      */
-    public function execute($sql, $params=null)
+    public function execute($sql, $params = null)
     {
-        //
-        if ($params) {
-            return DB::statement($sql, $params);
-        } else {
-            return DB::statement($sql);
-        }
-    }
-
-    /**
-     *
-     *
-     */
-    private function applyFetchMode($fetchMode)
-    {
-        //
-        if ($this->_tempFetchMode != null) {
-            $this->_database->errorExecute(new Exception("apply fetchMode overload"));
-        }
-
-        //
-        $this->_tempFetchMode = DB::getFetchMode();
-
-        //
-        DB::setFetchMode($fetchMode);
-    }
-
-    /**
-     *
-     *
-     */
-    private function resetFetchMode()
-    {
-        //
-        DB::setFetchMode($this->_tempFetchMode);
-
-        //
-        $this->_tempFetchMode = null;
+        return $this->_socket->execute($sql, $params);
     }
 }

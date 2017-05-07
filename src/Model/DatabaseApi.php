@@ -25,7 +25,7 @@ trait DatabaseApi
             $database = Database::getDefault();
 
             if (!$database) {
-                static::error("Database not found", debug_backtrace(), 1);
+                static::error("database connection not found");
             }
 
             static::setClassAttribute($attribute, $database);

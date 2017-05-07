@@ -1,12 +1,14 @@
 <?php
 /**
+ * Trait with utility methods to handle errors.
  *
+ * PHP version 5.6
  *
+ * @author Francesco Bianco
  */
+namespace Javanile\Moldable\Model;
 
-namespace Javanile\SchemaDB\Model;
-
-use Javanile\SchemaDB\Exception;
+use Javanile\Moldable\Functions;
 
 trait ErrorApi
 {
@@ -16,25 +18,10 @@ trait ErrorApi
      * @param type $trace
      * @param type $error
      */
-    public static function error($exception, $trace, $offset=0)
+    public static function error($exception)
     {
-        //
-        $message = is_string($exception)
-                 ? $exception : $exception->getMessage();
-        
-        //
-        echo '<br><b>Fatal error</b>: '.$message;
-           
-        //
-        if (isset($trace[$offset]['function'])) {
-            echo ' in method <strong>'.$trace[$offset]['function'].'</strong> ';
-        }
-                    
-        //
-        echo ' called at <strong>'.$trace[$offset]['file'].'</strong>'
-           . ' on line <strong>'.$trace[$offset]['line'].'</strong><br>';
-        
-        //
-        exit();
+        $backtrace = debug_backtrace();
+
+        Functions::throwException("Moldable model error, ", $exception, $backtrace, 3);
     }
 }
