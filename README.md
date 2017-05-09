@@ -8,9 +8,12 @@ with improved function to alter-state and manipulate database schema.
 Moldable integrates a ORM class for manage persisten objects and adapt database schema
 
 ## Searcing for contributors :sunglasses:
-
-
-
+We are looking for contributors (PHP lovers) that are passioned by ORM and Database worlds for:
+ - Appling PSR code standard in working codebase and beatify the source files
+ - Testing library to different framework like: Slim, Laravel, ZendFramenwork, etc...
+ - Write and mantaine updated the wiki sections https://github.com/javanile/moldable/wiki
+ - Increase popularity of https://packagist.org/packages/javanile/moldable by different kind of promotions
+**We guarantee all visibility and thanks for our contributors, many many stars, and public reference in all post blog and articles that talk about javanile/moldale**
 
 ## How to: Connect to database
 
@@ -57,8 +60,6 @@ $Customer->name = 'Franky Franco';
 $Customer->store();
 ```
 
-
-
 ## How to: Create schema (update if exists) 
 
 ```php
@@ -98,10 +99,10 @@ $db->apply([
  - http://www.iprogrammatori.it/forum-programmazione/php/manipolare-schema-del-database-t27275.html
 
 ## Roadmap
+ - Support to MongoDB for trasparent switch MySQL/MongoDB 
  - Manage table to store key-value pair like Setting or Config or MetaField
  - Manage UUID field (large integer or hash string) alternative to PRIMARY_KEY index
  - Flexible join system to extend field of table model on runtime
  - Define encode/decode static method for a sub-set of field 
  - Implementig Unit of work pattern
  - Listening For Query Events (gestione hook/event per modelli e query al db)
- - [DONE!] Port to GitHub
