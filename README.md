@@ -14,7 +14,7 @@ We are looking for contributors (PHP lovers) that are passioned by ORM and Datab
  - Write and mantaine updated the wiki sections https://github.com/javanile/moldable/wiki
  - Increase popularity of https://packagist.org/packages/javanile/moldable by different kind of promotions
 
-**We guarantee all visibility and thanks for our contributors, many many stars, and public reference in all post blog and articles that talk about javanile/moldale**
+*We guarantee all visibility and thanks for our contributors, many many stars and public reference in all blog posts and articles that talk about javanile/moldable*
 
 ## How to: Connect to database
 
