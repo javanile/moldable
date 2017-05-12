@@ -8,9 +8,13 @@ with improved function to alter-state and manipulate database schema.
 Moldable integrates a ORM class for manage persisten objects and adapt database schema
 
 ## Searcing for contributors :sunglasses:
+We are looking for contributors (PHP lovers) that are passioned by ORM and Database worlds for:
+ - Appling PSR code standard in working codebase and beatify the source files
+ - Testing library to different framework like: Slim, Laravel, ZendFramenwork, etc...
+ - Write and mantaine updated the wiki sections https://github.com/javanile/moldable/wiki
+ - Increase popularity of https://packagist.org/packages/javanile/moldable by different kind of promotions
 
-
-
+*We guarantee all visibility and thanks for our contributors, many many stars and public reference in all blog posts and articles that talk about javanile/moldable*
 
 ## How to: Connect to database
 
@@ -21,11 +25,11 @@ use Javanile\Moldable\Database;
 
 // initialize a database connection object 
 $db = new Database([
-	'host'     => 'localhost',
-	'dbname'   => 'db_marketing',
-	'usernane' => 'root',
-	'password' => 'p4ssw0rd',
-	'prefix'   => 'prefix_',
+    'host'     => 'localhost',
+    'dbname'   => 'db_marketing',
+    'usernane' => 'root',
+    'password' => 'p4ssw0rd',
+    'prefix'   => 'prefix_',
 ]);
 
 // '$db' is ready to use for your manipulation
@@ -41,23 +45,21 @@ use Javanile\Moldable\Storable;
 // define ORM class-model
 class Customer extends Storable 
 {
-	public $id = self::PRIMARY_KEY;
-	public $name = '';
+    public $id = self::PRIMARY_KEY;
+    public $name = '';
 }
 
 // instance empty object
 // database tables and fields are automatic generated 
 // or updated if change Customer class
-$Customer = new Customer();
+$customer = new Customer();
 
 // assign values
-$Customer->name = 'Franky Franco';
+$customer->name = 'Franky Franco';
 
 // now object persist on DB
-$Customer->store();
+$customer->store();
 ```
-
-
 
 ## How to: Create schema (update if exists) 
 
@@ -68,22 +70,22 @@ $Customer->store();
 // apply method send queries to create 
 // or align database to defined schema 
 $db->apply([
-	// customer table name
-	'Customer' => [		
-		// customer fields
-		'id'     => $db::PRIMARY_KEY,	// define field as a primary key
-		'name'   => '',			// empty string define field as VARCHAR	
-		'points' => 0,			// 0 (zero) define field as INT(11)
-		'born'   => $db::DATE,		// use to define as date field
-		'bio'    => $db::TEXT,		// text for large string and contents
-	],
-	// products table name
-	'Products' => [
-		// products fields		
-		'id'    => $db::PRIMARY_KEY,	// define field as a primary key
-		'name'  => '',			// empty string define field as VARCHAR	
-		'price' => .0,			// for float number init field with point-zero ".0"	
- 	],
+    // customer table name
+    'Customer' => [		
+        // customer fields
+        'id'     => $db::PRIMARY_KEY,	// define field as a primary key
+        'name'   => '',			// empty string define field as VARCHAR	
+        'points' => 0,			// 0 (zero) define field as INT(11)
+        'born'   => $db::DATE,		// use to define as date field
+        'bio'    => $db::TEXT,		// text for large string and contents
+    ],
+    // products table name
+    'Products' => [
+        // products fields		
+        'id'    => $db::PRIMARY_KEY,	// define field as a primary key
+        'name'  => '',			// empty string define field as VARCHAR	
+        'price' => .0,			// for float number init field with point-zero ".0"	
+    ],
 ));
 ```
 
@@ -98,10 +100,10 @@ $db->apply([
  - http://www.iprogrammatori.it/forum-programmazione/php/manipolare-schema-del-database-t27275.html
 
 ## Roadmap
+ - Support to MongoDB for trasparent switch MySQL/MongoDB 
  - Manage table to store key-value pair like Setting or Config or MetaField
  - Manage UUID field (large integer or hash string) alternative to PRIMARY_KEY index
  - Flexible join system to extend field of table model on runtime
  - Define encode/decode static method for a sub-set of field 
  - Implementig Unit of work pattern
  - Listening For Query Events (gestione hook/event per modelli e query al db)
- - [DONE!] Port to GitHub
