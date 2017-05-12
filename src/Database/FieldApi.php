@@ -28,4 +28,14 @@ trait FieldApi
             }
         }
     }
+
+    /**
+     *
+     */
+    public function getPrimaryKeyOrMainField($model)
+    {
+        $key = $this->getPrimaryKey($model);
+
+        return $key ? $key : $this->getMainField();
+    }
 }

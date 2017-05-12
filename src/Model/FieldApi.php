@@ -10,7 +10,68 @@ namespace Javanile\Moldable\Model;
 
 trait FieldApi
 {
-	/**
+    /**
+     *
+     */
+    protected function initSchemaFields()
+    {
+        $schema = static::getSchemaFields();
+        $parser = static::getDatabase()->getParser();
+
+        // prepare field values strip schema definitions
+        foreach ($schema as $field) {
+            $this->{$field} = $parser->getNotationValue($this->{$field});
+        }
+    }
+
+    /**
+     *
+     *
+     * @param type $values
+     */
+    public function fillSchemaFields($values, $map=null, $prefix=null)
+    {
+        //
+        foreach (static::getSchema() as $field => $aspects) {
+
+            //
+            if (isset($aspects['Class']) && $aspects['Relation'] == '1:1') {
+
+                //
+                $class = $aspects['Class'];
+
+                //
+                $this->{$field} = $class::make(
+                    $values,
+                    $map,
+                    $prefix . $field . '__'
+                );
+            }
+
+            //
+            $field = $prefix . $field;
+
+            //
+            if (isset($values[$field])) {
+                $this->{$field} = $values[$field];
+            }
+        }
+
+        //
+        $key = $this->getPrimaryKey();
+
+        //
+        $field = $prefix . $key;
+
+        //
+        if ($key) {
+            $this->{$key} = isset($values[$field])
+                ? (int) $values[$field]
+                : (int) $this->{$key};
+        }
+    }
+
+    /**
      * Retrieve primary key field name
      *
      * @return boolean
@@ -243,62 +304,5 @@ trait FieldApi
     protected static function getAllFields()
     {
         return array_keys(get_class_vars(static::getClass()));
-    }
-
-    /**
-     *
-     *
-     * @param type $values
-     */
-    public function fillSchemaFields($values, $map=null, $prefix=null)
-    {
-        //
-        foreach (static::getSchema() as $field => $aspects) {
-
-            //
-            if (isset($aspects['Class']) && $aspects['Relation'] == '1:1') {
-
-                //
-                $class = $aspects['Class'];
-
-                //
-                $this->{$field} = $class::make(
-                    $values,
-                    $map,
-                    $prefix . $field . '__'
-                );
-            }
-
-            //
-            $field = $prefix . $field;
-
-            //           
-            if (isset($values[$field])) {
-                $this->{$field} = $values[$field];
-            }
-        }
-
-        //
-        $key = $this->getPrimaryKey();
-
-        //
-        $field = $prefix . $key;
-
-        //
-        if ($key) {
-            $this->{$key} = isset($values[$field])
-                          ? (int) $values[$field]
-                          : (int) $this->{$key};
-        }
-    }
-
-    /**
-     *
-     *
-     */
-    protected function fillExpanseFields($values, $map=null, $prefix=null)
-    {
-
-        
     }
 }

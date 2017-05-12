@@ -22,40 +22,33 @@ trait SchemaApi
 
         $attribute = 'apply-schema';
 
-        // avoid re-update by check the cache
         if (static::hasClassAttribute($attribute)) {
-            return;
+            return true;
         }
 
-        // retrieve database
         $database = static::getDatabase();
 
-        // if model is not connectect to any db return
         if (!$database) {
-            static::error('Database not found', debug_backtrace(), 2);
+            static::error('database not found', debug_backtrace(), 2);
         }
 
-        // retrieve class model schema
         $schema = static::getSchema();
 
-        //
         if (!$schema) {
             $reflector = new \ReflectionClass(static::getClass());
-
-            static::error('Model class without attributes', [[
+            static::error('model class without attributes', [[
                 'file' => $reflector->getFileName(),
                 'line' => $reflector->getStartLine(),
             ]]);
         }
 
-        // get table name
         $table = static::getTable();
 
-        // have a valid schema update db table
-        $database->applyTable($table, $schema, false);
+        $queries = $database->applyTable($table, $schema, false);
 
-        // cache last update avoid multiple call
-        static::setClassAttribute($attribute, time());
+        static::setClassAttribute($attribute, microtime(true));
+
+        return $queries;
     }
 
     /**

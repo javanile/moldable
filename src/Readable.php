@@ -14,6 +14,7 @@ class Readable implements Notations
 {
     use Model\ErrorApi;
     use Model\ClassApi;
+    use Model\ModelApi;
     use Model\TableApi;
     use Model\FieldApi;
     use Model\SchemaApi;
@@ -40,5 +41,14 @@ class Readable implements Notations
      */
     static $__config = [
         'adamant' => true,
+        'table-name-conventions' => 'underscore',
     ];
+
+    /**
+     *
+     */
+    public function __construct()
+    {
+
+    }
 }

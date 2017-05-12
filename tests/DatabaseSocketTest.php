@@ -25,4 +25,18 @@ final class DatabaseSocketTest extends TestCase
             'password' => $GLOBALS['DB_PASS'],
         ]);
     }
+
+    public function testSocketQuote()
+    {
+        $db = new Database([
+            'host'     => $GLOBALS['DB_HOST'],
+            'dbname'   => $GLOBALS['DB_NAME'],
+            'username' => $GLOBALS['DB_USER'],
+            'password' => $GLOBALS['DB_PASS'],
+        ]);
+
+        $string = $db->quote("this is a 'test string'");
+
+        $this->assertTrue(is_string($string));
+    }
 }

@@ -25,6 +25,7 @@ class Database implements Notations
     use Database\SchemaApi;
     use Database\FieldApi;
     use Database\InsertApi;
+    use Database\UpdateApi;
 
     /**
      * Release version number.
@@ -189,7 +190,6 @@ class Database implements Notations
      */
     public function getParser()
     {
-        //
         return $this->_parser;
     }
 
@@ -200,7 +200,6 @@ class Database implements Notations
      */
     public function getWriter()
     {
-        //
         return $this->_writer;
     }
 

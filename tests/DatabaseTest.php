@@ -70,7 +70,7 @@ final class DatabaseTest extends TestCase
         $this->expectExceptionMessageRegExp("/Connection error.*username/i");
 
         $db = new Database([
-            'host'   => $GLOBALS['DB_HOST'],
+            'host' => $GLOBALS['DB_HOST'],
             'dbname' => $GLOBALS['DB_NAME'],
         ]);
     }
@@ -108,5 +108,27 @@ final class DatabaseTest extends TestCase
         $row = $db->getRow("SELECT * FROM test_table");
 
         $this->assertEquals($row, ['test_field_1' => 100, 'test_field_2' => 'string line']);
+
+        $benchmark = $db->benchmark();
+
+        $this->assertArrayHasKey('elapse', $benchmark);
+    }
+
+    public function testHasDefaultDatabase()
+    {
+        $flag = Database::hasDefault();
+
+        $this->assertEquals($flag, false);
+
+        $db = new Database([
+            'host' => $GLOBALS['DB_HOST'],
+            'dbname' => $GLOBALS['DB_NAME'],
+            'username' => $GLOBALS['DB_USER'],
+            'password' => $GLOBALS['DB_PASS'],
+        ]);
+
+        $flag = Database::hasDefault();
+
+        $this->assertEquals($flag, true);
     }
 }

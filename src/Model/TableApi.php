@@ -8,6 +8,8 @@
  */
 namespace Javanile\Moldable\Model;
 
+use Javanile\Moldable\Functions;
+
 trait TableApi
 {
     /**
@@ -20,7 +22,13 @@ trait TableApi
         $attribute = 'table';
 
         if (!static::hasClassAttribute($attribute)) {
-            $name  = isset(static::$table) ? static::$table : static::getClassName();
+            $name = !isset(static::$table)
+                ? Functions::applyConventions(
+                    static::getClassConfig('table-name-conventions'),
+                    static::getClassName()
+                )
+                : static::$table;
+
             $table = static::getDatabase()->getPrefix($name);
 
             static::setClassAttribute($attribute, $table);

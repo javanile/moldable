@@ -12,8 +12,10 @@ use Javanile\Moldable\Readable;
 
 class Storable extends Readable
 {
-    #use Model\ManageApi;
+    use Model\UpdateApi;
+
     /**
+     * Configuration array.
      *
      * @var type
      */
@@ -32,22 +34,25 @@ class Storable extends Readable
         $this->values($values);
     }
 
+    /**
+     *
+     */
+    protected function init()
+    {
+        static::applySchema();
+
+        $this->initSchemaFields();
+    }
+
+    /**
+     *
+     */
     protected function values($values)
     {
-        $parser = static::getDatabase()->getParser();
-        $schema = static::getSchemaFields();
-
-        // prepare field values strip schema definitions
-        foreach ($schema as $field)
-        {
-            $this->{$field} = $parser->getNotationValue($this->{$field});
-        }
-
-        //
-        $this->fillSchemaFields($values);
-
-        // update related table
         static::applySchema();
+
+        $this->initSchemaFields();
+        $this->fillSchemaFields($values);
     }
 
     /**
@@ -55,9 +60,8 @@ class Storable extends Readable
      *
      * @return type
      */
-    public function store($values=null)
+    public function store($values = null)
     {
-        // update database schema
         static::applySchema();
 
         // update values before store
@@ -67,11 +71,9 @@ class Storable extends Readable
             }
         }
 
-        // retrieve primary key
+        // if has primary update else insert
         $key = static::getPrimaryKey();
-
-        // based on primary key store action
-        if ($key && $this->{$key}) {
+        if ($key && isset($this->{$key}) && $this->{$key}) {
             return $this->storeUpdate();
         } 
 
@@ -85,61 +87,29 @@ class Storable extends Readable
      */
     public function storeUpdate()
     {
-        // update database schema
         static::applySchema();
 
-        //
-        $key = static::getPrimaryKey();
+        $key      = static::getPrimaryKey();
+        $fields   = static::getSchemaFields();
+        $setArray = [];
+        $params   = [];
 
-        //
-        $setArray = array();
-
-        //
-        $valuesArray = array();
-
-        //
-        $fields = static::getSchemaFields();
-
-        //
         foreach ($fields as $field) {
-
-            //
             if ($field == $key) { continue; }
 
-            //
-            $token = ':'.$field;
-
-            //
-            $setArray[] = $field.' = '.$token;
-
-            //
-            $valuesArray[$token] = $this->{$field};
+            $token          = ':'.$field;
+            $setArray[]     = $field.' = '.$token;
+            $params[$token] = $this->{$field};
         }
 
-        //
-        $set = implode(',', $setArray);
-
-        //
+        $set   = implode(',', $setArray);
         $table = static::getTable();
-
-        //
         $index = $this->{$key};
+        $sql   = "UPDATE {$table} SET {$set} WHERE {$key}='{$index}'";
 
-        //
-        $sql = "UPDATE {$table} SET {$set} WHERE {$key}='{$index}'";
+        static::getDatabase()->execute($sql, $params);
 
-        //
-        static::getDatabase()->execute($sql, $valuesArray);
-
-        //
-        if ($key) {
-            return $this->{$key};
-        }
-
-        //
-        else {
-            return true;
-        }
+        return $key ? $this->{$key} : true;
     }
 
     /**
