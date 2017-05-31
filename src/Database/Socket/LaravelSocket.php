@@ -61,7 +61,7 @@ class LaravelSocket
      * @param type $sql
      * @return type
      */
-    public function getResults($sql, $params=null)
+    public function getResults($sql, $params = null)
     {
         return $this->_socket->getResults($sql, $params = null);
     }
@@ -71,9 +71,9 @@ class LaravelSocket
      * @param type $sql
      * @return type
      */
-    public function getResultsAsObjects($sql, $params=null)
+    public function getResultsAsObjects($sql, $params = null)
     {
-        return $this->_socket->getResultsAsObjects($sql, $params = null);
+        return $this->_socket->getResultsAsObjects($sql, $params);
     }
 
     /**
@@ -82,9 +82,9 @@ class LaravelSocket
      * @param type $sql
      * @return type
      */
-    public function getColumn($sql, $params=null)
+    public function getColumn($sql, $params = null)
     {
-        return $this->_socket->getColumn($sql, $params = null);
+        return $this->_socket->getColumn($sql, $params);
     }
 
     /**
@@ -93,9 +93,9 @@ class LaravelSocket
      * @param type $sql
      * @return type
      */
-    public function getValue($sql, $params=null)
+    public function getValue($sql, $params = null)
     {
-        return $this->_socket->getValue($sql, $params = null);
+        return $this->_socket->getValue($sql, $params);
     }
 
     /**

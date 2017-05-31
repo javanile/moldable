@@ -14,5 +14,5 @@ interface SocketInterface
     /**
      *
      */
-    public function getRow($sql, $params=null);
+    public function getRow($sql, $params = null);
 }

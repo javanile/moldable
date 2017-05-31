@@ -29,7 +29,7 @@ trait FieldApi
      *
      * @param type $values
      */
-    public function fillSchemaFields($values, $map=null, $prefix=null)
+    public function fillSchemaFields($values, $map = null, $prefix = null)
     {
         //
         foreach (static::getSchema() as $field => $aspects) {

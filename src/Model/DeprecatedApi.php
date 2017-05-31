@@ -27,16 +27,13 @@ trait DeprecatedApi
      */
     public static function map($data, $map)
     {
-        //
-        $o = static::make($data);
+        $object = static::make($data);
 
-        //
-        foreach ($map as $m=>$f) {
-            $o->{$f} = isset($data[$m]) ? $data[$m] : '';
+        foreach ($map as $meta => $field) {
+            $object->{$field} = isset($data[$meta]) ? $data[$meta] : '';
         }
 
-        //
-        return $o;
+        return $object;
     }
     
     /**
@@ -72,21 +69,16 @@ trait DeprecatedApi
 
         //
         foreach ($object as $field => $value) {
-
-            //
             $compareWith = $filter.$field;
 
             //
             foreach($methods as $method) {
-
-                //
                 if (preg_match('/^'.$method.'/i',$compareWith)) {
                     $object->{$field} = call_user_func(array($object, $method), $value);
                 }
             }
         }
 
-        //
         return $object;
     }
 

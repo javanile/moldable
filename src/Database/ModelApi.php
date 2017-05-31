@@ -85,7 +85,7 @@ trait ModelApi
 	 * @param type $fields
      * @return type
      */
-    public function all($model, $fields=null)
+    public function all($model, $fields = null)
     {
         //
         $table = $this->getPrefix($model);
@@ -99,9 +99,7 @@ trait ModelApi
         //
         return $results;
     }
-    
 
-  
     /**
      *
      *
@@ -125,8 +123,6 @@ trait ModelApi
         
         //
         foreach ($schema as $field) {
-            
-            //
             if (!isset($query[$field])) { continue; }
 
             //
@@ -164,7 +160,7 @@ trait ModelApi
      *
      * @param type $list
      */
-    public function import($model, $records, $map=null)
+    public function import($model, $records, $map = null)
     {
         //
         if (!$records || !is_array($records[0])) {
@@ -173,8 +169,6 @@ trait ModelApi
 
         //
         foreach($records as $record) {
-            
-            //
             $schema = [];
 
             //
@@ -233,8 +227,6 @@ trait ModelApi
 
         //
         foreach ($models as $model) {
-
-            //
             $table = $this->getTable($model);
 
             //
@@ -254,12 +246,10 @@ trait ModelApi
      *
      *
      */
-    public function dump($model=null) {
-
+    public function dump($model = null)
+    {
         //
         if ($model) {
-
-            //
             $all = $this->all($model);
 
             //

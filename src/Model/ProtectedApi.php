@@ -24,8 +24,8 @@ class ProtectedApi extends Record
      * @param type $fields
      * @return type
      */
-    protected static function loadByPrimaryKey($index, $fields=null) {
-
+    protected static function loadByPrimaryKey($index, $fields = null)
+    {
         //
         $table = static::getTable();
 
@@ -63,8 +63,8 @@ class ProtectedApi extends Record
      * @param type $fields
      * @return type
      */
-    protected static function loadByMainField($value, $fields=null) {
-
+    protected static function loadByMainField($value, $fields = null)
+    {
         //
         $table = static::getTable();
 
@@ -99,8 +99,8 @@ class ProtectedApi extends Record
      * @param type $fields
      * @return type
      */
-    protected static function loadByQuery($query, $fields=null) {
-
+    protected static function loadByQuery($query, $fields = null)
+    {
         //
         $table = static::getTable();
 
@@ -162,8 +162,8 @@ class ProtectedApi extends Record
      * @param type $map
      * @return type
      */
-    protected static function filter($values, $filter, $map=null) {
-
+    protected static function filter($values, $filter, $map = null)
+    {
         //
         $object = is_array($values) ? static::make($values,$map) : $values;
 
@@ -195,16 +195,14 @@ class ProtectedApi extends Record
         return $object;
     }
 
-
     /**
      *
      *
      * @param type $trace
      * @param type $error
      */
-    public static function error($trace, $error) {
-
-
+    public static function error($trace, $error)
+    {
         echo '<br>'
            . '<b>Fatal error</b>: '
            . $error->getMessage().' in method <strong>'.$trace[0]['function'].'</strong> '

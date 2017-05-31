@@ -20,7 +20,7 @@ trait SocketApi
      * @param  type $values
      * @return type
      */
-    public function execute($sql, $values=null)
+    public function execute($sql, $values = null)
     {        
         $this->log('execute', $sql, $values);
 
@@ -59,7 +59,7 @@ trait SocketApi
      * @param  type $sql
      * @return type
      */
-    public function getRow($sql, $params=null)
+    public function getRow($sql, $params = null)
     {
         $this->log('getRow', $sql, $params);
 
@@ -73,7 +73,7 @@ trait SocketApi
      * @param  string $sql
      * @return array
      */
-    public function getResults($sql, $params=null)
+    public function getResults($sql, $params = null)
     {
         $this->log('getResults', $sql, $params);
 
@@ -87,7 +87,7 @@ trait SocketApi
      * @param  string $sql
      * @return array
      */
-    public function getResultsAsObjects($sql, $params=null)
+    public function getResultsAsObjects($sql, $params = null)
     {
         $this->log('getResults', $sql, $params);
 
@@ -100,7 +100,7 @@ trait SocketApi
      * @param  type $sql
      * @return type
      */
-    public function getValue($sql, $params=null)
+    public function getValue($sql, $params = null)
     {
         $this->log('getValue', $sql, $params);
 
@@ -114,7 +114,7 @@ trait SocketApi
      * @param  array  $params
      * @return array
      */
-    public function getValues($sql, $params=null)
+    public function getValues($sql, $params = null)
     {
         $this->log('getValues', $sql, $params);
 
