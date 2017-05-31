@@ -18,9 +18,22 @@ trait UpdateApi
      */
     public function update($model, $query, $values = null, $value = null)
     {
+        $key = $this->getPrimaryKey($model);
+
+        if (!is_array($query)) {
+            $query = [
+                $key => $query
+            ];
+        }
+
         if (is_string($values)) {
-            $values = [$values => $map];
-            $map = null;
+            $values = [$values => $value];
+            $value  = null;
+        }
+
+        if (is_null($values)) {
+            $values = $query;
+            $query = [$key => $query[$key]];
         }
 
         $params   = [];
@@ -58,7 +71,6 @@ trait UpdateApi
                 $params[$field] = $value;
                 continue;
             }
-
             $token          = ':'.$field;
             $whereArray[]   = "{$field} = {$token}";
             $params[$token] = $value;

@@ -1,17 +1,15 @@
 <?php
 
-namespace Javanile\Moldable\Tests\Parser;
+namespace Javanile\Moldable\Tests\Writer;
 
 use Javanile\Producer;
-use Javanile\Moldable\Parser\Mysql;
+use Javanile\Moldable\Writer\MysqlWriter;
 use PHPUnit\Framework\TestCase;
 
 Producer::addPsr4(['Javanile\\Moldable\\Tests\\' => __DIR__.'/../']);
 
 final class MysqlTest extends TestCase
 {
-    use DatabaseTrait;
-
     public function testDatabaseSetDebug()
     {
         $schema = [
@@ -20,7 +18,7 @@ final class MysqlTest extends TestCase
             ]
         ];
 
-        $parser = new Mysql();
+        $parser = new MysqlParser();
 
         $parser->parse($parser);
 

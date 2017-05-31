@@ -1,17 +1,12 @@
 <?php
 /**
- * ModelProtectedAPI.php
+ * Trait with utility methods to handle errors.
  *
- * PHP version 5
+ * PHP version 5.6
  *
- * @category  tag in file comment
- * @package   tag in file comment
- * @license   tag in file comment
- * @link      ciao
- * @author    Francesco Bianco <bianco@javanile.org>
-\*/
-
-namespace Javanile\SchemaDB\Model;
+ * @author Francesco Bianco
+ */
+namespace Javanile\Moldable\Model;
 
 trait LoadApi
 {
@@ -21,10 +16,10 @@ trait LoadApi
      * @param  type $id
      * @return type
      */
-    public static function load($query, $fields=null)
+    public static function load($query, $fields = null)
     {
         //
-        static::applyTable();
+        static::applySchema();
 
         //
         if (is_array($query)) {
@@ -66,10 +61,10 @@ trait LoadApi
 
         // parse SQL select fields
         $selectFields = static::getDatabase()
-                     -> getWriter()
-                     -> selectFields($requestedFields, $alias, $join);
+            -> getWriter()
+            -> selectFields($requestedFields, $alias, $join);
 
-                // prepare SQL query
+        // prepare SQL query
         $sql = " SELECT {$selectFields} "
              . "   FROM {$table} AS {$alias} {$join} "
              . "  WHERE {$alias}.{$key}=:index "
@@ -84,7 +79,8 @@ trait LoadApi
             'SingleRow'     => true,
             'SingleValue'   => is_string($fields),
             'CastToObject'  => is_null($fields),
-            'ExpanseObject' => static::isReadable(),
+            //'ExpanseObject' => static::isReadable(),
+            'ExpanseObject' => false,
         ]);
              
         //

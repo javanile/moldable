@@ -8,7 +8,7 @@
  */
 namespace Javanile\Moldable\Parser\Mysql;
 
-trait Datetime
+trait DatetimeTrait
 {
     /**
      *

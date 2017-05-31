@@ -8,7 +8,7 @@
  */
 namespace Javanile\Moldable\Parser\Mysql;
 
-trait Relation
+trait RelationTrait
 {
     /**
      *
@@ -27,7 +27,7 @@ trait Relation
         $attributes['Class'] = $params[0];
 
         //
-        $attributes['Relation']    = '1:1';
+        $attributes['Relation'] = '1:1';
 
         //
         return $attributes;

@@ -1,10 +1,12 @@
 <?php
 /**
+ * Trait with utility methods to handle errors.
  *
+ * PHP version 5.6
  *
+ * @author Francesco Bianco
  */
-
-namespace Javanile\SchemaDB\Model;
+namespace Javanile\Moldable\Model;
 
 trait FetchApi
 { 
@@ -15,10 +17,10 @@ trait FetchApi
      */
     protected static function fetch(
         $sql,
-        $params=null,
-        $singleRecord=false,
-        $singleValue=false,
-        $casting=true
+        $params = null,
+        $singleRecord = false,
+        $singleValue = false,
+        $casting = true
     ) {
         // requested a single record
         if ($singleRecord && !$singleValue && $casting) {

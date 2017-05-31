@@ -92,11 +92,16 @@ class Functions
      */
     public static function applyConventions($convention, $string)
     {
+        //
         switch ($convention) {
-            case 'camel-case': return Stringy::create($string)->camelize();
-            case 'upper-camel-case': return Stringy::create($string)->upperCamelize();
-            case 'underscore': return Stringy::create($string)->underscored();
-            default: return $string;
+            case 'camel-case':
+                return Stringy::create($string)->camelize();
+            case 'upper-camel-case':
+                return Stringy::create($string)->upperCamelize();
+            case 'underscore':
+                return Stringy::create($string)->underscored();
+            default:
+                return $string;
         }
     }
 

@@ -8,14 +8,13 @@
  */
 namespace Javanile\Moldable\Parser\Mysql;
 
-trait Number
+trait NumberTrait
 {
     /**
      *
      *
      */
-    private static function
-    getNotationAttributesBoolean($notation, $field, $before)
+    private function getNotationAttributesBoolean($notation, $field, $before)
     {
         //
         $attributes = static::getNotationAttributesCommon($field, $before);
@@ -36,23 +35,14 @@ trait Number
     /**
      *
      */
-    private static function
-    getNotationAttributesInteger($notation, $field, $before)
+    private function getNotationAspectsInteger($notation, $aspects)
     {
         //
-        $attributes = static::getNotationAttributesCommon($field, $before);
+        $aspects['Type'] = 'int(11)';
+        $aspects['Default'] = (int) $notation;
+        $aspects['Null'] = 'NO';
 
-        //
-        $attributes['Type']    = 'int(11)';
-
-        //
-        $attributes['Default']    = (int) $notation;
-
-        //
-        $attributes['Null'] = 'NO';
-
-        //
-        return $attributes;
+        return $aspects;
     }
 
     /**

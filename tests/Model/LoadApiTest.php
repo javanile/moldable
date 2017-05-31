@@ -1,13 +1,14 @@
 <?php
 
-namespace Javanile\Moldable\Tests;
+namespace Javanile\Moldable\Tests\Model;
 
 use Javanile\Producer;
 use Javanile\Moldable\Database;
 use Javanile\Moldable\Tests\Sample\People;
 use PHPUnit\Framework\TestCase;
+use Javanile\Moldable\Tests\DatabaseTrait;
 
-Producer::addPsr4(['Javanile\\Moldable\\Tests\\' => __DIR__]);
+Producer::addPsr4(['Javanile\\Moldable\\Tests\\' => __DIR__.'/../']);
 
 final class LoadApiTest extends TestCase
 {

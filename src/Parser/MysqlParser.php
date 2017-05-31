@@ -6,13 +6,18 @@
  *
  * @author Francesco Bianco
  */
-namespace Javanile\Moldable\Parser\Mysql;
+namespace Javanile\Moldable\Parser;
 
-class Mysql extends Parser
+class MysqlParser extends Parser
 {
-    use Number;
-    use Relation;
-    use Datetime;
+    use Mysql\KeyTrait;
+    use Mysql\TypeTrait;
+    use Mysql\ValueTrait;
+    use Mysql\NumberTrait;
+    use Mysql\StringTrait;
+    use Mysql\CommonTrait;
+    use Mysql\RelationTrait;
+    use Mysql\DatetimeTrait;
 
     /**
      * parse a multi-table schema to sanitize end explode implicit info
@@ -23,12 +28,12 @@ class Mysql extends Parser
     public function parse(&$schema)
     {
         // loop throh tables on the schema
-        foreach($schema as &$table) {
+        foreach ($schema as &$table) {
             static::parseTable($table);
         }
 
         // loop throh tables on the schema
-        foreach($schema as &$table) {
+        foreach ($schema as &$table) {
             foreach($table as $aspects) {
                 if (isset($aspects['Relation']) && $aspects['Relation'] == 'many-to-many') {
                     $schema['Cioa'] = [[]];
@@ -75,8 +80,7 @@ class Mysql extends Parser
         // look-to type
         switch ($type) {
             case 'schema':
-                return static::getNotationAttributesSchema
-                    ($notation, $field, $before);
+                return $this->getNotationAspectsSchema($notation, $aspects);
                 
             // notation contain a field attributes written in json 
             case 'json':
@@ -105,13 +109,11 @@ class Mysql extends Parser
 
             //
             case 'primary_key':
-                return static::getNotationAttributesPrimaryKey
-                    ($notation, $field, $before, $params);
+                return $this->getNotationAspectsPrimaryKey($notation, $aspects, $params);
                
             //
             case 'string':
-                return static::getNotationAttributesString
-                    ($notation, $field, $before);
+                return $this->getNotationAspectsString($notation, $aspects);
                
             //
             case 'boolean':
@@ -120,8 +122,7 @@ class Mysql extends Parser
 
             //
             case 'integer':
-                return static::getNotationAttributesInteger
-                    ($notation, $field, $before);
+                return $this->getNotationAspectsInteger($notation, $aspects);
                 
             //
             case 'float':
@@ -169,6 +170,7 @@ class Mysql extends Parser
     private function getNotationCommonAspects($field, $before)
     {
         $aspects = [
+            'Field'    => null,
             'Key'      => '',
             'Type'     => '',
             'Null'     => 'YES',

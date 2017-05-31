@@ -12,11 +12,14 @@ use Javanile\Moldable\Notations;
 
 class Readable implements Notations
 {
+    use Model\LoadApi;
+    use Model\FetchApi;
     use Model\ErrorApi;
     use Model\ClassApi;
     use Model\ModelApi;
     use Model\TableApi;
     use Model\FieldApi;
+    use Model\PublicApi;
     use Model\SchemaApi;
     use Model\DatabaseApi;
     #use Model\LoadApi;
@@ -41,7 +44,7 @@ class Readable implements Notations
      */
     static $__config = [
         'adamant' => true,
-        'table-name-conventions' => 'underscore',
+        'table-name-conventions' => null,
     ];
 
     /**

@@ -1,12 +1,14 @@
 <?php
 /**
- * 
- * 
+ * Class that handle a connection with database.
+ *
+ * PHP version 5.6
+ *
+ * @author Francesco Bianco
  */
+namespace Javanile\Moldable\Writer;
 
-namespace Javanile\Moldable\Writer\Mysql;
-
-class Mysql
+class MysqlWriter extends Writer
 {
     //
     private static $defaults = array(
@@ -291,4 +293,3 @@ class Mysql
         return '`'.$name.'`';
     }
 }
-

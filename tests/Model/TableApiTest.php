@@ -30,11 +30,11 @@ final class TableApiTest extends TestCase
 
         $table = People::getTable();
 
-        $this->assertEquals($table, 'prefix_people');
+        $this->assertEquals($table, 'prefix_People');
 
         $table = PlayerTeam::getTable();
 
-        $this->assertEquals($table, 'prefix_player_team');
+        $this->assertEquals($table, 'prefix_PlayerTeam');
 
         $table = ItemCustomField::getTable();
 

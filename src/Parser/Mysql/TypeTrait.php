@@ -8,37 +8,33 @@
  */
 namespace Javanile\Moldable\Parser\Mysql;
 
-trait Type
+trait TypeTrait
 {
     /**
-     *
+     * Get type of a notation
      *
      * @param type $notation
+     * @param type $params
      * @return string
      */
-    public static function getNotationType($notation, &$params=null)
+    public static function getNotationType($notation, &$params = null)
     {
-        $type   = gettype($notation);
+        $type = gettype($notation);
         $params = null;
 
         switch ($type) {
-            //
-            case 'string': return static::getNotationTypeString($notation, $params);
-
-            //
-            case 'array': return static::getNotationTypeArray($notation);
-
-            //
-            case 'integer': return 'integer';
-
-            //
-            case 'double': return 'float';
-
-            //
-            case 'boolean': return 'boolean';
-
-            //
-            case 'NULL': return 'null';
+            case 'string':
+                return static::getNotationTypeString($notation, $params);
+            case 'array':
+                return static::getNotationTypeArray($notation);
+            case 'integer':
+                return 'integer';
+            case 'double':
+                return 'float';
+            case 'boolean':
+                return 'boolean';
+            case 'NULL':
+                return 'null';
         }
     }
 

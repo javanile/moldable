@@ -1,13 +1,14 @@
 <?php
 
-namespace Javanile\Moldable\Tests;
+namespace Javanile\Moldable\Tests\Model;
 
 use Javanile\Producer;
 use Javanile\Moldable\Database;
 use Javanile\Moldable\Tests\Sample\People;
 use PHPUnit\Framework\TestCase;
+use Javanile\Moldable\Tests\DatabaseTrait;
 
-Producer::addPsr4(['Javanile\\Moldable\\Tests\\' => __DIR__]);
+Producer::addPsr4(['Javanile\\Moldable\\Tests\\' => __DIR__.'/../']);
 
 final class UpdateApiTest extends TestCase
 {
@@ -31,7 +32,7 @@ final class UpdateApiTest extends TestCase
             'age'     => 18,
         ]);
 
-        $sql = "SELECT age FROM prefix_people WHERE id = 1";
+        $sql = "SELECT age FROM prefix_People WHERE id = 1";
 
         // update by id inline
         People::update(1, 'age', 19);
@@ -63,6 +64,6 @@ final class UpdateApiTest extends TestCase
 
         // from db update by query and values
         $db->update('People', ['name' => 'Frank'], ['age' => 24]);
-        $this->assertEquals($db->getValue($sql), 25);
+        $this->assertEquals($db->getValue($sql), 24);
     }
 }

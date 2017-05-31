@@ -1,10 +1,12 @@
 <?php
 /**
- * 
- * 
+ * Trait with utility methods to handle errors.
+ *
+ * PHP version 5.6
+ *
+ * @author Francesco Bianco
  */
-
-namespace Javanile\SchemaDB\Model;
+namespace Javanile\Moldable\Model;
 
 use Javanile\SchemaDB\Functions;
 
@@ -29,7 +31,7 @@ trait PublicApi
      * @param type $map
      * @return \static
      */
-    public static function make($values=null, $map=null, $prefix=null)
+    public static function make($values = null, $map = null, $prefix = null)
     {
         //
         $object = new static();

@@ -8,7 +8,7 @@
  */
 namespace Javanile\Moldable\Parser\Mysql;
 
-trait Common
+trait CommonTrait
 {
     /**
      *
@@ -38,19 +38,14 @@ trait Common
      *
      *
      */
-    private static function
-    getNotationAttributesSchema($notation, $field, $before)
+    private function getNotationAspectsSchema($notation, $aspects)
     {
-        // set with default attributes
-        $attr = static::getNotationAttributesCommon($field, $before);
-
         // override default notation schema passed
         foreach ($notation as $key => $value) {
-            $attr[$key] = $value;
+            $aspects[$key] = $value;
         }
 
-        //
-        return $attr;
+        return $aspects;
     }
 
     /**
