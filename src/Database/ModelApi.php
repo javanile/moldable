@@ -4,17 +4,14 @@
  *
  * PHP version 5.4
  *
- * @author Francesco Bianco 
+ * @author Francesco Bianco
  */
-namespace Javanile\SchemaDB\Database;
+namespace Javanile\Moldable\Database;
 
 use Javanile\SchemaDB\Functions;
 
 trait ModelApi 
 {
-    use \Javanile\SchemaDB\Database\FieldApi;
-    use \Javanile\SchemaDB\Database\ModelUpdateApi;
-
     /**
      * Retrieve the table-name of specifc model.
      *
@@ -254,10 +251,7 @@ trait ModelApi
 
             //
             Functions::gridDump($model, $all);
-        }
-
-        //
-        else {
+        } else {
             $this->dumpSchema();
         }
     }

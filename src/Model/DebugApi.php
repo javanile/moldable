@@ -4,7 +4,7 @@
  *
  */
 
-namespace Javanile\SchemaDB\Model;
+namespace Javanile\Moldable\Model;
 
 use Javanile\SchemaDB\Functions;
 
@@ -19,7 +19,17 @@ trait DebugApi
         //
         static::getDatabase()->setDebug($flag);
     }
-    
+
+    /**
+     *
+     *
+     */
+    public static function getDebug()
+    {
+        //
+        return static::getDatabase()->getDebug();
+    }
+
     /**
      *
      * @param type $list

@@ -10,16 +10,22 @@ namespace Javanile\Moldable\Database;
 
 use Javanile\Moldable\Functions;
 
-trait ErrorApi
+trait CacheApi
 {
+    /**
+     *
+     */
+    protected $_cache = [];
+
     /**
      * Trigger a connection-with-database error.
      *
      * @param object $exception Exception catched with try-catch
      */
-    public function errorConnect($exception)
+    public function setCache($key, $value)
     {
-        Functions::throwException("Moldable connection error, ", $exception, $this->_trace, 0);
+        $this->_cache[$key] = $value;
+        //Functions::throwException("Moldable connection error, ", $exception, $this->_trace, 0);
     }
 
     /**
@@ -27,11 +33,9 @@ trait ErrorApi
      *
      * @param object $exception Exception catched with try-catch
      */
-    public function errorExecute($exception)
+    public function getCache($key)
     {
-        $backtrace = debug_backtrace();
-
-        Functions::throwException("Moldable query error, ", $exception, $backtrace, 2);
+        return $this->_cache[$key];
     }
 
     /**
@@ -39,10 +43,8 @@ trait ErrorApi
      *
      * @param object $exception Exception catched with try-catch
      */
-    public function errorHandler($message)
+    public function hasCache($key)
     {
-        $backtrace = debug_backtrace();
-
-        Functions::throwException("Moldable error, ", $message, $backtrace, 1);
+        return isset($this->_cache[$key]);
     }
 }

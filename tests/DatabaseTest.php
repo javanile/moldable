@@ -131,4 +131,18 @@ final class DatabaseTest extends TestCase
 
         $this->assertEquals($flag, true);
     }
+
+    public function testDatabaseCache()
+    {
+        $db = new Database([
+            'host' => $GLOBALS['DB_HOST'],
+            'dbname' => $GLOBALS['DB_NAME'],
+            'username' => $GLOBALS['DB_USER'],
+            'password' => $GLOBALS['DB_PASS'],
+        ]);
+
+        $db->setCache('key', 'value');
+        $this->assertEquals($db->hasCache('key'), true);
+        $this->assertEquals($db->getCache('key'), 'value');
+    }
 }

@@ -19,8 +19,9 @@ namespace Javanile\Moldable;
  */
 class Database implements Notations
 {
-    #use Database\ModelApi;
+    use Database\ModelApi;
     use Database\ErrorApi;
+    use Database\CacheApi;
     use Database\SocketApi;
     use Database\SchemaApi;
     use Database\FieldApi;

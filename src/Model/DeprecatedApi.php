@@ -4,7 +4,7 @@
  *
  */
 
-namespace Javanile\SchemaDB\Model;
+namespace Javanile\Moldable\Model;
 
 trait DeprecatedApi
 {    

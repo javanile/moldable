@@ -8,10 +8,9 @@ use PHPUnit\Framework\TestCase;
 
 Producer::addPsr4(['Javanile\\Moldable\\Tests\\' => __DIR__.'/../']);
 
-final class MysqlTest extends TestCase
+final class MysqlWriterTest extends TestCase
 {
-    /*
-    public function testDatabaseSetDebug()
+    public function testMysqlWriter()
     {
         $schema = [
             'People' => [
@@ -19,18 +18,10 @@ final class MysqlTest extends TestCase
             ]
         ];
 
-        $parser = new MysqlParser();
+        $writer = new MysqlWriter();
 
-        $parser->parse($parser);
+        $column = $writer->columnDefinition(['Type' => 'int(11)']);
 
-        $this->assertEquals($schema, [
-            'People' => [
-                'name' => [
-                    'Field'  => 'name',
-                    'Before' => false,
-                ],
-            ]
-        ]);
+        $this->assertEquals($column, "int(11) NULL");
     }
-    */
 }

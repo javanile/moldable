@@ -54,35 +54,20 @@ trait SchemaApi
     {
         //
         $sql = "DESC `{$table}`";
-
-        //
         $fields = $this->getResults($sql);
-
-        //
         $desc = array();
-
-        //
         $count = 0;
-
-        //
         $before = false;
 
         //
         foreach ($fields as $field) {
-
-            //
-            $field['First']  = $count === 0;
+            $field['First'] = $count === 0;
             $field['Before'] = $before;
-
-            //
             $desc[$field['Field']] = $field;
-
-            //
             $before = $field['Field'];
             $count++;
         }
 
-        //
         return $desc;
     }
 
@@ -516,26 +501,15 @@ trait SchemaApi
         //
         if (is_null($model)) {
             $this->info($this->getModels());
-        }
-
-        //
-        else if (is_array($model) && count($model) > 0) {
+        } else if (is_array($model) && count($model) > 0) {
             foreach ($model as $m) {
                 $this->info($m);
             }            
-        }
-
-        //
-        else if (is_array($model) && count($model) == 0) {
+        } else if (is_array($model) && count($model) == 0) {
             echo '<pre><table border="1" style="'.$style.'">'
                . '<tr><th>No database tables</th></tr></table></pre>'
                . '</table></pre>';
-        }
-
-        //
-        else {
-
-            //
+        } else {
             $desc = $this->desc($model);
 
             //
@@ -544,8 +518,6 @@ trait SchemaApi
 
             //
             if (isset($desc[$model])) {
-
-                //
                 $first = key($desc[$model]);
 
                 //
@@ -560,8 +532,6 @@ trait SchemaApi
                 echo '</tr>';
 
                 foreach ($desc[$model] as $field => $attributes) {
-
-                    //
                     echo '<tr><th>'.$field.'</th>';
 
                     //
@@ -610,15 +580,8 @@ trait SchemaApi
             echo '<table border="1" style="'.$style.'">'
                . '<tr><th>No database tables</th></tr></table></pre>'
                . '</table>';
-        }
-
-        //
-        else {
-
-            //
+        } else {
             foreach ($schema as $table => $fields) {
-
-                //
                 echo '<table border="1" style="'.$style.'">'
                    . '<tr><th colspan="9">'.$table.'</th></tr><tr><td>&nbsp;</td>';
 
@@ -635,8 +598,6 @@ trait SchemaApi
 
                 //
                 foreach ($fields as $field => $attributes) {
-
-                    //
                     echo '<tr><th>'.$field.'</th>';
 
                     //

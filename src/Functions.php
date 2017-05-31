@@ -108,36 +108,18 @@ class Functions
     }
 
     /**
-     * 
+     * Generate banchmark line
      * 
      * 
      */
-    public static function runTest($name)
-    {
-        include __DIR__.'/../../../tests/'.$name.'.php';
-    }
-
     public static function bachmark($name)
     {
-        //
         $delta = 'asd';
-
-            //
         $style = 'background:#333;'
-        . 'color:#fff;'
-        . 'padding:2px 6px 3px 6px;'
-        . 'border:1px solid #000';
-
-            //
-        $infoline = 'Time: '.$delta.' '
-        . 'Mem: ';
-
-            //
-        $html = '<pre style="'.$style.'">'.$infoline.'</pre>';
-
-            //
-        return $html;
-
+            . 'color:#fff;'
+            . 'padding:2px 6px 3px 6px;'
+            . 'border:1px solid #000';
+        $infoline = 'Time: '.$delta.' '. 'Mem: ';
+        return '<pre style="'.$style.'">'.$infoline.'</pre>';
     }
-
 }

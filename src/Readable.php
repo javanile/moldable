@@ -13,6 +13,9 @@ use Javanile\Moldable\Notations;
 class Readable implements Notations
 {
     use Model\LoadApi;
+    use Model\ReadApi;
+    use Model\JoinApi;
+    use Model\DebugApi;
     use Model\FetchApi;
     use Model\ErrorApi;
     use Model\ClassApi;
@@ -22,8 +25,8 @@ class Readable implements Notations
     use Model\PublicApi;
     use Model\SchemaApi;
     use Model\DatabaseApi;
+    use Model\DeprecatedApi;
     #use Model\LoadApi;
-    #use Model\ReadApi;
     #use Model\JoinApi;
     #use Model\FieldApi;
     #use Model\FetchApi;

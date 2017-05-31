@@ -13,6 +13,7 @@ use Javanile\Moldable\Readable;
 class Storable extends Readable
 {
     use Model\UpdateApi;
+    use Model\ManageApi;
 
     /**
      * Configuration array.

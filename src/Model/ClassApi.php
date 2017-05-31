@@ -10,7 +10,7 @@ namespace Javanile\Moldable\Model;
 
 trait ClassApi
 {
-	/**
+    /**
      * Global setting class attributes
      *
      * @var type

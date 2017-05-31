@@ -24,22 +24,15 @@ trait FetchApi
     ) {
         // requested a single record
         if ($singleRecord && !$singleValue && $casting) {
-
-            //
             $record = static::getDatabase()->getRow($sql, $params);
-
-            //
             return $record ? static::make($record): null;
-        }
-
-        // requested a multiple records many value per records
-        else if (!$singleRecord && !$singleValue) {
-
-            //
+        } else if (!$singleRecord && !$singleValue) {
+            // requested a multiple records many value per records
             $records = static::getDatabase()->getResults($sql, $params);
 
-            //
-            if (!$records) { return; }
+            if (!$records) {
+                return;
+            }
 
             //
             if ($casting) {
@@ -48,17 +41,12 @@ trait FetchApi
                 }
             }
 
-            //
             return $records;
-        }
 
-        // requested a single value of a single record
-        else if ($singleRecord && $singleValue) {
-
-            //
+        } else if ($singleRecord && $singleValue) {
+            // requested a single value of a single record
             $value = static::getDatabase()->getValue($sql, $params);
 
-            //
             return $value;
         }
     }

@@ -84,28 +84,23 @@ class MysqlParser extends Parser
                 
             // notation contain a field attributes written in json 
             case 'json':
-                return static::getNotationAttributesJson
-                    ($notation, $field, $before);
+                return static::getNotationAttributesJson($notation, $field, $before);
 
             // notation contain a date format string
             case 'date':
-                return static::getNotationAttributesDate
-                    ($notation, $field, $before);
+                return static::getNotationAttributesDate($notation, $field, $before);
 
             // notation contain a date format string
             case 'time':
-                return static::getNotationAttributesTime
-                    ($notation, $field, $before);
+                return static::getNotationAttributesTime($notation, $field, $before);
 
             //
             case 'datetime':
-                return static::getNotationAttributesDatetime
-                    ($notation, $field, $before);
+                return static::getNotationAttributesDatetime($notation, $field, $before);
             
             //
             case 'timestamp':
-                return static::getNotationAttributesTimestamp
-                    ($notation, $field, $before);
+                return static::getNotationAttributesTimestamp($notation, $field, $before);
 
             //
             case 'primary_key':
@@ -117,8 +112,7 @@ class MysqlParser extends Parser
                
             //
             case 'boolean':
-                return static::getNotationAttributesBoolean
-                    ($notation, $field, $before);
+                return static::getNotationAttributesBoolean($notation, $field, $before);
 
             //
             case 'integer':
@@ -126,38 +120,31 @@ class MysqlParser extends Parser
                 
             //
             case 'float':
-                return static::getNotationAttributesFloat
-                    ($notation, $field, $before);
+                return static::getNotationAttributesFloat($notation, $field, $before);
             
             //
             case 'double':
-                return static::getNotationAttributesDouble
-                    ($notation, $field, $before);
+                return static::getNotationAttributesDouble($notation, $field, $before);
 
             //
             case 'enum':
-                return static::getNotationAttributesEnum
-                    ($notation, $field, $before);
+                return static::getNotationAttributesEnum($notation, $field, $before);
 
             //
             case 'class':
-                return static::getNotationAttributesClass
-                    ($notation, $field, $before, $params);
+                return static::getNotationAttributesClass($notation, $field, $before, $params);
 
             //
             case 'vector':
-                return static::getNotationAttributesVector
-                    ($notation, $field, $before, $params);
+                return static::getNotationAttributesVector($notation, $field, $before, $params);
 
             //
             case 'matchs':
-                return static::getNotationAttributesMatchs
-                    ($notation, $field, $before, $params);
+                return static::getNotationAttributesMatchs($notation, $field, $before, $params);
 
             //
             case 'null':
-                return static::getNotationAttributesNull
-                    ($notation, $field, $before);
+                return static::getNotationAttributesNull($notation, $field, $before);
 
             //
             default: trigger_error('Error parse type: '.$field.' ('.$type.')');

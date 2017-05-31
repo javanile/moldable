@@ -13,4 +13,6 @@ final class People extends Storable
     public $surname = "";
 
     public $age = 0;
+
+    public $address = 0;
 }

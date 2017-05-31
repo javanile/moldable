@@ -6,9 +6,9 @@
  *
  * @author Francesco Bianco
  */
-namespace Javanile\SchemaDB\Model;
+namespace Javanile\Moldable\Model;
 
-use Javanile\SchemaDB\Functions;
+use Javanile\Moldable\Functions;
 
 trait ManageApi 
 {

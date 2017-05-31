@@ -18,7 +18,7 @@ class MysqlWriter extends Writer
     );
 
     //
-    public static function columnDefinition($aspects, $order=true)
+    public function columnDefinition($aspects, $order = true)
     {
         $Key = isset($aspects['Key'])
             && $aspects['Key'] == 'PRI'
@@ -180,8 +180,6 @@ class MysqlWriter extends Writer
 
         //
         foreach ($fields as $field => $definition) {
-
-            //
             if (is_numeric($field)) {
                 $field = $definition;
                 $definition = null;
@@ -204,8 +202,6 @@ class MysqlWriter extends Writer
 
             //
             if (is_array($definition)) {
-
-                //
                 $class = $definition['Class'];
 
                 //
@@ -226,6 +222,10 @@ class MysqlWriter extends Writer
 
                 //
                 $fieldFrom = $definition['FieldFrom'];
+
+                if ($fieldFrom == '__FIELD__') {
+                    $fieldFrom = $field;
+                }
 
                 //
                 $join .= " LEFT JOIN {$joinTable} AS {$joinAlias}"
@@ -278,7 +278,7 @@ class MysqlWriter extends Writer
      *
      *
      */
-    protected static function quote($name) {
+    private function quote($name) {
         return '`'.$name.'`';
     }
 }

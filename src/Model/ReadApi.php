@@ -11,7 +11,7 @@
  * @author    Francesco Bianco <bianco@javanile.org>
 \*/
 
-namespace Javanile\SchemaDB\Model;
+namespace Javanile\Moldable\Model;
 
 trait ReadApi
 {
@@ -21,10 +21,10 @@ trait ReadApi
      * @param type $fields
      * @return type
      */
-    public static function all($fields=null)
+    public static function all($fields = null)
     {
         //
-        static::applyTable();
+        static::applySchema();
 
         //
         if (isset($fields['limit'])) {
@@ -45,8 +45,8 @@ trait ReadApi
         
         //
         $selectFields = static::getDatabase()
-                     -> getWriter()
-                     -> selectFields($fields, $class, $join);
+            ->getWriter()
+            ->selectFields($fields, $class, $join);
         
         //
         $sql = "SELECT {$selectFields} "
@@ -63,10 +63,7 @@ trait ReadApi
                 is_string($fields),
                 is_null($fields)
             );
-        }
-
-        //
-        catch (DatabaseException $ex) {
+        } catch (DatabaseException $ex) {
             static::error(debug_backtrace(), $ex);
         }
 

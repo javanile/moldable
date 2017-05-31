@@ -14,6 +14,38 @@ final class StorableTest extends TestCase
 {
     use DatabaseTrait;
 
+    public function testDebugMode()
+    {
+        $db = new Database([
+            'host'     => $GLOBALS['DB_HOST'],
+            'dbname'   => $GLOBALS['DB_NAME'],
+            'username' => $GLOBALS['DB_USER'],
+            'password' => $GLOBALS['DB_PASS'],
+        ]);
+
+        People::resetClass();
+
+        People::setDebug(true);
+
+        $this->assertEquals(People::getDebug(), true);
+    }
+
+    public function testBuild()
+    {
+        $db = new Database([
+            'host'     => $GLOBALS['DB_HOST'],
+            'dbname'   => $GLOBALS['DB_NAME'],
+            'username' => $GLOBALS['DB_USER'],
+            'password' => $GLOBALS['DB_PASS'],
+        ]);
+
+        $frank = People::build([
+            'name' => 'Frank',
+        ]);
+
+        $this->assertEquals($frank->name, 'Frank');
+    }
+
     public function testSimpleStorable()
     {
         $db = new Database([
