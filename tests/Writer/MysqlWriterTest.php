@@ -10,6 +10,7 @@ Producer::addPsr4(['Javanile\\Moldable\\Tests\\' => __DIR__.'/../']);
 
 final class MysqlTest extends TestCase
 {
+    /*
     public function testDatabaseSetDebug()
     {
         $schema = [
@@ -31,4 +32,5 @@ final class MysqlTest extends TestCase
             ]
         ]);
     }
+    */
 }
