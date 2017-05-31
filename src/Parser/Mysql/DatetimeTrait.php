@@ -46,9 +46,11 @@ trait DatetimeTrait
      *
      *
      */
-    private static function
-    getNotationAttributesDatetime($notation, $field, $before)
-    {
+    private static function getNotationAttributesDatetime(
+        $notation,
+        $field,
+        $before
+    ) {
         //
         $attributes = static::getNotationAttributesCommon($field, $before);
 
@@ -65,9 +67,11 @@ trait DatetimeTrait
     /**
      *
      */
-    private static function
-    getNotationAttributesTimestamp($notation, $field, $before)
-    {
+    private static function getNotationAttributesTimestamp(
+        $notation,
+        $field,
+        $before
+    ) {
         //
         $attributes = static::getNotationAttributesCommon($field, $before);
 
@@ -84,7 +88,9 @@ trait DatetimeTrait
         return $attributes;
     }
 
-    // printout database status/info
+    /**
+     * printout database status/info
+     */
     public static function parseDate($date)
     {
         //
@@ -95,7 +101,9 @@ trait DatetimeTrait
         }
     }
 
-    // printout database status/info
+    /**
+     * printout database status/info
+     */
     public static function parseDatetime($datetime)
     {
         if ($datetime != '0000-00-00 00:00:00') {

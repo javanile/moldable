@@ -33,14 +33,9 @@ trait FieldApi
     {
         //
         foreach (static::getSchema() as $field => $aspects) {
-
-            //
             if (isset($aspects['Class']) && $aspects['Relation'] == '1:1') {
-
-                //
                 $class = $aspects['Class'];
 
-                //
                 $this->{$field} = $class::make(
                     $values,
                     $map,
@@ -83,8 +78,6 @@ trait FieldApi
 
         // retrieve value from class setting definition
         if (!static::hasClassAttribute($attribute)) {
-
-            //
             $key = false;
 
             //
@@ -92,8 +85,6 @@ trait FieldApi
 
             //
             foreach ($schema as $field => &$attributes) {
-
-                //
                 if ($attributes['Key'] == 'PRI') {
 
                     //
@@ -140,8 +131,6 @@ trait FieldApi
 
         // retrieve value from class setting definition
         if (!static::hasClassAttribute($attribute)) {
-
-            //
             $mainField = false;
 
             //
@@ -211,8 +200,6 @@ trait FieldApi
 
         // retrieve value from class setting definition
         if (!static::hasClassAttribute($attribute)) {
-
-            //
             $fields = array();
 
             //
@@ -262,9 +249,7 @@ trait FieldApi
 
         // retrieve value from class setting definition
         if (!static::hasClassAttribute($attribute)) {
-        
-            //
-            $class = static::getClass(); 
+            $class = static::getClass();
 
             //
             $reflection = new \ReflectionClass($class);

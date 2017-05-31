@@ -1,9 +1,11 @@
 <?php
 /**
- * 
- * 
+ * Class that handle a connection with database.
+ *
+ * PHP version 5.6
+ *
+ * @author Francesco Bianco
  */
-
 namespace Javanile\SchemaDB\Model;
 
 use Javanile\SchemaDB\Functions;
@@ -45,26 +47,23 @@ trait ManageApi
     {
         // source is array loop throut records
         foreach ($source as $record) {
-
             // insert single record
             static::insert($record);
         }
     }
     
     /**
+     * Insert persistent object in db and return it.
      *
      * @param type $values
      * @return type
      */
     public static function insert($values)
     {
-        //
+        // Make object and insert into DB
         $object = static::make($values);
-        
-        //
         $object->storeInsert();
 
-        //
         return $object;
     }
     
@@ -76,53 +75,47 @@ trait ManageApi
     public static function delete($query)
     {
         //
-        static::applyTable();
+        static::applySchema();
 
         //
-        $t = static::getTable();
+        $table = static::getTable();
 
         //
         if (is_array($query)) {
-
-            // where block for the query
-            $h = array();
+            $whereArray = array();
 
             //
             if (isset($query['where'])) {
-                $h[] = $query['where'];
+                $whereArray[] = $query['where'];
             }
 
             //
             foreach ($query as $k=>$v) {
                 if ($k!='sort'&&$k!='where') {
-                    $h[] = "{$k}='{$v}'";
+                    $whereArray[] = "{$k}='{$v}'";
                 }
             }
 
             //
-            $w = count($h)>0 ? 'WHERE '.implode(' AND ',$h) : '';
-
-            //
-            $s = "DELETE FROM {$t} {$w}";
+            $where = count($h)>0 ? 'WHERE '.implode(' AND ', $whereArray) : '';
+            $sql = "DELETE FROM {$table} {$where}";
 
             // execute query
-            static::getDatabase()->execute($s);
+            static::getDatabase()->execute($sql);
         }
 
         //
         else if ($query > 0) {
-
-            // prepare sql query
-            $k = static::getPrimaryKey();
+            $key = static::getPrimaryKey();
 
             //
-            $i = (int) $query;
+            $index = (int) $query;
 
             //
-            $q = "DELETE FROM {$t} WHERE {$k}='{$i}' LIMIT 1";
+            $sql = "DELETE FROM {$table} WHERE {$key}='{$index}' LIMIT 1";
 
             // execute query
-            static::getDatabase()->execute($q);
+            static::getDatabase()->execute($sql);
         }
     }
     
@@ -134,18 +127,13 @@ trait ManageApi
      */
     public static function submit($query)
     {
-        //
         $object = static::exists($query);
 
-        //
         if (!$object) {
             $object = static::make($query);
             $object->store();
         }
 
-        //
         return $object;
     }
-    
-    
 }

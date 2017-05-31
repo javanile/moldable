@@ -24,7 +24,7 @@ trait DebugApi
      *
      * @param type $list
      */
-    public static function dump($list='__null__')
+    public static function dump($list = '__null__')
     {       
         //
         Functions::gridDump(
@@ -70,5 +70,4 @@ trait DebugApi
         //
         echo '</table>';
     }
-
 }

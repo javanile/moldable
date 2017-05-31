@@ -36,6 +36,7 @@ class Functions
      */
     public static function gridDump($title, $content)
     {
+        /*
         //
         $a = &$content;
 
@@ -66,6 +67,7 @@ class Functions
 
         //
         echo '</tbody></table></pre>';
+        */
     }
 
     /**

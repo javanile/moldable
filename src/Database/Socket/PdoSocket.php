@@ -95,7 +95,7 @@ class PdoSocket implements SocketInterface
      * @param type $sql
      * @return type
      */
-    public function getRow($sql, $params=null)
+    public function getRow($sql, $params = null)
     {
         $stmt = $this->execute($sql, $params);
 
@@ -107,7 +107,7 @@ class PdoSocket implements SocketInterface
      * @param type $sql
      * @return type
      */
-    public function getResults($sql, $params=null)
+    public function getResults($sql, $params = null)
     {
         $stmt = $this->execute($sql, $params);
 
@@ -119,7 +119,7 @@ class PdoSocket implements SocketInterface
      * @param type $sql
      * @return type
      */
-    public function getResultsAsObjects($sql, $params=null)
+    public function getResultsAsObjects($sql, $params = null)
     {
         $stmt = $this->execute($sql, $params);
 
@@ -132,7 +132,7 @@ class PdoSocket implements SocketInterface
      * @param type $sql
      * @return type
      */
-    public function getColumn($sql, $params=null)
+    public function getColumn($sql, $params = null)
     {
         $stmt = $this->execute($sql, $params);
         $column = array();
@@ -150,7 +150,7 @@ class PdoSocket implements SocketInterface
      * @param type $sql
      * @return type
      */
-    public function getValue($sql, $params=null)
+    public function getValue($sql, $params = null)
     {
         $stmt = $this->execute($sql, $params);
 
@@ -228,7 +228,7 @@ class PdoSocket implements SocketInterface
      * Execute a SQL query on DB with binded values
      *
      */
-    public function execute($sql, $params=null)
+    public function execute($sql, $params = null)
     {
         $stmt = $this->_pdo->prepare($sql);
 

@@ -118,7 +118,7 @@ class Storable extends Readable
      * @param type $force
      * @return boolean
      */
-    public function storeInsert($force=false)
+    public function storeInsert($force = false)
     {
         // update table if needed
         static::applySchema();

@@ -14,9 +14,12 @@ trait RelationTrait
      *
      *
      */
-    private static function
-    getNotationAttributesClass($notation, $field, $before, $params)
-    {
+    private static function getNotationAttributesClass(
+        $notation,
+        $field,
+        $before,
+        $params
+    ) {
         //
         $attributes = static::getNotationAttributesCommon($field, $before);
 
@@ -37,9 +40,12 @@ trait RelationTrait
      *
      *
      */
-    private static function
-    getNotationAttributesVector($notation, $field, $before, $params)
-    {
+    private static function getNotationAttributesVector(
+        $notation,
+        $field,
+        $before,
+        $params
+    ) {
         //
         $aspects = static::getNotationAttributesCommon($field, $before);
 
@@ -54,9 +60,12 @@ trait RelationTrait
      *
      *
      */
-    private static function
-    getNotationAttributesMatchs($notation, $field, $before, $params)
-    {
+    private static function getNotationAttributesMatchs(
+        $notation,
+        $field,
+        $before,
+        $params
+    ) {
         //
         $aspects = static::getNotationAttributesCommon($field, $before);
 

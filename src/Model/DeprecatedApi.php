@@ -7,19 +7,19 @@
 namespace Javanile\SchemaDB\Model;
 
 trait DeprecatedApi
-{	
+{    
     /**
      * 
      * @param type $data
      * @return type
      */
-    public static function build($data=null)
+    public static function build($data = null)
     {
         //
         return static::make($data);
     }
-	
-	/**
+    
+    /**
      *
      * @param type $data
      * @param type $map
@@ -38,12 +38,12 @@ trait DeprecatedApi
         //
         return $o;
     }
-	
-	/**
+    
+    /**
      *
      * @return type
      */
-	public static function now()
+    public static function now()
     {
         //
         return date('Y-m-d H:i:s');
@@ -51,12 +51,13 @@ trait DeprecatedApi
 
     /**
      *
+     *
      * @param type $values
      * @param type $filter
      * @param type $map
      * @return type
      */
-    protected static function filter($values, $filter, $map=null)
+    protected static function filter($values, $filter, $map = null)
     {
         //
         $object = is_array($values) ? static::make($values, $map) : $values;
@@ -90,46 +91,45 @@ trait DeprecatedApi
     }
 
     /**
-	 *
-	 * @param type $prefix
-	 * @return type
-	 */
-	protected static function getMethodsByPrefix($prefix=null) {
+     *
+     * @param type $prefix
+     * @return type
+     */
+    protected static function getMethodsByPrefix($prefix = null)
+    {
+        //
+        $attribute = 'MethodsByPrefix:'.$prefix;
 
-		//
-		$attribute = 'MethodsByPrefix:'.$prefix;
+        //
+        if (static::hasConfig($attribute)) {
+            return static::getConfig($attribute);
+        }
 
-		//
-		if (static::hasConfig($attribute)) {
-			return static::getConfig($attribute);
-		}
+        //
+        $class = static::getClass();
 
-		//
-		$class = static::getClass();
+        //
+        $allMethods = get_class_methods($class);
 
-		//
-		$allMethods = get_class_methods($class);
+        //
+        $methods = array();
 
-		//
-		$methods = array();
+        //
+        if (count($allMethods) > 0) {
+            foreach($allMethods as $method) {
+                if (preg_match('/^'.$prefix.'/i',$method)) {
+                    $methods[] = $method;
+                }
+            }
+        }
 
-		//
-		if (count($allMethods) > 0) {
-			foreach($allMethods as $method) {
-				if (preg_match('/^'.$prefix.'/i',$method)) {
-					$methods[] = $method;
-				}
-			}
-		}
+        //
+        asort($methods);
 
-		//
-		asort($methods);
+        //
+        static::setConfig($attribute, $methods);
 
-		//
-		static::setConfig($attribute, $methods);
-
-		//
-		return $methods;
-	} 
-
+        //
+        return $methods;
+    }
 }

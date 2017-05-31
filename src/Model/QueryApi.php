@@ -18,7 +18,7 @@ trait QueryApi
     public static function query($query)
     { 
         //
-        static::applyTable(); 
+        static::applySchema();
 
         //
         $x = $query;
@@ -35,9 +35,7 @@ trait QueryApi
         }
 
         //
-        foreach ($x as $k=>$v) {
-
-            //
+        foreach ($x as $k => $v) {
             if (in_array($k,array('order','where','limit'))) {
                 continue;
             }
@@ -69,8 +67,4 @@ trait QueryApi
         //
         return $r;
     }
-
-    
 }
-    
-    

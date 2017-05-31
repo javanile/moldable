@@ -49,9 +49,11 @@ trait NumberTrait
      *
      *
      */
-    private static function
-    getNotationAttributesFloat($notation, $field, $before)
-    {
+    private static function getNotationAttributesFloat(
+        $notation,
+        $field,
+        $before
+    ) {
         //
         $attributes = static::getNotationAttributesCommon($field, $before);
 
@@ -72,9 +74,11 @@ trait NumberTrait
      *
      *
      */
-    private static function
-    getNotationAttributesDouble($notation, $field, $before)
-    {
+    private static function getNotationAttributesDouble(
+        $notation,
+        $field,
+        $before
+    ) {
         //
         $aspects = static::getNotationAttributesCommon($field, $before);
 
@@ -90,6 +94,4 @@ trait NumberTrait
         //
         return $aspects;
     }
-
-
 }

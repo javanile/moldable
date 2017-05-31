@@ -18,52 +18,41 @@ class MysqlWriter extends Writer
     );
 
     //
-    public static function columnDefinition($attributes, $order=true)
-    {        
-        //
-        $a = &$attributes;
+    public static function columnDefinition($aspects, $order=true)
+    {
+        $Key = isset($aspects['Key'])
+            && $aspects['Key'] == 'PRI'
+            ? 'PRIMARY KEY' : '';
 
-        //
-        $Key = isset($a['Key']) && $a['Key'] == 'PRI' ? 'PRIMARY KEY' : '';
+        $Type = isset($aspects['Type'])
+            ? strtolower($aspects['Type'])
+            : static::$defaults['Attributes']['Type'];
 
-        //
-        $Type = isset($a['Type']) ? strtolower($a['Type']) : static::$defaults['Attributes']['Type'];
-        
-        //
-        $Null = isset($a['Null']) && ($a['Null'] == 'NO' || !$a['Null']) ? 'NOT NULL' : 'NULL';
+        $Null = isset($aspects['Null'])
+            && ($aspects['Null'] == 'NO' || !$aspects['Null'])
+            ? 'NOT NULL' : 'NULL';
 
-        //
-        $Extra = isset($a['Extra']) ? $a['Extra'] : '';
+        $Extra = isset($aspects['Extra']) ? $aspects['Extra'] : '';
 
-        //
-        if (!isset($a['Default']) 
-            || $a['Default'] === 'NO'
-            || $a['Default'] === ''
-            || $a['Key']) {
+        if (!isset($aspects['Default'])
+            || $aspects['Default'] === 'NO'
+            || $aspects['Default'] === ''
+            || $aspects['Key']) {
             $Default = '';            
-        } 
-        
-        //
-        else if ($a['Default'] === 'CURRENT_TIMESTAMP') {
+        } else if ($aspects['Default'] === 'CURRENT_TIMESTAMP') {
             $Default = 'DEFAULT CURRENT_TIMESTAMP';                        
-        } 
-        
-        //
-        else {            
-            $Default = 'DEFAULT '."'".$a['Default']."'";
+        } else {
+            $Default = 'DEFAULT '."'".$aspects['Default']."'";
         }
 
-        //
         $sql = $Type.' '.$Null.' '.$Default.' '.$Key.' '.$Extra;
 
-        //
         if ($order) {
-            $First = isset($a['First']) && $a['First'] ? 'FIRST' : '';
-            $Before = isset($a['Before']) && $a['Before'] ? 'AFTER '.$a['Before'] : '';
+            $First = isset($aspects['First']) && $aspects['First'] ? 'FIRST' : '';
+            $Before = isset($aspects['Before']) && $aspects['Before'] ? 'AFTER '.$aspects['Before'] : '';
             $sql .= ' '.$First.' '.$Before;
         }
 
-        //
         return trim($sql);
     }
 

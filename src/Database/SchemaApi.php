@@ -266,9 +266,12 @@ trait SchemaApi
      *
      * @return type
      */
-    private function
-    diffTableMergeQueries($table, &$fields, &$foQueries, &$soQueries)
-    {
+    private function diffTableMergeQueries(
+        $table,
+        &$fields,
+        &$foQueries,
+        &$soQueries
+    ) {
         //
         $key = $this->diffTableFieldPrimaryKey($fields);
 
@@ -306,9 +309,13 @@ trait SchemaApi
      * @param type $soQueries
      */
     private function diffTableField(
-    $table, $field, &$attributes, &$fields, &$foQueries, &$soQueries
-    )
-    {
+        $table,
+        $field,
+        &$attributes,
+        &$fields,
+        &$foQueries,
+        &$soQueries
+    ) {
         // check if column exists in current db
         if (!isset($fields[$field])) {
 
