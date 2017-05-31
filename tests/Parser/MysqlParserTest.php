@@ -64,4 +64,31 @@ final class MysqlParserTest extends TestCase
             ]
         ]);
     }
+
+    public function testEnumField()
+    {
+        $schema = [
+            'people' => [
+                'title' => ['Mr.', 'Ms.'],
+            ]
+        ];
+
+        $this->parser->parse($schema);
+
+        $this->assertEquals($schema, [
+            'people' => [
+                'title' => [
+                    'Field'    => 'title',
+                    'First'    => true,
+                    'Before'   => false,
+                    'Key'      => '',
+                    'Type'     => "enum('Mr.','Ms.')",
+                    'Null'     => 'NO',
+                    'Extra'    => '',
+                    'Default'  => 'Mr.',
+                    'Relation' => null,
+                ],
+            ]
+        ]);
+    }
 }

@@ -42,7 +42,7 @@ trait LoadApi
      * @param type $fields
      * @return type
      */
-    protected static function loadByPrimaryKey($index, $fields=null)
+    protected static function loadByPrimaryKey($index, $fields = null)
     {
         //
         $table = static::getTable();
@@ -93,7 +93,7 @@ trait LoadApi
      * @param type $fields
      * @return type
      */
-    protected static function loadByMainField($value, $fields=null)
+    protected static function loadByMainField($value, $fields = null)
     {
         //
         $table = static::getTable();
@@ -140,13 +140,14 @@ trait LoadApi
     }
 
     /**
+     * Load one record by array-query.
      *
      * @param type $query
      * @param type $fields
      * @return type
      */
-    protected static function loadByQuery($query, $fields=null) {
-
+    protected static function loadByQuery($query, $fields = null)
+    {
         //
         $table = static::getTable();
 
@@ -169,18 +170,12 @@ trait LoadApi
 
         //
         if (isset($query['where'])) {
-
-            //
             $whereConditions[] = "(".$query['where'].")";
-
-            //
             unset($query['where']);
         }
 
         //
         foreach ($query as $field => $value) {
-
-            //
             $token = ':'.$field;
 
             //
@@ -208,7 +203,6 @@ trait LoadApi
             is_null($fields)
         );
         
-        //
         return $result;
     }    
 }

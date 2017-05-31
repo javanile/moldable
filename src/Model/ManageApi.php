@@ -18,7 +18,7 @@ trait ManageApi
      * @param type $confirm
      * @return type
      */
-    public static function drop($confirm=null)
+    public static function drop($confirm = null)
     {
         //
         if ($confirm !== 'confirm') {
@@ -90,9 +90,9 @@ trait ManageApi
             }
 
             //
-            foreach ($query as $k=>$v) {
-                if ($k!='sort'&&$k!='where') {
-                    $whereArray[] = "{$k}='{$v}'";
+            foreach ($query as $field => $value) {
+                if ($field != 'sort' && $field != 'where') {
+                    $whereArray[] = "{$field} = '{$value}'";
                 }
             }
 
@@ -112,7 +112,7 @@ trait ManageApi
             $index = (int) $query;
 
             //
-            $sql = "DELETE FROM {$table} WHERE {$key}='{$index}' LIMIT 1";
+            $sql = "DELETE FROM {$table} WHERE {$key} = '{$index}' LIMIT 1";
 
             // execute query
             static::getDatabase()->execute($sql);

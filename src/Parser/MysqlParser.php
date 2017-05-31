@@ -12,6 +12,7 @@ class MysqlParser extends Parser
 {
     use Mysql\KeyTrait;
     use Mysql\TypeTrait;
+    use Mysql\EnumTrait;
     use Mysql\ValueTrait;
     use Mysql\NumberTrait;
     use Mysql\StringTrait;
@@ -128,7 +129,7 @@ class MysqlParser extends Parser
 
             //
             case 'enum':
-                return static::getNotationAttributesEnum($notation, $field, $before);
+                return $this->getNotationAspectsEnum($notation, $aspects);
 
             //
             case 'class':

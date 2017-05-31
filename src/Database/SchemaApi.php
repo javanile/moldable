@@ -128,22 +128,19 @@ trait SchemaApi
 
         // execute queries
         if ($queries && count($queries) > 0) {
-
             // loop throu all queries calculated and execute it
             foreach ($queries as $sql) {
-
                 // execute each queries
                 $this->execute($sql);
             }
         }
 
-        // return queries
         return $queries;
     }
 
     /**
      * Generate SQL query to align database
-     * compare real database and passed schema
+     * compare real database and passed schema.
      *
      * @param  type $schema
      * @param  type $parse
@@ -232,17 +229,12 @@ trait SchemaApi
 
         // test field definition
         foreach ($schema as $field => &$attributes) {
-
-            //
             $this->diffTableField(
                 $table, $field, $attributes, $fields, $foQueries, $soQueries
             );
         }
 
-        //
-        return $this->diffTableMergeQueries(
-                $table, $fields, $foQueries, $soQueries
-        );
+        return $this->diffTableMergeQueries($table, $fields, $foQueries, $soQueries);
     }
 
     /**
@@ -262,8 +254,6 @@ trait SchemaApi
 
         //
         if ($key && count($foQueries) > 0) {
-
-            //
             $foQueries[] = $this
                 ->getWriter()
                 ->alterTableDropPrimaryKey($table);
@@ -280,7 +270,6 @@ trait SchemaApi
                 ->alterTableChange($table, $key, $fields[$key]);
         }
 
-        //
         return array_merge(array_reverse($foQueries), $soQueries);
     }
 
@@ -303,8 +292,6 @@ trait SchemaApi
     ) {
         // check if column exists in current db
         if (!isset($fields[$field])) {
-
-            //
             $sql = $this
                 ->getWriter()
                 ->alterTableAdd($table, $field, $attributes);
@@ -312,17 +299,12 @@ trait SchemaApi
             // add primary key column
             if ($attributes['Key'] == 'PRI') {
                 $foQueries[] = $sql;
-            }
-
-            // add normal column
-            else {
+            } else {
+                // add normal column
                 $soQueries[] = $sql;
             }
-        }
-
-        // check if column need to be updated
-        else if ($this->diffTableFieldAttributes($field, $attributes, $fields)) {
-
+        } else if ($this->diffTableFieldAttributes($field, $attributes, $fields)) {
+            // check if column need to be updated
             // compose alter table query with attributes
             $sql = $this
                 ->getWriter()
@@ -331,10 +313,8 @@ trait SchemaApi
             // alter column that lose primary key
             if ($fields[$field]['Key'] == 'PRI' || $attributes['Key'] == 'PRI') {
                 $foQueries[] = $sql;
-            }
-
-            // alter colum than not interact with primary key
-            else {
+            } else {
+                // alter colum than not interact with primary key
                 $soQueries[] = $sql;
             }
         }
@@ -353,7 +333,6 @@ trait SchemaApi
     {
         // loop throd current column property
         foreach ($fields[$field] as $key => $value) {
-
             // if have a difference
             if ($attributes[$key] == $value) {
                 continue;
@@ -365,11 +344,9 @@ trait SchemaApi
                 echo '  difference: "'.$attributes[$key].'" != "'.$value.'" in '.$field.'['.$key.']</pre>';
             }
 
-            //
             return true;
         }
 
-        //
         return false;
     }
 
@@ -383,14 +360,12 @@ trait SchemaApi
     {
         // loop throd current column property
         foreach ($fields as $field => &$attributes) {
-
             // lookitup by equal
             if ($attributes['Key'] == 'PRI') {
                 return $field;
             }
         }
 
-        //
         return false;
     }
 
@@ -415,9 +390,9 @@ trait SchemaApi
         //
         foreach ($schema as $table => $fields) {
             $desc[$table] = isset($desc[$table])
-                         && is_array($desc[$table])
-                          ? array_merge($desc[$table], $fields)
-                          : $fields;
+                && is_array($desc[$table])
+                ? array_merge($desc[$table], $fields)
+                : $fields;
         }
 
         //

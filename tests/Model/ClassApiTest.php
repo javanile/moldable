@@ -19,8 +19,8 @@ final class ClassApiTest extends TestCase
     public function testClassApi()
     {
         $db = new Database([
-            'host'     => $GLOBALS['DB_HOST'],
-            'dbname'   => $GLOBALS['DB_NAME'],
+            'host' => $GLOBALS['DB_HOST'],
+            'dbname' => $GLOBALS['DB_NAME'],
             'username' => $GLOBALS['DB_USER'],
             'password' => $GLOBALS['DB_PASS'],
         ]);
@@ -35,5 +35,12 @@ final class ClassApiTest extends TestCase
 
         $adamant = People::getClassConfig('adamant');
         $this->assertEquals($adamant, false);
+    }
+
+    public function testModelApi()
+    {
+        $model = People::getModel();
+
+        $this->assertEquals($model, 'People');
     }
 }

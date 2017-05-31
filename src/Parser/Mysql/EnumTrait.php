@@ -13,45 +13,28 @@ trait EnumTrait
     /**
      *
      */
-    private static function getNotationAttributesEnum(
-        $notation,
-        $field,
-        $before
-    ) {
+    private function getNotationAspectsEnum($notation, $aspects)
+    {
         //
         $enum = static::parseNotationEnum($notation);
-
-        //
         if (!$enum) {
             return static::getNotationAttributes('', $field, $before);
         }
 
         //
-        $aspects = static::getNotationAttributesCommon($field, $before);
-
-        //
-        $aspects['Enum'] = $enum;
-
-        //
+        #$aspects['Enum'] = $enum;
         $aspects['Default'] = $enum[0];
-
-        //
         $aspects['Null'] = in_array(null, $enum) ? 'YES' : 'NO';
 
         //
-        $t = array();
-
-        //
-        foreach ($enum as $i) {
-            if ($i !== null) {
-                $t[] = "'{$i}'";
+        $tokens = [];
+        foreach ($enum as $item) {
+            if ($item !== null) {
+                $tokens[] = "'{$item}'";
             }
         }
+        $aspects['Type'] = 'enum('.implode(',', $tokens).')';
 
-        //
-        $aspects['Type'] = 'enum('.implode(',',$t).')';
-
-        //
         return $aspects;
     }
 
@@ -63,18 +46,11 @@ trait EnumTrait
     {
         //
         if (is_string($notation)) {
-
-            //
             $notation = json_decode(trim($notation, '<>'));
-
-            //
             if (json_last_error()) { return null; }
         }
 
         //
         return $notation;
     }
-
-
-
 }

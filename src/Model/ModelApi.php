@@ -11,20 +11,20 @@ namespace Javanile\Moldable\Model;
 trait ModelApi
 {
 	/**
-     * Retrieve static class name
+     * Retrieve model name.
      *
-     * @return type
+     * @return string
      */
-    protected static function getModel()
+    public static function getModel()
     {
         $attribute = 'model';
 
         if (!static::hasClassAttribute($attribute)) {
             $class = static::getClass();
-            $point = strrpos($class, '\\');
-            $className = $point === false ? $class : substr($class, $point + 1);
+            $slash = strrpos($class, '\\');
+            $model = $slash === false ? $class : substr($class, $slash + 1);
 
-            static::setClassAttribute($attribute, $className);
+            static::setClassAttribute($attribute, $model);
         } 
         
         return static::getClassAttribute($attribute);

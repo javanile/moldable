@@ -21,25 +21,12 @@ class Readable implements Notations
     use Model\ClassApi;
     use Model\ModelApi;
     use Model\TableApi;
+    use Model\QueryApi;
     use Model\FieldApi;
     use Model\PublicApi;
     use Model\SchemaApi;
     use Model\DatabaseApi;
     use Model\DeprecatedApi;
-    #use Model\LoadApi;
-    #use Model\JoinApi;
-    #use Model\FieldApi;
-    #use Model\FetchApi;
-    #use Model\PublicApi;
-    #use Model\DebugApi;
-    //
-    //use Model\ErrorApi;
-    //
-    //
-    //use Model\UpdateApi;
-    //
-    //use Model\PublicApi;
-    //
 
     /**
      *

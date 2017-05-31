@@ -115,8 +115,8 @@ trait FieldApi
         //
         return $key
             && isset($this->{$key})
-             ? $this->{$key}
-             : null;
+            ? $this->{$key}
+            : null;
     }
 
     /**
@@ -138,8 +138,6 @@ trait FieldApi
 
             //
             foreach ($schema as $field => &$attributes) {
-
-                //
                 if ($attributes['Key'] == 'PRI') {
                     continue;
                 }
@@ -171,8 +169,8 @@ trait FieldApi
         //
         return $mainField
             && isset($this->{$mainField})
-             ? $this->{$mainField}
-             : null;
+            ? $this->{$mainField}
+            : null;
     }
 
     /**
@@ -234,8 +232,8 @@ trait FieldApi
         
         //
         return isset($schema[$field]['Enum'])
-             ? $schema[$field]['Enum']
-             : null;
+            ? $schema[$field]['Enum']
+            : null;
     }
 
     /**

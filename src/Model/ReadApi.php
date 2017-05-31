@@ -75,7 +75,7 @@ trait ReadApi
      *
      * @return type
      */
-    public static function first($query=null, $fields=null)
+    public static function first($query = null, $fields = null)
     {
         //
         static::applyTable();
@@ -105,15 +105,13 @@ trait ReadApi
 
         //
         if (count($query) > 0) {
-
-            //
-            $schema = static::getSchemaFields(); 
+            $schema = static::getSchemaFields();
 
             //
             foreach ($schema as $field) {
-             
-                //
-                if (!isset($query[$field])) { continue; }
+                if (!isset($query[$field])) {
+                    continue;
+                }
 
                 //
                 $token = ':'.$field;
@@ -206,19 +204,9 @@ trait ReadApi
      */
     public static function ping(&$query)
     {
-        //
         $exist = static::exists($query);
-        
-        //
         $query = $exist ? $exist : static::make($query);
 
-        //
         return $exist;
     }
-    
-    
-    
-    
-    
-    
 }

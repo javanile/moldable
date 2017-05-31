@@ -180,11 +180,10 @@ class Storable extends Readable
         
         //
         foreach ($schema as $field => &$column) {
+            if (!$force && $field == $key) {
+                continue;
+            }
 
-            //
-            if (!$force && $field == $key) { continue; }
-
-            //
             static::insertRelationAfter($this->{$field}, $column);
         }
 
@@ -213,14 +212,9 @@ class Storable extends Readable
 
         //
         switch ($column['Relation']) {
-
-            //
             case '1:1': return static::insertRelationOneToOne($value, $column);
-
-            //
             case '1:*':    return static::insertRelationOneToMany($value, $column);
         }
-
     }
 
     /**
@@ -255,8 +249,6 @@ class Storable extends Readable
 
         //
         switch ($column['Relation']) {
-
-            //
             case '1:*':    return static::insertRelationOneToMany($value, $column);
         }
     }
@@ -267,20 +259,13 @@ class Storable extends Readable
      */
     private static function insertRelationOneToMany($values, &$column)
     {
-        //
         $class = $column['Class'];
 
-        //
         foreach($values as $value) {
-
-            //
             $object = new $class($value);
-
-            //
             $index = $object->store();
         }
 
-        //
         return $index;
     }
 }
