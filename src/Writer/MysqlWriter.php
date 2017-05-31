@@ -63,7 +63,7 @@ class MysqlWriter extends Writer
      * @param  array  $schema Skema of the table contain column definitions
      * @return string Sql code statament of CREATE TABLE
      */
-    public static function createTable($table, $schema)
+    public function createTable($table, $schema)
     {
         //
         $columnsArray = array();
@@ -82,7 +82,7 @@ class MysqlWriter extends Writer
             }
 
             //
-            $column = static::columnDefinition($attributes, false);
+            $column = $this->columnDefinition($attributes, false);
 
             //
             $columnsArray[] = "`{$field}` {$column}";
@@ -105,10 +105,10 @@ class MysqlWriter extends Writer
      * @param type $attributes
      * @return type
      */
-    public static function alterTableAdd($table, $field, $attributes)
+    public function alterTableAdd($table, $field, $attributes)
     {
         //
-        $column = static::columnDefinition($attributes);
+        $column = $this->columnDefinition($attributes);
 
         //
         $sql = "ALTER TABLE `{$table}` ADD COLUMN `{$field}` {$column}";
@@ -125,10 +125,10 @@ class MysqlWriter extends Writer
      * @param type $d
      * @return type
      */
-    public static function alterTableChange($table, $field, $attributes)
+    public function alterTableChange($table, $field, $attributes)
     {
         //
-        $column = static::columnDefinition($attributes);
+        $column = $this->columnDefinition($attributes);
 
         //
         $sql = "ALTER TABLE `{$table}` CHANGE COLUMN `{$field}` `{$field}` {$column}";
@@ -138,7 +138,7 @@ class MysqlWriter extends Writer
     }
 
     // retrive query to remove primary key
-    public static function alterTableDropPrimaryKey($table)
+    public function alterTableDropPrimaryKey($table)
     {
         //
         $sql = "ALTER TABLE `{$table}` DROP PRIMARY KEY";
@@ -152,7 +152,7 @@ class MysqlWriter extends Writer
      * @param  type   $f
      * @return string
      */
-    public static function selectFields($fields, $tableAlias, &$join)
+    public function selectFields($fields, $tableAlias, &$join)
     {
         //
         if (!$fields) {
@@ -187,7 +187,7 @@ class MysqlWriter extends Writer
 
             //
             if (!$definition) {
-                $selectFields[] = static::selectFieldsSingletoneField(
+                $selectFields[] = $this->selectFieldsSingletoneField(
                     $field,
                     $tableAlias
                 );
@@ -260,7 +260,7 @@ class MysqlWriter extends Writer
      * @param type $field
      * @return type
      */
-    public static function selectFieldsSingletoneField($field, $tableAlias)
+    public function selectFieldsSingletoneField($field, $tableAlias)
     {
         //
         if (preg_match('/^[a-z_][a-z0-9_]*$/i', $field)) {
