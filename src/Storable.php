@@ -28,15 +28,17 @@ class Storable extends Readable
      * Construct a storable object
      * with filled fields by values
      *
-     *
+     * @param array $values
      */
     public function __construct($values = null)
     {
+        parent::__construct();
+
         $this->values($values);
     }
 
     /**
-     *
+     * Prepare field with notation to with default values.
      */
     protected function init()
     {
@@ -46,7 +48,9 @@ class Storable extends Readable
     }
 
     /**
+     * Prepare field with notation to with specific values.
      *
+     * @param array $values
      */
     protected function values($values)
     {

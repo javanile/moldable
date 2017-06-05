@@ -75,42 +75,33 @@ class MysqlParser extends Parser
         $before = null
     ) {
         $params = null;
-        $type = static::getNotationType($notation, $params);
+        $type = $this->getNotationType($notation, $params);
         $aspects = $this->getNotationCommonAspects($field, $before);
 
         // look-to type
         switch ($type) {
             case 'schema':
                 return $this->getNotationAspectsSchema($notation, $aspects);
-                
-            // notation contain a field attributes written in json 
             case 'json':
                 return static::getNotationAttributesJson($notation, $field, $before);
-
-            // notation contain a date format string
             case 'date':
-                return static::getNotationAttributesDate($notation, $field, $before);
-
-            // notation contain a date format string
+                return $this->getNotationAspectsDate($notation, $aspects);
             case 'time':
-                return static::getNotationAttributesTime($notation, $field, $before);
-
-            //
+                return $this->getNotationAspectsTime($notation, $aspects);
             case 'datetime':
-                return static::getNotationAttributesDatetime($notation, $field, $before);
-            
-            //
+                return $this->getNotationAspectsDatetime($notation, $aspects);
             case 'timestamp':
-                return static::getNotationAttributesTimestamp($notation, $field, $before);
+                return $this->getNotationAspectsTimestamp($notation, $aspects);
 
-            //
             case 'primary_key':
                 return $this->getNotationAspectsPrimaryKey($notation, $aspects, $params);
                
-            //
             case 'string':
                 return $this->getNotationAspectsString($notation, $aspects);
-               
+
+            case 'text':
+                return $this->getNotationAspectsText($notation, $aspects);
+
             //
             case 'boolean':
                 return static::getNotationAttributesBoolean($notation, $field, $before);

@@ -14,78 +14,56 @@ trait DatetimeTrait
      *
      *
      */
-    private static function getNotationAttributesDate(
+    private function getNotationAspectsDate(
         $notation,
-        $field,
-        $before
+        $aspects
     ) {
-        $attributes = static::getNotationAttributesCommon($field, $before);
-        $attributes['Type'] = 'date';
-        $attributes['Default'] = $notation;
+        $aspects['Type'] = 'date';
+        $aspects['Default'] = $notation;
 
-        return $attributes;
+        return $aspects;
     }
 
     /**
      *
      *
      */
-    private static function getNotationAttributesTime(
+    private function getNotationAspectsTime(
         $notation,
-        $field,
-        $before
+        $aspects
     ) {
-        $attributes = static::getNotationAttributesCommon($field, $before);
-        $attributes['Type'] = 'time';
-        $attributes['Default'] = $notation;
+        $aspects['Type'] = 'time';
+        $aspects['Default'] = $notation;
 
-        return $attributes;
+        return $aspects;
     }
 
     /**
      *
      *
      */
-    private static function getNotationAttributesDatetime(
+    private function getNotationAspectsDatetime(
         $notation,
-        $field,
-        $before
+        $aspects
     ) {
-        //
-        $attributes = static::getNotationAttributesCommon($field, $before);
+        $aspects['Type'] = 'datetime';
+        $aspects['Default'] = $notation;
 
-        //
-        $attributes['Type'] = 'datetime';
-
-        //
-        $attributes['Default'] = $notation;
-
-        //
-        return $attributes;
+        return $aspects;
     }
 
     /**
      *
      */
-    private static function getNotationAttributesTimestamp(
+    private static function getNotationAspectsTimestamp(
         $notation,
-        $field,
-        $before
+        $aspects
     ) {
-        //
-        $attributes = static::getNotationAttributesCommon($field, $before);
+        $aspects['Type'] = 'timestamp';
+        $aspects['Null'] = 'NO';
+        $aspects['Default'] = 'CURRENT_TIMESTAMP';
 
-        //
-        $attributes['Type'] = 'timestamp';
-
-        //
-        $attributes['Null'] = 'NO';
-
-        //
-        $attributes['Default'] = 'CURRENT_TIMESTAMP';
-
-        //
-        return $attributes;
+        return $aspects;
     }
 
     /**

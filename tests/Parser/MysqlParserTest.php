@@ -91,4 +91,55 @@ final class MysqlParserTest extends TestCase
             ]
         ]);
     }
+
+    public function testDatetimeField()
+    {
+        $schema = [
+            'table' => [
+                'day' => '2000-01-01',
+                'moment' => '00:00:01',
+                'precise_moment' => '2000-01-01 00:00:01',
+            ]
+        ];
+
+        $this->parser->parse($schema);
+
+        $this->assertEquals($schema, [
+            'table' => [
+                'day' => [
+                    'Field'    => 'day',
+                    'First'    => true,
+                    'Before'   => false,
+                    'Key'      => '',
+                    'Type'     => "date",
+                    'Null'     => 'YES',
+                    'Extra'    => '',
+                    'Default'  => '2000-01-01',
+                    'Relation' => null,
+                ],
+                'moment' => [
+                    'Field'    => 'moment',
+                    'First'    => false,
+                    'Before'   => 'day',
+                    'Key'      => '',
+                    'Type'     => "time",
+                    'Null'     => 'YES',
+                    'Extra'    => '',
+                    'Default'  => '00:00:01',
+                    'Relation' => null,
+                ],
+                'precise_moment' => [
+                    'Field'    => 'precise_moment',
+                    'First'    => false,
+                    'Before'   => 'moment',
+                    'Key'      => '',
+                    'Type'     => "datetime",
+                    'Null'     => 'YES',
+                    'Extra'    => '',
+                    'Default'  => '2000-01-01 00:00:01',
+                    'Relation' => null,
+                ],
+            ]
+        ]);
+    }
 }

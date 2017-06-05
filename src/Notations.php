@@ -11,20 +11,20 @@ namespace Javanile\Moldable;
 interface Notations
 {
     /**
-     * Primary key notation
+     * Key notation
      */
-    const KEY = '<<#primary_key>>';
+    const KEY = '<<@primary_key>>';
 
     /**
      * Primary key notation
      */
-    const PRIMARY_KEY = '<<#primary_key>>';
+    const PRIMARY_KEY = '<<@primary_key>>';
 
     /**
      *
      *
      */
-    const PRIMARY_KEY_INT_20 = '<<#primary_key_int_20>>';
+    const PRIMARY_KEY_INT_20 = '<<@primary_key_int_20>>';
     
     /**
      *
@@ -66,7 +66,7 @@ interface Notations
      *
      *
      */
-    const TEXT = '<<{"Type":"text"}>>';
+    const TEXT = '<<@text>>';
     
     /**
      *
@@ -90,7 +90,7 @@ interface Notations
      *
      *
      */
-    const INT = '<<{"Type":"int(11)"}>>';
+    const INT = '<<@integer>>';
 
     /**
      *
@@ -126,35 +126,39 @@ interface Notations
      *
      *
      */
-    const FLOAT = '<<#float>>';
+    const FLOAT = '<<@float>>';
     
     /**
      *
      *
      */
-    const DOUBLE = '<<#double>>';
+    const DOUBLE = '<<@double>>';
 
     /**
+     * Define field as timestamp holder.
      *
-     *
+     * @const string
      */
-    const TIMESTAMP = '<<#timestamp>>';
+    const TIMESTAMP = '<<@timestamp>>';
     
     /**
+     * Define field as time.
      *
-     *
+     * @const string
      */
     const TIME = '00:00:00';
 
     /**
+     * Define field as date.
      *
-     *
+     * @const string
      */
     const DATE = '0000-00-00';
     
     /**
+     * Define field as datetime.
      *
-     *
+     * @const string
      */
     const DATETIME = '0000-00-00 00:00:00';
 }

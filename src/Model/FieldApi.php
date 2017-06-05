@@ -32,6 +32,15 @@ trait FieldApi
     public function fillSchemaFields($values, $map = null, $prefix = null)
     {
         //
+        if (is_array($map)) {
+            foreach ($map as $alias => $field) {
+                if (isset($values[$alias])) {
+                    $values[$field] = $values[$alias];
+                }
+            }
+        }
+
+        //
         foreach (static::getSchema() as $field => $aspects) {
             if (isset($aspects['Class']) && $aspects['Relation'] == '1:1') {
                 $class = $aspects['Class'];

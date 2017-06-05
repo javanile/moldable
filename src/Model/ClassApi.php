@@ -228,4 +228,35 @@ trait ClassApi
     {
         static::$__attrib = null;
     }
+
+    /**
+     *
+     * @param type $prefix
+     * @return type
+     */
+    protected static function getClassMethodsByPrefix($prefix = null)
+    {
+        //
+        $attribute = 'MethodsByPrefix:'.$prefix;
+
+        if (!static::hasClassAttribute($attribute)) {
+            $class = static::getClass();
+            $allMethods = get_class_methods($class);
+            $methods = array();
+
+            if (count($allMethods) > 0) {
+                foreach ($allMethods as $method) {
+                    if (preg_match('/^' . $prefix . '/i', $method)) {
+                        $methods[] = $method;
+                    }
+                }
+            }
+            asort($methods);
+
+            static::setClassAttribute($attribute, $methods);
+        }
+
+        //
+        return static::getClassAttribute($attribute);
+    }
 }

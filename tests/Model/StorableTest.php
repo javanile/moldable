@@ -6,6 +6,7 @@ use Javanile\Producer;
 use Javanile\Moldable\Database;
 use PHPUnit\Framework\TestCase;
 use Javanile\Moldable\Tests\Sample\People;
+use Javanile\Moldable\Tests\Sample\CustomConstructor;
 use Javanile\Moldable\Tests\DatabaseTrait;
 
 Producer::addPsr4(['Javanile\\Moldable\\Tests\\' => __DIR__.'/../']);
@@ -17,8 +18,8 @@ final class StorableTest extends TestCase
     public function testDebugMode()
     {
         $db = new Database([
-            'host'     => $GLOBALS['DB_HOST'],
-            'dbname'   => $GLOBALS['DB_NAME'],
+            'host' => $GLOBALS['DB_HOST'],
+            'dbname' => $GLOBALS['DB_NAME'],
             'username' => $GLOBALS['DB_USER'],
             'password' => $GLOBALS['DB_PASS'],
         ]);
@@ -30,16 +31,16 @@ final class StorableTest extends TestCase
         $this->assertEquals(People::getDebug(), true);
     }
 
-    public function testBuild()
+    public function testMake()
     {
         $db = new Database([
-            'host'     => $GLOBALS['DB_HOST'],
-            'dbname'   => $GLOBALS['DB_NAME'],
+            'host' => $GLOBALS['DB_HOST'],
+            'dbname' => $GLOBALS['DB_NAME'],
             'username' => $GLOBALS['DB_USER'],
             'password' => $GLOBALS['DB_PASS'],
         ]);
 
-        $frank = People::build([
+        $frank = People::make([
             'name' => 'Frank',
         ]);
 
@@ -49,8 +50,8 @@ final class StorableTest extends TestCase
     public function testSimpleStorable()
     {
         $db = new Database([
-            'host'     => $GLOBALS['DB_HOST'],
-            'dbname'   => $GLOBALS['DB_NAME'],
+            'host' => $GLOBALS['DB_HOST'],
+            'dbname' => $GLOBALS['DB_NAME'],
             'username' => $GLOBALS['DB_USER'],
             'password' => $GLOBALS['DB_PASS'],
         ]);
@@ -71,8 +72,8 @@ final class StorableTest extends TestCase
     public function testSimpleStorableTwo()
     {
         $db = new Database([
-            'host'     => $GLOBALS['DB_HOST'],
-            'dbname'   => $GLOBALS['DB_NAME'],
+            'host' => $GLOBALS['DB_HOST'],
+            'dbname' => $GLOBALS['DB_NAME'],
             'username' => $GLOBALS['DB_USER'],
             'password' => $GLOBALS['DB_PASS'],
         ]);
@@ -86,5 +87,37 @@ final class StorableTest extends TestCase
         $names = $db->getValues("SELECT name FROM People");
 
         $this->assertEquals($names, ['Frank', 'Carol']);
+    }
+
+    public function testStorableConstructorOverride()
+    {
+        $db = new Database([
+            'host' => $GLOBALS['DB_HOST'],
+            'dbname' => $GLOBALS['DB_NAME'],
+            'username' => $GLOBALS['DB_USER'],
+            'password' => $GLOBALS['DB_PASS'],
+        ]);
+
+        $object = new CustomConstructor("arg1", "arg1");
+
+        $this->assertEquals($object->field1, 0);
+    }
+
+    public function testStorableBuildMap()
+    {
+        $db = new Database([
+            'host' => $GLOBALS['DB_HOST'],
+            'dbname' => $GLOBALS['DB_NAME'],
+            'username' => $GLOBALS['DB_USER'],
+            'password' => $GLOBALS['DB_PASS'],
+        ]);
+
+        $people = People::make([
+            'old_name' => 'Frank',
+        ],[
+            'old_name' => 'name'
+        ]);
+
+        $this->assertEquals($people->name, 'Frank');
     }
 }

@@ -48,7 +48,7 @@ trait TypeTrait
         $matchs = null;
         $params = null;
 
-        if (preg_match('/^<<#([a-z_]+)>>$/i', $notation, $matchs)) {
+        if (preg_match('/^<<@([a-z_]+)>>$/', $notation, $matchs)) {
             return $matchs[1];
         } else if (preg_match('/^<<primary key ([1-9][0-9]*)>>$/', $notation, $matchs)) {
             $params = array_slice($matchs, 1);

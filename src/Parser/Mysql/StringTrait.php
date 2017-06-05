@@ -18,7 +18,19 @@ trait StringTrait
         //
         $aspects['Type'] = 'varchar(255)';
         $aspects['Null'] = 'NO';
-        $aspects['Default'] = $notation;
+        $aspects['Default'] = $this->getNotationValue($notation);
+
+        return $aspects;
+    }
+
+    /**
+     *
+     */
+    private function getNotationAspectsText($notation, $aspects)
+    {
+        $aspects['Type'] = 'text';
+        $aspects['Null'] = 'NO';
+        $aspects['Default'] = $this->getNotationValue($notation);
 
         return $aspects;
     }

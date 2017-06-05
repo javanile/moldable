@@ -19,7 +19,8 @@ trait ValueTrait
      */
     public function getNotationValue($notation)
     {
-        $type = static::getNotationType($notation, $params);
+        $type = $this->getNotationType($notation, $params);
+        $value = null;
 
         switch ($type) {
             case 'integer':
@@ -29,11 +30,14 @@ trait ValueTrait
             case 'primary_key':
                 return null;
             case 'string':
-                return (string)$notation;
+                return (string) $notation;
+            case 'text':
+                $value = $this->getNotationValueString($notation);
+                break;
             case 'float':
-                return (float)$notation;
+                return (float) $notation;
             case 'double':
-                return (double)$notation;
+                return (double) $notation;
             case 'class':
                 return null;
             case 'vector':
@@ -63,5 +67,16 @@ trait ValueTrait
             default:
                 trigger_error("No PSEUDOTYPE value for '{$type}' => '{$notation}'", E_USER_ERROR);
         }
+    }
+
+    /**
+     *
+     */
+    protected function getNotationValueString($notation)
+    {
+        if (preg_match('/<<@[a-z_]+>>/', $notation)) {
+            return "";
+        }
+        return $notation;
     }
 }
