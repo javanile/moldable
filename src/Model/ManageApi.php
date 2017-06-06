@@ -136,4 +136,22 @@ trait ManageApi
 
         return $object;
     }
+
+    /**
+     *
+     *
+     * @param type $query
+     * @return type
+     */
+    public static function upsert($query, $values)
+    {
+        $object = static::exists($query);
+
+        if (!$object) {
+            $object = static::make($query);
+            $object->store($values);
+        }
+
+        return $object;
+    }
 }

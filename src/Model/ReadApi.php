@@ -2,15 +2,10 @@
 /**
  * ModelProtectedAPI.php
  *
- * PHP version 5
+ * PHP version 5.6
  *
- * @category  tag in file comment
- * @package   tag in file comment
- * @license   tag in file comment
- * @link      ciao
- * @author    Francesco Bianco <bianco@javanile.org>
-\*/
-
+ * @author Francesco Bianco
+ */
 namespace Javanile\Moldable\Model;
 
 trait ReadApi
@@ -26,16 +21,19 @@ trait ReadApi
         //
         static::applySchema();
 
-        //
+        $table = static::getTable();
+
+        $limit = '';
         if (isset($fields['limit'])) {
             $limit = 'LIMIT '.$fields['limit'];
             unset($fields['limit']);
-        } else {
-            $limit = '';
         }
 
-        //
-        $table = static::getTable();
+        $order = '';
+        if (isset($fields['order'])) {
+            $limit = 'ORDER BY '.$fields['order'];
+            unset($fields['order']);
+        }
 
         //
         $join = '';
@@ -52,6 +50,7 @@ trait ReadApi
         $sql = "SELECT {$selectFields} "
              .   "FROM {$table} AS {$class} "
              .       " {$join} "
+             .       " {$order} "
              .       " {$limit} ";
              
         //
@@ -67,7 +66,6 @@ trait ReadApi
             static::error(debug_backtrace(), $ex);
         }
 
-        //
         return $results;
     }
 
