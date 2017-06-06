@@ -34,4 +34,18 @@ trait StringTrait
 
         return $aspects;
     }
+
+    /**
+     *
+     *
+     */
+    private function getNotationAspectsNull(
+        $notation,
+        $aspects
+    ) {
+        $aspects['Type'] = 'varchar(255)';
+        $aspects['Default'] = $notation;
+
+        return $aspects;
+    }
 }

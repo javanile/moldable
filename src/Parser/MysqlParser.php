@@ -83,7 +83,7 @@ class MysqlParser extends Parser
             case 'schema':
                 return $this->getNotationAspectsSchema($notation, $aspects);
             case 'json':
-                return static::getNotationAttributesJson($notation, $field, $before);
+                return $this->getNotationAspectsJson($notation, $aspects);
             case 'date':
                 return $this->getNotationAspectsDate($notation, $aspects);
             case 'time':
@@ -98,6 +98,8 @@ class MysqlParser extends Parser
                 return $this->getNotationAspectsString($notation, $aspects);
             case 'text':
                 return $this->getNotationAspectsText($notation, $aspects);
+            case 'null':
+                return $this->getNotationAspectsNull($notation, $aspects);
             case 'boolean':
                 return $this->getNotationAspectsBoolean($notation, $aspects);
             case 'integer':
@@ -121,9 +123,6 @@ class MysqlParser extends Parser
             case 'matchs':
                 return static::getNotationAttributesMatchs($notation, $field, $before, $params);
 
-            //
-            case 'null':
-                return static::getNotationAttributesNull($notation, $field, $before);
 
             //
             default: trigger_error('Error parse type: '.$field.' ('.$type.')');

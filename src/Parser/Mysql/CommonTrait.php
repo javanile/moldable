@@ -14,24 +14,21 @@ trait CommonTrait
      *
      *
      */
-    private static function getNotationAttributesJson(
+    private static function getNotationAspectsJson(
         $notation,
-        $field,
-        $before
+        $aspects
     ) {
         // decode json object into notation
         $json = json_decode(trim($notation,'<>'), true);
 
-        // set with default attributes
-        $attr = static::getNotationAttributesCommon($field, $before);
-
         // override default with json passed
-        foreach ($json as $key => $value) {
-            $attr[$key] = $value;
+        if (is_array($json)) {
+            foreach ($json as $key => $value) {
+                $aspects[$key] = $value;
+            }
         }
 
-        //
-        return $attr;
+        return $aspects;
     }
 
     /**
@@ -45,28 +42,6 @@ trait CommonTrait
             $aspects[$key] = $value;
         }
 
-        return $aspects;
-    }
-
-    /**
-     *
-     *
-     */
-    private static function getNotationAttributesNull(
-        $notation,
-        $field,
-        $before
-    ) {
-        //
-        $aspects = static::getNotationAttributesCommon($field, $before);
-
-        //
-        $aspects['Type'] = 'varchar(255)';
-
-        //
-        $aspects['Default'] = $notation;
-
-        //
         return $aspects;
     }
 }

@@ -4,6 +4,7 @@ namespace Javanile\Moldable\Tests\Parser;
 
 use Javanile\Producer;
 use PHPUnit\Framework\TestCase;
+use Javanile\Moldable\Storable;
 
 Producer::addPsr4(['Javanile\\Moldable\\Tests\\' => __DIR__.'/../']);
 
@@ -16,6 +17,7 @@ final class MysqlParserTest extends TestCase
         $schema = [
             'people' => [
                 'first_name' => '',
+                'last_name' => null,
             ]
         ];
 
@@ -32,6 +34,17 @@ final class MysqlParserTest extends TestCase
                     'Null'     => 'NO',
                     'Extra'    => '',
                     'Default'  => '',
+                    'Relation' => null,
+                ],
+                'last_name' => [
+                    'Field'    => 'last_name',
+                    'First'    => false,
+                    'Before'   => 'first_name',
+                    'Key'      => '',
+                    'Type'     => 'varchar(255)',
+                    'Null'     => 'YES',
+                    'Extra'    => '',
+                    'Default'  => null,
                     'Relation' => null,
                 ],
             ]
@@ -116,6 +129,33 @@ final class MysqlParserTest extends TestCase
         ]);
     }
 
+    public function testJsonField()
+    {
+        $schema = [
+            'people' => [
+                'title' => '<<{"Type":"int(3)"}>>',
+            ]
+        ];
+
+        $this->parser->parse($schema);
+
+        $this->assertEquals($schema, [
+            'people' => [
+                'title' => [
+                    'Field'    => 'title',
+                    'First'    => true,
+                    'Before'   => false,
+                    'Key'      => '',
+                    'Type'     => "int(3)",
+                    'Null'     => 'YES',
+                    'Extra'    => '',
+                    'Default'  => '',
+                    'Relation' => null,
+                ],
+            ]
+        ]);
+    }
+
     public function testDatetimeField()
     {
         $schema = [
@@ -123,6 +163,7 @@ final class MysqlParserTest extends TestCase
                 'day' => '2000-01-01',
                 'moment' => '00:00:01',
                 'precise_moment' => '2000-01-01 00:00:01',
+                'ts' => Storable::TIMESTAMP,
             ]
         ];
 
@@ -161,6 +202,17 @@ final class MysqlParserTest extends TestCase
                     'Null'     => 'YES',
                     'Extra'    => '',
                     'Default'  => '2000-01-01 00:00:01',
+                    'Relation' => null,
+                ],
+                'ts' => [
+                    'Field'    => 'ts',
+                    'First'    => false,
+                    'Before'   => 'precise_moment',
+                    'Key'      => '',
+                    'Type'     => "timestamp",
+                    'Null'     => 'NO',
+                    'Extra'    => '',
+                    'Default'  => 'CURRENT_TIMESTAMP',
                     'Relation' => null,
                 ],
             ]

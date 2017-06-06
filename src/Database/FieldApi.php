@@ -36,6 +36,21 @@ trait FieldApi
     {
         $key = $this->getPrimaryKey($model);
 
-        return $key ? $key : $this->getMainField();
+        return $key ? $key : $this->getMainField($model);
+    }
+
+    /**
+     *
+     */
+    public function getMainField($model)
+    {
+        // describe the model
+        $desc = $this->desc($model);
+
+        // search by fields for primary key
+        foreach ($desc[$model] as $field => $aspects) {
+            return $field;
+        }
     }
 }
+

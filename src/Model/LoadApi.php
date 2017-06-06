@@ -128,15 +128,15 @@ trait LoadApi
              . "  LIMIT 1";
 
         // fetch data on database and return it
-        $result = static::fetch(
+        $object = static::fetch(
             $sql,
             $values,
-            false,
+            true,
             is_string($fields)
         );
-             
+
         //
-        return $result;
+        return $object;
     }
 
     /**

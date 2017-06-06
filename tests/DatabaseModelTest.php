@@ -96,4 +96,25 @@ final class DatabaseModelTest extends TestCase
         $count = $db->getValue("SELECT COUNT(*) FROM model");
         $this->assertEquals($count, 2);
     }
+
+    public function testDatabaseModelFieldApi()
+    {
+        $db = new Database([
+            'host' => $GLOBALS['DB_HOST'],
+            'dbname' => $GLOBALS['DB_NAME'],
+            'username' => $GLOBALS['DB_USER'],
+            'password' => $GLOBALS['DB_PASS'],
+        ]);
+
+        $db->apply([
+            'albums' => [
+                'title' => '',
+                'author' => '',
+            ]
+        ]);
+
+        $mainField = $db->getPrimaryKeyOrMainField('albums');
+
+        $this->assertEquals($mainField, 'title');
+    }
 }
