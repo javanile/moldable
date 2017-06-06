@@ -84,11 +84,16 @@ trait ModelApi
      */
     public function all($model, $fields = null)
     {
-        //
         $table = $this->getPrefix($model);
+        $order = '';
+
+        if (isset($fields['order'])) {
+            $order = "ORDER BY ".$fields['order'];
+            unset($fields['order']);
+        }
 
         //
-        $sql = "SELECT * FROM `{$table}`";
+        $sql = "SELECT * FROM `{$table}` {$order}";
 
         //
         $results = $this->getResults($sql);

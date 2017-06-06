@@ -89,6 +89,28 @@ final class StorableTest extends TestCase
         $this->assertEquals($names, ['Frank', 'Carol']);
     }
 
+    public function testStorableUpdate()
+    {
+        $db = new Database([
+            'host' => $GLOBALS['DB_HOST'],
+            'dbname' => $GLOBALS['DB_NAME'],
+            'username' => $GLOBALS['DB_USER'],
+            'password' => $GLOBALS['DB_PASS'],
+        ]);
+
+        $frank = new People();
+        $frank->store(['name' => 'Frank']);
+
+        $name = $db->getValue("SELECT name FROM People");
+        $this->assertEquals($name, 'Frank');
+
+        $frank->name = "The New Frank";
+        $frank->store();
+
+        $name = $db->getValue("SELECT name FROM People");
+        $this->assertEquals($name, 'The New Frank');
+    }
+
     public function testStorableConstructorOverride()
     {
         $db = new Database([
@@ -103,7 +125,7 @@ final class StorableTest extends TestCase
         $this->assertEquals($object->field1, 0);
     }
 
-    public function testStorableBuildMap()
+    public function testStorableMakeMap()
     {
         $db = new Database([
             'host' => $GLOBALS['DB_HOST'],
@@ -119,5 +141,26 @@ final class StorableTest extends TestCase
         ]);
 
         $this->assertEquals($people->name, 'Frank');
+    }
+
+    public function testUtilApi()
+    {
+        $now = People::now();
+
+        $this->assertEquals(is_string($now), true);
+    }
+
+    public function testDump()
+    {
+        $db = new Database([
+            'host' => $GLOBALS['DB_HOST'],
+            'dbname' => $GLOBALS['DB_NAME'],
+            'username' => $GLOBALS['DB_USER'],
+            'password' => $GLOBALS['DB_PASS'],
+        ]);
+
+        $dump = People::dump();
+
+        $this->assertEquals(is_string($dump), true);
     }
 }

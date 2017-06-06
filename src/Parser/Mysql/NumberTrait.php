@@ -14,30 +14,24 @@ trait NumberTrait
      *
      *
      */
-    private function getNotationAttributesBoolean($notation, $field, $before)
-    {
-        //
-        $attributes = static::getNotationAttributesCommon($field, $before);
+    private function getNotationAspectsBoolean(
+        $notation,
+        $aspects
+    ) {
+        $aspects['Type'] = 'tinyint(1)';
+        $aspects['Default'] = (int) $notation;
+        $aspects['Null'] = 'NO';
 
-        //
-        $attributes['Type'] = 'tinyint(1)';
-
-        //
-        $attributes['Default'] = (int) $notation;
-
-        //
-        $attributes['Null'] = 'NO';
-
-        //
-        return $attributes;
+        return $aspects;
     }
 
     /**
      *
      */
-    private function getNotationAspectsInteger($notation, $aspects)
-    {
-        //
+    private function getNotationAspectsInteger(
+        $notation,
+        $aspects
+    ) {
         $aspects['Type'] = 'int(11)';
         $aspects['Default'] = (int) $notation;
         $aspects['Null'] = 'NO';
@@ -49,49 +43,29 @@ trait NumberTrait
      *
      *
      */
-    private static function getNotationAttributesFloat(
+    private function getNotationAspectsFloat(
         $notation,
-        $field,
-        $before
+        $aspects
     ) {
-        //
-        $attributes = static::getNotationAttributesCommon($field, $before);
+        $aspects['Null'] = 'NO';
+        $aspects['Type'] = 'float(12,2)';
+        $aspects['Default'] = (float) $notation;
 
-        //
-        $attributes['Null']    = 'NO';
-
-        //
-        $attributes['Type']    = 'float(12,2)';
-
-        //
-        $attributes['Default']    = (float) $notation;
-
-        //
-        return $attributes;
+        return $aspects;
     }
 
     /**
      *
      *
      */
-    private static function getNotationAttributesDouble(
+    private function getNotationAspectsDouble(
         $notation,
-        $field,
-        $before
+        $aspects
     ) {
-        //
-        $aspects = static::getNotationAttributesCommon($field, $before);
-
-        //
         $aspects['Null'] = 'NO';
-
-        //
         $aspects['Type'] = 'double(10,4)';
+        $aspects['Default'] = (double) $notation;
 
-        //
-        $aspects['Default']    = (double) $notation;
-
-        //
         return $aspects;
     }
 }

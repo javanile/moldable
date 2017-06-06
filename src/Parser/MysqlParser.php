@@ -92,33 +92,20 @@ class MysqlParser extends Parser
                 return $this->getNotationAspectsDatetime($notation, $aspects);
             case 'timestamp':
                 return $this->getNotationAspectsTimestamp($notation, $aspects);
-
             case 'primary_key':
                 return $this->getNotationAspectsPrimaryKey($notation, $aspects, $params);
-               
             case 'string':
                 return $this->getNotationAspectsString($notation, $aspects);
-
             case 'text':
                 return $this->getNotationAspectsText($notation, $aspects);
-
-            //
             case 'boolean':
-                return static::getNotationAttributesBoolean($notation, $field, $before);
-
-            //
+                return $this->getNotationAspectsBoolean($notation, $aspects);
             case 'integer':
                 return $this->getNotationAspectsInteger($notation, $aspects);
-                
-            //
             case 'float':
-                return static::getNotationAttributesFloat($notation, $field, $before);
-            
-            //
+                return $this->getNotationAspectsFloat($notation, $aspects);
             case 'double':
-                return static::getNotationAttributesDouble($notation, $field, $before);
-
-            //
+                return $this->getNotationAspectsDouble($notation, $aspects);
             case 'enum':
                 return $this->getNotationAspectsEnum($notation, $aspects);
 

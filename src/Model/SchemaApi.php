@@ -150,4 +150,16 @@ trait SchemaApi
 
         return static::getClassAttribute($attribute);
     }
+
+    /**
+     *
+     *
+     */
+    public static function desc()
+    {
+        $table = static::getTable();
+        $desc = static::getDatabase()->descTable($table);
+
+        return $desc;
+    }
 }

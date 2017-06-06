@@ -77,18 +77,13 @@ trait ReadApi
      */
     public static function first($query = null, $fields = null)
     {
-        //
-        static::applyTable();
+        static::applySchema();
 
-        //
         $table = static::getTable();
-
-        //
         $order = isset($query['order'])
                ? 'ORDER BY '.$query['order']
                : '';
-        
-        //
+
         unset($query['order']);
 
         //
@@ -154,7 +149,7 @@ trait ReadApi
     public static function exists($query)
     {
         //
-        static::applyTable();
+        static::applySchema();
 
         //
         $table = self::getTable();

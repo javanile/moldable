@@ -34,7 +34,7 @@ class Functions
      * @param type $title
      * @param type $content
      */
-    public static function gridDump($title, $content)
+    public static function dumpGrid($title, $content)
     {
         /*
         //
@@ -68,6 +68,7 @@ class Functions
         //
         echo '</tbody></table></pre>';
         */
+        return "<div></div>";
     }
 
     /**

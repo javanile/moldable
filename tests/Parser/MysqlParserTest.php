@@ -43,6 +43,8 @@ final class MysqlParserTest extends TestCase
         $schema = [
             'people' => [
                 'age' => 0,
+                'major' => true,
+                'money' => .0,
             ]
         ];
 
@@ -59,6 +61,28 @@ final class MysqlParserTest extends TestCase
                     'Null'     => 'NO',
                     'Extra'    => '',
                     'Default'  => 0,
+                    'Relation' => null,
+                ],
+                'major' => [
+                    'Field'    => 'major',
+                    'First'    => false,
+                    'Before'   => 'age',
+                    'Key'      => '',
+                    'Type'     => 'tinyint(1)',
+                    'Null'     => 'NO',
+                    'Extra'    => '',
+                    'Default'  => 1,
+                    'Relation' => null,
+                ],
+                'money' => [
+                    'Field'    => 'money',
+                    'First'    => false,
+                    'Before'   => 'major',
+                    'Key'      => '',
+                    'Type'     => 'float(12,2)',
+                    'Null'     => 'NO',
+                    'Extra'    => '',
+                    'Default'  => 0.0,
                     'Relation' => null,
                 ],
             ]
