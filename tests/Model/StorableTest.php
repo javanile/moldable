@@ -163,4 +163,47 @@ final class StorableTest extends TestCase
 
         $this->assertEquals(is_string($dump), true);
     }
+
+    public function testConnect()
+    {
+        $db1 = new Database([
+            'host' => $GLOBALS['DB_HOST'],
+            'dbname' => $GLOBALS['DB_NAME'],
+            'username' => $GLOBALS['DB_USER'],
+            'password' => $GLOBALS['DB_PASS'],
+            'prefix' => 'prefix1_',
+        ]);
+
+        $db2 = new Database([
+            'host' => $GLOBALS['DB_HOST'],
+            'dbname' => $GLOBALS['DB_NAME'],
+            'username' => $GLOBALS['DB_USER'],
+            'password' => $GLOBALS['DB_PASS'],
+            'prefix' => 'prefix2_',
+        ]);
+
+        $schema1 = $db1->desc();
+        $schema2 = $db2->desc();
+        $this->assertEquals($schema1, []);
+        $this->assertEquals($schema2, []);
+
+        People::connect($db1);
+        $schema1 = $db1->desc();
+        $schema2 = $db2->desc();
+        $this->assertEquals($schema1, ['People' => People::desc()]);
+        $this->assertEquals($schema2, []);
+
+        People::connect($db2);
+        $schema1 = $db1->desc();
+        $schema2 = $db2->desc();
+        $this->assertEquals($schema1, ['People' => People::desc()]);
+        $this->assertEquals($schema2, ['People' => People::desc()]);
+    }
+
+    public function testCheckAdamant()
+    {
+        $isAdamant = People::isAdamantTable();
+
+        $this->assertEquals($isAdamant, false);
+    }
 }

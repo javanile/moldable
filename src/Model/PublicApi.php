@@ -13,16 +13,15 @@ use Javanile\SchemaDB\Functions;
 trait PublicApi 
 {
     /**
+     * Connectio Model-Class to database.
      *
      * @param type $database
      */
-    public static function connect($database=null)
+    public static function connect($database = null)
     {
-        //
+        static::resetClass();
         static::setDatabase($database);
-
-        //
-        static::applyTable();
+        static::applySchema();
     }
 
     /**
@@ -67,11 +66,4 @@ trait PublicApi
     {
         // . . .
     }
-
-    
-
-    
-
-    
-    
 }

@@ -41,7 +41,7 @@ trait TableApi
      *
      *
      */
-    protected static function isAdamantTable()
+    public static function isAdamantTable()
     {
         // config attribute that contain model table adamant 
         $attribute = 'Adamant';
@@ -54,7 +54,7 @@ trait TableApi
                  ? static::$adamant
                  : isset(static::$__adamant)
                  ? static::$__adamant
-                 : true;
+                 : false;
 
             // store as setting for future request
             static::setClassAttribute($attribute, $adamant);

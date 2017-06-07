@@ -34,6 +34,9 @@ final class ReadApiTest extends TestCase
 
         $frank = People::first();
         $this->assertEquals($frank->age, 18);
+
+        #$age = People::first(['field' => 'age']);
+        #$this->assertEquals($age, 18);
     }
 
     public function testExistsApi()

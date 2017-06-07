@@ -79,7 +79,7 @@ trait SchemaApi
      */
     public function apply($schema, $columns = null, $notation = null)
     {
-        // 
+        //
         if (is_string($schema)) {
             $schema = [
                 $schema => is_string($columns)
@@ -154,7 +154,7 @@ trait SchemaApi
         }
 
         // output container for rescued SQL query
-        $queries = array();
+        $queries = [];
 
         // loop throu the schema
         foreach ($schema as $table => &$attributes) {
@@ -170,7 +170,7 @@ trait SchemaApi
     }
 
     /**
-     * generate query to align table
+     * Generate query to align table
      *
      * @param  type $table
      * @param  type $schema
@@ -181,35 +181,26 @@ trait SchemaApi
     {
         // parse input schema if required
         if ($parse) {
-
-            //
             $this->getParser()->parseSchemaTable($schema);
-
-            //
             $table = $this->getPrefix().$table;
         }
         
         // if table no exists return sql statament for creating this
         if (!$this->tableExists($table, false)) {
-
-            //
             $sql = $this
                 ->getWriter()
                 ->createTable($table, $schema);
 
-            //
             return [$sql];
         }
 
-        //
         $queries = $this->diffTableQueries($table, $schema);
 
-        //
         return $queries;
     }
 
     /**
-     * generate query to align table
+     * Generate query to align table
      *
      * @param  type $table
      * @param  type $schema
@@ -230,11 +221,21 @@ trait SchemaApi
         // test field definition
         foreach ($schema as $field => &$attributes) {
             $this->diffTableField(
-                $table, $field, $attributes, $fields, $foQueries, $soQueries
+                $table,
+                $field,
+                $attributes,
+                $fields,
+                $foQueries,
+                $soQueries
             );
         }
 
-        return $this->diffTableMergeQueries($table, $fields, $foQueries, $soQueries);
+        return $this->diffTableMergeQueries(
+            $table,
+            $fields,
+            $foQueries,
+            $soQueries
+        );
     }
 
     /**
@@ -249,25 +250,21 @@ trait SchemaApi
         &$foQueries,
         &$soQueries
     ) {
-        //
         $key = $this->diffTableFieldPrimaryKey($fields);
 
-        //
         if ($key && count($foQueries) > 0) {
-            $foQueries[] = $this
-                ->getWriter()
-                ->alterTableDropPrimaryKey($table);
+            $writer = $this->getWriter();
 
-            //
+            $foQueries[] = $writer->alterTableDropPrimaryKey($table);
+
             $fields[$key]['Key'] = '';
-
-            //
             $fields[$key]['Extra'] = '';
 
-            //
-            $foQueries[] = $this
-                ->getWriter()
-                ->alterTableChange($table, $key, $fields[$key]);
+            $foQueries[] = $writer->alterTableChange(
+                $table,
+                $key,
+                $fields[$key]
+            );
         }
 
         return array_merge(array_reverse($foQueries), $soQueries);

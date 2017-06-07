@@ -97,6 +97,97 @@ final class DatabaseModelTest extends TestCase
         $this->assertEquals($count, 2);
     }
 
+    public function testDatabaseModelExists()
+    {
+        $db = new Database([
+            'host' => $GLOBALS['DB_HOST'],
+            'dbname' => $GLOBALS['DB_NAME'],
+            'username' => $GLOBALS['DB_USER'],
+            'password' => $GLOBALS['DB_PASS'],
+        ]);
+
+        //
+        $db->apply(['model' => [
+            'name' => '',
+            'hook' => 0,
+        ]]);
+        $db->submit('model', [
+            'name' => 'Frank',
+            'hook' => 10,
+        ]);
+
+        $exists = $db->exists('model', ['name' => 'Tony']);
+        $this->assertEquals($exists, false);
+
+        $exists = $db->exists('model', ['hook' => 10]);
+        $this->assertEquals($exists, [
+            'name' => 'Frank',
+            'hook' => 10,
+        ]);
+    }
+
+    public function testDatabaseModelImport()
+    {
+        $db = new Database([
+            'host' => $GLOBALS['DB_HOST'],
+            'dbname' => $GLOBALS['DB_NAME'],
+            'username' => $GLOBALS['DB_USER'],
+            'password' => $GLOBALS['DB_PASS'],
+        ]);
+
+        $db->import('model', [
+            ['name' => 'Frank', 'hook' => 10],
+            ['name' => 'Andy', 'hook' => 12],
+            ['name' => 'Mike', 'hook' => 14],
+        ]);
+
+        $exists = $db->exists('model', ['name' => 'Tony']);
+        $this->assertEquals($exists, false);
+
+        $exists = $db->exists('model', ['hook' => 10]);
+        $this->assertEquals($exists, [
+            'name' => 'Frank',
+            'hook' => 10,
+        ]);
+    }
+
+    public function testDatabaseModelDrop()
+    {
+        $db = new Database([
+            'host' => $GLOBALS['DB_HOST'],
+            'dbname' => $GLOBALS['DB_NAME'],
+            'username' => $GLOBALS['DB_USER'],
+            'password' => $GLOBALS['DB_PASS'],
+        ]);
+
+        $db->apply('animal', 'field0');
+
+        $db->import('model', [
+            ['name' => 'Frank', 'hook' => 10],
+            ['name' => 'Andy', 'hook' => 12],
+            ['name' => 'Mike', 'hook' => 14],
+        ]);
+
+        $db->drop('model', 'confirm');
+
+        $schema = $db->desc();
+
+        $this->assertEquals($schema, [
+            'animal' => [
+                'field0' => [
+                    'Field' => 'field0',
+                    'Type' => 'varchar(255)',
+                    'Null' => 'YES',
+                    'Key' => '',
+                    'Default' => null,
+                    'Extra' => '',
+                    'First' => true,
+                    'Before' => false,
+                ]
+            ]
+        ]);
+    }
+
     public function testDatabaseModelFieldApi()
     {
         $db = new Database([

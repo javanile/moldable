@@ -78,11 +78,16 @@ trait ReadApi
         static::applySchema();
 
         $table = static::getTable();
-        $order = isset($query['order'])
-               ? 'ORDER BY '.$query['order']
-               : '';
 
-        unset($query['order']);
+        $order = '';
+        if (isset($query['order'])) {
+            $order = 'ORDER BY '.$query['order'];
+            unset($query['order']);
+        }
+
+        #if (isset($query['field'])) {
+        #    $fields[]
+        #}
 
         //
         $whereArray = [];
