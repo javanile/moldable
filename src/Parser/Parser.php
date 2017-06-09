@@ -15,5 +15,4 @@ class Parser
      *
      */
     const CLASSREGEX = '([A-Za-z_][0-9A-Za-z_]*(\\\\[A-Za-z_][0-9A-Za-z_]*)*)([^\*.]*)';
-
 }

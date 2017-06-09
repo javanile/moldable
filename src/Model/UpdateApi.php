@@ -57,7 +57,7 @@ trait UpdateApi
         }
 
         $set   = implode(',', $setArray);
-        $where = $whereArray ? 'WHERE '.implode(' AND ' ,$whereArray) : '';
+        $where = $whereArray ? 'WHERE '.implode(' AND ', $whereArray) : '';
         $table = static::getTable();
         $sql   = "UPDATE `{$table}` SET {$set} {$where}";
 

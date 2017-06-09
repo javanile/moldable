@@ -74,47 +74,35 @@ trait ManageApi
      */
     public static function delete($query)
     {
-        //
         static::applySchema();
 
-        //
         $table = static::getTable();
 
-        //
         if (is_array($query)) {
-            $whereArray = array();
-
-            //
+            $whereArray = [];
             if (isset($query['where'])) {
                 $whereArray[] = $query['where'];
             }
 
-            //
             foreach ($query as $field => $value) {
                 if ($field != 'sort' && $field != 'where') {
                     $whereArray[] = "{$field} = '{$value}'";
                 }
             }
 
-            //
-            $where = count($h)>0 ? 'WHERE '.implode(' AND ', $whereArray) : '';
+            $where = $whereArray
+                   ? 'WHERE '.implode(' AND ', $whereArray)
+                   : '';
+
             $sql = "DELETE FROM {$table} {$where}";
 
-            // execute query
             static::getDatabase()->execute($sql);
-        }
 
-        //
-        else if ($query > 0) {
+        } else if ($query > 0) {
             $key = static::getPrimaryKey();
-
-            //
             $index = (int) $query;
-
-            //
             $sql = "DELETE FROM {$table} WHERE {$key} = '{$index}' LIMIT 1";
 
-            // execute query
             static::getDatabase()->execute($sql);
         }
     }

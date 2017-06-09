@@ -10,7 +10,7 @@ namespace Javanile\Moldable\Model;
 
 use Javanile\SchemaDB\Functions;
 
-trait PublicApi 
+trait PublicApi
 {
     /**
      * Connectio Model-Class to database.

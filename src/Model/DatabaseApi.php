@@ -10,7 +10,7 @@ namespace Javanile\Moldable\Model;
 
 use Javanile\Moldable\Database;
 
-trait DatabaseApi 
+trait DatabaseApi
 {
     /**
      * Retriece linked database or default

@@ -443,15 +443,12 @@ trait SchemaApi
      */
     public function profile($values)
     {
-        //
         $profile = [];
 
-        //
         foreach (array_keys($values) as $field) {
             $profile[$field] = '';
         }
 
-        //
         return $profile;
     }
 
@@ -459,7 +456,7 @@ trait SchemaApi
      * printout database status and info
      *
      */
-    public function info($model=null)
+    public function info($model = null)
     {
         //
         $debug = $this->getDebug();

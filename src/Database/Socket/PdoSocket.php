@@ -14,7 +14,7 @@ use PDOException;
 use Javanile\Moldable\Exception;
 
 class PdoSocket implements SocketInterface
-{	 
+{
     /**
      *
      * @var type

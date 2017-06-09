@@ -5,11 +5,6 @@
  * PHP version 5.6
  *
  * @author Francesco Bianco
- * @elegy  title   ### Use me as ORM
- * @elegy  after   #
- * @elegy  before  $ Connection
- * @elegy  section ORM -> Storable
- * @elegy  content This is a page content
  */
 namespace Javanile\Moldable;
 
@@ -167,7 +162,6 @@ class Database implements Notations
     {
         // if no default SchemaDB connection auto-set then-self
         if (static::$_default === null) {
-
             // set current SchemaDB connection to default
             static::$_default = &$database;
         }

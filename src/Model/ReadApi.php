@@ -181,19 +181,15 @@ trait ReadApi
             }
         }
 
-        //
-        $where = count($whereArray)>0
-               ? 'WHERE '.implode(' AND ',$whereArray)
+        $where = count($whereArray) > 0
+               ? 'WHERE '.implode(' AND ', $whereArray)
                : '';
 
-        //
         $sql = "SELECT * FROM `{$table}` {$where} LIMIT 1";
 
-        //
-        $r = static::getDatabase()->getRow($sql, $valuesArray);
+        $row = static::getDatabase()->getRow($sql, $valuesArray);
 
-        //        
-        return $r ? self::make($r) : false;
+        return $row ? self::make($row) : false;
     }
 
     /**

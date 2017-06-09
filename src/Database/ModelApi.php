@@ -10,7 +10,7 @@ namespace Javanile\Moldable\Database;
 
 use Javanile\SchemaDB\Functions;
 
-trait ModelApi 
+trait ModelApi
 {
     /**
      * Retrieve the table-name of specifc model.

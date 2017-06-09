@@ -33,7 +33,7 @@ class Readable implements Notations
      *
      * @var type
      */
-    static $__config = [
+    public static $__config = [
         'adamant' => true,
         'table-name-conventions' => null,
     ];

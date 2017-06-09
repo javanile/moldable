@@ -20,7 +20,7 @@ class Storable extends Readable
      *
      * @var type
      */
-    static $__config = [
+    public static $__config = [
         'adamant' => false,
     ];
 
@@ -145,8 +145,6 @@ class Storable extends Readable
         
         //
         foreach ($schema as $field => &$column) {
-
-            //
             if (($field == $key || is_null($this->{$field})) && !$force) {
                 continue;
             }
@@ -216,8 +214,10 @@ class Storable extends Readable
 
         //
         switch ($column['Relation']) {
-            case '1:1': return static::insertRelationOneToOne($value, $column);
-            case '1:*':    return static::insertRelationOneToMany($value, $column);
+            case '1:1':
+                return static::insertRelationOneToOne($value, $column);
+            case '1:*':
+                return static::insertRelationOneToMany($value, $column);
         }
     }
 
@@ -253,7 +253,8 @@ class Storable extends Readable
 
         //
         switch ($column['Relation']) {
-            case '1:*':    return static::insertRelationOneToMany($value, $column);
+            case '1:*':
+                return static::insertRelationOneToMany($value, $column);
         }
     }
 
@@ -265,7 +266,7 @@ class Storable extends Readable
     {
         $class = $column['Class'];
 
-        foreach($values as $value) {
+        foreach ($values as $value) {
             $object = new $class($value);
             $index = $object->store();
         }

@@ -1,8 +1,11 @@
 <?php
 /**
- * 
- * 
-\*/
+ * Class that handle a connection with database.
+ *
+ * PHP version 5.6
+ *
+ * @author Francesco Bianco
+ */
 namespace Javanile\Moldable;
 
 use Javanile\Producer;
@@ -10,7 +13,7 @@ use Javanile\Moldable\Exception;
 use Stringy\Stringy;
 
 class Functions
-{	
+{
     /**
      *
      * @param type $var
@@ -77,8 +80,12 @@ class Functions
      * @param type $trace
      * @param type $error
      */
-    public static function throwException($slug, $exception, $trace=null, $offset=0)
-    {
+    public static function throwException(
+        $slug,
+        $exception,
+        $trace = null,
+        $offset = 0
+    ) {
         $info = is_object($exception) ? $exception->getMessage() : $exception;
         $code = is_object($exception) ? $exception->getCode() : 0;
 

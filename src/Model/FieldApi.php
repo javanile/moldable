@@ -82,33 +82,23 @@ trait FieldApi
      */
     public static function getPrimaryKey()
     {
-        //
-        $attribute = 'PrimaryKey';
+        $attribute = 'primary-key';
 
         // retrieve value from class setting definition
         if (!static::hasClassAttribute($attribute)) {
             $key = false;
-
-            //
             $schema = static::getSchema();
 
-            //
             foreach ($schema as $field => &$attributes) {
                 if ($attributes['Key'] == 'PRI') {
-
-                    //
                     $key = $field;
-
-                    //
                     break;
                 }
             }
 
-            // store as setting for future request
             static::setClassAttribute($attribute, $key);
         }
 
-        // return primary key field name
         return static::getClassAttribute($attribute);
     }
 

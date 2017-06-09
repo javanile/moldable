@@ -123,9 +123,9 @@ class MysqlParser extends Parser
             case 'matchs':
                 return static::getNotationAttributesMatchs($notation, $field, $before, $params);
 
-
             //
-            default: trigger_error('Error parse type: '.$field.' ('.$type.')');
+            default:
+                trigger_error('Error parse type: '.$field.' ('.$type.')');
         }
     }
 
