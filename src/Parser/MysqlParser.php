@@ -35,7 +35,7 @@ class MysqlParser extends Parser
 
         // loop throh tables on the schema
         foreach ($schema as &$table) {
-            foreach($table as $aspects) {
+            foreach ($table as $aspects) {
                 if (isset($aspects['Relation']) && $aspects['Relation'] == 'many-to-many') {
                     $schema['Cioa'] = [[]];
                 }
@@ -50,7 +50,7 @@ class MysqlParser extends Parser
      * @return type
      */
     public function parseTable(&$table)
-    {        
+    {
         // for first field no have before 
         $before = false;
 
@@ -58,7 +58,7 @@ class MysqlParser extends Parser
         foreach ($table as $field => &$notation) {
             $notation = static::getNotationAspects($notation, $field, $before);
             $before = $field;
-        }       
+        }
     }
 
     /**
@@ -68,7 +68,7 @@ class MysqlParser extends Parser
      * @param  type   $field
      * @param  type   $before
      * @return string
-     */ 
+     */
     public function getNotationAspects(
         $notation,
         $field = null,

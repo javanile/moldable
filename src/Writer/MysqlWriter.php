@@ -38,9 +38,9 @@ class MysqlWriter extends Writer
             || $aspects['Default'] === 'NO'
             || $aspects['Default'] === ''
             || $aspects['Key']) {
-            $Default = '';            
+            $Default = '';
         } else if ($aspects['Default'] === 'CURRENT_TIMESTAMP') {
-            $Default = 'DEFAULT CURRENT_TIMESTAMP';                        
+            $Default = 'DEFAULT CURRENT_TIMESTAMP';
         } else {
             $Default = 'DEFAULT '."'".$aspects['Default']."'";
         }
@@ -70,14 +70,8 @@ class MysqlWriter extends Writer
 
         // loop throut schema
         foreach ($schema as $field => $attributes) {
-
-            //
             if (is_numeric($field) && is_string($attributes)) {
-
-                //
                 $field = $attributes;
-
-                //
                 $attributes = array();
             }
 
@@ -157,15 +151,9 @@ class MysqlWriter extends Writer
         //
         if (!$fields) {
             return '*';
-        }
-
-        //
-        else if (is_string($fields)) {
+        } else if (is_string($fields)) {
             return $fields;
-        }
-
-        //
-        else if (!is_array($fields)) {
+        } else if (!is_array($fields)) {
             static::error("selectFields require array");
         }
 
@@ -231,28 +219,19 @@ class MysqlWriter extends Writer
                 $join .= " LEFT JOIN {$joinTable} AS {$joinAlias}"
                        . " ON {$joinKey} = {$fieldFrom}";
 
-                if (is_array($definition['FieldTo'])) 
-                {
+                if (is_array($definition['FieldTo'])) {
                     foreach ($definition['FieldTo'] as $nextFieldTo) {
-
-                        //
                         $fieldAlias = $field.'__'.$nextFieldTo;
-
-                        //
                         $fieldTo = $joinAlias.'.'.$nextFieldTo;
-
-                        //
                         $selectFields[] = $fieldTo.' AS '.$fieldAlias; 
                     }
                 }
-                
-                //
+
                 continue;
             }                                     
         }
 
-        //
-        return implode(', ',$selectFields);
+        return implode(', ', $selectFields);
     }
 
     /**
@@ -265,10 +244,7 @@ class MysqlWriter extends Writer
         //
         if (preg_match('/^[a-z_][a-z0-9_]*$/i', $field)) {
             return $tableAlias ? $tableAlias.'.'.$field : $field;
-        }
-
-        //
-        else {
+        } else {
             return $field;
         }
     }

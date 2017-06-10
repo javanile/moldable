@@ -9,8 +9,10 @@
 namespace Javanile\Moldable\Model;
 
 trait FetchApi
-{ 
+{
     /**
+     *
+     *
      *
      *
      * @param type $array

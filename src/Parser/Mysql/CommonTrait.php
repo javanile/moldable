@@ -19,7 +19,7 @@ trait CommonTrait
         $aspects
     ) {
         // decode json object into notation
-        $json = json_decode(trim($notation,'<>'), true);
+        $json = json_decode(trim($notation, '<>'), true);
 
         // override default with json passed
         if (is_array($json)) {

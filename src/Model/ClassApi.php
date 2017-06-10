@@ -88,7 +88,7 @@ trait ClassApi
     }
 
     /**
-     * 
+     *
      *
      */
     protected static function getClassAttribute($attribute)
@@ -100,7 +100,7 @@ trait ClassApi
 
     /**
      *
-     * 
+     *
      */
     protected static function setClassAttribute($attribute, $value)
     {

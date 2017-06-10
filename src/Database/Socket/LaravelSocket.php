@@ -35,6 +35,11 @@ class LaravelSocket
     private $_socket = null;
 
     /**
+     * @var int
+     */
+    private $_args = null;
+
+    /**
      *
      * 
      */
@@ -44,6 +49,7 @@ class LaravelSocket
         $this->_connection = Capsule::connection();
         $this->_pdo        = $this->_connection->getPdo();
         $this->_socket     = new PdoSocket($this->_database, ['pdo' => $this->_pdo]);
+        $this->_args       = $args;
     }
 
     /**
@@ -116,6 +122,7 @@ class LaravelSocket
     public function setPrefix($prefix)
     {
         //DB::setTablePrefix($prefix);
+        return $prefix;
     }
 
     /**

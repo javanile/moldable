@@ -33,7 +33,7 @@ trait DebugApi
      * @param type $list
      */
     public static function dump($list = '__null__')
-    {       
+    {
         $html = Functions::dumpGrid(
             static::getTable(),
             $list != '__null__' ? $list : static::all()

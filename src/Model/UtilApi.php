@@ -9,7 +9,7 @@
 namespace Javanile\Moldable\Model;
 
 trait UtilApi
-{    
+{
     /**
      *
      * @return type

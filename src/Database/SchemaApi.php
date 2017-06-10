@@ -402,7 +402,7 @@ trait SchemaApi
      */
     public function alterTable($schema, $column = null, $notation = null)
     {
-        // TODO: da fare
+        return $schema . $column . $notation;
     }
 
     /**

@@ -100,7 +100,9 @@ class Storable extends Readable
         $params   = [];
 
         foreach ($fields as $field) {
-            if ($field == $key) { continue; }
+            if ($field == $key) {
+                continue;
+            }
 
             $token          = ':'.$field;
             $setArray[]     = $field.' = '.$token;
@@ -163,7 +165,7 @@ class Storable extends Readable
 
             //
             $tokensArray[$token] = $value;
-        } 
+        }
 
         //
         $fields = implode(',', $fieldsArray);
@@ -260,7 +262,7 @@ class Storable extends Readable
 
     /**
      *
-     * 
+     *
      */
     private static function insertRelationOneToMany($values, &$column)
     {

@@ -48,7 +48,7 @@ trait FieldApi
         $desc = $this->desc($model);
 
         // search by fields for primary key
-        foreach ($desc[$model] as $field => $aspects) {
+        foreach (array_keys($desc[$model]) as $field) {
             return $field;
         }
     }

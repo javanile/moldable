@@ -43,6 +43,5 @@ class Readable implements Notations
      */
     public function __construct()
     {
-
     }
 }

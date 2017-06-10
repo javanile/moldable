@@ -44,13 +44,14 @@ trait EnumTrait
      */
     private static function parseNotationEnum($notation)
     {
-        //
         if (is_string($notation)) {
             $notation = json_decode(trim($notation, '<>'));
-            if (json_last_error()) { return null; }
+
+            if (json_last_error()) {
+                return null;
+            }
         }
 
-        //
         return $notation;
     }
 }

@@ -10,7 +10,7 @@ namespace Javanile\Moldable\Model;
 
 use Javanile\Moldable\Functions;
 
-trait ManageApi 
+trait ManageApi
 {
     /**
      * Drop table
