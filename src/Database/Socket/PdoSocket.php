@@ -84,7 +84,20 @@ class PdoSocket implements SocketInterface
         $dsn      = "mysql:host={$this->_args['host']};dbname={$this->_args['dbname']}";
         $username = $this->_args['username'];
         $password = $this->_args['password'];
+
+        // TODO: Move to use the follow: PDO::ATTR_EMULATE_PREPARES to 'false'
+        // For security reason
         $options  = [PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8'];
+
+        /*\
+         * The latter can be fixed by turning off emulation
+         * and using the DSN charset attribute instead of SET NAMES.
+         * The former is tricky, because you have no concept for safely
+         * dealing with identifiers (they're just dumped straight into the query).
+         * One possible approach would be to wrap all identifiers in backticks
+         * while escaping all backticks within the identifiers (through doubling).
+         * Whether this actually works in all cases is an open question, though.
+        \*/
 
         try {
             $this->_pdo = new PDO($dsn, $username, $password, $options);
