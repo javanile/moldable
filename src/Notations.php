@@ -161,4 +161,11 @@ interface Notations
      * @const string
      */
     const DATETIME = '0000-00-00 00:00:00';
+
+    /**
+     * Define field as date.
+     *
+     * @const string
+     */
+    const YEAR = '<<{"Type":"int(4)"}>>';
 }

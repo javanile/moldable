@@ -161,6 +161,27 @@ trait SocketApi
     }
 
     /**
+     * Get array with current tables on database
+     *
+     * @return array
+     */
+    public function getCharset()
+    {
+        // TODO: retrive charset
+        return null;
+    }
+
+    /**
+     * Get array with current tables on database
+     *
+     * @return array
+     */
+    public function setCharset($charset)
+    {
+        // TODO: apply charset
+    }
+
+    /**
      *
      *
      */

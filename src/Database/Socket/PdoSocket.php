@@ -67,6 +67,11 @@ class PdoSocket implements SocketInterface
             }
         }
 
+        //
+        if (isset($args['charset'])) {
+            // TODO: apply charset
+        }
+
         // create and start pdo
         $this->connect();
     }
