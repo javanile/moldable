@@ -5,13 +5,13 @@
 
 Moldable is an abstraction layer to manage MySQL database 
 with improved function to alter-state and manipulate database schema.
-Moldable integrates a ORM class for manage persisten objects and adapt database schema
+Moldable integrates a ORM class for manage persistent objects and adapt database schema
 
 ## Searcing for contributors :sunglasses:
 We are looking for contributors (PHP lovers) that are passioned by ORM and Database worlds for:
- - Appling PSR code standard in working codebase and beatify the source files
+ - Applying PSR code standard in working codebase and beatify the source files
  - Testing library to different framework like: Slim, Laravel, ZendFramenwork, etc...
- - Write and mantaine updated the wiki sections https://github.com/javanile/moldable/wiki
+ - Write and maintains updated the wiki sections https://github.com/javanile/moldable/wiki
  - Increase popularity of https://packagist.org/packages/javanile/moldable by different kind of promotions
 
 *We guarantee all visibility and thanks for our contributors, many many stars and public reference in all blog posts and articles that talk about javanile/moldable*
@@ -90,6 +90,7 @@ $db->apply([
 ```
 
 ## Talk about
+ - https://www.reddit.com/r/PHP/comments/6jsm2d/the_only_php_mysql_orm_for_continuous_delivery/
  - http://www.php-forum.com/phpforum/viewtopic.php?f=30&t=26732&p=4413131&hilit=schemadb#p4413131
  - https://www.reddit.com/r/PHP/comments/3okj7x/schemadb_a_modern_and_coincise_database/?ref=readnext_4
  - https://www.reddit.com/r/PHP/comments/427zvg/schemadb_adapt_schema_of_mysql_db_based_on_class/
