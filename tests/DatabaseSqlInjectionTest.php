@@ -35,6 +35,12 @@ final class DatabaseSqlInjectionTest extends TestCase
             "x" => "dummy value",
         ]);
 
+        /*\
+         * Avoid this:
+         * INSERT INTO `prefix_test` (x) SELECT CONCAT('The MySQL version is: ', VERSION()) -- ,x) VALUES
+         * (:x) SELECT CONCAT('The MySQL version is: ', VERSION()) -- ,:x)
+        \*/
+
         $this->assertTrue(is_object($results[0]));
 
         $this->assertTrue(is_object($results[1]));
