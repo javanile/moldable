@@ -9,7 +9,7 @@ Moldable integrates a ORM class for manage persistent objects and adapt database
 
 ## Searcing for contributors :sunglasses:
 We are looking for contributors (PHP lovers) that are passioned by ORM and Database worlds for:
- - Applying PSR code standard in working codebase and beatify the source files
+ - Applying PSR code standard in working codebase and beautify the source files
  - Testing library to different framework like: Slim, Laravel, ZendFramenwork, etc...
  - Write and maintains updated the wiki sections https://github.com/javanile/moldable/wiki
  - Increase popularity of https://packagist.org/packages/javanile/moldable by different kind of promotions
