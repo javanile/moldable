@@ -438,7 +438,7 @@ trait SchemaApi
     }
 
     /**
-     *
+     * Get values profile.
      *
      */
     public function profile($values)

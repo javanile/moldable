@@ -103,7 +103,7 @@ trait ModelApi
     }
 
     /**
-     *
+     * Check if record exists.
      *
      */
     public function exists($model, $query)

@@ -149,7 +149,7 @@ class LaravelSocket
     }
 
     /**
-     *
+     * Start transact query.
      *
      */
     public function transact()
