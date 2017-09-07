@@ -13,7 +13,7 @@ use Javanile\Moldable\Functions;
 trait CacheApi
 {
     /**
-     *
+     * @var array
      */
     protected $_cache = [];
 

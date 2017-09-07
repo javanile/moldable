@@ -11,12 +11,12 @@ namespace Javanile\Moldable;
 final class Context
 {
     /**
-     *
+     * @var boolean
      */
     private static $_useLaravel = true;
 
     /**
-     *
+     * Check if run inside laravel.
      */
     public static function checkLaravel()
     {
@@ -26,7 +26,7 @@ final class Context
     }
 
     /**
-     *
+     * Apply use laravel flag.
      */
     public static function useLaravel($flag)
     {

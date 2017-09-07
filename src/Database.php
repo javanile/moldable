@@ -6,12 +6,9 @@
  *
  * @author Francesco Bianco
  */
+
 namespace Javanile\Moldable;
 
-/**
- *
- *
- */
 class Database implements Notations
 {
     use Database\ModelApi;

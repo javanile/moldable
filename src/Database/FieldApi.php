@@ -30,7 +30,7 @@ trait FieldApi
     }
 
     /**
-     *
+     * Get primary key or main field.
      */
     public function getPrimaryKeyOrMainField($model)
     {
@@ -40,7 +40,7 @@ trait FieldApi
     }
 
     /**
-     *
+     * Get the main field.
      */
     public function getMainField($model)
     {
