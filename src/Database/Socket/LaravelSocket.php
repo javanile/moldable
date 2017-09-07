@@ -167,6 +167,10 @@ class LaravelSocket
         return $this->_socket->quote($string);
     }
 
+    /**
+     * Start transact query.
+     *
+     */
     public function transact()
     {
         return $this->_socket->transact();

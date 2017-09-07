@@ -12,10 +12,10 @@ engines:
     enabled: true
     config:
       file_extensions: "php"
-      standard: "PSR1,PSR2"
+      standard: "PSR1,PSR2,PHPCS,Zend"
       ignore_warnings: false
   phpmd:
     enabled: true
     config:
       file_extensions: "php"
-      rulesets: "unusedcode,codesize,naming"
+      rulesets: "unusedcode,codesize,naming,controversial,design,cleancode"

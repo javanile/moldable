@@ -449,6 +449,10 @@ trait SchemaApi
         return $this->apply($desc);
     }
 
+    /**
+     * Get values profile.
+     *
+     */
     public function profile($values)
     {
         $profile = [];

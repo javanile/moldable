@@ -107,6 +107,11 @@ trait ModelApi
         return $results;
     }
 
+
+    /**
+     * Check if record exists.
+     *
+     */
     public function exists($model, $query)
     {
         //
