@@ -18,4 +18,4 @@ engines:
     enabled: true
     config:
       file_extensions: "php"
-      rulesets: "unusedcode,codesize,naming,design,cleancode"
+      rulesets: "unusedcode,codesize,naming"
