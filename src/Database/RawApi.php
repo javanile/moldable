@@ -20,7 +20,7 @@ trait RawApi
      */
     public function raw($model)
     {
-        // describe the model
+        // describe the passed model
         $desc = $this->desc($model);
 
         // search by fields for primary key
