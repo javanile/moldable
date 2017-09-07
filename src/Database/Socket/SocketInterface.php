@@ -12,7 +12,7 @@ namespace Javanile\Moldable\Database\Socket;
 interface SocketInterface
 {
     /**
-     *
+     * Get a single record.
      */
     public function getRow($sql, $params = null);
 }

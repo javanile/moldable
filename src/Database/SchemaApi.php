@@ -336,7 +336,7 @@ trait SchemaApi
             }
 
             //
-            if ($this->getDebug()) {
+            if ($this->isDebug()) {
                 //echo '<pre style="background:#E66;color:#000;margin:0 0 1px 0;padding:2px 6px 3px 6px;border:1px solid #000;">';
                 //echo '  difference: "'.$attributes[$key].'" != "'.$value.'" in '.$field.'['.$key.']</pre>';
             }
@@ -375,7 +375,7 @@ trait SchemaApi
         //
         if (is_string($schema)) {
             $schema = array(
-                $schema => is_string($columns) 
+                $schema => is_string($columns)
                      ? array($columns => $notation)
                      : $columns,
             );
@@ -459,7 +459,7 @@ trait SchemaApi
     public function info($model = null)
     {
         //
-        $debug = $this->getDebug();
+        $debug = $this->isDebug();
         
         //
         $this->setDebug(false);
@@ -473,7 +473,7 @@ trait SchemaApi
         } else if (is_array($model) && count($model) > 0) {
             foreach ($model as $m) {
                 $this->info($m);
-            }            
+            }
         } else if (is_array($model) && count($model) == 0) {
             echo '<pre><table border="1" style="'.$style.'">'
                . '<tr><th>No database tables</th></tr></table></pre>'
@@ -530,7 +530,7 @@ trait SchemaApi
     public function dumpSchema()
     {
         //
-        $debug = $this->getDebug();
+        $debug = $this->isDebug();
 
         //
         $this->setDebug(false);

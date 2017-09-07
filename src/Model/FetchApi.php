@@ -11,9 +11,7 @@ namespace Javanile\Moldable\Model;
 trait FetchApi
 {
     /**
-     *
-     *
-     *
+     * Fetch data from db.
      *
      * @param type $array
      */
@@ -38,7 +36,7 @@ trait FetchApi
 
             //
             if ($casting) {
-                foreach($records as &$record) {
+                foreach ($records as &$record) {
                     $record = static::make($record);
                 }
             }

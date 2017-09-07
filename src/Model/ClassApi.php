@@ -71,13 +71,13 @@ trait ClassApi
             $className = $point === false ? $class : substr($class, $point + 1);
 
             static::setClassAttribute($attribute, $className);
-        } 
+        }
         
         return static::getClassAttribute($attribute);
     }
 
     /**
-     *
+     * Class have attribute by name.
      * 
      */
     protected static function hasClassAttribute($attribute)
@@ -88,7 +88,7 @@ trait ClassApi
     }
 
     /**
-     *
+     * Retrieve class attribute by name.
      *
      */
     protected static function getClassAttribute($attribute)
@@ -99,7 +99,7 @@ trait ClassApi
     }
 
     /**
-     *
+     * Set attibute value in class.
      *
      */
     protected static function setClassAttribute($attribute, $value)
@@ -110,7 +110,7 @@ trait ClassApi
     }
 
     /**
-     *
+     * Delete class attribute.
      *
      */
     protected static function delClassAttribute($attribute)
@@ -121,7 +121,7 @@ trait ClassApi
     }
 
     /**
-     *
+     * Get global attribute value.
      *
      */
     protected static function getClassGlobal($attribute)
@@ -130,7 +130,7 @@ trait ClassApi
     }
 
     /**
-     *
+     * Check if have global attribute.
      *
      */
     protected static function hasClassGlobal($attribute)
@@ -150,7 +150,7 @@ trait ClassApi
     }
 
     /**
-     * Get configuration value of called class
+     * Get configuration value of called class.
      *
      */
     public static function getClassConfig($key)
@@ -172,7 +172,7 @@ trait ClassApi
     }
 
     /**
-     *
+     * Get all cofiguration array.
      *
      */
     protected static function getClassConfigArray()
@@ -181,7 +181,7 @@ trait ClassApi
     }
 
     /**
-     *
+     * Get configuration array inherited.
      */
     public static function getClassConfigInherit()
     {
@@ -210,7 +210,7 @@ trait ClassApi
     }
 
     /**
-     *
+     * Reset class attributes.
      *
      */
     public static function resetClass()
@@ -221,7 +221,7 @@ trait ClassApi
     }
 
     /**
-     *
+     * Reset all classes attributes.
      *
      */
     public static function resetAllClass()
@@ -230,6 +230,7 @@ trait ClassApi
     }
 
     /**
+     * Get methods names by prefix.
      *
      * @param type $prefix
      * @return type

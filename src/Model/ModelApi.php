@@ -10,7 +10,7 @@ namespace Javanile\Moldable\Model;
 
 trait ModelApi
 {
-	/**
+    /**
      * Retrieve model name.
      *
      * @return string

@@ -23,9 +23,9 @@ trait DebugApi
      *
      *
      */
-    public static function getDebug()
+    public static function isDebug()
     {
-        return static::getDatabase()->getDebug();
+        return static::getDatabase()->isDebug();
     }
 
     /**

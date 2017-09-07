@@ -11,9 +11,7 @@ namespace Javanile\Moldable\Model;
 trait RawApi
 {
     /**
-     *
-     *
-     *
+     * Execute a raw query on database.
      *
      * @param type $array
      */
@@ -38,7 +36,7 @@ trait RawApi
 
             //
             if ($casting) {
-                foreach($records as &$record) {
+                foreach ($records as &$record) {
                     $record = static::make($record);
                 }
             }

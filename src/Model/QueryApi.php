@@ -11,10 +11,11 @@ namespace Javanile\Moldable\Model;
 trait QueryApi
 {
     /**
+     * Query a list of records.
      *
      * @param type $query
      * @return type
-     */ 
+     */
     public static function query($query)
     { 
         //

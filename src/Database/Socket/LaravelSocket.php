@@ -40,8 +40,8 @@ class LaravelSocket
     private $_args = null;
 
     /**
+     * Construct socket.
      *
-     * 
      */
     public function __construct($database, $args = null)
     {
@@ -53,6 +53,7 @@ class LaravelSocket
     }
 
     /**
+     * Get a single row.
      *
      * @param type $sql
      * @return type
@@ -63,6 +64,7 @@ class LaravelSocket
     }
 
     /**
+     * Get list of records.
      *
      * @param type $sql
      * @return type
@@ -73,6 +75,7 @@ class LaravelSocket
     }
 
     /**
+     * Get list of records as object.
      *
      * @param type $sql
      * @return type
@@ -83,7 +86,7 @@ class LaravelSocket
     }
 
     /**
-     *
+     * Get a array of values of specific column.
      *
      * @param type $sql
      * @return type
@@ -94,7 +97,7 @@ class LaravelSocket
     }
 
     /**
-     *
+     * Get a single value.
      *
      * @param type $sql
      * @return type
@@ -163,7 +166,7 @@ class LaravelSocket
     }
 
     /**
-     *
+     * Roll back query.
      */
     public function rollback()
     {
@@ -171,8 +174,8 @@ class LaravelSocket
     }
 
     /**
+     * Execute query.
      *
-     * 
      */
     public function execute($sql, $params = null)
     {

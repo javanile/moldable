@@ -23,10 +23,10 @@ final class DatabaseDebugTest extends TestCase
             'debug'    => true,
         ]);
 
-        $this->assertEquals($db->getDebug(), true);
+        $this->assertEquals($db->isDebug(), true);
 
         $db->setDebug(0);
 
-        $this->assertEquals($db->getDebug(), false);
+        $this->assertEquals($db->isDebug(), false);
     }
 }

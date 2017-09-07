@@ -11,7 +11,7 @@ namespace Javanile\Moldable\Model;
 trait FieldApi
 {
     /**
-     *
+     * Initialize all fields in class.
      */
     protected function initSchemaFields()
     {
@@ -25,7 +25,7 @@ trait FieldApi
     }
 
     /**
-     *
+     * Fill value inside model fields.
      *
      * @param type $values
      */
@@ -103,8 +103,8 @@ trait FieldApi
     }
 
     /**
-     * 
-     * 
+     * Get primary key value.
+     *
      */
     public function getPrimaryKeyValue()
     {
@@ -182,7 +182,7 @@ trait FieldApi
         $key = static::getPrimaryKey();
 
         //
-        return $key ? $key : static::getMainField(); 
+        return $key ? $key : static::getMainField();
     }
 
     /**
@@ -203,7 +203,7 @@ trait FieldApi
             $schema = static::getSchema();
 
             //
-            foreach($schema as $field => $aspects) {
+            foreach ($schema as $field => $aspects) {
                 if (isset($aspects['Class']) && $aspects['Relation'] == '1:1') {
                     $class = $aspects['Class'];
                     $fields[$field] = call_user_func($class.'::join', $field);
@@ -236,10 +236,10 @@ trait FieldApi
     }
 
     /**
-     *
+     * Get all static fields.
      *
      */
-    protected static function getStaticFields()  
+    protected static function getStaticFields()
     {
         //
         $attribute = 'StaticFields';

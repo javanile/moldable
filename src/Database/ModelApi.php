@@ -25,7 +25,7 @@ trait ModelApi
     }
 
     /**
-     *
+     * Get all models.
      *
      */
     public function getModels()
@@ -48,7 +48,7 @@ trait ModelApi
     }
 
     /**
-     * describe table
+     * Describe table
      *
      * @param type $table
      * @return type
@@ -77,9 +77,9 @@ trait ModelApi
     }
 
     /**
+     * Get all records.
      *
-     *
-	 * @param type $fields
+     * @param type $fields
      * @return type
      */
     public function all($model, $fields = null)
@@ -125,7 +125,9 @@ trait ModelApi
         
         //
         foreach ($schema as $field) {
-            if (!isset($query[$field])) { continue; }
+            if (!isset($query[$field])) {
+                continue;
+            }
 
             //
             $value = $query[$field];
@@ -158,40 +160,37 @@ trait ModelApi
     }
 
     /**
-     *
+     * Import records into a model table.
      *
      * @param type $list
      */
-    public function import($model, $records, $map = null)
-    {
-        //
+    public function import(
+        $model,
+        $records
+        //$map = null
+    ) {
         if (!$records || !is_array($records[0])) {
             return;
         }
 
-        //
-        foreach($records as $record) {
+        foreach ($records as $record) {
             $schema = [];
 
-            //
             foreach (array_keys($record) as $field) {
                 $schema[$field] = '';
             }
 
-            //
             $this->adapt($model, $schema);
-          
-            //
             $this->submit($model, $record);
         }
     }
 
     /**
-     *
+     * Submit (upsert) record into a model table.
      *
      */
-    public function submit($model, $values) {
-
+    public function submit($model, $values)
+    {
         //
         $exists = $this->exists($model, $values);
 
@@ -245,7 +244,7 @@ trait ModelApi
     }
 
     /**
-     *
+     * Dump all data.
      *
      */
     public function dump($model = null)

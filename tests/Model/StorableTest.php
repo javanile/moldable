@@ -29,7 +29,7 @@ final class StorableTest extends TestCase
 
         People::setDebug(true);
 
-        $this->assertEquals(People::getDebug(), true);
+        $this->assertEquals(People::isDebug(), true);
     }
 
     public function testMake()

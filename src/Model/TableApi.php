@@ -18,7 +18,7 @@ trait TableApi
      * @return string
      */
     public static function getTable()
-    {        
+    {
         $attribute = 'table';
 
         if (!static::hasClassAttribute($attribute)) {

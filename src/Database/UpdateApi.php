@@ -47,17 +47,17 @@ trait UpdateApi
 
         $set   = implode(',', $setArray);
         $table = $this->getPrefix($model);
-        $where = $this->getUpdateWhere($model, $query, $params);
+        $where = $this->getUpdateWhere($query, $params);
         $sql   = "UPDATE `{$table}` SET {$set} WHERE {$where}";
 
         $this->execute($sql, $params);
     }
 
     /**
-     *
+     * Build where conditions.
      *
      */
-    private function getUpdateWhere($model, $query, &$params)
+    private function getUpdateWhere($query, &$params)
     {
         $whereArray = [];
 

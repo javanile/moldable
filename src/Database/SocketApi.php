@@ -122,7 +122,7 @@ trait SocketApi
     }
 
     /**
-     * Test if a table exists
+     * Test if a table exists.
      *
      * @param type $table
      * @return type
@@ -130,7 +130,7 @@ trait SocketApi
     public function tableExists($table, $parse = true)
     {
         // prepare
-        if ($parse) { 
+        if ($parse) {
             $table = $this->getPrefix($table);
         }
 
@@ -161,7 +161,7 @@ trait SocketApi
     }
 
     /**
-     * Get array with current tables on database
+     * Get array with current tables on database.
      *
      * @return array
      */
@@ -172,17 +172,17 @@ trait SocketApi
     }
 
     /**
-     * Get array with current tables on database
+     * Get array with current tables on database.
      *
      * @return array
      */
     public function setCharset($charset)
     {
-        // TODO: apply charset
+        return $charset;
     }
 
     /**
-     *
+     * Quote a string.
      *
      */
     public function quote($string)
@@ -191,17 +191,16 @@ trait SocketApi
     }
   
     /**
-     * Log called SocketApi into log file
+     * Log called SocketApi into log file.
      *
      */
     private function log($method, $sql = null, $params = null)
     {
-        /*
-
-        if (!$this->getDebug()) {
-            return;
+        if (!$this->isDebug()) {
+            return $method . $sql . json_encode($params);
         }
 
+        /*
         $arg1formatted = is_string($arg1) ? str_replace([
             'SELECT ',
             ', ',

@@ -71,11 +71,11 @@ class Functions
         //
         echo '</tbody></table></pre>';
         */
-        return "<div></div>";
+        return "<div>".$title.json_encode($content)."</div>";
     }
 
     /**
-     *
+     * Throw new exception.
      *
      * @param type $trace
      * @param type $error
@@ -87,7 +87,7 @@ class Functions
         $offset = 0
     ) {
         $info = is_object($exception) ? $exception->getMessage() : $exception;
-        $code = is_object($exception) ? $exception->getCode() : 0;
+        //$code = is_object($exception) ? $exception->getCode() : 0;
 
         $message = $slug . $info
             . ' in method '."'->".$trace[$offset]['function']."()'"
@@ -98,7 +98,7 @@ class Functions
     }
 
     /**
-     *
+     * Apply names conventions as camelCase or snake_case.
      */
     public static function applyConventions($convention, $string)
     {
@@ -116,7 +116,7 @@ class Functions
     }
 
     /**
-     * Generate banchmark line
+     * Generate banchmark line.
      * 
      * 
      */

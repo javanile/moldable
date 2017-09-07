@@ -213,7 +213,7 @@ class Database implements Notations
      *
      * @return bool Return debug mode status.
      */
-    public function getDebug()
+    public function isDebug()
     {
         return (bool) $this->_debug;
     }
