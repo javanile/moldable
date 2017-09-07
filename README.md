@@ -1,6 +1,7 @@
 # javanile/moldable
-[![Build Status](https://travis-ci.org/javanile-bot/moldable.svg?branch=master)](https://travis-ci.org/javanile-bot/moldable)
+[![StyleCI](https://styleci.io/repos/43810715/shield?branch=master)](https://styleci.io/repos/43810715)
 [![Code Climate](https://codeclimate.com/github/javanile-bot/moldable/badges/gpa.svg)](https://codeclimate.com/github/javanile-bot/moldable)
+[![Build Status](https://travis-ci.org/javanile-bot/moldable.svg?branch=master)](https://travis-ci.org/javanile-bot/moldable)
 [![Test Coverage](https://codeclimate.com/github/javanile-bot/moldable/badges/coverage.svg)](https://codeclimate.com/github/javanile-bot/moldable/coverage)
 
 Moldable is an abstraction layer to manage MySQL database 
