@@ -89,7 +89,7 @@ trait FieldApi
 
         // retrieve value from class setting definition
         if (!static::hasClassAttribute($attribute)) {
-            $key = false;
+            $key = null;
             $schema = static::getSchema();
 
             foreach ($schema as $field => &$attributes) {
@@ -132,7 +132,7 @@ trait FieldApi
 
         // retrieve value from class setting definition
         if (!static::hasClassAttribute($attribute)) {
-            $mainField = false;
+            $mainField = null;
 
             //
             $schema = static::getSchema();
