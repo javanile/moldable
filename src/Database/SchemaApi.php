@@ -452,6 +452,7 @@ trait SchemaApi
     /**
      * Get values profile.
      *
+     * @param mixed $values
      */
     public function profile($values)
     {

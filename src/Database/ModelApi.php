@@ -107,10 +107,11 @@ trait ModelApi
         return $results;
     }
 
-
     /**
      * Check if record exists.
      *
+     * @param mixed $model
+     * @param mixed $query
      */
     public function exists($model, $query)
     {
