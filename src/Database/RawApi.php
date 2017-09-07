@@ -6,6 +6,7 @@
  *
  * @author Francesco Bianco
  */
+
 namespace Javanile\Moldable\Database;
 
 trait RawApi
@@ -14,6 +15,7 @@ trait RawApi
      * Retrieve primary key name of specific model.
      *
      * @param type $model
+     *
      * @return type
      */
     public function raw($model)

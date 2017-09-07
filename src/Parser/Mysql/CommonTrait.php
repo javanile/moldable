@@ -6,14 +6,11 @@
  *
  * @author Francesco Bianco
  */
+
 namespace Javanile\Moldable\Parser\Mysql;
 
 trait CommonTrait
 {
-    /**
-     *
-     *
-     */
     private static function getNotationAspectsJson(
         $notation,
         $aspects
@@ -31,10 +28,6 @@ trait CommonTrait
         return $aspects;
     }
 
-    /**
-     *
-     *
-     */
     private function getNotationAspectsSchema($notation, $aspects)
     {
         // override default notation schema passed

@@ -1,19 +1,19 @@
 <?php
 /**
- * ModelProtectedAPI.php
+ * ModelProtectedAPI.php.
  *
  * PHP version 5.6
  *
  * @author Francesco Bianco
  */
+
 namespace Javanile\Moldable\Model;
 
 trait ReadApi
 {
     /**
-     *
-     *
      * @param type $fields
+     *
      * @return type
      */
     public static function all($fields = null)
@@ -40,19 +40,19 @@ trait ReadApi
 
         //
         $class = static::getClassName();
-        
+
         //
         $selectFields = static::getDatabase()
             ->getWriter()
             ->selectFields($fields, $class, $join);
-        
+
         //
         $sql = "SELECT {$selectFields} "
-             .   "FROM {$table} AS {$class} "
-             .       " {$join} "
-             .       " {$order} "
-             .       " {$limit} ";
-             
+             ."FROM {$table} AS {$class} "
+             ." {$join} "
+             ." {$order} "
+             ." {$limit} ";
+
         //
         try {
             $results = static::fetch(
@@ -70,6 +70,8 @@ trait ReadApi
     }
 
     /**
+     * @param null|mixed $query
+     * @param null|mixed $fields
      *
      * @return type
      */
@@ -85,9 +87,9 @@ trait ReadApi
             unset($query['order']);
         }
 
-        #if (isset($query['field'])) {
-        #    $fields[]
-        #}
+        //if (isset($query['field'])) {
+        //    $fields[]
+        //}
 
         //
         $whereArray = [];
@@ -97,7 +99,7 @@ trait ReadApi
             $whereArray[] = '('.$query['where'].')';
             unset($query['where']);
         }
-        
+
         //
         $valueArray = [];
 
@@ -126,7 +128,7 @@ trait ReadApi
         $where = $whereArray
                ? 'WHERE '.implode(' AND ', $whereArray)
                : '';
-        
+
         //
         $sql = "SELECT * FROM {$table} {$where} {$order} LIMIT 1";
 
@@ -144,9 +146,10 @@ trait ReadApi
     }
 
     /**
-     * Alias of ping
+     * Alias of ping.
      *
      * @param type $query
+     *
      * @return type
      */
     public static function exists($query)
@@ -156,7 +159,7 @@ trait ReadApi
 
         //
         $table = self::getTable();
-        
+
         //
         $whereArray = [];
 
@@ -192,10 +195,6 @@ trait ReadApi
         return $row ? self::make($row) : false;
     }
 
-    /**
-     *
-     *
-     */
     public static function ping(&$query)
     {
         $exist = static::exists($query);

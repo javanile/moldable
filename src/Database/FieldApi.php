@@ -6,6 +6,7 @@
  *
  * @author Francesco Bianco
  */
+
 namespace Javanile\Moldable\Database;
 
 trait FieldApi
@@ -14,6 +15,7 @@ trait FieldApi
      * Retrieve primary key name of specific model.
      *
      * @param type $model
+     *
      * @return type
      */
     public function getPrimaryKey($model)
@@ -31,6 +33,8 @@ trait FieldApi
 
     /**
      * Get primary key or main field.
+     *
+     * @param mixed $model
      */
     public function getPrimaryKeyOrMainField($model)
     {
@@ -41,6 +45,8 @@ trait FieldApi
 
     /**
      * Get the main field.
+     *
+     * @param mixed $model
      */
     public function getMainField($model)
     {

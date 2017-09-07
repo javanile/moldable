@@ -6,16 +6,16 @@
  *
  * @author Francesco Bianco
  */
+
 namespace Javanile\Moldable\Model;
 
 trait FilterApi
 {
     /**
-     *
-     *
      * @param type $values
      * @param type $filter
      * @param type $map
+     *
      * @return type
      */
     public static function filter($values, $filter, $map = null)
@@ -31,11 +31,11 @@ trait FilterApi
 
         //
         foreach ($object as $field => $value) {
-            $compareWith = $filter . $field;
+            $compareWith = $filter.$field;
 
-            foreach($methods as $method) {
+            foreach ($methods as $method) {
                 if (preg_match('/^'.$method.'/i', $compareWith)) {
-                    $object->{$field} = call_user_func(array($object, $method), $value);
+                    $object->{$field} = call_user_func([$object, $method], $value);
                 }
             }
         }

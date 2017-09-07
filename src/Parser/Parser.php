@@ -6,13 +6,10 @@
  *
  * @author Francesco Bianco
  */
+
 namespace Javanile\Moldable\Parser;
 
 class Parser
 {
-    /**
-     *
-     *
-     */
     const CLASSREGEX = '([A-Za-z_][0-9A-Za-z_]*(\\\\[A-Za-z_][0-9A-Za-z_]*)*)([^\*.]*)';
 }

@@ -6,26 +6,24 @@
  *
  * @author Francesco Bianco
  */
+
 namespace Javanile\Moldable;
 
-use Javanile\Producer;
-use Javanile\Moldable\Exception;
 use Stringy\Stringy;
 
 class Functions
 {
     /**
-     *
      * @param type $var
      */
     public static function varDump($var)
     {
         //
         $style = 'padding:4px 6px 2px 6px;'
-               . 'background:#eee;'
-               . 'border:1px solid #ccc;'
-               . 'margin:0 0 1px 0;';
-        
+               .'background:#eee;'
+               .'border:1px solid #ccc;'
+               .'margin:0 0 1px 0;';
+
         //
         echo '<pre style="'.$style.'">';
         var_dump($var);
@@ -33,7 +31,6 @@ class Functions
     }
 
     /**
-     *
      * @param type $title
      * @param type $content
      */
@@ -71,14 +68,17 @@ class Functions
         //
         echo '</tbody></table></pre>';
         */
-        return "<div>".$title.json_encode($content)."</div>";
+        return '<div>'.$title.json_encode($content).'</div>';
     }
 
     /**
      * Throw new exception.
      *
-     * @param type $trace
-     * @param type $error
+     * @param type  $trace
+     * @param type  $error
+     * @param mixed $slug
+     * @param mixed $exception
+     * @param mixed $offset
      */
     public static function throwException(
         $slug,
@@ -89,16 +89,19 @@ class Functions
         $info = is_object($exception) ? $exception->getMessage() : $exception;
         //$code = is_object($exception) ? $exception->getCode() : 0;
 
-        $message = $slug . $info
-            . ' in method '."'->".$trace[$offset]['function']."()'"
-            . ' called at '.$trace[$offset]['file']
-            . ' on line '.$trace[$offset]['line'];
+        $message = $slug.$info
+            .' in method '."'->".$trace[$offset]['function']."()'"
+            .' called at '.$trace[$offset]['file']
+            .' on line '.$trace[$offset]['line'];
 
         throw new Exception($message);
     }
 
     /**
      * Apply names conventions as camelCase or snake_case.
+     *
+     * @param mixed $convention
+     * @param mixed $string
      */
     public static function applyConventions($convention, $string)
     {
@@ -117,17 +120,19 @@ class Functions
 
     /**
      * Generate banchmark line.
-     * 
-     * 
+     *
+     *
+     * @param mixed $name
      */
     public static function bachmark($name)
     {
         $delta = 'asd';
         $style = 'background:#333;'
-            . 'color:#fff;'
-            . 'padding:2px 6px 3px 6px;'
-            . 'border:1px solid #000';
-        $infoline = 'Time: '.$delta.' '. 'Mem: ';
+            .'color:#fff;'
+            .'padding:2px 6px 3px 6px;'
+            .'border:1px solid #000';
+        $infoline = 'Time: '.$delta.' '.'Mem: ';
+
         return '<pre style="'.$style.'">'.$infoline.'</pre>';
     }
 }

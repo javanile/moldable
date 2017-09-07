@@ -6,14 +6,11 @@
  *
  * @author Francesco Bianco
  */
+
 namespace Javanile\Moldable\Parser\Mysql;
 
 trait DatetimeTrait
 {
-    /**
-     *
-     *
-     */
     private function getNotationAspectsDate(
         $notation,
         $aspects
@@ -24,10 +21,6 @@ trait DatetimeTrait
         return $aspects;
     }
 
-    /**
-     *
-     *
-     */
     private function getNotationAspectsTime(
         $notation,
         $aspects
@@ -38,10 +31,6 @@ trait DatetimeTrait
         return $aspects;
     }
 
-    /**
-     *
-     *
-     */
     private function getNotationAspectsDatetime(
         $notation,
         $aspects
@@ -52,9 +41,6 @@ trait DatetimeTrait
         return $aspects;
     }
 
-    /**
-     *
-     */
     private static function getNotationAspectsTimestamp(
         $notation,
         $aspects
@@ -67,27 +53,31 @@ trait DatetimeTrait
     }
 
     /**
-     * printout database status/info
+     * printout database status/info.
+     *
+     * @param mixed $date
      */
     public static function parseDate($date)
     {
         //
         if ($date != '0000-00-00') {
-            return @date('Y-m-d', @strtotime('' . $date));
+            return @date('Y-m-d', @strtotime(''.$date));
         } else {
-            return null;
+            return;
         }
     }
 
     /**
-     * printout database status/info
+     * printout database status/info.
+     *
+     * @param mixed $datetime
      */
     public static function parseDatetime($datetime)
     {
         if ($datetime != '0000-00-00 00:00:00') {
-            return @date('Y-m-d H:i:s', @strtotime('' . $datetime));
+            return @date('Y-m-d H:i:s', @strtotime(''.$datetime));
         } else {
-            return null;
+            return;
         }
     }
 }

@@ -6,16 +6,16 @@
  *
  * @author Francesco Bianco
  */
-namespace Javanile\Moldable\Model;
 
-use Javanile\Moldable\Exception;
+namespace Javanile\Moldable\Model;
 
 trait UpdateApi
 {
     /**
+     * @param type       $query
+     * @param type       $values
+     * @param null|mixed $map
      *
-     * @param  type $query
-     * @param  type $values
      * @return type
      */
     public static function update($query, $values = null, $map = null)
@@ -30,7 +30,7 @@ trait UpdateApi
 
         if ($key && isset($query[$key]) && is_null($values)) {
             $values = $query;
-            $query  = [$key => $query[$key]];
+            $query = [$key => $query[$key]];
             unset($values[$key]);
         }
 
@@ -38,28 +38,30 @@ trait UpdateApi
             $values = [$values => $map];
         }
 
-        $setArray    = [];
-        $whereArray  = [];
+        $setArray = [];
+        $whereArray = [];
         $valuesArray = [];
 
         foreach ($query as $field => $value) {
-            $token          = ':'.$field.'0';
-            $whereArray[]   = "`{$field}` = {$token}";
+            $token = ':'.$field.'0';
+            $whereArray[] = "`{$field}` = {$token}";
             $params[$token] = $value;
         }
 
         foreach (static::getSchemaFields() as $field) {
-            if (!isset($values[$field])) { continue; }
+            if (!isset($values[$field])) {
+                continue;
+            }
 
-            $token          = ':'.$field.'1';
-            $setArray[]     = "`{$field}` = {$token}";
+            $token = ':'.$field.'1';
+            $setArray[] = "`{$field}` = {$token}";
             $params[$token] = $values[$field];
         }
 
-        $set   = implode(',', $setArray);
+        $set = implode(',', $setArray);
         $where = $whereArray ? 'WHERE '.implode(' AND ', $whereArray) : '';
         $table = static::getTable();
-        $sql   = "UPDATE `{$table}` SET {$set} {$where}";
+        $sql = "UPDATE `{$table}` SET {$set} {$where}";
 
         static::getDatabase()->execute($sql, $params);
     }

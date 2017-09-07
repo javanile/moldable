@@ -6,12 +6,12 @@
  *
  * @author Francesco Bianco
  */
+
 namespace Javanile\Moldable\Model;
 
 trait SchemaApi
 {
     /**
-     *
      * @return type
      */
     public static function applySchema()
@@ -52,7 +52,7 @@ trait SchemaApi
     }
 
     /**
-     * Instrospect and retrieve element schema
+     * Instrospect and retrieve element schema.
      *
      * @return type
      */
@@ -62,7 +62,7 @@ trait SchemaApi
 
         if (!static::hasClassAttribute($attribute)) {
             $fields = static::getSchemaFieldsValues();
-            $schema = array();
+            $schema = [];
 
             if ($fields && count($fields) > 0) {
                 foreach ($fields as $name => $value) {
@@ -79,7 +79,7 @@ trait SchemaApi
     }
 
     /**
-     * Instrospect and retrieve element schema
+     * Instrospect and retrieve element schema.
      *
      * @return type
      */
@@ -88,9 +88,9 @@ trait SchemaApi
         $attribute = 'schema-fields';
 
         if (!static::hasClassAttribute($attribute)) {
-            $allFields     = static::getAllFields();
+            $allFields = static::getAllFields();
             $excludeFields = static::getExcludeFields();
-            $schemaFields  = array_diff($allFields, $excludeFields);
+            $schemaFields = array_diff($allFields, $excludeFields);
 
             static::setClassAttribute($attribute, $schemaFields);
         }
@@ -98,10 +98,6 @@ trait SchemaApi
         return static::getClassAttribute($attribute);
     }
 
-    /**
-     *
-     *
-     */
     protected static function getExcludeFields()
     {
         $attribute = 'exclude-fields';
@@ -130,7 +126,7 @@ trait SchemaApi
     }
 
     /**
-     * Instrospect and retrieve element schema
+     * Instrospect and retrieve element schema.
      *
      * @return type
      */
@@ -151,10 +147,6 @@ trait SchemaApi
         return static::getClassAttribute($attribute);
     }
 
-    /**
-     *
-     *
-     */
     public static function desc()
     {
         $table = static::getTable();

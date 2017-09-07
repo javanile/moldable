@@ -6,6 +6,7 @@
  *
  * @author Francesco Bianco
  */
+
 namespace Javanile\Moldable\Database;
 
 trait InsertApi
@@ -13,7 +14,10 @@ trait InsertApi
     /**
      * Insert record for specific model with values.
      *
-     * @param type $list
+     * @param type       $list
+     * @param mixed      $model
+     * @param mixed      $values
+     * @param null|mixed $map
      */
     public function insert($model, $values, $map = null)
     {
@@ -26,9 +30,9 @@ trait InsertApi
 
         $this->adapt($model, $this->profile($values));
 
-        $fieldsArray = array();
-        $tokensArray = array();
-        $valuesArray = array();
+        $fieldsArray = [];
+        $tokensArray = [];
+        $valuesArray = [];
 
         foreach ($values as $field => $value) {
             $field = isset($map[$field]) ? $map[$field] : $field;

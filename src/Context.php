@@ -6,12 +6,13 @@
  *
  * @author Francesco Bianco
  */
+
 namespace Javanile\Moldable;
 
 final class Context
 {
     /**
-     * @var boolean
+     * @var bool
      */
     private static $_useLaravel = true;
 
@@ -27,6 +28,8 @@ final class Context
 
     /**
      * Apply use laravel flag.
+     *
+     * @param mixed $flag
      */
     public static function useLaravel($flag)
     {

@@ -2,8 +2,8 @@
 
 namespace Javanile\Moldable\Tests;
 
-use Javanile\Producer;
 use Javanile\Moldable\Database;
+use Javanile\Producer;
 use PHPUnit\Framework\TestCase;
 
 Producer::addPsr4(['Javanile\\Moldable\\Tests\\' => __DIR__]);
@@ -25,21 +25,21 @@ final class DatabaseFieldApiTest extends TestCase
 
         $db->apply('test_table_1', [
             'primary_key_field' => $db::PRIMARY_KEY,
-            'test_field_2'      => "",
+            'test_field_2'      => '',
         ]);
 
         $this->assertEquals($db->getPrimaryKey('test_table_1'), 'primary_key_field');
 
         $db->apply('test_table_2', [
             'primary_key_field' => $db::KEY,
-            'test_field_2'      => "",
+            'test_field_2'      => '',
         ]);
 
         $this->assertEquals($db->getPrimaryKey('test_table_2'), 'primary_key_field');
 
         $db->apply('test_table_1', [
             'primary_key_field_other' => $db::PRIMARY_KEY,
-            'test_field_2'      => "",
+            'test_field_2'            => '',
         ]);
 
         $this->assertEquals($db->getPrimaryKey('test_table_1'), 'primary_key_field_other');

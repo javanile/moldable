@@ -7,10 +7,11 @@
  *
  * @author Francesco Bianco
  */
+
 namespace Javanile\Moldable\Database\Socket;
 
-use PDO;
 use Illuminate\Database\Capsule\Manager as Capsule;
+use PDO;
 
 class LaravelSocket
 {
@@ -42,20 +43,24 @@ class LaravelSocket
     /**
      * Construct socket.
      *
+     * @param mixed      $database
+     * @param null|mixed $args
      */
     public function __construct($database, $args = null)
     {
-        $this->_database   = $database;
+        $this->_database = $database;
         $this->_connection = Capsule::connection();
-        $this->_pdo        = $this->_connection->getPdo();
-        $this->_socket     = new PdoSocket($this->_database, ['pdo' => $this->_pdo]);
-        $this->_args       = $args;
+        $this->_pdo = $this->_connection->getPdo();
+        $this->_socket = new PdoSocket($this->_database, ['pdo' => $this->_pdo]);
+        $this->_args = $args;
     }
 
     /**
      * Get a single row.
      *
-     * @param type $sql
+     * @param type       $sql
+     * @param null|mixed $params
+     *
      * @return type
      */
     public function getRow($sql, $params = null)
@@ -66,7 +71,9 @@ class LaravelSocket
     /**
      * Get list of records.
      *
-     * @param type $sql
+     * @param type       $sql
+     * @param null|mixed $params
+     *
      * @return type
      */
     public function getResults($sql, $params = null)
@@ -77,7 +84,9 @@ class LaravelSocket
     /**
      * Get list of records as object.
      *
-     * @param type $sql
+     * @param type       $sql
+     * @param null|mixed $params
+     *
      * @return type
      */
     public function getResultsAsObjects($sql, $params = null)
@@ -88,7 +97,9 @@ class LaravelSocket
     /**
      * Get a array of values of specific column.
      *
-     * @param type $sql
+     * @param type       $sql
+     * @param null|mixed $params
+     *
      * @return type
      */
     public function getColumn($sql, $params = null)
@@ -99,7 +110,9 @@ class LaravelSocket
     /**
      * Get a single value.
      *
-     * @param type $sql
+     * @param type       $sql
+     * @param null|mixed $params
+     *
      * @return type
      */
     public function getValue($sql, $params = null)
@@ -108,17 +121,21 @@ class LaravelSocket
     }
 
     /**
-     * Return prefix passed on init attribute
+     * Return prefix passed on init attribute.
+     *
+     * @param mixed $table
      *
      * @return type
      */
-    public function getPrefix($table = "")
+    public function getPrefix($table = '')
     {
-        return $this->_connection->getTablePrefix() . $table;
+        return $this->_connection->getTablePrefix().$table;
     }
 
     /**
-     * Return prefix passed on init attribute
+     * Return prefix passed on init attribute.
+     *
+     * @param mixed $prefix
      *
      * @return type
      */
@@ -129,7 +146,7 @@ class LaravelSocket
     }
 
     /**
-     * Return last insert id
+     * Return last insert id.
      *
      * @return type
      */
@@ -139,7 +156,9 @@ class LaravelSocket
     }
 
     /**
-     * Return last insert id
+     * Return last insert id.
+     *
+     * @param mixed $string
      *
      * @return type
      */
@@ -157,9 +176,6 @@ class LaravelSocket
         return $this->_socket->transact();
     }
 
-    /**
-     *
-     */
     public function commit()
     {
         return $this->_socket->commit();
@@ -176,6 +192,8 @@ class LaravelSocket
     /**
      * Execute query.
      *
+     * @param mixed      $sql
+     * @param null|mixed $params
      */
     public function execute($sql, $params = null)
     {

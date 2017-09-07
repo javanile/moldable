@@ -6,13 +6,11 @@
  *
  * @author Francesco Bianco
  */
+
 namespace Javanile\Moldable\Parser\Mysql;
 
 trait EnumTrait
 {
-    /**
-     *
-     */
     private function getNotationAspectsEnum($notation, $aspects)
     {
         //
@@ -22,7 +20,7 @@ trait EnumTrait
         }
 
         //
-        #$aspects['Enum'] = $enum;
+        //$aspects['Enum'] = $enum;
         $aspects['Default'] = $enum[0];
         $aspects['Null'] = in_array(null, $enum) ? 'YES' : 'NO';
 
@@ -38,17 +36,13 @@ trait EnumTrait
         return $aspects;
     }
 
-    /**
-     *
-     *
-     */
     private static function parseNotationEnum($notation)
     {
         if (is_string($notation)) {
             $notation = json_decode(trim($notation, '<>'));
 
             if (json_last_error()) {
-                return null;
+                return;
             }
         }
 

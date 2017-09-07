@@ -6,6 +6,7 @@
  *
  * @author Francesco Bianco
  */
+
 namespace Javanile\Moldable\Model;
 
 use Javanile\Moldable\Functions;
@@ -13,7 +14,7 @@ use Javanile\Moldable\Functions;
 trait TableApi
 {
     /**
-     * Retrieve table name
+     * Retrieve table name.
      *
      * @return string
      */
@@ -37,13 +38,9 @@ trait TableApi
         return static::getClassAttribute($attribute);
     }
 
-    /**
-     *
-     *
-     */
     public static function isAdamantTable()
     {
-        // config attribute that contain model table adamant 
+        // config attribute that contain model table adamant
         $attribute = 'Adamant';
 
         // retrieve value from class setting definition

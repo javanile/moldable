@@ -6,14 +6,11 @@
  *
  * @author Francesco Bianco
  */
+
 namespace Javanile\Moldable\Parser\Mysql;
 
 trait KeyTrait
 {
-    /**
-     *
-     *
-     */
     private function getNotationAspectsPrimaryKey($notation, $aspects, $params)
     {
         //

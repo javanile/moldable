@@ -6,6 +6,7 @@
  *
  * @author Francesco Bianco
  */
+
 namespace Javanile\Moldable\Model;
 
 trait FieldApi
@@ -27,7 +28,9 @@ trait FieldApi
     /**
      * Fill value inside model fields.
      *
-     * @param type $values
+     * @param type       $values
+     * @param null|mixed $map
+     * @param null|mixed $prefix
      */
     public function fillSchemaFields($values, $map = null, $prefix = null)
     {
@@ -48,12 +51,12 @@ trait FieldApi
                 $this->{$field} = $class::make(
                     $values,
                     $map,
-                    $prefix . $field . '__'
+                    $prefix.$field.'__'
                 );
             }
 
             //
-            $field = $prefix . $field;
+            $field = $prefix.$field;
 
             //
             if (isset($values[$field])) {
@@ -65,7 +68,7 @@ trait FieldApi
         $key = $this->getPrimaryKey();
 
         //
-        $field = $prefix . $key;
+        $field = $prefix.$key;
 
         //
         if ($key) {
@@ -76,9 +79,9 @@ trait FieldApi
     }
 
     /**
-     * Retrieve primary key field name
+     * Retrieve primary key field name.
      *
-     * @return boolean
+     * @return bool
      */
     public static function getPrimaryKey()
     {
@@ -104,7 +107,6 @@ trait FieldApi
 
     /**
      * Get primary key value.
-     *
      */
     public function getPrimaryKeyValue()
     {
@@ -119,9 +121,9 @@ trait FieldApi
     }
 
     /**
-     * Retrieve primary key field name
+     * Retrieve primary key field name.
      *
-     * @return boolean
+     * @return bool
      */
     public static function getMainField()
     {
@@ -156,10 +158,6 @@ trait FieldApi
         return static::getClassAttribute($attribute);
     }
 
-    /**
-     *
-     *
-     */
     public function getMainFieldValue()
     {
         //
@@ -172,10 +170,6 @@ trait FieldApi
             : null;
     }
 
-    /**
-     *
-     *
-     */
     protected static function getPrimaryKeyOrMainField()
     {
         //
@@ -186,9 +180,9 @@ trait FieldApi
     }
 
     /**
-     * Retrieve primary key field name
+     * Retrieve primary key field name.
      *
-     * @return boolean
+     * @return bool
      */
     protected static function getDefaultFields()
     {
@@ -197,7 +191,7 @@ trait FieldApi
 
         // retrieve value from class setting definition
         if (!static::hasClassAttribute($attribute)) {
-            $fields = array();
+            $fields = [];
 
             //
             $schema = static::getSchema();
@@ -215,20 +209,16 @@ trait FieldApi
             // store as setting for future request
             static::setClassAttribute($attribute, $fields);
         }
-    
+
         // return primary key field name
         return static::getClassAttribute($attribute);
     }
 
-    /**
-     *
-     *
-     */
     public static function getFieldValues($field)
     {
         //
         $schema = static::getSchema();
-        
+
         //
         return isset($schema[$field]['Enum'])
             ? $schema[$field]['Enum']
@@ -237,7 +227,6 @@ trait FieldApi
 
     /**
      * Get all static fields.
-     *
      */
     protected static function getStaticFields()
     {
@@ -253,36 +242,29 @@ trait FieldApi
 
             //
             $fields = array_keys($reflection->getStaticProperties());
-                  
+
             // store as setting for future request
             static::setClassAttribute($attribute, $fields);
         }
-        
+
         // return primary key field name
         return static::getClassAttribute($attribute);
     }
-    
-    /**
-     *
-     *
-     */
+
     protected static function getAllFieldsValues()
     {
         $attribute = 'fields-values';
 
         if (!static::hasClassAttribute($attribute)) {
-            $class  = static::getClass();
+            $class = static::getClass();
             $fields = get_class_vars($class);
-                  
+
             static::setClassAttribute($attribute, $fields);
         }
-        
+
         return static::getClassAttribute($attribute);
     }
 
-    /**
-     *
-     */
     protected static function getAllFields()
     {
         return array_keys(get_class_vars(static::getClass()));

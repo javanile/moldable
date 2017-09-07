@@ -134,11 +134,12 @@ class Database implements Notations
 
         // check if running into laravel context
         if (Context::checkLaravel()) {
-            static::$_default = new Database(['socket' => 'Laravel']);
+            static::$_default = new self(['socket' => 'Laravel']);
+
             return static::$_default;
         }
     }
-    
+
     /**
      * Test if have a default db connection.
      *

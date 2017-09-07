@@ -6,6 +6,7 @@
  *
  * @author Francesco Bianco
  */
+
 namespace Javanile\Moldable\Model;
 
 use Javanile\Moldable\Database;
@@ -13,7 +14,7 @@ use Javanile\Moldable\Database;
 trait DatabaseApi
 {
     /**
-     * Retriece linked database or default
+     * Retriece linked database or default.
      *
      * @return type
      */
@@ -25,7 +26,7 @@ trait DatabaseApi
             $database = Database::getDefault();
 
             if (!$database) {
-                static::error("database connection not found");
+                static::error('database connection not found');
             }
 
             static::setClassAttribute($attribute, $database);
@@ -35,7 +36,9 @@ trait DatabaseApi
     }
 
     /**
-     * Link specific database to this table
+     * Link specific database to this table.
+     *
+     * @param mixed $database
      *
      * @return type
      */

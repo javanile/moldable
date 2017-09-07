@@ -6,6 +6,7 @@
  *
  * @author Francesco Bianco
  */
+
 namespace Javanile\Moldable\Parser;
 
 class MysqlParser extends Parser
@@ -21,9 +22,10 @@ class MysqlParser extends Parser
     use Mysql\DatetimeTrait;
 
     /**
-     * parse a multi-table schema to sanitize end explode implicit info
+     * parse a multi-table schema to sanitize end explode implicit info.
      *
      * @param type $schema
+     *
      * @return type
      */
     public function parse(&$schema)
@@ -44,14 +46,15 @@ class MysqlParser extends Parser
     }
 
     /**
-     * Parse table schema to sanitize end explod implicit info
+     * Parse table schema to sanitize end explod implicit info.
      *
      * @param type $schema
+     *
      * @return type
      */
     public function parseTable(&$table)
     {
-        // for first field no have before 
+        // for first field no have before
         $before = false;
 
         // loop throuh fields on table
@@ -62,11 +65,12 @@ class MysqlParser extends Parser
     }
 
     /**
-     * Parse notation of a field
+     * Parse notation of a field.
      *
-     * @param  type   $notation
-     * @param  type   $field
-     * @param  type   $before
+     * @param type $notation
+     * @param type $field
+     * @param type $before
+     *
      * @return string
      */
     public function getNotationAspects(
@@ -129,9 +133,6 @@ class MysqlParser extends Parser
         }
     }
 
-    /**
-     *
-     */
     private function getNotationCommonAspects($field, $before)
     {
         $aspects = [

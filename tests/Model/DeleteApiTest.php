@@ -2,11 +2,11 @@
 
 namespace Javanile\Moldable\Tests\Model;
 
-use Javanile\Producer;
 use Javanile\Moldable\Database;
-use Javanile\Moldable\Tests\Sample\People;
-use PHPUnit\Framework\TestCase;
 use Javanile\Moldable\Tests\DatabaseTrait;
+use Javanile\Moldable\Tests\Sample\People;
+use Javanile\Producer;
+use PHPUnit\Framework\TestCase;
 
 Producer::addPsr4(['Javanile\\Moldable\\Tests\\' => __DIR__.'/../']);
 
@@ -31,11 +31,10 @@ final class DeleteApiTest extends TestCase
             'age'     => 18,
         ]);
 
-        $sql = "SELECT age FROM prefix_People WHERE id = 1";
+        $sql = 'SELECT age FROM prefix_People WHERE id = 1';
         $this->assertEquals($db->getValue($sql), 18);
 
         People::delete(1);
         $this->assertEquals($db->getValue($sql), null);
-
     }
 }

@@ -6,6 +6,7 @@
  *
  * @author Francesco Bianco
  */
+
 namespace Javanile\Moldable\Parser\Mysql;
 
 trait ValueTrait
@@ -15,6 +16,7 @@ trait ValueTrait
      * Value rapresent ...
      *
      * @param type $notation
+     *
      * @return type
      */
     public function getNotationValue($notation)
@@ -26,9 +28,9 @@ trait ValueTrait
             case 'integer':
                 return (int) $notation;
             case 'boolean':
-                return (boolean) $notation;
+                return (bool) $notation;
             case 'primary_key':
-                return null;
+                return;
             case 'string':
                 return (string) $notation;
             case 'text':
@@ -37,15 +39,15 @@ trait ValueTrait
             case 'float':
                 return (float) $notation;
             case 'double':
-                return (double) $notation;
+                return (float) $notation;
             case 'class':
-                return null;
+                return;
             case 'vector':
-                return null;
+                return;
             case 'matchs':
-                return null;
+                return;
             case 'array':
-                return null;
+                return;
             case 'enum':
                 return !is_string($notation) && isset($notation[0]) && !is_null($notation[0]) ? $notation[0] : null;
             case 'time':
@@ -55,28 +57,26 @@ trait ValueTrait
             case 'datetime':
                 return static::parseDatetime($notation);
             case 'timestamp':
-                return null;
+                return;
             case 'schema':
-                return null;
+                return;
             case 'column':
-                return null;
+                return;
             case 'json':
-                return null;
+                return;
             case 'null':
-                return null;
+                return;
             default:
                 trigger_error("No PSEUDOTYPE value for '{$type}' => '{$notation}'", E_USER_ERROR);
         }
     }
 
-    /**
-     *
-     */
     protected function getNotationValueString($notation)
     {
         if (preg_match('/<<@[a-z_]+>>/', $notation)) {
-            return "";
+            return '';
         }
+
         return $notation;
     }
 }

@@ -6,6 +6,7 @@
  *
  * @author Francesco Bianco
  */
+
 namespace Javanile\Moldable\Database;
 
 use Javanile\SchemaDB\Functions;
@@ -16,6 +17,7 @@ trait ModelApi
      * Retrieve the table-name of specifc model.
      *
      * @param string $model Model name
+     *
      * @return string Return table name by model
      */
     private function getTable($model)
@@ -26,7 +28,6 @@ trait ModelApi
 
     /**
      * Get all models.
-     *
      */
     public function getModels()
     {
@@ -48,9 +49,11 @@ trait ModelApi
     }
 
     /**
-     * Describe table
+     * Describe table.
      *
-     * @param type $table
+     * @param type  $table
+     * @param mixed $model
+     *
      * @return type
      */
     public function getFields($model)
@@ -79,7 +82,9 @@ trait ModelApi
     /**
      * Get all records.
      *
-     * @param type $fields
+     * @param type  $fields
+     * @param mixed $model
+     *
      * @return type
      */
     public function all($model, $fields = null)
@@ -88,7 +93,7 @@ trait ModelApi
         $order = '';
 
         if (isset($fields['order'])) {
-            $order = "ORDER BY ".$fields['order'];
+            $order = 'ORDER BY '.$fields['order'];
             unset($fields['order']);
         }
 
@@ -101,6 +106,7 @@ trait ModelApi
         //
         return $results;
     }
+
 
     /**
      * Check if record exists.
@@ -119,10 +125,10 @@ trait ModelApi
             $whereArray[] = $query['where'];
             unset($query['where']);
         }
-        
+
         //
         $schema = $this->getFields($model);
-        
+
         //
         foreach ($schema as $field) {
             if (!isset($query[$field])) {
@@ -131,10 +137,10 @@ trait ModelApi
 
             //
             $value = $query[$field];
-            
+
             //
             $token = ':'.$field;
-        
+
             //
             $params[$token] = $value;
 
@@ -162,7 +168,9 @@ trait ModelApi
     /**
      * Import records into a model table.
      *
-     * @param type $list
+     * @param type  $list
+     * @param mixed $model
+     * @param mixed $records
      */
     public function import(
         $model,
@@ -188,6 +196,8 @@ trait ModelApi
     /**
      * Submit (upsert) record into a model table.
      *
+     * @param mixed $model
+     * @param mixed $values
      */
     public function submit($model, $values)
     {
@@ -198,7 +208,7 @@ trait ModelApi
         if (!$exists) {
             $exists = $this->insert($model, $values);
         }
-        
+
         //
         return $exists;
     }
@@ -206,7 +216,7 @@ trait ModelApi
     /**
      * Drop delete table related to a model.
      *
-     * @param string $model Model name to drop
+     * @param string $model   Model name to drop
      * @param string $confirm Confirmation string
      */
     public function drop($model, $confirm)
@@ -215,7 +225,7 @@ trait ModelApi
         if ($confirm != 'confirm') {
             return;
         }
-        
+
         //
         $models = $model == '*'
                 ? $this->getModels()
@@ -240,12 +250,13 @@ trait ModelApi
 
             //
             $this->execute($sql);
-        }       
+        }
     }
 
     /**
      * Dump all data.
      *
+     * @param null|mixed $model
      */
     public function dump($model = null)
     {

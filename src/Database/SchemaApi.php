@@ -7,15 +7,16 @@
  *
  * @author Francesco Bianco
  */
-namespace Javanile\Moldable\Database;
 
-use Javanile\Moldable\Exception;
+namespace Javanile\Moldable\Database;
 
 trait SchemaApi
 {
     /**
      * Describe database each tables
-     * with the specific prefix and her fields
+     * with the specific prefix and her fields.
+     *
+     * @param null|mixed $only
      *
      * @return array return an array with database description schema
      */
@@ -45,9 +46,10 @@ trait SchemaApi
     }
 
     /**
-     * describe table
+     * describe table.
      *
      * @param type $table
+     *
      * @return type
      */
     public function descTable($table)
@@ -55,7 +57,7 @@ trait SchemaApi
         //
         $sql = "DESC `{$table}`";
         $fields = $this->getResults($sql);
-        $desc = array();
+        $desc = [];
         $count = 0;
         $before = false;
 
@@ -72,9 +74,12 @@ trait SchemaApi
     }
 
     /**
-     * Apply schema on the database
+     * Apply schema on the database.
      *
-     * @param  type $schema
+     * @param type       $schema
+     * @param null|mixed $columns
+     * @param null|mixed $notation
+     *
      * @return type
      */
     public function apply($schema, $columns = null, $notation = null)
@@ -90,7 +95,7 @@ trait SchemaApi
 
         //
         if (!$schema || count($schema) == 0 || !is_array($schema)) {
-            $this->errorHandler("empty schema not allowed");
+            $this->errorHandler('empty schema not allowed');
         }
 
         //
@@ -114,11 +119,12 @@ trait SchemaApi
     }
 
     /**
-     * Update database table via schema
+     * Update database table via schema.
      *
-     * @param  string $table  real table name to update
-     * @param  type   $schema
-     * @param  type   $parse
+     * @param string $table  real table name to update
+     * @param type   $schema
+     * @param type   $parse
+     *
      * @return type
      */
     public function applyTable($table, $schema, $parse = true)
@@ -142,8 +148,9 @@ trait SchemaApi
      * Generate SQL query to align database
      * compare real database and passed schema.
      *
-     * @param  type $schema
-     * @param  type $parse
+     * @param type $schema
+     * @param type $parse
+     *
      * @return type
      */
     public function diff($schema, $parse = true)
@@ -170,11 +177,12 @@ trait SchemaApi
     }
 
     /**
-     * Generate query to align table
+     * Generate query to align table.
      *
-     * @param  type $table
-     * @param  type $schema
-     * @param  type $parse
+     * @param type $table
+     * @param type $schema
+     * @param type $parse
+     *
      * @return type
      */
     public function diffTable($table, $schema, $parse = true)
@@ -184,7 +192,7 @@ trait SchemaApi
             $this->getParser()->parseSchemaTable($schema);
             $table = $this->getPrefix().$table;
         }
-        
+
         // if table no exists return sql statament for creating this
         if (!$this->tableExists($table, false)) {
             $sql = $this
@@ -200,20 +208,21 @@ trait SchemaApi
     }
 
     /**
-     * Generate query to align table
+     * Generate query to align table.
      *
-     * @param  type $table
-     * @param  type $schema
-     * @param  type $parse
+     * @param type $table
+     * @param type $schema
+     * @param type $parse
+     *
      * @return type
      */
     private function diffTableQueries($table, &$schema)
     {
         // first order queries used as output array
-        $foQueries = array();
+        $foQueries = [];
 
         // second order queries used as output array
-        $soQueries = array();
+        $soQueries = [];
 
         // describe table get current table description
         $fields = $this->descTable($table);
@@ -239,8 +248,7 @@ trait SchemaApi
     }
 
     /**
-     *
-     *
+     * @param mixed $table
      *
      * @return type
      */
@@ -271,7 +279,6 @@ trait SchemaApi
     }
 
     /**
-     *
      * @param type $table
      * @param type $field
      * @param type $attributes
@@ -300,7 +307,7 @@ trait SchemaApi
                 // add normal column
                 $soQueries[] = $sql;
             }
-        } else if ($this->diffTableFieldAttributes($field, $attributes, $fields)) {
+        } elseif ($this->diffTableFieldAttributes($field, $attributes, $fields)) {
             // check if column need to be updated
             // compose alter table query with attributes
             $sql = $this
@@ -319,12 +326,13 @@ trait SchemaApi
 
     /**
      * Evaluate diff between a field and their attributes
-     * vs fields set definitions releaved direct from db
+     * vs fields set definitions releaved direct from db.
      *
-     * @param  type $field
-     * @param  type $attributes
-     * @param  type $fields
-     * @return boolean
+     * @param type $field
+     * @param type $attributes
+     * @param type $fields
+     *
+     * @return bool
      */
     private function diffTableFieldAttributes($field, &$attributes, &$fields)
     {
@@ -348,10 +356,11 @@ trait SchemaApi
     }
 
     /**
-     * Return primary field name if have one
+     * Return primary field name if have one.
      *
      * @param type $fields
-     * @return boolean
+     *
+     * @return bool
      */
     private function diffTableFieldPrimaryKey(&$fields)
     {
@@ -367,18 +376,19 @@ trait SchemaApi
     }
 
     /**
-     *
-     * @param type $schema
+     * @param type       $schema
+     * @param null|mixed $columns
+     * @param null|mixed $notation
      */
     public function alter($schema, $columns = null, $notation = null)
     {
         //
         if (is_string($schema)) {
-            $schema = array(
+            $schema = [
                 $schema => is_string($columns)
-                     ? array($columns => $notation)
+                     ? [$columns => $notation]
                      : $columns,
-            );
+            ];
         }
 
         //
@@ -397,31 +407,33 @@ trait SchemaApi
     }
 
     /**
-     *
-     * @param type $schema
+     * @param type       $schema
+     * @param null|mixed $column
+     * @param null|mixed $notation
      */
     public function alterTable($schema, $column = null, $notation = null)
     {
-        return $schema . $column . $notation;
+        return $schema.$column.$notation;
     }
 
     /**
-     *
-     * @param type $schema
+     * @param type       $schema
+     * @param null|mixed $columns
+     * @param null|mixed $notation
      */
     public function adapt($schema, $columns = null, $notation = null)
     {
         // fix one-line params
         if (is_string($schema)) {
-            $schema = array(
+            $schema = [
                 $schema => is_string($columns)
-                    ? array($columns => $notation)
+                    ? [$columns => $notation]
                     : $columns,
-            );
+            ];
         }
 
         $desc = $this->desc(array_keys($schema));
-        
+
         foreach ($schema as $table => $fields) {
             if (!isset($desc[$table])) {
                 $desc[$table] = $fields;
@@ -453,37 +465,38 @@ trait SchemaApi
     }
 
     /**
-     * printout database status and info
+     * printout database status and info.
      *
+     * @param null|mixed $model
      */
     public function info($model = null)
     {
         //
         $debug = $this->isDebug();
-        
+
         //
         $this->setDebug(false);
 
         //
         $style = 'text-align:center;margin:10px 0;width:800px;';
-        
+
         //
         if (is_null($model)) {
             $this->info($this->getModels());
-        } else if (is_array($model) && count($model) > 0) {
+        } elseif (is_array($model) && count($model) > 0) {
             foreach ($model as $m) {
                 $this->info($m);
             }
-        } else if (is_array($model) && count($model) == 0) {
+        } elseif (is_array($model) && count($model) == 0) {
             echo '<pre><table border="1" style="'.$style.'">'
-               . '<tr><th>No database tables</th></tr></table></pre>'
-               . '</table></pre>';
+               .'<tr><th>No database tables</th></tr></table></pre>'
+               .'</table></pre>';
         } else {
             $desc = $this->desc($model);
 
             //
             echo '<pre><table border="1" style="'.$style.'">'
-               . '<tr><th colspan="9">'.$model.'</th></tr>';
+               .'<tr><th colspan="9">'.$model.'</th></tr>';
 
             //
             if (isset($desc[$model])) {
@@ -524,8 +537,7 @@ trait SchemaApi
     }
 
     /**
-     * printout database status and info
-     *
+     * printout database status and info.
      */
     public function dumpSchema()
     {
@@ -547,12 +559,12 @@ trait SchemaApi
         //
         if (!$schema) {
             echo '<table border="1" style="'.$style.'">'
-               . '<tr><th>No database tables</th></tr></table></pre>'
-               . '</table>';
+               .'<tr><th>No database tables</th></tr></table></pre>'
+               .'</table>';
         } else {
             foreach ($schema as $table => $fields) {
                 echo '<table border="1" style="'.$style.'">'
-                   . '<tr><th colspan="9">'.$table.'</th></tr><tr><td>&nbsp;</td>';
+                   .'<tr><th colspan="9">'.$table.'</th></tr><tr><td>&nbsp;</td>';
 
                 //
                 $first = key($fields);

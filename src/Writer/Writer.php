@@ -6,9 +6,9 @@
  *
  * @author Francesco Bianco
  */
+
 namespace Javanile\Moldable\Writer;
 
 class Writer
 {
-
 }

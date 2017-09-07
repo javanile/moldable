@@ -2,8 +2,8 @@
 
 namespace Javanile\Moldable\Tests;
 
-use Javanile\Producer;
 use Javanile\Moldable\Database;
+use Javanile\Producer;
 use PHPUnit\Framework\TestCase;
 
 Producer::addPsr4(['Javanile\\Moldable\\Tests\\' => __DIR__]);
@@ -43,7 +43,7 @@ final class DatabaseSchemaApiTest extends TestCase
                     'Extra'    => '',
                     'First'    => true,
                     'Before'   => false,
-                ]
+                ],
             ],
             'test_table_2' => [
                 'test_field_2' => [
@@ -55,7 +55,7 @@ final class DatabaseSchemaApiTest extends TestCase
                     'Extra'    => '',
                     'First'    => true,
                     'Before'   => false,
-                ]
+                ],
             ],
         ]);
     }
@@ -91,7 +91,7 @@ final class DatabaseSchemaApiTest extends TestCase
                     'Extra'    => '',
                     'First'    => true,
                     'Before'   => false,
-                ]
+                ],
             ],
             'test_table_2' => [
                 'test_field_2' => [
@@ -103,7 +103,7 @@ final class DatabaseSchemaApiTest extends TestCase
                     'Extra'    => '',
                     'First'    => true,
                     'Before'   => false,
-                ]
+                ],
             ],
         ]);
     }

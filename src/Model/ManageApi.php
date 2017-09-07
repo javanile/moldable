@@ -6,16 +6,16 @@
  *
  * @author Francesco Bianco
  */
-namespace Javanile\Moldable\Model;
 
-use Javanile\Moldable\Functions;
+namespace Javanile\Moldable\Model;
 
 trait ManageApi
 {
     /**
-     * Drop table
+     * Drop table.
      *
      * @param type $confirm
+     *
      * @return type
      */
     public static function drop($confirm = null)
@@ -37,9 +37,9 @@ trait ManageApi
         //
         static::delClassAttribute('ApplyTableExecuted');
     }
-    
+
     /**
-     * Import records from a source
+     * Import records from a source.
      *
      * @param type $source
      */
@@ -51,11 +51,12 @@ trait ManageApi
             static::insert($record);
         }
     }
-    
+
     /**
      * Insert persistent object in db and return it.
      *
      * @param type $values
+     *
      * @return type
      */
     public static function insert($values)
@@ -66,9 +67,9 @@ trait ManageApi
 
         return $object;
     }
-    
+
     /**
-     * Delete element by primary key or query
+     * Delete element by primary key or query.
      *
      * @param type $query
      */
@@ -97,8 +98,7 @@ trait ManageApi
             $sql = "DELETE FROM {$table} {$where}";
 
             static::getDatabase()->execute($sql);
-
-        } else if ($query > 0) {
+        } elseif ($query > 0) {
             $key = static::getPrimaryKey();
             $index = (int) $query;
             $sql = "DELETE FROM {$table} WHERE {$key} = '{$index}' LIMIT 1";
@@ -106,11 +106,10 @@ trait ManageApi
             static::getDatabase()->execute($sql);
         }
     }
-    
+
     /**
-     *
-     *
      * @param type $query
+     *
      * @return type
      */
     public static function submit($query)
@@ -126,9 +125,9 @@ trait ManageApi
     }
 
     /**
+     * @param type  $query
+     * @param mixed $values
      *
-     *
-     * @param type $query
      * @return type
      */
     public static function upsert($query, $values)
