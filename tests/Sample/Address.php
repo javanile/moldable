@@ -8,9 +8,9 @@ final class Address extends Storable
 {
     public $id = self::PRIMARY_KEY;
 
-    public $route = "";
+    public $route = '';
 
-    public $city = "";
+    public $city = '';
 
     public $zip_code = 0;
 }

@@ -2,11 +2,11 @@
 
 namespace Javanile\Moldable\Tests\Model;
 
-use Javanile\Producer;
 use Javanile\Moldable\Database;
-use Javanile\Moldable\Tests\Sample\People;
-use PHPUnit\Framework\TestCase;
 use Javanile\Moldable\Tests\DatabaseTrait;
+use Javanile\Moldable\Tests\Sample\People;
+use Javanile\Producer;
+use PHPUnit\Framework\TestCase;
 
 Producer::addPsr4(['Javanile\\Moldable\\Tests\\' => __DIR__.'/../']);
 
@@ -38,56 +38,56 @@ final class ManageApiTest extends TestCase
         $this->assertEquals($schema, [
             'People' => [
                 'id' => [
-                    'Field' => 'id',
-                    'Type' => 'int(11)',
-                    'Null' => 'NO',
-                    'Key' => 'PRI',
+                    'Field'   => 'id',
+                    'Type'    => 'int(11)',
+                    'Null'    => 'NO',
+                    'Key'     => 'PRI',
                     'Default' => null,
-                    'Extra' => 'auto_increment',
-                    'First' => true,
-                    'Before' => false,
+                    'Extra'   => 'auto_increment',
+                    'First'   => true,
+                    'Before'  => false,
                 ],
                 'name' => [
-                    'Field' => 'name',
-                    'Type' => 'varchar(255)',
-                    'Null' => 'NO',
-                    'Key' => '',
+                    'Field'   => 'name',
+                    'Type'    => 'varchar(255)',
+                    'Null'    => 'NO',
+                    'Key'     => '',
                     'Default' => null,
-                    'Extra' => '',
-                    'First' => false,
-                    'Before' => 'id',
+                    'Extra'   => '',
+                    'First'   => false,
+                    'Before'  => 'id',
                 ],
                 'surname' => [
-                    'Field' => 'surname',
-                    'Type' => 'varchar(255)',
-                    'Null' => 'NO',
-                    'Key' => '',
+                    'Field'   => 'surname',
+                    'Type'    => 'varchar(255)',
+                    'Null'    => 'NO',
+                    'Key'     => '',
                     'Default' => null,
-                    'Extra' => '',
-                    'First' => false,
-                    'Before' => 'name',
+                    'Extra'   => '',
+                    'First'   => false,
+                    'Before'  => 'name',
                 ],
                 'age' => [
-                    'Field' => 'age',
-                    'Type' => 'int(11)',
-                    'Null' => 'NO',
-                    'Key' => '',
+                    'Field'   => 'age',
+                    'Type'    => 'int(11)',
+                    'Null'    => 'NO',
+                    'Key'     => '',
                     'Default' => '0',
-                    'Extra' => '',
-                    'First' => false,
-                    'Before' => 'surname',
+                    'Extra'   => '',
+                    'First'   => false,
+                    'Before'  => 'surname',
                 ],
                 'address' => [
-                    'Field' => 'address',
-                    'Type' => 'int(11)',
-                    'Null' => 'NO',
-                    'Key' => '',
+                    'Field'   => 'address',
+                    'Type'    => 'int(11)',
+                    'Null'    => 'NO',
+                    'Key'     => '',
                     'Default' => '0',
-                    'Extra' => '',
-                    'First' => false,
-                    'Before' => 'age',
+                    'Extra'   => '',
+                    'First'   => false,
+                    'Before'  => 'age',
                 ],
-            ]
+            ],
         ]);
 
         People::drop('confirm');
@@ -117,9 +117,9 @@ final class ManageApiTest extends TestCase
         $all = People::all(['order' => 'name']);
 
         $this->assertEquals($all, [
-            ["id" => "3", "name" => "Adami", "surname" => "", "age" => "0", "address" => "0"],
-            ["id" => "2", "name" => "Alloy", "surname" => "", "age" => "0", "address" => "0"],
-            ["id" => "1", "name" => "Frank", "surname" => "", "age" => "0", "address" => "0"]
+            ['id' => '3', 'name' => 'Adami', 'surname' => '', 'age' => '0', 'address' => '0'],
+            ['id' => '2', 'name' => 'Alloy', 'surname' => '', 'age' => '0', 'address' => '0'],
+            ['id' => '1', 'name' => 'Frank', 'surname' => '', 'age' => '0', 'address' => '0'],
         ]);
     }
 }

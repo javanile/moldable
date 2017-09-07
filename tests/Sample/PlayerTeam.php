@@ -8,9 +8,9 @@ final class PlayerTeam extends Storable
 {
     public $id = self::PRIMARY_KEY;
 
-    public $name = "";
+    public $name = '';
 
-    public $surname = "";
+    public $surname = '';
 
     public $age = 0;
 }

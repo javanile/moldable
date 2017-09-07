@@ -6,6 +6,7 @@
  *
  * @author Francesco Bianco
  */
+
 namespace Javanile\Moldable\Model;
 
 trait QueryApi
@@ -14,26 +15,27 @@ trait QueryApi
      * Query a list of records.
      *
      * @param type $query
+     *
      * @return type
      */
     public static function query($query)
-    { 
+    {
         //
         static::applySchema();
 
         //
         $table = self::getTable();
-        $whereArray = array();
+        $whereArray = [];
 
         //
         if (isset($query['where'])) {
-            $whereArray[] = "(".$query['where'].")";
+            $whereArray[] = '('.$query['where'].')';
             unset($query['where']);
         }
 
         //
         foreach ($query as $field => $value) {
-            if (in_array($field, array('order', 'limit'))) {
+            if (in_array($field, ['order', 'limit'])) {
                 continue;
             }
             $whereArray[] = "{$field} = '{$value}'";

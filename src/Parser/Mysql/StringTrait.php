@@ -6,13 +6,11 @@
  *
  * @author Francesco Bianco
  */
+
 namespace Javanile\Moldable\Parser\Mysql;
 
 trait StringTrait
 {
-    /**
-     *
-     */
     private function getNotationAspectsString($notation, $aspects)
     {
         //
@@ -23,9 +21,6 @@ trait StringTrait
         return $aspects;
     }
 
-    /**
-     *
-     */
     private function getNotationAspectsText($notation, $aspects)
     {
         $aspects['Type'] = 'text';
@@ -35,10 +30,6 @@ trait StringTrait
         return $aspects;
     }
 
-    /**
-     *
-     *
-     */
     private function getNotationAspectsNull(
         $notation,
         $aspects

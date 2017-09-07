@@ -6,6 +6,7 @@
  *
  * @author Francesco Bianco
  */
+
 namespace Javanile\Moldable\Model;
 
 trait RawApi
@@ -13,7 +14,12 @@ trait RawApi
     /**
      * Execute a raw query on database.
      *
-     * @param type $array
+     * @param type       $array
+     * @param mixed      $sql
+     * @param null|mixed $params
+     * @param mixed      $singleRecord
+     * @param mixed      $singleValue
+     * @param mixed      $casting
      */
     protected static function raw(
         $sql,
@@ -25,8 +31,9 @@ trait RawApi
         // requested a single record
         if ($singleRecord && !$singleValue && $casting) {
             $record = static::getDatabase()->getRow($sql, $params);
-            return $record ? static::make($record): null;
-        } else if (!$singleRecord && !$singleValue) {
+
+            return $record ? static::make($record) : null;
+        } elseif (!$singleRecord && !$singleValue) {
             // requested a multiple records many value per records
             $records = static::getDatabase()->getResults($sql, $params);
 
@@ -42,8 +49,7 @@ trait RawApi
             }
 
             return $records;
-
-        } else if ($singleRecord && $singleValue) {
+        } elseif ($singleRecord && $singleValue) {
             // requested a single value of a single record
             $value = static::getDatabase()->getValue($sql, $params);
 

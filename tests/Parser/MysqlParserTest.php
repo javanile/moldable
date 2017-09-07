@@ -2,9 +2,9 @@
 
 namespace Javanile\Moldable\Tests\Parser;
 
+use Javanile\Moldable\Storable;
 use Javanile\Producer;
 use PHPUnit\Framework\TestCase;
-use Javanile\Moldable\Storable;
 
 Producer::addPsr4(['Javanile\\Moldable\\Tests\\' => __DIR__.'/../']);
 
@@ -17,8 +17,8 @@ final class MysqlParserTest extends TestCase
         $schema = [
             'people' => [
                 'first_name' => '',
-                'last_name' => null,
-            ]
+                'last_name'  => null,
+            ],
         ];
 
         $this->parser->parse($schema);
@@ -47,7 +47,7 @@ final class MysqlParserTest extends TestCase
                     'Default'  => null,
                     'Relation' => null,
                 ],
-            ]
+            ],
         ]);
     }
 
@@ -55,10 +55,10 @@ final class MysqlParserTest extends TestCase
     {
         $schema = [
             'people' => [
-                'age' => 0,
+                'age'   => 0,
                 'major' => true,
                 'money' => .0,
-            ]
+            ],
         ];
 
         $this->parser->parse($schema);
@@ -98,7 +98,7 @@ final class MysqlParserTest extends TestCase
                     'Default'  => 0.0,
                     'Relation' => null,
                 ],
-            ]
+            ],
         ]);
     }
 
@@ -107,7 +107,7 @@ final class MysqlParserTest extends TestCase
         $schema = [
             'people' => [
                 'title' => ['Mr.', 'Ms.'],
-            ]
+            ],
         ];
 
         $this->parser->parse($schema);
@@ -125,7 +125,7 @@ final class MysqlParserTest extends TestCase
                     'Default'  => 'Mr.',
                     'Relation' => null,
                 ],
-            ]
+            ],
         ]);
     }
 
@@ -134,7 +134,7 @@ final class MysqlParserTest extends TestCase
         $schema = [
             'people' => [
                 'title' => '<<{"Type":"int(3)"}>>',
-            ]
+            ],
         ];
 
         $this->parser->parse($schema);
@@ -146,13 +146,13 @@ final class MysqlParserTest extends TestCase
                     'First'    => true,
                     'Before'   => false,
                     'Key'      => '',
-                    'Type'     => "int(3)",
+                    'Type'     => 'int(3)',
                     'Null'     => 'YES',
                     'Extra'    => '',
                     'Default'  => '',
                     'Relation' => null,
                 ],
-            ]
+            ],
         ]);
     }
 
@@ -160,11 +160,11 @@ final class MysqlParserTest extends TestCase
     {
         $schema = [
             'table' => [
-                'day' => '2000-01-01',
-                'moment' => '00:00:01',
+                'day'            => '2000-01-01',
+                'moment'         => '00:00:01',
                 'precise_moment' => '2000-01-01 00:00:01',
-                'ts' => Storable::TIMESTAMP,
-            ]
+                'ts'             => Storable::TIMESTAMP,
+            ],
         ];
 
         $this->parser->parse($schema);
@@ -176,7 +176,7 @@ final class MysqlParserTest extends TestCase
                     'First'    => true,
                     'Before'   => false,
                     'Key'      => '',
-                    'Type'     => "date",
+                    'Type'     => 'date',
                     'Null'     => 'YES',
                     'Extra'    => '',
                     'Default'  => '2000-01-01',
@@ -187,7 +187,7 @@ final class MysqlParserTest extends TestCase
                     'First'    => false,
                     'Before'   => 'day',
                     'Key'      => '',
-                    'Type'     => "time",
+                    'Type'     => 'time',
                     'Null'     => 'YES',
                     'Extra'    => '',
                     'Default'  => '00:00:01',
@@ -198,7 +198,7 @@ final class MysqlParserTest extends TestCase
                     'First'    => false,
                     'Before'   => 'moment',
                     'Key'      => '',
-                    'Type'     => "datetime",
+                    'Type'     => 'datetime',
                     'Null'     => 'YES',
                     'Extra'    => '',
                     'Default'  => '2000-01-01 00:00:01',
@@ -209,13 +209,13 @@ final class MysqlParserTest extends TestCase
                     'First'    => false,
                     'Before'   => 'precise_moment',
                     'Key'      => '',
-                    'Type'     => "timestamp",
+                    'Type'     => 'timestamp',
                     'Null'     => 'NO',
                     'Extra'    => '',
                     'Default'  => 'CURRENT_TIMESTAMP',
                     'Relation' => null,
                 ],
-            ]
+            ],
         ]);
     }
 }

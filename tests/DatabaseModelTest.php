@@ -2,8 +2,8 @@
 
 namespace Javanile\Moldable\Tests;
 
-use Javanile\Producer;
 use Javanile\Moldable\Database;
+use Javanile\Producer;
 use PHPUnit\Framework\TestCase;
 
 Producer::addPsr4(['Javanile\\Moldable\\Tests\\' => __DIR__]);
@@ -71,7 +71,7 @@ final class DatabaseModelTest extends TestCase
             'name' => '',
             'hook' => 0,
         ]]);
-        $count = $db->getValue("SELECT COUNT(*) FROM model");
+        $count = $db->getValue('SELECT COUNT(*) FROM model');
         $this->assertEquals($count, 0);
 
         //
@@ -79,7 +79,7 @@ final class DatabaseModelTest extends TestCase
             'name' => 'Frank',
             'hook' => 10,
         ]);
-        $count = $db->getValue("SELECT COUNT(*) FROM model");
+        $count = $db->getValue('SELECT COUNT(*) FROM model');
         $this->assertEquals($count, 1);
 
         //
@@ -87,7 +87,7 @@ final class DatabaseModelTest extends TestCase
             'name' => 'Frank',
             'hook' => 10,
         ]);
-        $count = $db->getValue("SELECT COUNT(*) FROM model");
+        $count = $db->getValue('SELECT COUNT(*) FROM model');
         $this->assertEquals($count, 1);
 
         //
@@ -95,7 +95,7 @@ final class DatabaseModelTest extends TestCase
             'name' => 'Frank',
             'hook' => 11,
         ]);
-        $count = $db->getValue("SELECT COUNT(*) FROM model");
+        $count = $db->getValue('SELECT COUNT(*) FROM model');
         $this->assertEquals($count, 2);
     }
 
@@ -180,16 +180,16 @@ final class DatabaseModelTest extends TestCase
         $this->assertEquals($schema, [
             'animal' => [
                 'field0' => [
-                    'Field' => 'field0',
-                    'Type' => 'varchar(255)',
-                    'Null' => 'YES',
-                    'Key' => '',
+                    'Field'   => 'field0',
+                    'Type'    => 'varchar(255)',
+                    'Null'    => 'YES',
+                    'Key'     => '',
                     'Default' => null,
-                    'Extra' => '',
-                    'First' => true,
-                    'Before' => false,
-                ]
-            ]
+                    'Extra'   => '',
+                    'First'   => true,
+                    'Before'  => false,
+                ],
+            ],
         ]);
     }
 
@@ -205,9 +205,9 @@ final class DatabaseModelTest extends TestCase
 
         $db->apply([
             'albums' => [
-                'title' => '',
+                'title'  => '',
                 'author' => '',
-            ]
+            ],
         ]);
 
         $mainField = $db->getPrimaryKeyOrMainField('albums');

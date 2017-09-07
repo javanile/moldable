@@ -2,12 +2,12 @@
 
 namespace Javanile\Moldable\Tests\Model;
 
-use Javanile\Producer;
 use Javanile\Moldable\Database;
-use PHPUnit\Framework\TestCase;
-use Javanile\Moldable\Tests\Sample\People;
-use Javanile\Moldable\Tests\Sample\CustomConstructor;
 use Javanile\Moldable\Tests\DatabaseTrait;
+use Javanile\Moldable\Tests\Sample\CustomConstructor;
+use Javanile\Moldable\Tests\Sample\People;
+use Javanile\Producer;
+use PHPUnit\Framework\TestCase;
 
 Producer::addPsr4(['Javanile\\Moldable\\Tests\\' => __DIR__.'/../']);
 
@@ -54,7 +54,7 @@ final class StorableTest extends TestCase
         $db = new Database([
             'host'     => $GLOBALS['DB_HOST'],
             'port'     => $GLOBALS['DB_PORT'],
-            'dbname'  => $GLOBALS['DB_NAME'],
+            'dbname'   => $GLOBALS['DB_NAME'],
             'username' => $GLOBALS['DB_USER'],
             'password' => $GLOBALS['DB_PASS'],
         ]);
@@ -67,7 +67,7 @@ final class StorableTest extends TestCase
 
         $this->assertEquals($id, 1);
 
-        $row = $db->getRow("SELECT * FROM People WHERE id = 1");
+        $row = $db->getRow('SELECT * FROM People WHERE id = 1');
 
         $this->assertEquals($row['name'], 'Frank');
     }
@@ -88,7 +88,7 @@ final class StorableTest extends TestCase
         $carol = new People();
         $carol->store(['name' => 'Carol']);
 
-        $names = $db->getValues("SELECT name FROM People");
+        $names = $db->getValues('SELECT name FROM People');
 
         $this->assertEquals($names, ['Frank', 'Carol']);
     }
@@ -106,13 +106,13 @@ final class StorableTest extends TestCase
         $frank = new People();
         $frank->store(['name' => 'Frank']);
 
-        $name = $db->getValue("SELECT name FROM People");
+        $name = $db->getValue('SELECT name FROM People');
         $this->assertEquals($name, 'Frank');
 
-        $frank->name = "The New Frank";
+        $frank->name = 'The New Frank';
         $frank->store();
 
-        $name = $db->getValue("SELECT name FROM People");
+        $name = $db->getValue('SELECT name FROM People');
         $this->assertEquals($name, 'The New Frank');
     }
 
@@ -126,7 +126,7 @@ final class StorableTest extends TestCase
             'password' => $GLOBALS['DB_PASS'],
         ]);
 
-        $object = new CustomConstructor("arg1", "arg1");
+        $object = new CustomConstructor('arg1', 'arg1');
 
         $this->assertEquals($object->field1, 0);
     }
@@ -143,8 +143,8 @@ final class StorableTest extends TestCase
 
         $people = People::make([
             'old_name' => 'Frank',
-        ],[
-            'old_name' => 'name'
+        ], [
+            'old_name' => 'name',
         ]);
 
         $this->assertEquals($people->name, 'Frank');

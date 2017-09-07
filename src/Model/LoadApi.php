@@ -6,14 +6,18 @@
  *
  * @author Francesco Bianco
  */
+
 namespace Javanile\Moldable\Model;
 
 trait LoadApi
 {
     /**
-     * Load item from DB
+     * Load item from DB.
      *
-     * @param  type $id
+     * @param type       $id
+     * @param mixed      $query
+     * @param null|mixed $fields
+     *
      * @return type
      */
     public static function load($query, $fields = null)
@@ -25,7 +29,7 @@ trait LoadApi
         if (is_array($query)) {
             return static::loadByQuery($query, $fields);
         }
-       
+
         //
         $key = static::getPrimaryKey();
 
@@ -40,16 +44,17 @@ trait LoadApi
      *
      * @param type $index
      * @param type $fields
+     *
      * @return type
      */
     protected static function loadByPrimaryKey($index, $fields = null)
     {
         //
         $table = static::getTable();
-        
+
         // get primary key
         $key = static::getPrimaryKey();
-      
+
         //
         $alias = static::getClassName();
 
@@ -61,14 +66,14 @@ trait LoadApi
 
         // parse SQL select fields
         $selectFields = static::getDatabase()
-            -> getWriter()
-            -> selectFields($requestedFields, $alias, $join);
+            ->getWriter()
+            ->selectFields($requestedFields, $alias, $join);
 
         // prepare SQL query
         $sql = " SELECT {$selectFields} "
-             . "   FROM {$table} AS {$alias} {$join} "
-             . "  WHERE {$alias}.{$key}=:index "
-             . "  LIMIT 1";
+             ."   FROM {$table} AS {$alias} {$join} "
+             ."  WHERE {$alias}.{$key}=:index "
+             .'  LIMIT 1';
 
         $params = [
             'index' => $index,
@@ -82,15 +87,15 @@ trait LoadApi
             //'ExpanseObject' => static::isReadable(),
             'ExpanseObject' => false,
         ]);
-             
+
         //
         return $result;
     }
 
     /**
-     *
      * @param type $value
      * @param type $fields
+     *
      * @return type
      */
     protected static function loadByMainField($value, $fields = null)
@@ -112,8 +117,8 @@ trait LoadApi
 
         // parse SQL select fields
         $selectFields = static::getDatabase()
-                     -> getWriter()
-                     -> selectFields($allFields, $alias, $join);
+                     ->getWriter()
+                     ->selectFields($allFields, $alias, $join);
 
         //
         $token = ':'.$field;
@@ -123,9 +128,9 @@ trait LoadApi
 
         // prepare SQL query
         $sql = " SELECT {$selectFields}"
-             . "   FROM {$table} AS {$alias} {$join}"
-             . "  WHERE {$field} = {$token}"
-             . "  LIMIT 1";
+             ."   FROM {$table} AS {$alias} {$join}"
+             ."  WHERE {$field} = {$token}"
+             .'  LIMIT 1';
 
         // fetch data on database and return it
         $object = static::fetch(
@@ -144,6 +149,7 @@ trait LoadApi
      *
      * @param type $query
      * @param type $fields
+     *
      * @return type
      */
     protected static function loadByQuery($query, $fields = null)
@@ -162,15 +168,15 @@ trait LoadApi
 
         // parse SQL select fields
         $selectFields = static::getDatabase()
-                     -> getWriter()
-                     -> selectFields($allFields, $alias, $join);
+                     ->getWriter()
+                     ->selectFields($allFields, $alias, $join);
 
         //
-        $whereConditions = array();
+        $whereConditions = [];
 
         //
         if (isset($query['where'])) {
-            $whereConditions[] = "(".$query['where'].")";
+            $whereConditions[] = '('.$query['where'].')';
             unset($query['where']);
         }
 
@@ -190,9 +196,9 @@ trait LoadApi
 
         // prepare SQL query
         $sql = "SELECT {$selectFields} "
-             .   "FROM {$table} AS {$alias} {$join} "
-             .  "WHERE {$where} "
-             .  "LIMIT 1";
+             ."FROM {$table} AS {$alias} {$join} "
+             ."WHERE {$where} "
+             .'LIMIT 1';
 
         // fetch data on database and return it
         $result = static::fetch(
@@ -202,7 +208,7 @@ trait LoadApi
             is_string($fields),
             is_null($fields)
         );
-        
+
         return $result;
     }
 }

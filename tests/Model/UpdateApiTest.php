@@ -2,11 +2,11 @@
 
 namespace Javanile\Moldable\Tests\Model;
 
-use Javanile\Producer;
 use Javanile\Moldable\Database;
-use Javanile\Moldable\Tests\Sample\People;
-use PHPUnit\Framework\TestCase;
 use Javanile\Moldable\Tests\DatabaseTrait;
+use Javanile\Moldable\Tests\Sample\People;
+use Javanile\Producer;
+use PHPUnit\Framework\TestCase;
 
 Producer::addPsr4(['Javanile\\Moldable\\Tests\\' => __DIR__.'/../']);
 
@@ -33,7 +33,7 @@ final class UpdateApiTest extends TestCase
             'age'     => 18,
         ]);
 
-        $sql = "SELECT age FROM prefix_People WHERE id = 1";
+        $sql = 'SELECT age FROM prefix_People WHERE id = 1';
 
         // update by id inline
         People::update(1, 'age', 19);

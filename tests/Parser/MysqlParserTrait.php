@@ -2,10 +2,6 @@
 
 namespace Javanile\Moldable\Tests\Parser;
 
-use PDO;
-use Javanile\Producer;
-use Javanile\Moldable\Database;
-use Javanile\Moldable\Storable;
 use Javanile\Moldable\Parser\MysqlParser;
 
 trait MysqlParserTrait

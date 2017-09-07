@@ -6,9 +6,8 @@
  *
  * @author Francesco Bianco
  */
-namespace Javanile\Moldable;
 
-use Javanile\Moldable\Notations;
+namespace Javanile\Moldable;
 
 class Readable implements Notations
 {
@@ -30,17 +29,13 @@ class Readable implements Notations
     use Model\DatabaseApi;
 
     /**
-     *
      * @var type
      */
     public static $__config = [
-        'adamant' => true,
+        'adamant'                => true,
         'table-name-conventions' => null,
     ];
 
-    /**
-     *
-     */
     public function __construct()
     {
     }

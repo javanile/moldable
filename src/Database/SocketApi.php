@@ -7,36 +7,38 @@
  *
  * @author Francesco Bianco
  */
-namespace Javanile\Moldable\Database;
 
-use Javanile\Moldable\Exception;
+namespace Javanile\Moldable\Database;
 
 trait SocketApi
 {
     /**
-     * Execute SQL query to database
+     * Execute SQL query to database.
      *
-     * @param  type $sql
-     * @param  type $values
+     * @param type $sql
+     * @param type $values
+     *
      * @return type
      */
     public function execute($sql, $values = null)
-    {        
+    {
         $this->log('execute', $sql, $values);
 
         return $this->_socket->execute($sql, $values);
     }
 
     /**
-     * Return current database prefix used
+     * Return current database prefix used.
+     *
+     * @param null|mixed $table
      *
      * @return type
      */
     public function getPrefix($table = null)
     {
         $prefix = $this->_socket->getPrefix();
-        
-        return $table ? $prefix . $table : $prefix;
+
+        return $table ? $prefix.$table : $prefix;
     }
 
     /**
@@ -56,7 +58,9 @@ trait SocketApi
     /**
      * Get a single row of a result set.
      *
-     * @param  type $sql
+     * @param type       $sql
+     * @param null|mixed $params
+     *
      * @return type
      */
     public function getRow($sql, $params = null)
@@ -70,7 +74,9 @@ trait SocketApi
      * Get a list/array of record from database
      * based on SQL query passed.
      *
-     * @param  string $sql
+     * @param string     $sql
+     * @param null|mixed $params
+     *
      * @return array
      */
     public function getResults($sql, $params = null)
@@ -84,7 +90,9 @@ trait SocketApi
      * Get a list/array of record from database
      * based on SQL query passed.
      *
-     * @param  string $sql
+     * @param string     $sql
+     * @param null|mixed $params
+     *
      * @return array
      */
     public function getResultsAsObjects($sql, $params = null)
@@ -97,7 +105,9 @@ trait SocketApi
     /**
      * Get single value/first in result set.
      *
-     * @param  type $sql
+     * @param type       $sql
+     * @param null|mixed $params
+     *
      * @return type
      */
     public function getValue($sql, $params = null)
@@ -110,8 +120,9 @@ trait SocketApi
     /**
      * Get all value/first for every row of result set.
      *
-     * @param  string $sql
-     * @param  array  $params
+     * @param string $sql
+     * @param array  $params
+     *
      * @return array
      */
     public function getValues($sql, $params = null)
@@ -124,7 +135,9 @@ trait SocketApi
     /**
      * Test if a table exists.
      *
-     * @param type $table
+     * @param type  $table
+     * @param mixed $parse
+     *
      * @return type
      */
     public function tableExists($table, $parse = true)
@@ -143,11 +156,11 @@ trait SocketApi
         // execute test if table exists
         $exists = $this->getRow($sql);
 
-        return (boolean) $exists;
+        return (bool) $exists;
     }
 
     /**
-     * Get array with current tables on database
+     * Get array with current tables on database.
      *
      * @return array
      */
@@ -168,11 +181,12 @@ trait SocketApi
     public function getCharset()
     {
         // TODO: retrive charset
-        return null;
     }
 
     /**
      * Get array with current tables on database.
+     *
+     * @param mixed $charset
      *
      * @return array
      */
@@ -184,20 +198,24 @@ trait SocketApi
     /**
      * Quote a string.
      *
+     * @param mixed $string
      */
     public function quote($string)
     {
         return $this->_socket->quote($string);
     }
-  
+
     /**
      * Log called SocketApi into log file.
      *
+     * @param mixed      $method
+     * @param null|mixed $sql
+     * @param null|mixed $params
      */
     private function log($method, $sql = null, $params = null)
     {
         if (!$this->isDebug()) {
-            return $method . $sql . json_encode($params);
+            return $method.$sql.json_encode($params);
         }
 
         /*

@@ -6,12 +6,12 @@
  *
  * @author Francesco Bianco
  */
+
 namespace Javanile\Moldable\Model;
 
 trait UtilApi
 {
     /**
-     *
      * @return type
      */
     public static function now()

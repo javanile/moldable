@@ -2,11 +2,9 @@
 
 namespace Javanile\Moldable\Tests\Laravel;
 
-use PDO;
-use Javanile\Producer;
+use Illuminate\Database\Capsule\Manager as Capsule;
 use Javanile\Moldable\Database;
 use Javanile\Moldable\Storable;
-use Illuminate\Database\Capsule\Manager as Capsule;
 
 trait LaravelTrait
 {
@@ -15,7 +13,7 @@ trait LaravelTrait
         if (!defined('LARAVEL_START')) {
             define('LARAVEL_START', microtime(true));
         }
-        $this->capsule = new Capsule;
+        $this->capsule = new Capsule();
         $this->capsule->addConnection([
             'driver'    => 'mysql',
             'host'      => $GLOBALS['DB_HOST'],

@@ -1,17 +1,9 @@
 <?php
-/**
- *
- *
- */
 
 namespace Javanile\Moldable\Model;
 
 trait JoinApi
 {
-    /**
-     *
-     *
-     */
     public static function join(
         $fieldFrom = '__FIELD__',
         $fieldTo = null

@@ -6,9 +6,8 @@
  *
  * @author Francesco Bianco
  */
-namespace Javanile\Moldable;
 
-use Javanile\Moldable\Readable;
+namespace Javanile\Moldable;
 
 class Storable extends Readable
 {
@@ -26,7 +25,7 @@ class Storable extends Readable
 
     /**
      * Construct a storable object
-     * with filled fields by values
+     * with filled fields by values.
      *
      * @param array $values
      */
@@ -61,7 +60,9 @@ class Storable extends Readable
     }
 
     /**
-     * Auto-store element method
+     * Auto-store element method.
+     *
+     * @param null|mixed $values
      *
      * @return type
      */
@@ -80,39 +81,37 @@ class Storable extends Readable
         $key = static::getPrimaryKey();
         if ($key && isset($this->{$key}) && $this->{$key}) {
             return $this->storeUpdate();
-        } 
+        }
 
         return $this->storeInsert();
     }
 
     /**
-     *
-     *
-     * @return boolean
+     * @return bool
      */
     public function storeUpdate()
     {
         static::applySchema();
 
-        $key      = static::getPrimaryKey();
-        $fields   = static::getSchemaFields();
+        $key = static::getPrimaryKey();
+        $fields = static::getSchemaFields();
         $setArray = [];
-        $params   = [];
+        $params = [];
 
         foreach ($fields as $field) {
             if ($field == $key) {
                 continue;
             }
 
-            $token          = ':'.$field;
-            $setArray[]     = $field.' = '.$token;
+            $token = ':'.$field;
+            $setArray[] = $field.' = '.$token;
             $params[$token] = $this->{$field};
         }
 
-        $set   = implode(',', $setArray);
+        $set = implode(',', $setArray);
         $table = static::getTable();
         $index = $this->{$key};
-        $sql   = "UPDATE {$table} SET {$set} WHERE {$key}='{$index}'";
+        $sql = "UPDATE {$table} SET {$set} WHERE {$key}='{$index}'";
 
         static::getDatabase()->execute($sql, $params);
 
@@ -120,10 +119,9 @@ class Storable extends Readable
     }
 
     /**
-     *
-     *
      * @param type $force
-     * @return boolean
+     *
+     * @return bool
      */
     public function storeInsert($force = false)
     {
@@ -138,13 +136,13 @@ class Storable extends Readable
 
         // collect tokens value for pdo parametric
         $tokensArray = [];
-        
+
         // get primary field name
         $key = static::getPrimaryKey();
 
         // get complete fields schema
         $schema = static::getSchema();
-        
+
         //
         foreach ($schema as $field => &$column) {
             if (($field == $key || is_null($this->{$field})) && !$force) {
@@ -181,7 +179,7 @@ class Storable extends Readable
 
         //
         static::getDatabase()->execute($sql, $tokensArray);
-        
+
         //
         foreach ($schema as $field => &$column) {
             if (!$force && $field == $key) {
@@ -198,13 +196,12 @@ class Storable extends Readable
         } else {
             $index = static::getMainFieldValue();
         }
-        
+
         //
         return $index;
     }
 
     /**
-     *
      * @param type $value
      */
     private static function insertRelationBefore($value, &$column)
@@ -223,10 +220,6 @@ class Storable extends Readable
         }
     }
 
-    /**
-     *
-     * 
-     */
     private static function insertRelationOneToOne($value, &$column)
     {
         //
@@ -243,7 +236,6 @@ class Storable extends Readable
     }
 
     /**
-     *
      * @param type $value
      */
     private static function insertRelationAfter($value, &$column)
@@ -260,10 +252,6 @@ class Storable extends Readable
         }
     }
 
-    /**
-     *
-     *
-     */
     private static function insertRelationOneToMany($values, &$column)
     {
         $class = $column['Class'];

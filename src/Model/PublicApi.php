@@ -6,9 +6,8 @@
  *
  * @author Francesco Bianco
  */
-namespace Javanile\Moldable\Model;
 
-use Javanile\SchemaDB\Functions;
+namespace Javanile\Moldable\Model;
 
 trait PublicApi
 {
@@ -25,9 +24,10 @@ trait PublicApi
     }
 
     /**
+     * @param type       $values
+     * @param type       $map
+     * @param null|mixed $prefix
      *
-     * @param type $values
-     * @param type $map
      * @return \static
      */
     public static function make($values = null, $map = null, $prefix = null)
@@ -46,9 +46,10 @@ trait PublicApi
 
     /**
      * Encode/manipulate field on object
-     * based on encode_ static method of class
+     * based on encode_ static method of class.
      *
-     * @param  type $$values
+     * @param type $$values
+     *
      * @return type
      */
     public function encode()
@@ -57,9 +58,8 @@ trait PublicApi
     }
 
     /**
-     *
-     *
      * @param type $values
+     *
      * @return type
      */
     public function decode()

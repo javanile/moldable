@@ -2,8 +2,8 @@
 
 namespace Javanile\Moldable\Tests;
 
-use Javanile\Producer;
 use Javanile\Moldable\Database;
+use Javanile\Producer;
 use PHPUnit\Framework\TestCase;
 
 Producer::addPsr4(['Javanile\\Moldable\\Tests\\' => __DIR__]);
@@ -14,7 +14,7 @@ final class DatabaseSocketTest extends TestCase
 
     public function testDatabaseUndefinedSocket()
     {
-        $this->expectException("Javanile\\Moldable\\Exception");
+        $this->expectException('Javanile\\Moldable\\Exception');
         $this->expectExceptionMessageRegExp("/Socket class '[a-z0-9_\\\\]+' not found/i");
 
         $db = new Database([

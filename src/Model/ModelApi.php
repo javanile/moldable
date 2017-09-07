@@ -6,6 +6,7 @@
  *
  * @author Francesco Bianco
  */
+
 namespace Javanile\Moldable\Model;
 
 trait ModelApi
@@ -25,8 +26,8 @@ trait ModelApi
             $model = $slash === false ? $class : substr($class, $slash + 1);
 
             static::setClassAttribute($attribute, $model);
-        } 
-        
+        }
+
         return static::getClassAttribute($attribute);
     }
 }

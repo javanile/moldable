@@ -6,16 +6,17 @@
  *
  * @author Francesco Bianco
  */
+
 namespace Javanile\Moldable\Writer;
 
 class MysqlWriter extends Writer
 {
     //
-    private static $defaults = array(
-        'Attributes' => array(
+    private static $defaults = [
+        'Attributes' => [
             'Type' => 'int(11)',
-        ),
-    );
+        ],
+    ];
 
     //
     public function columnDefinition($aspects, $order = true)
@@ -39,7 +40,7 @@ class MysqlWriter extends Writer
             || $aspects['Default'] === ''
             || $aspects['Key']) {
             $Default = '';
-        } else if ($aspects['Default'] === 'CURRENT_TIMESTAMP') {
+        } elseif ($aspects['Default'] === 'CURRENT_TIMESTAMP') {
             $Default = 'DEFAULT CURRENT_TIMESTAMP';
         } else {
             $Default = 'DEFAULT '."'".$aspects['Default']."'";
@@ -57,22 +58,23 @@ class MysqlWriter extends Writer
     }
 
     /**
-     * Prepare sql code to create a table
+     * Prepare sql code to create a table.
      *
-     * @param  string $table The name of table to create
-     * @param  array  $schema Skema of the table contain column definitions
+     * @param string $table  The name of table to create
+     * @param array  $schema Skema of the table contain column definitions
+     *
      * @return string Sql code statament of CREATE TABLE
      */
     public function createTable($table, $schema)
     {
         //
-        $columnsArray = array();
+        $columnsArray = [];
 
         // loop throut schema
         foreach ($schema as $field => $attributes) {
             if (is_numeric($field) && is_string($attributes)) {
                 $field = $attributes;
-                $attributes = array();
+                $attributes = [];
             }
 
             //
@@ -93,10 +95,10 @@ class MysqlWriter extends Writer
     }
 
     /**
-     *
      * @param type $table
      * @param type $field
      * @param type $attributes
+     *
      * @return type
      */
     public function alterTableAdd($table, $field, $attributes)
@@ -112,11 +114,15 @@ class MysqlWriter extends Writer
     }
 
     /**
-     * Retrieve sql to alter table definition
+     * Retrieve sql to alter table definition.
      *
-     * @param type $t
-     * @param type $f
-     * @param type $d
+     * @param type  $t
+     * @param type  $f
+     * @param type  $d
+     * @param mixed $table
+     * @param mixed $field
+     * @param mixed $attributes
+     *
      * @return type
      */
     public function alterTableChange($table, $field, $attributes)
@@ -142,8 +148,10 @@ class MysqlWriter extends Writer
     }
 
     /**
+     * @param type  $f
+     * @param mixed $fields
+     * @param mixed $tableAlias
      *
-     * @param  type   $f
      * @return string
      */
     public function selectFields($fields, $tableAlias, &$join)
@@ -151,20 +159,20 @@ class MysqlWriter extends Writer
         //
         if (!$fields) {
             return '*';
-        } else if (is_string($fields)) {
+        } elseif (is_string($fields)) {
             return $fields;
-        } else if (!is_array($fields)) {
-            static::error("selectFields require array");
+        } elseif (!is_array($fields)) {
+            static::error('selectFields require array');
         }
 
         //
-        $join = "";
+        $join = '';
 
         //
-        $aliasTable = array();
+        $aliasTable = [];
 
         //
-        $selectFields = array();
+        $selectFields = [];
 
         //
         foreach ($fields as $field => $definition) {
@@ -184,7 +192,7 @@ class MysqlWriter extends Writer
 
             //
             if (is_string($definition)) {
-                $selectFields[] = $definition. ' AS '.$field;
+                $selectFields[] = $definition.' AS '.$field;
                 continue;
             }
 
@@ -193,15 +201,15 @@ class MysqlWriter extends Writer
                 $class = $definition['Class'];
 
                 //
-                $aliasTable[$class] = isset($aliasTable[$class]) 
+                $aliasTable[$class] = isset($aliasTable[$class])
                                     ? $aliasTable[$class] + 1
                                     : 1;
 
                 //
-                $joinAlias = $aliasTable[$class] > 1 
+                $joinAlias = $aliasTable[$class] > 1
                            ? $class.''.$aliasTable[$class]
                            : $class;
-                
+
                 //
                 $joinTable = $definition['Table'];
 
@@ -217,26 +225,27 @@ class MysqlWriter extends Writer
 
                 //
                 $join .= " LEFT JOIN {$joinTable} AS {$joinAlias}"
-                       . " ON {$joinKey} = {$fieldFrom}";
+                       ." ON {$joinKey} = {$fieldFrom}";
 
                 if (is_array($definition['FieldTo'])) {
                     foreach ($definition['FieldTo'] as $nextFieldTo) {
                         $fieldAlias = $field.'__'.$nextFieldTo;
                         $fieldTo = $joinAlias.'.'.$nextFieldTo;
-                        $selectFields[] = $fieldTo.' AS '.$fieldAlias; 
+                        $selectFields[] = $fieldTo.' AS '.$fieldAlias;
                     }
                 }
 
                 continue;
-            }                                     
+            }
         }
 
         return implode(', ', $selectFields);
     }
 
     /**
+     * @param type  $field
+     * @param mixed $tableAlias
      *
-     * @param type $field
      * @return type
      */
     public function selectFieldsSingletoneField($field, $tableAlias)
@@ -250,11 +259,13 @@ class MysqlWriter extends Writer
     }
 
     /**
-     * Quote table or column names
+     * Quote table or column names.
      *
      *
+     * @param mixed $name
      */
-    private function quote($name) {
+    private function quote($name)
+    {
         return '`'.$name.'`';
     }
 }

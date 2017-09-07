@@ -6,14 +6,11 @@
  *
  * @author Francesco Bianco
  */
+
 namespace Javanile\Moldable\Parser\Mysql;
 
 trait RelationTrait
 {
-    /**
-     *
-     *
-     */
     private static function getNotationAttributesClass(
         $notation,
         $field,
@@ -36,10 +33,6 @@ trait RelationTrait
         return $attributes;
     }
 
-    /**
-     *
-     *
-     */
     private static function getNotationAttributesVector(
         $notation,
         $field,
@@ -56,10 +49,6 @@ trait RelationTrait
         return $aspects;
     }
 
-    /**
-     *
-     *
-     */
     private static function getNotationAttributesMatchs(
         $notation,
         $field,
@@ -76,10 +65,6 @@ trait RelationTrait
         return $aspects;
     }
 
-    /**
-     *
-     *
-     */
     public static function pregMatchClass($notation, &$matchs)
     {
         //
@@ -90,10 +75,6 @@ trait RelationTrait
         );
     }
 
-    /**
-     *
-     *
-     */
     public static function pregMatchVector($notation, &$matchs)
     {
         //
@@ -104,10 +85,6 @@ trait RelationTrait
         );
     }
 
-    /**
-     *
-     *
-     */
     public static function pregMatchMatchs($notation, &$matchs)
     {
         //

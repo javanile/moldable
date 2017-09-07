@@ -2,11 +2,11 @@
 
 namespace Javanile\Moldable\Tests\Model;
 
-use Javanile\Producer;
 use Javanile\Moldable\Database;
-use Javanile\Moldable\Tests\Sample\People;
-use PHPUnit\Framework\TestCase;
 use Javanile\Moldable\Tests\DatabaseTrait;
+use Javanile\Moldable\Tests\Sample\People;
+use Javanile\Producer;
+use PHPUnit\Framework\TestCase;
 
 Producer::addPsr4(['Javanile\\Moldable\\Tests\\' => __DIR__.'/../']);
 
@@ -53,7 +53,7 @@ final class QueryApiTest extends TestCase
 
         $results = People::query([
             'surname' => 'White',
-            'order' => 'name ASC',
+            'order'   => 'name ASC',
         ]);
         $this->assertEquals($results, [
             0 => $amber,

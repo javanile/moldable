@@ -6,11 +6,11 @@ use Javanile\Moldable\Storable;
 
 final class ItemCustomField extends Storable
 {
-    static $__config = [
+    public static $__config = [
         'table-name-conventions' => 'upper-camel-case',
     ];
 
     public $id = self::PRIMARY_KEY;
 
-    public $name = "";
+    public $name = '';
 }

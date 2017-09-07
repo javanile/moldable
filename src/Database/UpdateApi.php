@@ -6,6 +6,7 @@
  *
  * @author Francesco Bianco
  */
+
 namespace Javanile\Moldable\Database;
 
 trait UpdateApi
@@ -13,7 +14,11 @@ trait UpdateApi
     /**
      * Retrieve primary key name of specific model.
      *
-     * @param type $model
+     * @param type       $model
+     * @param mixed      $query
+     * @param null|mixed $values
+     * @param null|mixed $value
+     *
      * @return type
      */
     public function update($model, $query, $values = null, $value = null)
@@ -22,13 +27,13 @@ trait UpdateApi
 
         if (!is_array($query)) {
             $query = [
-                $key => $query
+                $key => $query,
             ];
         }
 
         if (is_string($values)) {
             $values = [$values => $value];
-            $value  = null;
+            $value = null;
         }
 
         if (is_null($values)) {
@@ -36,19 +41,19 @@ trait UpdateApi
             $query = [$key => $query[$key]];
         }
 
-        $params   = [];
+        $params = [];
         $setArray = [];
 
         foreach ($values as $field => $value) {
-            $token          = ':'.$field;
-            $setArray[]     = "`{$field}` = {$token}";
+            $token = ':'.$field;
+            $setArray[] = "`{$field}` = {$token}";
             $params[$token] = $value;
         }
 
-        $set   = implode(',', $setArray);
+        $set = implode(',', $setArray);
         $table = $this->getPrefix($model);
         $where = $this->getUpdateWhere($query, $params);
-        $sql   = "UPDATE `{$table}` SET {$set} WHERE {$where}";
+        $sql = "UPDATE `{$table}` SET {$set} WHERE {$where}";
 
         $this->execute($sql, $params);
     }
@@ -56,6 +61,7 @@ trait UpdateApi
     /**
      * Build where conditions.
      *
+     * @param mixed $query
      */
     private function getUpdateWhere($query, &$params)
     {
@@ -71,8 +77,8 @@ trait UpdateApi
                 $params[$field] = $value;
                 continue;
             }
-            $token          = ':'.$field;
-            $whereArray[]   = "{$field} = {$token}";
+            $token = ':'.$field;
+            $whereArray[] = "{$field} = {$token}";
             $params[$token] = $value;
         }
 

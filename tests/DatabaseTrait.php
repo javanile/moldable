@@ -2,10 +2,9 @@
 
 namespace Javanile\Moldable\Tests;
 
-use PDO;
-use Javanile\Producer;
 use Javanile\Moldable\Database;
 use Javanile\Moldable\Storable;
+use PDO;
 
 trait DatabaseTrait
 {

@@ -6,12 +6,13 @@
  *
  * @author Francesco Bianco
  */
+
 namespace Javanile\Moldable\Model;
 
 trait ClassApi
 {
     /**
-     * Global setting class attributes
+     * Global setting class attributes.
      *
      * @var type
      */
@@ -27,7 +28,7 @@ trait ClassApi
     ];
 
     /**
-     * Per-class attributes used as cache
+     * Per-class attributes used as cache.
      *
      * @var type
      */
@@ -35,7 +36,7 @@ trait ClassApi
 
     /**
      * Retrieve static class complete name
-     * with namespace prepended
+     * with namespace prepended.
      *
      * @return type
      */
@@ -47,8 +48,6 @@ trait ClassApi
     }
 
     /**
-     *
-     * 
      * @return type
      */
     protected static function getCalledClass()
@@ -57,7 +56,7 @@ trait ClassApi
     }
 
     /**
-     * Retrieve static class name
+     * Retrieve static class name.
      *
      * @return type
      */
@@ -72,13 +71,14 @@ trait ClassApi
 
             static::setClassAttribute($attribute, $className);
         }
-        
+
         return static::getClassAttribute($attribute);
     }
 
     /**
      * Class have attribute by name.
-     * 
+     *
+     * @param mixed $attribute
      */
     protected static function hasClassAttribute($attribute)
     {
@@ -90,17 +90,20 @@ trait ClassApi
     /**
      * Retrieve class attribute by name.
      *
+     * @param mixed $attribute
      */
     protected static function getClassAttribute($attribute)
     {
         $class = static::getClass();
-      
+
         return static::$__attrib[$class][$attribute];
     }
 
     /**
      * Set attibute value in class.
      *
+     * @param mixed $attribute
+     * @param mixed $value
      */
     protected static function setClassAttribute($attribute, $value)
     {
@@ -112,6 +115,7 @@ trait ClassApi
     /**
      * Delete class attribute.
      *
+     * @param mixed $attribute
      */
     protected static function delClassAttribute($attribute)
     {
@@ -123,6 +127,7 @@ trait ClassApi
     /**
      * Get global attribute value.
      *
+     * @param mixed $attribute
      */
     protected static function getClassGlobal($attribute)
     {
@@ -132,6 +137,7 @@ trait ClassApi
     /**
      * Check if have global attribute.
      *
+     * @param mixed $attribute
      */
     protected static function hasClassGlobal($attribute)
     {
@@ -141,6 +147,7 @@ trait ClassApi
     /**
      * Check if called class have configuration value.
      *
+     * @param mixed $key
      */
     protected static function hasClassConfig($key)
     {
@@ -152,6 +159,7 @@ trait ClassApi
     /**
      * Get configuration value of called class.
      *
+     * @param mixed $key
      */
     public static function getClassConfig($key)
     {
@@ -163,6 +171,8 @@ trait ClassApi
     /**
      * Set configuration value of called class.
      *
+     * @param mixed $key
+     * @param mixed $value
      */
     protected static function setClassConfig($key, $value)
     {
@@ -173,7 +183,6 @@ trait ClassApi
 
     /**
      * Get all cofiguration array.
-     *
      */
     protected static function getClassConfigArray()
     {
@@ -211,7 +220,6 @@ trait ClassApi
 
     /**
      * Reset class attributes.
-     *
      */
     public static function resetClass()
     {
@@ -222,7 +230,6 @@ trait ClassApi
 
     /**
      * Reset all classes attributes.
-     *
      */
     public static function resetAllClass()
     {
@@ -233,6 +240,7 @@ trait ClassApi
      * Get methods names by prefix.
      *
      * @param type $prefix
+     *
      * @return type
      */
     protected static function getClassMethodsByPrefix($prefix = null)
@@ -243,11 +251,11 @@ trait ClassApi
         if (!static::hasClassAttribute($attribute)) {
             $class = static::getClass();
             $allMethods = get_class_methods($class);
-            $methods = array();
+            $methods = [];
 
             if (count($allMethods) > 0) {
                 foreach ($allMethods as $method) {
-                    if (preg_match('/^' . $prefix . '/i', $method)) {
+                    if (preg_match('/^'.$prefix.'/i', $method)) {
                         $methods[] = $method;
                     }
                 }

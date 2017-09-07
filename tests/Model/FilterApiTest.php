@@ -2,12 +2,11 @@
 
 namespace Javanile\Moldable\Tests\Model;
 
-use Javanile\Producer;
 use Javanile\Moldable\Database;
-use Javanile\Moldable\Tests\Sample\People;
-use Javanile\Moldable\Tests\Sample\PeopleWithFilter;
-use PHPUnit\Framework\TestCase;
 use Javanile\Moldable\Tests\DatabaseTrait;
+use Javanile\Moldable\Tests\Sample\PeopleWithFilter;
+use Javanile\Producer;
+use PHPUnit\Framework\TestCase;
 
 Producer::addPsr4(['Javanile\\Moldable\\Tests\\' => __DIR__.'/../']);
 

@@ -2,15 +2,13 @@
 
 namespace Javanile\Moldable\Tests\Model;
 
-use Javanile\Producer;
 use Javanile\Moldable\Database;
-use PHPUnit\Framework\TestCase;
-use Javanile\Moldable\Readable;
-use Javanile\Moldable\Storable;
+use Javanile\Moldable\Tests\DatabaseTrait;
+use Javanile\Moldable\Tests\Sample\ItemCustomField;
 use Javanile\Moldable\Tests\Sample\People;
 use Javanile\Moldable\Tests\Sample\PlayerTeam;
-use Javanile\Moldable\Tests\Sample\ItemCustomField;
-use Javanile\Moldable\Tests\DatabaseTrait;
+use Javanile\Producer;
+use PHPUnit\Framework\TestCase;
 
 Producer::addPsr4(['Javanile\\Moldable\\Tests\\' => __DIR__.'/../']);
 

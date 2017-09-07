@@ -2,12 +2,12 @@
 
 namespace Javanile\Moldable\Tests\Model;
 
-use Javanile\Producer;
 use Javanile\Moldable\Database;
-use Javanile\Moldable\Tests\Sample\People;
-use Javanile\Moldable\Tests\Sample\Address;
-use PHPUnit\Framework\TestCase;
 use Javanile\Moldable\Tests\DatabaseTrait;
+use Javanile\Moldable\Tests\Sample\Address;
+use Javanile\Moldable\Tests\Sample\People;
+use Javanile\Producer;
+use PHPUnit\Framework\TestCase;
 
 Producer::addPsr4(['Javanile\\Moldable\\Tests\\' => __DIR__.'/../']);
 
@@ -30,7 +30,7 @@ final class JoinApiTest extends TestCase
 
         $address->store([
             'route' => 'Rt. Cavallo',
-            'city'
+            'city',
         ]);
 
         $frank = new People();
@@ -44,17 +44,17 @@ final class JoinApiTest extends TestCase
 
         $results = People::all([
             'name',
-            'address' => Address::join()
+            'address' => Address::join(),
         ]);
 
         $this->assertEquals($results, [
             0 => [
-                'name' => 'Frank',
-                'address__id' => '1',
-                'address__route' => 'Rt. Cavallo',
-                'address__city' => '',
-                'address__zip_code' =>'0',
-            ]
+                'name'              => 'Frank',
+                'address__id'       => '1',
+                'address__route'    => 'Rt. Cavallo',
+                'address__city'     => '',
+                'address__zip_code' => '0',
+            ],
         ]);
     }
 }

@@ -7,56 +7,52 @@
  *
  * @author Francesco Bianco
  */
+
 namespace Javanile\Moldable\Database\Socket;
 
 use PDO;
 use PDOException;
-use Javanile\Moldable\Exception;
 
 class PdoSocket implements SocketInterface
 {
     /**
-     *
      * @var type
      */
     private $_pdo = null;
 
-    /**
-     * 
-     *
-     */
     private $_args = null;
 
     /**
-     *
      * @var type
      */
     private $_prefix = null;
 
     /**
-     *
      * @var type
      */
     private $_database = null;
 
     /**
-     *
      * @
+     *
+     * @param mixed $database
+     * @param mixed $args
      */
     public function __construct($database, $args)
     {
         if (!$args || !is_array($args)) {
-            $database->errorConnect("required connection arguments");
+            $database->errorConnect('required connection arguments');
         }
 
         // init params
-        $this->_args     = $args;
-        $this->_prefix   = isset($args['prefix']) ? $args['prefix'] : '';
+        $this->_args = $args;
+        $this->_prefix = isset($args['prefix']) ? $args['prefix'] : '';
         $this->_database = $database;
 
         // set custom pdo connection
         if (isset($args['pdo']) && $args['pdo']) {
             $this->_pdo = $args['pdo'];
+
             return;
         }
 
@@ -81,14 +77,14 @@ class PdoSocket implements SocketInterface
      */
     private function connect()
     {
-        $port     = isset($this->_args['port']) && $this->_args['port'] ? $this->_args['port'] : 3306;
-        $dsn      = "mysql:host={$this->_args['host']};port={$port};dbname={$this->_args['dbname']}";
+        $port = isset($this->_args['port']) && $this->_args['port'] ? $this->_args['port'] : 3306;
+        $dsn = "mysql:host={$this->_args['host']};port={$port};dbname={$this->_args['dbname']}";
         $username = $this->_args['username'];
         $password = $this->_args['password'];
 
         // TODO: Move to use the follow: PDO::ATTR_EMULATE_PREPARES to 'false'
         // For security reason
-        $options  = [PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8'];
+        $options = [PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8'];
 
         /*\
          * The latter can be fixed by turning off emulation
@@ -108,10 +104,11 @@ class PdoSocket implements SocketInterface
 
         $this->_pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     }
-    
+
     /**
+     * @param type       $sql
+     * @param null|mixed $params
      *
-     * @param type $sql
      * @return type
      */
     public function getRow($sql, $params = null)
@@ -122,8 +119,9 @@ class PdoSocket implements SocketInterface
     }
 
     /**
+     * @param type       $sql
+     * @param null|mixed $params
      *
-     * @param type $sql
      * @return type
      */
     public function getResults($sql, $params = null)
@@ -134,8 +132,9 @@ class PdoSocket implements SocketInterface
     }
 
     /**
+     * @param type       $sql
+     * @param null|mixed $params
      *
-     * @param type $sql
      * @return type
      */
     public function getResultsAsObjects($sql, $params = null)
@@ -148,13 +147,15 @@ class PdoSocket implements SocketInterface
     /**
      * Get single column elements.
      *
-     * @param type $sql
+     * @param type       $sql
+     * @param null|mixed $params
+     *
      * @return type
      */
     public function getColumn($sql, $params = null)
     {
         $stmt = $this->execute($sql, $params);
-        $column = array();
+        $column = [];
 
         while ($row = $stmt->fetch()) {
             $column[] = $row[0];
@@ -164,9 +165,9 @@ class PdoSocket implements SocketInterface
     }
 
     /**
+     * @param type       $sql
+     * @param null|mixed $params
      *
-     *
-     * @param type $sql
      * @return type
      */
     public function getValue($sql, $params = null)
@@ -177,7 +178,7 @@ class PdoSocket implements SocketInterface
     }
 
     /**
-     * Return prefix passed on init attribute
+     * Return prefix passed on init attribute.
      *
      * @return type
      */
@@ -187,7 +188,9 @@ class PdoSocket implements SocketInterface
     }
 
     /**
-     * Return prefix passed on init attribute
+     * Return prefix passed on init attribute.
+     *
+     * @param mixed $prefix
      *
      * @return type
      */
@@ -197,7 +200,7 @@ class PdoSocket implements SocketInterface
     }
 
     /**
-     * Return last insert id
+     * Return last insert id.
      *
      * @return type
      */
@@ -207,7 +210,9 @@ class PdoSocket implements SocketInterface
     }
 
     /**
-     * Return last insert id
+     * Return last insert id.
+     *
+     * @param mixed $string
      *
      * @return type
      */
@@ -218,7 +223,6 @@ class PdoSocket implements SocketInterface
 
     /**
      * Starting a transaction to DB.
-     *
      */
     public function transact()
     {
@@ -227,7 +231,6 @@ class PdoSocket implements SocketInterface
 
     /**
      * Transactional commit.
-     *
      */
     public function commit()
     {
@@ -236,7 +239,6 @@ class PdoSocket implements SocketInterface
 
     /**
      * Transactional rollback.
-     *
      */
     public function rollback()
     {
@@ -244,15 +246,17 @@ class PdoSocket implements SocketInterface
     }
 
     /**
-     * Execute a SQL query on DB with binded values
+     * Execute a SQL query on DB with binded values.
      *
+     * @param mixed      $sql
+     * @param null|mixed $params
      */
     public function execute($sql, $params = null)
     {
         $stmt = $this->_pdo->prepare($sql);
 
         if (is_array($params)) {
-            foreach($params as $token => $value) {
+            foreach ($params as $token => $value) {
                 $stmt->bindValue($token, $value);
             }
         }

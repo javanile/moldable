@@ -13,6 +13,9 @@ interface SocketInterface
 {
     /**
      * Get a single record.
+     *
+     * @param mixed      $sql
+     * @param null|mixed $params
      */
     public function getRow($sql, $params = null);
 }

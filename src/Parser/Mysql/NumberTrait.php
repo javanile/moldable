@@ -6,14 +6,11 @@
  *
  * @author Francesco Bianco
  */
+
 namespace Javanile\Moldable\Parser\Mysql;
 
 trait NumberTrait
 {
-    /**
-     *
-     *
-     */
     private function getNotationAspectsBoolean(
         $notation,
         $aspects
@@ -25,9 +22,6 @@ trait NumberTrait
         return $aspects;
     }
 
-    /**
-     *
-     */
     private function getNotationAspectsInteger(
         $notation,
         $aspects
@@ -39,10 +33,6 @@ trait NumberTrait
         return $aspects;
     }
 
-    /**
-     *
-     *
-     */
     private function getNotationAspectsFloat(
         $notation,
         $aspects
@@ -54,17 +44,13 @@ trait NumberTrait
         return $aspects;
     }
 
-    /**
-     *
-     *
-     */
     private function getNotationAspectsDouble(
         $notation,
         $aspects
     ) {
         $aspects['Null'] = 'NO';
         $aspects['Type'] = 'double(10,4)';
-        $aspects['Default'] = (double) $notation;
+        $aspects['Default'] = (float) $notation;
 
         return $aspects;
     }

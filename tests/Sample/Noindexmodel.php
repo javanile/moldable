@@ -6,9 +6,9 @@ use Javanile\Moldable\Storable;
 
 final class Noindexmodel extends Storable
 {
-    public $name = "";
+    public $name = '';
 
-    public $surname = "";
+    public $surname = '';
 
     public $age = 0;
 
