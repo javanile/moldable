@@ -15,11 +15,12 @@ final class DatabaseDebugTest extends TestCase
     public function testDatabaseSetDebug()
     {
         $db = new Database([
-            'host' => $GLOBALS['DB_HOST'],
-            'dbname' => $GLOBALS['DB_NAME'],
+            'host'     => $GLOBALS['DB_HOST'],
+            'port'     => $GLOBALS['DB_PORT'],
+            'dbname'   => $GLOBALS['DB_NAME'],
             'username' => $GLOBALS['DB_USER'],
             'password' => $GLOBALS['DB_PASS'],
-            'debug' => true,
+            'debug'    => true,
         ]);
 
         $this->assertEquals($db->getDebug(), true);

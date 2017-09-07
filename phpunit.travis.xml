@@ -2,6 +2,7 @@
 <phpunit bootstrap="./vendor/autoload.php" colors="true">
     <php>
         <var name="DB_HOST" value="localhost" />
+        <var name="DB_PORT" value="3306" />
         <var name="DB_NAME" value="database" />
         <var name="DB_USER" value="username" />
         <var name="DB_PASS" value="password" />

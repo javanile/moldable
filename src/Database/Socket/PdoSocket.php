@@ -81,7 +81,8 @@ class PdoSocket implements SocketInterface
      */
     private function connect()
     {
-        $dsn      = "mysql:host={$this->_args['host']};dbname={$this->_args['dbname']}";
+        $port     = isset($this->_args['port']) && $this->_args['port'] ? $this->_args['port'] : 3306;
+        $dsn      = "mysql:host={$this->_args['host']};port={$port};dbname={$this->_args['dbname']}";
         $username = $this->_args['username'];
         $password = $this->_args['password'];
 

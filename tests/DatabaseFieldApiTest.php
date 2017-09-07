@@ -16,6 +16,7 @@ final class DatabaseFieldApiTest extends TestCase
     {
         $db = new Database([
             'host'     => $GLOBALS['DB_HOST'],
+            'port'     => $GLOBALS['DB_PORT'],
             'dbname'   => $GLOBALS['DB_NAME'],
             'username' => $GLOBALS['DB_USER'],
             'password' => $GLOBALS['DB_PASS'],

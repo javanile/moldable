@@ -19,7 +19,7 @@ trait LaravelTrait
         $this->capsule->addConnection([
             'driver'    => 'mysql',
             'host'      => $GLOBALS['DB_HOST'],
-            //'port' => DB_PORT,
+            'port'      => $GLOBALS['DB_PORT'],
             'database'  => $GLOBALS['DB_NAME'],
             'username'  => $GLOBALS['DB_USER'],
             'password'  => $GLOBALS['DB_PASS'],

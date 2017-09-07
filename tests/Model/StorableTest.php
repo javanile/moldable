@@ -18,8 +18,9 @@ final class StorableTest extends TestCase
     public function testDebugMode()
     {
         $db = new Database([
-            'host' => $GLOBALS['DB_HOST'],
-            'dbname' => $GLOBALS['DB_NAME'],
+            'host'     => $GLOBALS['DB_HOST'],
+            'port'     => $GLOBALS['DB_PORT'],
+            'dbname'   => $GLOBALS['DB_NAME'],
             'username' => $GLOBALS['DB_USER'],
             'password' => $GLOBALS['DB_PASS'],
         ]);
@@ -34,8 +35,9 @@ final class StorableTest extends TestCase
     public function testMake()
     {
         $db = new Database([
-            'host' => $GLOBALS['DB_HOST'],
-            'dbname' => $GLOBALS['DB_NAME'],
+            'host'     => $GLOBALS['DB_HOST'],
+            'port'     => $GLOBALS['DB_PORT'],
+            'dbname'   => $GLOBALS['DB_NAME'],
             'username' => $GLOBALS['DB_USER'],
             'password' => $GLOBALS['DB_PASS'],
         ]);
@@ -50,8 +52,9 @@ final class StorableTest extends TestCase
     public function testSimpleStorable()
     {
         $db = new Database([
-            'host' => $GLOBALS['DB_HOST'],
-            'dbname' => $GLOBALS['DB_NAME'],
+            'host'     => $GLOBALS['DB_HOST'],
+            'port'     => $GLOBALS['DB_PORT'],
+            'dbname'  => $GLOBALS['DB_NAME'],
             'username' => $GLOBALS['DB_USER'],
             'password' => $GLOBALS['DB_PASS'],
         ]);
@@ -72,8 +75,9 @@ final class StorableTest extends TestCase
     public function testSimpleStorableTwo()
     {
         $db = new Database([
-            'host' => $GLOBALS['DB_HOST'],
-            'dbname' => $GLOBALS['DB_NAME'],
+            'host'     => $GLOBALS['DB_HOST'],
+            'port'     => $GLOBALS['DB_PORT'],
+            'dbname'   => $GLOBALS['DB_NAME'],
             'username' => $GLOBALS['DB_USER'],
             'password' => $GLOBALS['DB_PASS'],
         ]);
@@ -92,8 +96,9 @@ final class StorableTest extends TestCase
     public function testStorableUpdate()
     {
         $db = new Database([
-            'host' => $GLOBALS['DB_HOST'],
-            'dbname' => $GLOBALS['DB_NAME'],
+            'host'     => $GLOBALS['DB_HOST'],
+            'port'     => $GLOBALS['DB_PORT'],
+            'dbname'   => $GLOBALS['DB_NAME'],
             'username' => $GLOBALS['DB_USER'],
             'password' => $GLOBALS['DB_PASS'],
         ]);
@@ -114,8 +119,9 @@ final class StorableTest extends TestCase
     public function testStorableConstructorOverride()
     {
         $db = new Database([
-            'host' => $GLOBALS['DB_HOST'],
-            'dbname' => $GLOBALS['DB_NAME'],
+            'host'     => $GLOBALS['DB_HOST'],
+            'port'     => $GLOBALS['DB_PORT'],
+            'dbname'   => $GLOBALS['DB_NAME'],
             'username' => $GLOBALS['DB_USER'],
             'password' => $GLOBALS['DB_PASS'],
         ]);
@@ -128,8 +134,9 @@ final class StorableTest extends TestCase
     public function testStorableMakeMap()
     {
         $db = new Database([
-            'host' => $GLOBALS['DB_HOST'],
-            'dbname' => $GLOBALS['DB_NAME'],
+            'host'     => $GLOBALS['DB_HOST'],
+            'port'     => $GLOBALS['DB_PORT'],
+            'dbname'   => $GLOBALS['DB_NAME'],
             'username' => $GLOBALS['DB_USER'],
             'password' => $GLOBALS['DB_PASS'],
         ]);
@@ -153,8 +160,9 @@ final class StorableTest extends TestCase
     public function testDump()
     {
         $db = new Database([
-            'host' => $GLOBALS['DB_HOST'],
-            'dbname' => $GLOBALS['DB_NAME'],
+            'host'     => $GLOBALS['DB_HOST'],
+            'port'     => $GLOBALS['DB_PORT'],
+            'dbname'   => $GLOBALS['DB_NAME'],
             'username' => $GLOBALS['DB_USER'],
             'password' => $GLOBALS['DB_PASS'],
         ]);
@@ -167,19 +175,21 @@ final class StorableTest extends TestCase
     public function testConnect()
     {
         $db1 = new Database([
-            'host' => $GLOBALS['DB_HOST'],
-            'dbname' => $GLOBALS['DB_NAME'],
+            'host'     => $GLOBALS['DB_HOST'],
+            'port'     => $GLOBALS['DB_PORT'],
+            'dbname'   => $GLOBALS['DB_NAME'],
             'username' => $GLOBALS['DB_USER'],
             'password' => $GLOBALS['DB_PASS'],
-            'prefix' => 'prefix1_',
+            'prefix'   => 'prefix1_',
         ]);
 
         $db2 = new Database([
-            'host' => $GLOBALS['DB_HOST'],
-            'dbname' => $GLOBALS['DB_NAME'],
+            'host'     => $GLOBALS['DB_HOST'],
+            'port'     => $GLOBALS['DB_PORT'],
+            'dbname'   => $GLOBALS['DB_NAME'],
             'username' => $GLOBALS['DB_USER'],
             'password' => $GLOBALS['DB_PASS'],
-            'prefix' => 'prefix2_',
+            'prefix'   => 'prefix2_',
         ]);
 
         $schema1 = $db1->desc();

@@ -11,10 +11,14 @@ trait DatabaseTrait
 {
     protected function setUp()
     {
-        $dsn = "mysql:dbname={$GLOBALS['DB_NAME']};host={$GLOBALS['DB_HOST']}";
+        $dsn = "mysql:dbname={$GLOBALS['DB_NAME']};".
+            "port={$GLOBALS['DB_PORT']};host={$GLOBALS['DB_HOST']}";
+
+        Producer::log($dsn);
+
         $this->pdo = new PDO($dsn, $GLOBALS['DB_USER'], $GLOBALS['DB_PASS']);
-        $this->pdo->query("DROP DATABASE `database`");
-        $this->pdo->query("CREATE DATABASE `database`");
+        $this->pdo->query("DROP DATABASE `{$GLOBALS['DB_NAME']}`");
+        $this->pdo->query("CREATE DATABASE `{$GLOBALS['DB_NAME']}`");
 
         Database::resetDefault();
         Storable::resetAllClass();

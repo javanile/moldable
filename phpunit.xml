@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <phpunit colors="true">
     <php>
-        <var name="DB_HOST" value="10.77.77.22" />
+        <var name="DB_HOST" value="127.0.0.1" />
+        <var name="DB_PORT" value="33060" />
         <var name="DB_NAME" value="database" />
         <var name="DB_USER" value="root" />
         <var name="DB_PASS" value="root" />

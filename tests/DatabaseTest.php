@@ -15,8 +15,9 @@ final class DatabaseTest extends TestCase
     public function testNewDatabaseNoPrefix()
     {
         $db = new Database([
-            'host' => $GLOBALS['DB_HOST'],
-            'dbname' => $GLOBALS['DB_NAME'],
+            'host'     => $GLOBALS['DB_HOST'],
+            'port'     => $GLOBALS['DB_PORT'],
+            'dbname'   => $GLOBALS['DB_NAME'],
             'username' => $GLOBALS['DB_USER'],
             'password' => $GLOBALS['DB_PASS'],
         ]);
@@ -39,8 +40,9 @@ final class DatabaseTest extends TestCase
         $this->expectExceptionMessageRegExp("/Connection error/i");
 
         $db = new Database([
-            'host' => $GLOBALS['DB_HOST'],
-            'dbname' => 'wrong dbname',
+            'host'     => $GLOBALS['DB_HOST'],
+            'port'     => $GLOBALS['DB_PORT'],
+            'dbname'   => 'wrong dbname',
             'username' => 'wrong username',
             'password' => 'wrong password',
         ]);
@@ -70,7 +72,7 @@ final class DatabaseTest extends TestCase
         $this->expectExceptionMessageRegExp("/Connection error.*username/i");
 
         $db = new Database([
-            'host' => $GLOBALS['DB_HOST'],
+            'host'   => $GLOBALS['DB_HOST'],
             'dbname' => $GLOBALS['DB_NAME'],
         ]);
     }
@@ -81,8 +83,9 @@ final class DatabaseTest extends TestCase
         $this->expectExceptionMessageRegExp("/empty schema not allowed/i");
 
         $db = new Database([
-            'host' => $GLOBALS['DB_HOST'],
-            'dbname' => $GLOBALS['DB_NAME'],
+            'host'     => $GLOBALS['DB_HOST'],
+            'port'     => $GLOBALS['DB_PORT'],
+            'dbname'   => $GLOBALS['DB_NAME'],
             'username' => $GLOBALS['DB_USER'],
             'password' => $GLOBALS['DB_PASS'],
         ]);
@@ -96,8 +99,9 @@ final class DatabaseTest extends TestCase
         $this->expectExceptionMessageRegExp("/Query error/i");
 
         $db = new Database([
-            'host' => $GLOBALS['DB_HOST'],
-            'dbname' => $GLOBALS['DB_NAME'],
+            'host'     => $GLOBALS['DB_HOST'],
+            'port'     => $GLOBALS['DB_PORT'],
+            'dbname'   => $GLOBALS['DB_NAME'],
             'username' => $GLOBALS['DB_USER'],
             'password' => $GLOBALS['DB_PASS'],
         ]);
@@ -108,8 +112,9 @@ final class DatabaseTest extends TestCase
     public function testDatabaseGetRow()
     {
         $db = new Database([
-            'host' => $GLOBALS['DB_HOST'],
-            'dbname' => $GLOBALS['DB_NAME'],
+            'host'     => $GLOBALS['DB_HOST'],
+            'port'     => $GLOBALS['DB_PORT'],
+            'dbname'   => $GLOBALS['DB_NAME'],
             'username' => $GLOBALS['DB_USER'],
             'password' => $GLOBALS['DB_PASS'],
         ]);
@@ -136,8 +141,9 @@ final class DatabaseTest extends TestCase
         $this->assertEquals($flag, false);
 
         $db = new Database([
-            'host' => $GLOBALS['DB_HOST'],
-            'dbname' => $GLOBALS['DB_NAME'],
+            'host'     => $GLOBALS['DB_HOST'],
+            'port'     => $GLOBALS['DB_PORT'],
+            'dbname'   => $GLOBALS['DB_NAME'],
             'username' => $GLOBALS['DB_USER'],
             'password' => $GLOBALS['DB_PASS'],
         ]);
@@ -150,8 +156,9 @@ final class DatabaseTest extends TestCase
     public function testDatabaseCache()
     {
         $db = new Database([
-            'host' => $GLOBALS['DB_HOST'],
-            'dbname' => $GLOBALS['DB_NAME'],
+            'host'     => $GLOBALS['DB_HOST'],
+            'port'     => $GLOBALS['DB_PORT'],
+            'dbname'   => $GLOBALS['DB_NAME'],
             'username' => $GLOBALS['DB_USER'],
             'password' => $GLOBALS['DB_PASS'],
         ]);
