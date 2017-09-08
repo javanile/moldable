@@ -1,4 +1,4 @@
-preset: laravel
+preset: symfony
 
 enabled:
 - phpdoc_add_missing_param_annotation
