@@ -1,7 +1,7 @@
 {
     "name": "javanile/moldable",
     "type": "library",
-    "version": "0.0.24",
+    "version": "0.0.25",
     "description": "Uknown PHP Database Abstraction Layer",
     "keywords": [
         "moldable",
@@ -16,6 +16,12 @@
         {
             "name": "Francesco Bianco",
             "email": "info.francescobianco@gmail.com"
+        }
+    ],
+    "repositories": [
+        {
+            "type": "git",
+            "url": "https://github.com/javanile/moldable"
         }
     ],
     "autoload": {
