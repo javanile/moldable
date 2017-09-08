@@ -1,4 +1,4 @@
-preset: recommended
+preset: laravel
 
 enabled:
 - phpdoc_add_missing_param_annotation
