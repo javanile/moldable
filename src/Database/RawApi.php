@@ -18,16 +18,11 @@ trait RawApi
      *
      * @return type
      */
-    public function raw($model)
+    public function raw($sql)
     {
-        // describe the passed model
-        $desc = $this->desc($model);
+        $results = $this->getResults($sql);
 
-        // search by fields for primary key
-        foreach ($desc[$model] as $field => $aspects) {
-            if ($aspects['Key'] == 'PRI') {
-                return $field;
-            }
-        }
+
+        return $results;
     }
 }

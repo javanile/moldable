@@ -214,9 +214,10 @@ trait SocketApi
      */
     private function log($method, $sql = null, $params = null)
     {
-        if (!$this->isDebug()) {
-            return $method.$sql.json_encode($params);
-        }
+        $this->_logger->info(
+            str_pad('('.$method.')', 14, ' ', STR_PAD_RIGHT).'"'.$sql.'"',
+            (array) $params
+        );
 
         /*
         $arg1formatted = is_string($arg1) ? str_replace([

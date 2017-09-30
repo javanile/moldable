@@ -1,0 +1,50 @@
+0%
+src/Database/RawApi.php	8	0	8	0.0
+—
+src/Database/Socket/SocketInterface.php	0	0	0	0.0
+—
+src/Exception.php	0	0	0	0.0
+0%
+src/Model/RawApi.php	25	0	25	0.0
+—
+src/Notations.php	0	0	0	0.0
+—
+src/Parser/Parser.php	0	0	0	0.0
+—
+src/Writer/Writer.php	0	0	0	0.0
+30%
+src/Parser/Mysql/ValueTrait.php	50	15	35	6.5
+46%
+src/Model/ManageApi.php	49	23	26	0.5
+50%
+src/Functions.php	26	13	13	7.8
+52%
+src/Parser/Mysql/RelationTrait.php	23	12	11	19.8
+52%
+src/Model/FetchApi.php	17	9	8	1.7
+62%
+src/Database/ErrorApi.php	8	5	3	1.1
+65%
+src/Database/SchemaApi.php	245	161	84	7.4
+66%
+src/Model/ErrorApi.php	3	2	1	0.7
+68%
+src/Parser/Mysql/DatetimeTrait.php	19	13	6	0.7
+72%
+src/Model/ReadApi.php	91	66	25	1.3
+73%
+src/Database/Socket/LaravelSocket.php	19	14	5	3.6
+73%
+src/Parser/Mysql/EnumTrait.php	19	14	5	0.7
+74%
+src/Model/SchemaApi.php	70	52	18	18.0
+74%
+src/Database/ModelApi.php	83	62	21	2.4
+75%
+src/Parser/Mysql/NumberTrait.php	16	12	4	9.0
+76%
+src/Storable.php	95	73	22	10.8
+77%
+src/Model/JoinApi.php	9	7	2	0.8
+81%
+src/Parser/Mysql/TypeTrait.php	43	35	8	19.6

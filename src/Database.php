@@ -9,6 +9,9 @@
 
 namespace Javanile\Moldable;
 
+use Monolog\Logger;
+use Monolog\Handler\StreamHandler;
+
 class Database implements Notations
 {
     use Database\ModelApi;
@@ -19,6 +22,7 @@ class Database implements Notations
     use Database\FieldApi;
     use Database\InsertApi;
     use Database\UpdateApi;
+    use Database\RawApi;
 
     /**
      * Release version number.
@@ -54,6 +58,13 @@ class Database implements Notations
      * @var object
      */
     private $_parser = null;
+
+    /**
+     * Logger handler.
+     *
+     * @var object
+     */
+    private $_logger = null;
 
     /**
      * Database status ready for queries.
@@ -118,6 +129,13 @@ class Database implements Notations
             $this->setDebug($args['debug']);
         }
 
+        // Logger
+        $logFile = isset($args['log']) ? $args['log'] : getcwd();
+        $logFlag = isset($args['debug']) ? Logger::INFO : Logger::ERROR;
+        $this->_logger = new Logger('name');
+        $this->_logger->pushHandler(new StreamHandler($logFile, $logFlag));
+
+        // Set as default database
         static::setDefault($this);
     }
 

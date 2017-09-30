@@ -130,36 +130,21 @@ trait ModelApi
         //
         $schema = $this->getFields($model);
 
-        //
         foreach ($schema as $field) {
             if (!isset($query[$field])) {
                 continue;
             }
-
-            //
             $value = $query[$field];
-
-            //
             $token = ':'.$field;
-
-            //
             $params[$token] = $value;
-
-            //
-            $whereArray[] = "{$field} = {$token}";
+            $whereArray[] = "`{$field}` = {$token}";
         }
 
-        //
         $where = count($whereArray) > 0
                ? 'WHERE '.implode(' AND ', $whereArray) : '';
 
-        //
         $table = $this->getPrefix($model);
-
-        //
         $sql = "SELECT * FROM `{$table}` {$where} LIMIT 1";
-
-        //
         $row = $this->getRow($sql, $params);
 
         return $row;

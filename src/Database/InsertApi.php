@@ -36,22 +36,16 @@ trait InsertApi
 
         foreach ($values as $field => $value) {
             $field = isset($map[$field]) ? $map[$field] : $field;
-
             $token = ':'.$field;
-
-            $fieldsArray[] = $field;
+            $fieldsArray[] = '`'.$field.'`';
             $tokensArray[] = $token;
-
             $valuesArray[$token] = $value;
         }
 
         $fields = implode(',', $fieldsArray);
         $tokens = implode(',', $tokensArray);
-
         $table = $this->getPrefix($model);
-
         $sql = "INSERT INTO `{$table}` ({$fields}) VALUES ({$tokens})";
-
         $this->execute($sql, $valuesArray);
 
         return $this->getLastId();

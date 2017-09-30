@@ -20,6 +20,9 @@ class PdoSocket implements SocketInterface
      */
     private $_pdo = null;
 
+    /**
+     * @var type
+     */
     private $_args = null;
 
     /**

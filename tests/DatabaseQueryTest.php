@@ -14,6 +14,10 @@ final class DatabaseQueryTest extends TestCase
 
     public function testDatabaseRawQuery()
     {
+        $log = __DIR__.'/database.log';
+
+        unlink($log);
+
         $db = new Database([
             'host'     => $GLOBALS['DB_HOST'],
             'port'     => $GLOBALS['DB_PORT'],
@@ -22,6 +26,7 @@ final class DatabaseQueryTest extends TestCase
             'password' => $GLOBALS['DB_PASS'],
             'prefix'   => 'prefix_',
             'debug'    => true,
+            'log'      => $log,
         ]);
 
         $db->import('raw_table', [
@@ -30,7 +35,7 @@ final class DatabaseQueryTest extends TestCase
             ['item' => 'HH999', 'desc' => 'management man man man'],
         ]);
 
-        $results = $db->raw("SELECT * FROM prefix_raw_table WHERE desc LIKE '%full%'");
+        $results = $db->raw("SELECT * FROM prefix_raw_table WHERE `desc` LIKE '%full%'");
 
         Producer::log($results);
     }
