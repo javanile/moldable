@@ -162,7 +162,6 @@ trait ModelApi
         //
         $row = $this->getRow($sql, $params);
 
-        //
         return $row;
     }
 
@@ -202,15 +201,12 @@ trait ModelApi
      */
     public function submit($model, $values)
     {
-        //
         $exists = $this->exists($model, $values);
 
-        //
         if (!$exists) {
             $exists = $this->insert($model, $values);
         }
 
-        //
         return $exists;
     }
 
