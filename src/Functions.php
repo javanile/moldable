@@ -34,41 +34,37 @@ class Functions
      * @param type $title
      * @param type $content
      */
-    public static function dumpGrid($title, $content)
+    public static function dumpGrid($grid, $title = null)
     {
-        /*
-        //
-        $a = &$content;
+        $key = key($grid);
+        $n = count($grid) > 0 ? count((array)$grid[$key]) : 1;
 
-        //
-        $r = key($a);
-
-        //
-        $n = count($a) > 0 ? count((array) $a[$r]) : 1;
-
-        //
-        echo '<pre><table border="1" style="text-align:center;margin-bottom:1px;"><thead><tr><th colspan="'.$n.'">'.$title.'</th></tr>';
-
-        //
-        echo '<tr>';
-        foreach ($a[$r] as $f=>$v) {
-            echo '<th>'.$f.'</th>';
+        echo '<pre><table border="1" style="text-align:center;margin-bottom:1px;"><thead>';
+        if ($title) {
+            echo '<tr><th colspan="' . $n . '">' . $title . '</th></tr>';
         }
-        echo '</tr></thead><tbody>';
 
-        //
-        foreach ($a as $i=>$r) {
+        if (is_array($grid[$key])) {
             echo '<tr>';
-            foreach ($r as $f=>$v) {
-                echo '<td>'.$v.'</td>';
+            foreach (array_keys($grid[$key]) as $field) {
+                echo '<th>' . $field . '</th>';
             }
             echo '</tr>';
         }
 
-        //
+        echo '</thead><tbody>';
+        foreach ($grid as $row) {
+            echo '<tr>';
+            if (is_array($row) || is_object($row)) {
+                foreach ($row as $value) {
+                    echo '<td>'.$value.'</td>';
+                }
+            } else {
+                echo '<td>'.$row.'</td>';
+            }
+            echo '</tr>';
+        }
         echo '</tbody></table></pre>';
-        */
-        return '<div>'.$title.json_encode($content).'</div>';
     }
 
     /**
@@ -124,7 +120,7 @@ class Functions
      *
      * @param mixed $name
      */
-    public static function bachmark()
+    public static function benchmark()
     {
         $delta = 'asd';
         $style = 'background:#333;'
@@ -133,6 +129,6 @@ class Functions
             .'border:1px solid #000';
         $infoline = 'Time: '.$delta.' '.'Mem: ';
 
-        return '<pre style="'.$style.'">'.$infoline.'</pre>';
+        echo '<pre style="'.$style.'">'.$infoline.'</pre>';
     }
 }

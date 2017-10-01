@@ -3,7 +3,7 @@
 namespace Javanile\Moldable\Tests\Model;
 
 use Javanile\Moldable\Database;
-use Javanile\Moldable\Tests\DatabaseTrait;
+use Javanile\Moldable\Tests\DefaultDatabaseTrait;
 use Javanile\Moldable\Tests\Sample\People;
 use Javanile\Producer;
 use PHPUnit\Framework\TestCase;
@@ -12,19 +12,10 @@ Producer::addPsr4(['Javanile\\Moldable\\Tests\\' => __DIR__.'/../']);
 
 final class QueryApiTest extends TestCase
 {
-    use DatabaseTrait;
+    use DefaultDatabaseTrait;
 
     public function testQueryApi()
     {
-        $db = new Database([
-            'host' => $GLOBALS['DB_HOST'],
-            'port' => $GLOBALS['DB_PORT'],
-            'dbname' => $GLOBALS['DB_NAME'],
-            'username' => $GLOBALS['DB_USER'],
-            'password' => $GLOBALS['DB_PASS'],
-            'prefix' => 'prefix_',
-        ]);
-
         $frank = new People();
         $frank->store([
             'name' => 'Frank',
@@ -63,15 +54,6 @@ final class QueryApiTest extends TestCase
 
     public function testRawQueryApi()
     {
-        $db = new Database([
-            'host' => $GLOBALS['DB_HOST'],
-            'port' => $GLOBALS['DB_PORT'],
-            'dbname' => $GLOBALS['DB_NAME'],
-            'username' => $GLOBALS['DB_USER'],
-            'password' => $GLOBALS['DB_PASS'],
-            'prefix' => 'prefix_',
-        ]);
-
         $frank = new People();
         $frank->store([
             'name' => 'Frank',
@@ -88,5 +70,55 @@ final class QueryApiTest extends TestCase
         ]);
         $results = People::raw("SELECT * FROM prefix_People WHERE `select` LIKE '%uma%'");
         $this->assertEquals($results[0]['select'], 'Human');
+    }
+
+    public function testAllApi()
+    {
+        $frank = new People();
+        $frank->store([
+            'name' => 'Frank',
+            'surname' => 'White',
+            'select' => 'Human',
+            'age' => 18,
+        ]);
+        $train = new People();
+        $train->store([
+            'name' => 'Train',
+            'surname' => 'Gnome',
+            'select' => 'Orch',
+            'age' => 400,
+        ]);
+
+        $all = People::all();
+
+        $this->assertEquals('Javanile\Moldable\Tests\Sample\People', get_class($all[0]));
+        $this->assertEquals('Javanile\Moldable\Tests\Sample\People', get_class($all[1]));
+    }
+
+    public function testFirstLastApi()
+    {
+        $frank = new People();
+        $frank->store([
+            'name' => 'Frank',
+            'surname' => 'White',
+            'select' => 'Human',
+            'age' => 18,
+        ]);
+        $train = new People();
+        $train->store([
+            'name' => 'Train',
+            'surname' => 'Gnome',
+            'select' => 'Orch',
+            'age' => 400,
+        ]);
+
+        $firstId = People::first('id');
+        $lastId = People::last('id');
+        $firstName = People::first('name');
+        $lastName = People::last('name');
+        $this->assertEquals(1, $firstId);
+        $this->assertEquals(2, $lastId);
+        $this->assertEquals('Frank', $firstName);
+        $this->assertEquals('Train', $lastName);
     }
 }

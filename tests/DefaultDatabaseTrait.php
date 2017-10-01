@@ -10,6 +10,8 @@ trait DefaultDatabaseTrait
 {
     protected $db = null;
 
+    protected $log = null;
+
     protected function setUp()
     {
         $dsn = "mysql:dbname={$GLOBALS['DB_NAME']};".
@@ -22,6 +24,10 @@ trait DefaultDatabaseTrait
         Database::resetDefault();
         Storable::resetAllClass();
 
+        if (file_exists($this->log = __DIR__.'/database.log')) {
+            unlink($this->log);
+        }
+
         $this->db = new Database([
             'host'     => $GLOBALS['DB_HOST'],
             'port'     => $GLOBALS['DB_PORT'],
@@ -29,6 +35,8 @@ trait DefaultDatabaseTrait
             'username' => $GLOBALS['DB_USER'],
             'password' => $GLOBALS['DB_PASS'],
             'prefix'   => 'prefix_',
+            'debug'    => true,
+            'log'      => $this->log,
         ]);
     }
 

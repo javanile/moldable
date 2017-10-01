@@ -159,6 +159,8 @@ final class StorableTest extends TestCase
 
     public function testDump()
     {
+        $this->expectOutputRegex('/^<pre.+pre>$/s');
+
         $db = new Database([
             'host'     => $GLOBALS['DB_HOST'],
             'port'     => $GLOBALS['DB_PORT'],
@@ -167,9 +169,11 @@ final class StorableTest extends TestCase
             'password' => $GLOBALS['DB_PASS'],
         ]);
 
-        $dump = People::dump();
+        People::insert([
+            'name' => 'Frank'
+        ]);
 
-        $this->assertEquals(is_string($dump), true);
+        People::dump();
     }
 
     public function testConnect()

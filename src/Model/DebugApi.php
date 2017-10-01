@@ -19,13 +19,11 @@ trait DebugApi
     /**
      * @param type $list
      */
-    public static function dump($list = '__null__')
+    public static function dump($list = 'all')
     {
-        $html = Functions::dumpGrid(
-            static::getTable(),
-            $list != '__null__' ? $list : static::all()
+        Functions::dumpGrid(
+            $list == 'all' ? static::all() : $list,
+            static::getTable()
         );
-
-        return $html;
     }
 }

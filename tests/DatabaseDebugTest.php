@@ -3,6 +3,7 @@
 namespace Javanile\Moldable\Tests;
 
 use Javanile\Moldable\Database;
+use Javanile\Moldable\Functions;
 use Javanile\Producer;
 use PHPUnit\Framework\TestCase;
 
@@ -15,12 +16,12 @@ final class DatabaseDebugTest extends TestCase
     public function testDatabaseSetDebug()
     {
         $db = new Database([
-            'host'     => $GLOBALS['DB_HOST'],
-            'port'     => $GLOBALS['DB_PORT'],
-            'dbname'   => $GLOBALS['DB_NAME'],
+            'host' => $GLOBALS['DB_HOST'],
+            'port' => $GLOBALS['DB_PORT'],
+            'dbname' => $GLOBALS['DB_NAME'],
             'username' => $GLOBALS['DB_USER'],
             'password' => $GLOBALS['DB_PASS'],
-            'debug'    => true,
+            'debug' => true,
         ]);
 
         $this->assertEquals($db->isDebug(), true);
@@ -28,5 +29,26 @@ final class DatabaseDebugTest extends TestCase
         $db->setDebug(0);
 
         $this->assertEquals($db->isDebug(), false);
+    }
+
+    public function testVarDumpFunction()
+    {
+        $this->expectOutputRegex('/^<pre.+pre>$/s');
+        $var = ['key' => 'value'];
+        Functions::varDump($var);
+    }
+
+    public function testGridDumpFunction()
+    {
+        $this->expectOutputRegex('/^<pre.+pre>$/s');
+        $grid = ['key' => 'value'];
+        Functions::dumpGrid($grid);
+    }
+
+    public function testBenchmarkFunction()
+    {
+        $this->expectOutputRegex('/^<pre.+pre>$/s');
+        $grid = ['key' => 'value'];
+        Functions::benchmark($grid);
     }
 }

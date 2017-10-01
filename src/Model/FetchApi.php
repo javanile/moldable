@@ -28,6 +28,14 @@ trait FetchApi
         $singleValue = false,
         $casting = true
     ) {
+        /*
+        \Javanile\Producer::log([
+            'singleRecord' => $singleRecord,
+            'singleValue' => $singleValue,
+            'casting' => $casting,
+        ]);
+        */
+
         // requested a single record
         if ($singleRecord && !$singleValue && $casting) {
             $record = static::getDatabase()->getRow($sql, $params);
@@ -52,7 +60,6 @@ trait FetchApi
         } elseif ($singleRecord && $singleValue) {
             // requested a single value of a single record
             $value = static::getDatabase()->getValue($sql, $params);
-
             return $value;
         }
     }

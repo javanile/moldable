@@ -48,10 +48,10 @@ trait ReadApi
 
         //
         $sql = "SELECT {$selectFields} "
-             ."FROM {$table} AS {$class} "
-             ." {$join} "
-             ." {$order} "
-             ." {$limit} ";
+             . "FROM {$table} AS {$class} "
+             . " {$join} "
+             . " {$order} "
+             . " {$limit} ";
 
         //
         try {
@@ -75,74 +75,160 @@ trait ReadApi
      *
      * @return type
      */
-    public static function first($query = null, $fields = null)
+    public static function first($query = null, $fields = null, $last = false)
     {
         static::applySchema();
 
+        $key = static::getPrimaryKey();
         $table = static::getTable();
+        $writer = static::getDatabase()->getWriter();
+
+        if (!$query && !$fields) {
+            $fields = '*';
+        } elseif (is_string($query) && !$fields) {
+            $fields = explode(',', $query);
+            $query = null;
+        }
 
         $order = '';
         if (isset($query['order'])) {
             $order = 'ORDER BY '.$query['order'];
             unset($query['order']);
+        } else {
+            $order = 'ORDER BY '.'`'.$key.'`'.' '. ($last ? 'DESC' : 'ASC');
         }
 
-        //if (isset($query['field'])) {
-        //    $fields[]
-        //}
+        if (!$fields && isset($query['fields'])) {
+            $fields = $query['fields'];
+            unset($query['fields']);
+        }
 
-        //
         $whereArray = [];
-
-        //
         if (isset($query['where'])) {
             $whereArray[] = '('.$query['where'].')';
             unset($query['where']);
         }
 
-        //
         $valueArray = [];
-
-        //
         if (count($query) > 0) {
             $schema = static::getSchemaFields();
-
-            //
             foreach ($schema as $field) {
                 if (!isset($query[$field])) {
                     continue;
                 }
-
-                //
                 $token = ':'.$field;
-
-                //
                 $whereArray[] = "`{$field}` = {$token}";
-
-                //
                 $valueArray[$token] = $query[$field];
             }
         }
 
-        //
-        $where = $whereArray
-               ? 'WHERE '.implode(' AND ', $whereArray)
-               : '';
+        $join = '';
+        $class = static::getClassName();
+        $selectFields = $writer->selectFields($fields, $class, $join);
+        $where = $writer->whereByArray($whereArray);
+        $sql = "SELECT {$selectFields} FROM {$table} AS {$class} {$where} {$order} LIMIT 1";
 
-        //
-        $sql = "SELECT * FROM {$table} {$where} {$order} LIMIT 1";
-
-        //
         $result = static::fetch(
             $sql,
             $valueArray,
             true,
-            is_string($fields),
-            is_null($fields)
+            is_array($fields) && count($fields) == 1,
+            $fields == '*'
         );
 
-        //
         return $result;
+    }
+
+    /**
+     * @param null|mixed $query
+     * @param null|mixed $fields
+     *
+     * @return type
+     */
+    public static function last($query = null, $fields = null)
+    {
+        return static::first($query, $fields, 'last');
+    }
+
+    /**
+     * @param null|mixed $query
+     * @param null|mixed $fields
+     *
+     * @return type
+     */
+    public static function min($query = null, $fields = null, $max = false)
+    {
+        static::applySchema();
+
+        $key = static::getPrimaryKey();
+        $table = static::getTable();
+        $writer = static::getDatabase()->getWriter();
+
+        if (!$query && !$fields) {
+            $fields = '*';
+        } elseif (is_string($query) && !$fields) {
+            $fields = explode(',', $query);
+            $query = null;
+        }
+
+        $order = '';
+        if (isset($query['order'])) {
+            $order = 'ORDER BY '.$query['order'];
+            unset($query['order']);
+        } else {
+            $order = 'ORDER BY '.'`'.$key.'`'.' '. ($last ? 'DESC' : 'ASC');
+        }
+
+        if (!$fields && isset($query['fields'])) {
+            $fields = $query['fields'];
+            unset($query['fields']);
+        }
+
+        $whereArray = [];
+        if (isset($query['where'])) {
+            $whereArray[] = '('.$query['where'].')';
+            unset($query['where']);
+        }
+
+        $valueArray = [];
+        if (count($query) > 0) {
+            $schema = static::getSchemaFields();
+            foreach ($schema as $field) {
+                if (!isset($query[$field])) {
+                    continue;
+                }
+                $token = ':'.$field;
+                $whereArray[] = "`{$field}` = {$token}";
+                $valueArray[$token] = $query[$field];
+            }
+        }
+
+        $join = '';
+        $class = static::getClassName();
+        $selectFields = $writer->selectFields($fields, $class, $join);
+        $where = $writer->whereByArray($whereArray);
+        $sql = "SELECT {$selectFields} FROM {$table} AS {$class} {$where} {$order} LIMIT 1";
+
+        $result = static::fetch(
+            $sql,
+            $valueArray,
+            true,
+            is_array($fields) && count($fields) == 1,
+            $fields == '*'
+        );
+
+        return $result;
+    }
+
+    /**
+     * @param null|mixed $query
+     * @param null|mixed $fields
+     *
+     * @return type
+     */
+    public static function max($query = null, $fields = null)
+    {
+        return static::min($query, $fields, 'max');
     }
 
     /**

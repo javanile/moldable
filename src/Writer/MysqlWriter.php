@@ -261,6 +261,16 @@ class MysqlWriter implements Writer
     /**
      *
      */
+    public function whereByArray($whereArray)
+    {
+        return $whereArray
+            ? 'WHERE '.implode(' AND ', $whereArray)
+            : '';
+    }
+
+    /**
+     *
+     */
     public function orderBy($order)
     {
         if (is_array($order)) {

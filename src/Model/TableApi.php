@@ -24,15 +24,17 @@ trait TableApi
 
         if (!static::hasClassAttribute($attribute)) {
             $name = !isset(static::$table)
-                ? Functions::applyConventions(
-                    static::getClassConfig('table-name-conventions'),
-                    static::getClassName()
-                )
+                ? static::getClassName()
                 : static::$table;
 
-            $table = static::getDatabase()->getPrefix($name);
+            $conventionName = Functions::applyConventions(
+                static::getClassConfig('table-name-conventions'),
+                $name
+            );
 
-            static::setClassAttribute($attribute, $table);
+            $tableName = static::getDatabase()->getPrefix($conventionName);
+
+            static::setClassAttribute($attribute, $tableName);
         }
 
         return static::getClassAttribute($attribute);
