@@ -71,8 +71,6 @@ final class ReadApiTest extends TestCase
 
         $first = People::first(['where' => "surname LIKE 'Chess'"]);
         $this->assertEquals('Anand', $first->name);
-
-        Producer::log($first);
     }
 
     public function testMinAdvancedApi()
