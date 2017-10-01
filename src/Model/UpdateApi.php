@@ -38,6 +38,7 @@ trait UpdateApi
             $values = [$values => $map];
         }
 
+        $params = [];
         $setArray = [];
         $whereArray = [];
         $valuesArray = [];

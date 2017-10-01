@@ -23,7 +23,7 @@ before_script:
   - composer require codeclimate/php-test-reporter:dev-master --no-interaction
 
 script:
-  - vendor/bin/phpunit --configuration phpunit.travis.xml
+  - vendor/bin/phpunit --configuration phpunit.xml.travis
 
 after_success:
   - vendor/bin/test-reporter

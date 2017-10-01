@@ -9,6 +9,6 @@
 
 namespace Javanile\Moldable\Writer;
 
-class Writer
+interface Writer
 {
 }

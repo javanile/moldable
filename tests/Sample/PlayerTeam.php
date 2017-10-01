@@ -13,4 +13,12 @@ final class PlayerTeam extends Storable
     public $surname = '';
 
     public $age = 0;
+
+    public $leader = false;
+
+    public $score = .0;
+
+    public $time = self::TIME;
+
+    public $date = self::DATE;
 }

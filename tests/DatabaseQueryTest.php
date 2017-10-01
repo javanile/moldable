@@ -14,9 +14,9 @@ final class DatabaseQueryTest extends TestCase
 
     public function testDatabaseRawQuery()
     {
-        $log = __DIR__.'/database.log';
-
-        unlink($log);
+        if (file_exists($log = __DIR__ . '/database.log')) {
+            unlink($log);
+        }
 
         $db = new Database([
             'host'     => $GLOBALS['DB_HOST'],
@@ -37,6 +37,6 @@ final class DatabaseQueryTest extends TestCase
 
         $results = $db->raw("SELECT * FROM prefix_raw_table WHERE `desc` LIKE '%full%'");
 
-        Producer::log($results);
+        $this->assertEquals($results, [['item' => 'TK100', 'desc' => 'powerfull gadget']]);
     }
 }

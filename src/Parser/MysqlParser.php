@@ -9,7 +9,7 @@
 
 namespace Javanile\Moldable\Parser;
 
-class MysqlParser extends Parser
+class MysqlParser implements Parser
 {
     use Mysql\KeyTrait;
     use Mysql\TypeTrait;
@@ -20,6 +20,23 @@ class MysqlParser extends Parser
     use Mysql\CommonTrait;
     use Mysql\RelationTrait;
     use Mysql\DatetimeTrait;
+
+    /**
+     *
+     */
+    const TYPE_WITHOUT_VALUE = [
+        'primary_key',
+        'text',
+        'class',
+        'vector',
+        'matchs',
+        'array',
+        'timestamp',
+        'schema',
+        'column',
+        'json',
+        'null',
+    ];
 
     /**
      * parse a multi-table schema to sanitize end explode implicit info.

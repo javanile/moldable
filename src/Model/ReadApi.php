@@ -18,10 +18,10 @@ trait ReadApi
      */
     public static function all($fields = null)
     {
-        //
         static::applySchema();
 
         $table = static::getTable();
+        $writer = static::getDatabase()->getWriter();
 
         $limit = '';
         if (isset($fields['limit'])) {
@@ -31,20 +31,20 @@ trait ReadApi
 
         $order = '';
         if (isset($fields['order'])) {
-            $limit = 'ORDER BY '.$fields['order'];
+            $limit = 'ORDER BY '.$writer->orderBy($fields['order']);
             unset($fields['order']);
         }
 
-        //
-        $join = '';
+        if (isset($fields['fields'])) {
+            $fields = array_merge($fields, $fields['fields']);
+            unset($fields['fields']);
+        }
 
-        //
+        $join = '';
         $class = static::getClassName();
 
         //
-        $selectFields = static::getDatabase()
-            ->getWriter()
-            ->selectFields($fields, $class, $join);
+        $selectFields = $writer->selectFields($fields, $class, $join);
 
         //
         $sql = "SELECT {$selectFields} "

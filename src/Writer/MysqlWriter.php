@@ -9,7 +9,7 @@
 
 namespace Javanile\Moldable\Writer;
 
-class MysqlWriter extends Writer
+class MysqlWriter implements Writer
 {
     //
     private static $defaults = [
@@ -256,6 +256,22 @@ class MysqlWriter extends Writer
         } else {
             return $field;
         }
+    }
+
+    /**
+     *
+     */
+    public function orderBy($order)
+    {
+        if (is_array($order)) {
+            $sql = [];
+            foreach ($order as $field => $asc) {
+                $sql[] = '`'.$field.'`'.' '.$asc;
+            }
+            return implode(', ', $sql);
+        }
+
+        return $order;
     }
 
     /**

@@ -12,6 +12,8 @@ final class People extends Storable
 
     public $surname = '';
 
+    public $select = self::TEXT;
+
     public $age = 0;
 
     public $address = 0;

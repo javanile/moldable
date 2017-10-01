@@ -12,6 +12,7 @@ namespace Javanile\Moldable;
 class Storable extends Readable
 {
     use Model\UpdateApi;
+    use Model\DeleteApi;
     use Model\ManageApi;
 
     /**
@@ -104,14 +105,14 @@ class Storable extends Readable
             }
 
             $token = ':'.$field;
-            $setArray[] = $field.' = '.$token;
+            $setArray[] = '`'.$field.'`'.' = '.$token;
             $params[$token] = $this->{$field};
         }
 
         $set = implode(',', $setArray);
         $table = static::getTable();
         $index = $this->{$key};
-        $sql = "UPDATE {$table} SET {$set} WHERE {$key}='{$index}'";
+        $sql = "UPDATE {$table} SET {$set} WHERE `{$key}` = '{$index}'";
 
         static::getDatabase()->execute($sql, $params);
 
@@ -148,20 +149,11 @@ class Storable extends Readable
             if (($field == $key || is_null($this->{$field})) && !$force) {
                 continue;
             }
-
             // get current value of attribute of object
             $value = static::insertRelationBefore($this->{$field}, $column);
-
-            //
             $token = ':'.$field;
-
-            //
-            $fieldsArray[] = $field;
-
-            //
+            $fieldsArray[] = '`'.$field.'`';
             $valuesArray[] = $token;
-
-            //
             $tokensArray[$token] = $value;
         }
 

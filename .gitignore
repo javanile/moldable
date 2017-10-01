@@ -2,3 +2,4 @@ trash/
 vendor/
 composer.lock
 phpunit.xml
+tests/database.log

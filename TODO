@@ -1,22 +1,3 @@
-0%
-src/Database/RawApi.php	8	0	8	0.0
-—
-src/Database/Socket/SocketInterface.php	0	0	0	0.0
-—
-src/Exception.php	0	0	0	0.0
-0%
-src/Model/RawApi.php	25	0	25	0.0
-—
-src/Notations.php	0	0	0	0.0
-—
-src/Parser/Parser.php	0	0	0	0.0
-—
-src/Writer/Writer.php	0	0	0	0.0
-30%
-src/Parser/Mysql/ValueTrait.php	50	15	35	6.5
-46%
-src/Model/ManageApi.php	49	23	26	0.5
-50%
 src/Functions.php	26	13	13	7.8
 52%
 src/Parser/Mysql/RelationTrait.php	23	12	11	19.8

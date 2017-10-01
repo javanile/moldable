@@ -69,45 +69,6 @@ trait ManageApi
     }
 
     /**
-     * Delete element by primary key or query.
-     *
-     * @param type $query
-     */
-    public static function delete($query)
-    {
-        static::applySchema();
-
-        $table = static::getTable();
-
-        if (is_array($query)) {
-            $whereArray = [];
-            if (isset($query['where'])) {
-                $whereArray[] = $query['where'];
-            }
-
-            foreach ($query as $field => $value) {
-                if ($field != 'sort' && $field != 'where') {
-                    $whereArray[] = "{$field} = '{$value}'";
-                }
-            }
-
-            $where = $whereArray
-                   ? 'WHERE '.implode(' AND ', $whereArray)
-                   : '';
-
-            $sql = "DELETE FROM {$table} {$where}";
-
-            static::getDatabase()->execute($sql);
-        } elseif ($query > 0) {
-            $key = static::getPrimaryKey();
-            $index = (int) $query;
-            $sql = "DELETE FROM {$table} WHERE {$key} = '{$index}' LIMIT 1";
-
-            static::getDatabase()->execute($sql);
-        }
-    }
-
-    /**
      * @param type $query
      *
      * @return type
@@ -136,8 +97,9 @@ trait ManageApi
 
         if (!$object) {
             $object = static::make($query);
-            $object->store($values);
         }
+
+        $object->store($values);
 
         return $object;
     }

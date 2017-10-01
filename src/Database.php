@@ -130,7 +130,7 @@ class Database implements Notations
         }
 
         // Logger
-        $logFile = isset($args['log']) ? $args['log'] : getcwd();
+        $logFile = isset($args['log']) ? $args['log'] : getcwd().'/moldable.log';
         $logFlag = isset($args['debug']) ? Logger::INFO : Logger::ERROR;
         $this->_logger = new Logger('name');
         $this->_logger->pushHandler(new StreamHandler($logFile, $logFlag));

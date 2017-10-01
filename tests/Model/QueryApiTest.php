@@ -17,19 +17,19 @@ final class QueryApiTest extends TestCase
     public function testQueryApi()
     {
         $db = new Database([
-            'host'     => $GLOBALS['DB_HOST'],
-            'port'     => $GLOBALS['DB_PORT'],
-            'dbname'   => $GLOBALS['DB_NAME'],
+            'host' => $GLOBALS['DB_HOST'],
+            'port' => $GLOBALS['DB_PORT'],
+            'dbname' => $GLOBALS['DB_NAME'],
             'username' => $GLOBALS['DB_USER'],
             'password' => $GLOBALS['DB_PASS'],
-            'prefix'   => 'prefix_',
+            'prefix' => 'prefix_',
         ]);
 
         $frank = new People();
         $frank->store([
-            'name'    => 'Frank',
+            'name' => 'Frank',
             'surname' => 'White',
-            'age'     => 18,
+            'age' => 18,
         ]);
         $results = People::query([
             'age' => 18,
@@ -40,9 +40,9 @@ final class QueryApiTest extends TestCase
 
         $amber = new People();
         $amber->store([
-            'name'    => 'Amber',
+            'name' => 'Amber',
             'surname' => 'White',
-            'age'     => 19,
+            'age' => 19,
         ]);
         $results = People::query([
             'age' => 19,
@@ -53,11 +53,40 @@ final class QueryApiTest extends TestCase
 
         $results = People::query([
             'surname' => 'White',
-            'order'   => 'name ASC',
+            'order' => 'name ASC',
         ]);
         $this->assertEquals($results, [
             0 => $amber,
             1 => $frank,
         ]);
+    }
+
+    public function testRawQueryApi()
+    {
+        $db = new Database([
+            'host' => $GLOBALS['DB_HOST'],
+            'port' => $GLOBALS['DB_PORT'],
+            'dbname' => $GLOBALS['DB_NAME'],
+            'username' => $GLOBALS['DB_USER'],
+            'password' => $GLOBALS['DB_PASS'],
+            'prefix' => 'prefix_',
+        ]);
+
+        $frank = new People();
+        $frank->store([
+            'name' => 'Frank',
+            'surname' => 'White',
+            'select' => 'Human',
+            'age' => 18,
+        ]);
+        $train = new People();
+        $train->store([
+            'name' => 'Train',
+            'surname' => 'Gnome',
+            'select' => 'Orch',
+            'age' => 400,
+        ]);
+        $results = People::raw("SELECT * FROM prefix_People WHERE `select` LIKE '%uma%'");
+        $this->assertEquals($results[0]['select'], 'Human');
     }
 }
