@@ -1,6 +1,7 @@
 trash/
 vendor/
-composer.lock
 phpunit.xml
+producer.log
 moldable.log
+composer.lock
 tests/database.log
