@@ -11,85 +11,70 @@ namespace Javanile\Moldable\Parser\Mysql;
 
 trait RelationTrait
 {
-    private static function getNotationAttributesClass(
-        $notation,
-        $field,
-        $before,
-        $params
-    ) {
-        //
-        $attributes = static::getNotationAttributesCommon($field, $before);
+    /**
+     * Get notation aspects for class.
+     */
+    private function getNotationAspectsClass($notation, $aspects, $params)
+    {
+        $aspects['Type'] = 'int(11)';
+        $aspects['Class'] = $params['Class'];
+        $aspects['Relation'] = '1:1';
 
-        //
-        $attributes['Type'] = 'int(11)';
-
-        //
-        $attributes['Class'] = $params[0];
-
-        //
-        $attributes['Relation'] = '1:1';
-
-        //
-        return $attributes;
+        return $aspects;
     }
 
-    private static function getNotationAttributesVector(
-        $notation,
-        $field,
-        $before,
-        $params
-    ) {
-        //
-        $aspects = static::getNotationAttributesCommon($field, $before);
-
-        //
+    /**
+     *
+     */
+    private function getNotationAspectsVector($notation, $aspects, $params)
+    {
         $aspects['Relation'] = '1:*';
 
-        //
         return $aspects;
     }
 
-    private static function getNotationAttributesMatchs(
-        $notation,
-        $field,
-        $before,
-        $params
-    ) {
-        //
-        $aspects = static::getNotationAttributesCommon($field, $before);
-
-        //
+    /**
+     *
+     */
+    private static function getNotationAspectsMatchs($notation, $aspects, $params)
+    {
         $aspects['Relation'] = '*:*';
 
-        //
         return $aspects;
     }
 
-    public static function pregMatchClass($notation, &$matchs)
+    /**
+     *
+     */
+    public static function isClass($notation, &$matchs)
     {
-        //
         return preg_match(
-            '/^<<'.static::CLASSREGEX.'>>$/',
+            '/^<<[ \t]*'.static::REGEX_PHP_CLASS.'[ \t]*>>$/',
             $notation,
             $matchs
         );
     }
 
+    /**
+     *
+     */
     public static function pregMatchVector($notation, &$matchs)
     {
         //
         return preg_match(
-            '/^<<'.static::CLASSREGEX.'\*>>$/',
+            '/^<<'.static::REGEX_PHP_CLASS.'\*>>$/',
             $notation,
             $matchs
         );
     }
 
+    /**
+     *
+     */
     public static function pregMatchMatchs($notation, &$matchs)
     {
-        //
         return preg_match(
-            '/^<<'.static::CLASSREGEX.'\*\*>>$/',
+            '/^<<'.static::REGEX_PHP_CLASS.'\*\*>>$/',
             $notation,
             $matchs
         );

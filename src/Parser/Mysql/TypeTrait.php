@@ -19,7 +19,7 @@ trait TypeTrait
      *
      * @return string
      */
-    public static function getNotationType($notation, &$params = null)
+    public function getNotationType($notation, &$params = null)
     {
         $type = gettype($notation);
         $params = null;
@@ -48,10 +48,12 @@ trait TypeTrait
         $matchs = null;
         $params = null;
 
+        // simple type
         if (preg_match('/^<<@([a-z_]+)>>$/', $notation, $matchs)) {
             return $matchs[1];
         }
 
+        // type with default value
         if (preg_match('/^<<@([a-z_]+) (.*)>>$/', $notation, $matchs)) {
             $params = [
                 'Default' => $matchs[1] != 'text' ? $matchs[2] : null,
@@ -60,21 +62,36 @@ trait TypeTrait
             return $matchs[1];
         }
 
+        // sconosciuto???
         if (preg_match('/^<<primary key ([1-9][0-9]*)>>$/', $notation, $matchs)) {
             $params = array_slice($matchs, 1);
 
             return 'primary_key';
-        } elseif (static::pregMatchClass($notation, $matchs)) {
-            $params[0] = $matchs[1];
+        }
+
+        // is class relation
+        if (static::isClass($notation, $matchs)) {
+            $params['Class'] = $matchs[1];
 
             return 'class';
-        } elseif (static::pregMatchVector($notation, $matchs)) {
+        }
+
+        //
+        if (static::pregMatchVector($notation, $matchs)) {
             return 'vector';
-        } elseif (static::pregMatchMatchs($notation, $matchs)) {
+        }
+
+        //
+        if (static::pregMatchMatchs($notation, $matchs)) {
             return 'matchs';
-        } elseif (preg_match('/^<<\{.*\}>>$/si', $notation)) {
+        }
+
+        //
+        if (preg_match('/^<<\{.*\}>>$/si', $notation)) {
             return 'json';
-        } elseif (preg_match('/^<<\[.*\]>>$/si', $notation)) {
+        }
+
+        if (preg_match('/^<<\[.*\]>>$/si', $notation)) {
             return 'enum';
         } elseif (preg_match('/^[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9] [0-9][0-9]:[0-9][0-9]:[0-9][0-9]$/', $notation)) {
             return 'datetime';

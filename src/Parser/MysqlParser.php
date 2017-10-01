@@ -131,17 +131,12 @@ class MysqlParser implements Parser
             case 'enum':
                 return $this->getNotationAspectsEnum($notation, $aspects);
 
-            //
             case 'class':
-                return static::getNotationAttributesClass($notation, $field, $before, $params);
-
-            //
+                return static::getNotationAspectsClass($notation, $aspects, $params);
             case 'vector':
-                return static::getNotationAttributesVector($notation, $field, $before, $params);
-
-            //
+                return static::getNotationAspectsVector($notation, $aspects, $params);
             case 'matchs':
-                return static::getNotationAttributesMatchs($notation, $field, $before, $params);
+                return static::getNotationAspectsMatchs($notation, $aspects, $params);
 
             //
             default:

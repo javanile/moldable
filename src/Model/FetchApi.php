@@ -28,6 +28,34 @@ trait FetchApi
         $singleValue = false,
         $casting = true
     ) {
+        $results = null;
+
+        try {
+            $results = static::unsafeFetch($sql, $params, $singleRecord, $singleValue, $casting);
+        } catch (DatabaseException $ex) {
+            static::error(debug_backtrace(), $ex);
+        }
+
+        return $results;
+    }
+
+    /**
+     * Fetch data from db.
+     *
+     * @param type       $array
+     * @param mixed      $sql
+     * @param null|mixed $params
+     * @param mixed      $singleRecord
+     * @param mixed      $singleValue
+     * @param mixed      $casting
+     */
+    protected static function unsafeFetch(
+        $sql,
+        $params = null,
+        $singleRecord = false,
+        $singleValue = false,
+        $casting = true
+    ) {
         /*
         \Javanile\Producer::log([
             'singleRecord' => $singleRecord,
@@ -37,11 +65,13 @@ trait FetchApi
         */
 
         // requested a single record
-        if ($singleRecord && !$singleValue && $casting) {
+        if ($singleRecord && !$singleValue) {
             $record = static::getDatabase()->getRow($sql, $params);
 
-            return $record ? static::make($record) : null;
-        } elseif (!$singleRecord && !$singleValue) {
+            return $record ? ($casting ? static::make($record) : $record) : null;
+        }
+
+        if (!$singleRecord && !$singleValue) {
             // requested a multiple records many value per records
             $records = static::getDatabase()->getResults($sql, $params);
 

@@ -11,9 +11,11 @@ namespace Javanile\Moldable\Parser\Mysql;
 
 trait StringTrait
 {
+    /**
+     * Get notaion aspect for string.
+     */
     private function getNotationAspectsString($notation, $aspects)
     {
-        //
         $aspects['Type'] = 'varchar(255)';
         $aspects['Null'] = 'NO';
         $aspects['Default'] = $this->getNotationValue($notation);

@@ -149,6 +149,8 @@ trait SchemaApi
 
     public static function desc()
     {
+        static::applySchema();
+
         $table = static::getTable();
         $desc = static::getDatabase()->descTable($table);
 

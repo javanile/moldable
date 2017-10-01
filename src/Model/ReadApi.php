@@ -53,18 +53,13 @@ trait ReadApi
              . " {$order} "
              . " {$limit} ";
 
-        //
-        try {
-            $results = static::fetch(
-                $sql,
-                null,
-                false,
-                is_string($fields),
-                is_null($fields)
-            );
-        } catch (DatabaseException $ex) {
-            static::error(debug_backtrace(), $ex);
-        }
+        $results = static::fetch(
+            $sql,
+            null,
+            false,
+            is_string($fields),
+            is_null($fields)
+        );
 
         return $results;
     }
@@ -103,9 +98,17 @@ trait ReadApi
             unset($query['fields']);
         }
 
+        if (!$fields) {
+            $fields = '*';
+        }
+
         $whereArray = [];
         if (isset($query['where'])) {
-            $whereArray[] = '('.$query['where'].')';
+            if (is_array($query['where'])) {
+                $query = array_merge($query, $query['where']);
+            } else {
+                $whereArray[] = '('.$query['where'].')';
+            }
             unset($query['where']);
         }
 
@@ -126,7 +129,9 @@ trait ReadApi
         $class = static::getClassName();
         $selectFields = $writer->selectFields($fields, $class, $join);
         $where = $writer->whereByArray($whereArray);
-        $sql = "SELECT {$selectFields} FROM {$table} AS {$class} {$where} {$order} LIMIT 1";
+        $sql = "SELECT {$selectFields} FROM `{$table}` AS {$class} {$where} {$order} LIMIT 1";
+
+        \Javanile\Producer::log($sql);
 
         $result = static::fetch(
             $sql,
@@ -164,30 +169,45 @@ trait ReadApi
         $table = static::getTable();
         $writer = static::getDatabase()->getWriter();
 
+        if (isset($query['fields'])) {
+            $fields = array_merge((array) $fields, $query['fields']);
+            unset($query['fields']);
+        }
+
         if (!$query && !$fields) {
+            $focus = $key;
             $fields = '*';
         } elseif (is_string($query) && !$fields) {
             $fields = explode(',', $query);
+            $focus = $fields[0];
             $query = null;
+        } elseif (is_array($fields)) {
+            $focus = $fields[0];
+        } else {
+            $focus = $key;
         }
 
         $order = '';
         if (isset($query['order'])) {
-            $order = 'ORDER BY '.$query['order'];
+            $order = 'ORDER BY '.$query['order'].' '.($max ? 'DESC' : 'ASC');
+            $fields[] = $query['order'];
             unset($query['order']);
         } else {
-            $order = 'ORDER BY '.'`'.$key.'`'.' '. ($last ? 'DESC' : 'ASC');
-        }
-
-        if (!$fields && isset($query['fields'])) {
-            $fields = $query['fields'];
-            unset($query['fields']);
+            $order = 'ORDER BY '.'`'.$focus.'`'.' '. ($max ? 'DESC' : 'ASC');
         }
 
         $whereArray = [];
         if (isset($query['where'])) {
-            $whereArray[] = '('.$query['where'].')';
+            if (is_array($query['where'])) {
+                $query = array_merge($query, $query['where']);
+            } else {
+                $whereArray[] = '('.$query['where'].')';
+            }
             unset($query['where']);
+        }
+
+        if (!$fields) {
+            $fields = '*';
         }
 
         $valueArray = [];

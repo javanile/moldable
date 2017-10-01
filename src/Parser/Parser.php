@@ -11,5 +11,5 @@ namespace Javanile\Moldable\Parser;
 
 interface Parser
 {
-    const CLASSREGEX = '([A-Za-z_][0-9A-Za-z_]*(\\\\[A-Za-z_][0-9A-Za-z_]*)*)([^\*.]*)';
+    const REGEX_PHP_CLASS = '(\\\\?[A-Za-z_][0-9A-Za-z_]*(\\\\[A-Za-z_][0-9A-Za-z_]*)*)([^\*.]*)';
 }
