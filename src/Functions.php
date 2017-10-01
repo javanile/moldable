@@ -124,7 +124,7 @@ class Functions
      *
      * @param mixed $name
      */
-    public static function bachmark($name)
+    public static function bachmark()
     {
         $delta = 'asd';
         $style = 'background:#333;'

@@ -147,8 +147,6 @@ final class ManageApiTest extends TestCase
             'fields' => ['id', 'name', 'surname', 'age']
         ]);
 
-        Producer::log($all);
-
         $this->assertEquals($all, [
             ['id' => '4', 'name' => 'Kenus', 'surname' => '', 'age' => '0'],
             ['id' => '3', 'name' => 'Adami', 'surname' => '', 'age' => '0'],

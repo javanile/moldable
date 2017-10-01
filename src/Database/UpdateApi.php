@@ -68,7 +68,7 @@ trait UpdateApi
         $whereArray = [];
 
         if (isset($query['where'])) {
-            $where[] = '('.$query['where'].')';
+            $whereArray[] = '('.$query['where'].')';
             unset($query['where']);
         }
 
