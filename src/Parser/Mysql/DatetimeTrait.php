@@ -57,6 +57,21 @@ trait DatetimeTrait
      *
      * @param mixed $date
      */
+    public static function parseTime($time)
+    {
+        //
+        if ($time != '00:00:00') {
+            return @date('H:i:s', @strtotime(''.$time));
+        } else {
+            return;
+        }
+    }
+
+    /**
+     * printout database status/info.
+     *
+     * @param mixed $date
+     */
     public static function parseDate($date)
     {
         //

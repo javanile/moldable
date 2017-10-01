@@ -33,7 +33,9 @@ trait ValueTrait
             case 'boolean':
                 return (bool) $notation;
             case 'string':
-                return (string) $notation;
+                return isset($params['Default']) ? $params['Default'] : (string) $notation;
+            case 'text':
+                return isset($params['Default']) ? $params['Default'] : '';
             case 'float':
                 return (float) $notation;
             case 'double':

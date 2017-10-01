@@ -26,7 +26,6 @@ class MysqlParser implements Parser
      */
     const TYPE_WITHOUT_VALUE = [
         'primary_key',
-        'text',
         'class',
         'vector',
         'matchs',
