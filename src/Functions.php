@@ -68,6 +68,48 @@ class Functions
     }
 
     /**
+     *
+     */
+    public static function dumpSchema($schema)
+    {
+        $style = 'text-align:center;margin:10px 0;width:800px;';
+
+        echo '<pre>';
+
+        if (!$schema) {
+            echo '<table border="1" style="'.$style.'">'
+                .'<tr><th>No database tables</th></tr></table></pre>'
+                .'</table>';
+        } else {
+            foreach ($schema as $table => $fields) {
+                echo '<table border="1" style="'.$style.'">'
+                    .'<tr><th colspan="9">'.$table.'</th></tr><tr><td>&nbsp;</td>';
+
+                $first = key($fields);
+                foreach (array_keys($fields[$first]) as $attributeName) {
+                    echo '<th>'.$attributeName.'</th>';
+                }
+
+                echo '</tr>';
+
+                foreach ($fields as $field => $attributes) {
+                    echo '<tr><th>'.$field.'</th>';
+
+                    foreach ($attributes as $value) {
+                        echo '<td>'.$value.'</td>';
+                    }
+
+                    echo '</tr>';
+                }
+
+                echo '</table>';
+            }
+
+            echo '</pre>';
+        }
+    }
+
+    /**
      * Throw new exception.
      *
      * @param type  $trace

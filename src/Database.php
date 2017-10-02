@@ -118,7 +118,7 @@ class Database implements Notations
         $socketClass = "\\Javanile\\Moldable\\Database\\Socket\\{$socket}Socket";
 
         if (!class_exists($socketClass)) {
-            $this->errorConnect("socket class '{$socketClass}' not found");
+            $this->error('connect', "socket class '{$socketClass}' not found");
         }
 
         $this->_socket = new $socketClass($this, $args);

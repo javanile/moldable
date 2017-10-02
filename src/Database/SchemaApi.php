@@ -10,6 +10,8 @@
 
 namespace Javanile\Moldable\Database;
 
+use Javanile\Moldable\Functions;
+
 trait SchemaApi
 {
     /**
@@ -95,13 +97,13 @@ trait SchemaApi
 
         //
         if (!$schema || count($schema) == 0 || !is_array($schema)) {
-            $this->errorHandler('empty schema not allowed');
+            $this->error('generic', 'empty schema not allowed');
         }
 
         //
         foreach ($schema as $model => $attributes) {
             if (!$attributes || count($attributes) == 0 || !is_array($attributes)) {
-                $this->errorHandler("empty model '{$model}' not allowed");
+                $this->error('generic', "empty model '{$model}' not allowed");
             }
         }
 
@@ -542,64 +544,12 @@ trait SchemaApi
      */
     public function dumpSchema()
     {
-        //
         $debug = $this->isDebug();
-
-        //
         $this->setDebug(false);
 
-        // describe databse
         $schema = $this->desc();
+        Functions::dumpSchema($schema);
 
-        //
-        $style = 'text-align:center;margin:10px 0;width:800px;';
-
-        //
-        echo '<pre>';
-
-        //
-        if (!$schema) {
-            echo '<table border="1" style="'.$style.'">'
-               .'<tr><th>No database tables</th></tr></table></pre>'
-               .'</table>';
-        } else {
-            foreach ($schema as $table => $fields) {
-                echo '<table border="1" style="'.$style.'">'
-                   .'<tr><th colspan="9">'.$table.'</th></tr><tr><td>&nbsp;</td>';
-
-                //
-                $first = key($fields);
-
-                //
-                foreach (array_keys($fields[$first]) as $attributeName) {
-                    echo '<th>'.$attributeName.'</th>';
-                }
-
-                //
-                echo '</tr>';
-
-                //
-                foreach ($fields as $field => $attributes) {
-                    echo '<tr><th>'.$field.'</th>';
-
-                    //
-                    foreach ($attributes as $value) {
-                        echo '<td>'.$value.'</td>';
-                    }
-
-                    //
-                    echo '</tr>';
-                }
-
-                //
-                echo '</table>';
-            }
-
-            //
-            echo '</pre>';
-        }
-
-        //
         $this->setDebug($debug);
     }
 }

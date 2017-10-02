@@ -51,4 +51,26 @@ final class DatabaseDebugTest extends TestCase
         $grid = ['key' => 'value'];
         Functions::benchmark($grid);
     }
+
+    public function testDatabaseDumpSchemaDebug()
+    {
+        $this->expectOutputRegex('/^<pre.+pre>$/s');
+
+        $db = new Database([
+            'host' => $GLOBALS['DB_HOST'],
+            'port' => $GLOBALS['DB_PORT'],
+            'dbname' => $GLOBALS['DB_NAME'],
+            'username' => $GLOBALS['DB_USER'],
+            'password' => $GLOBALS['DB_PASS'],
+            'debug' => true,
+        ]);
+
+        $db->apply([
+            'table' => [
+                'field' => 1
+            ]
+        ]);
+
+        $db->dumpSchema();
+    }
 }

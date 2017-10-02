@@ -14,37 +14,42 @@ use Javanile\Moldable\Functions;
 trait ErrorApi
 {
     /**
-     * Trigger a connection-with-database error.
+     * Trigger a error.
      *
      * @param object $exception Exception catched with try-catch
      */
-    public function errorConnect($exception)
+    public function error($type, $exception)
     {
-        Functions::throwException('Moldable connection error, ', $exception, $this->_trace, 0);
-    }
+        switch ($type) {
+            // Trigger a connection-with-database error.
+            case 'connect':
+                $slug = 'Moldable connection error, ';
+                $backtrace = $this->_trace;
+                $offset = 0;
+                break;
 
-    /**
-     * Trigger a error in executed sql query.
-     *
-     * @param object $exception Exception catched with try-catch
-     */
-    public function errorExecute($exception)
-    {
-        $backtrace = debug_backtrace();
+            // Trigger a error in executed sql query.
+            case 'execute':
+                $slug = 'Moldable query error, ';
+                $backtrace = debug_backtrace();
+                $offset = 2;
+                break;
 
-        Functions::throwException('Moldable query error, ', $exception, $backtrace, 2);
-    }
+            // Trigger a error in executed sql query.
+            case 'generic':
+                $slug = 'Moldable error, ';
+                $backtrace = debug_backtrace();
+                $offset = 1;
+                break;
 
-    /**
-     * Trigger a error in executed sql query.
-     *
-     * @param object $exception Exception catched with try-catch
-     * @param mixed  $message
-     */
-    public function errorHandler($message)
-    {
-        $backtrace = debug_backtrace();
+            // Trigger a error in executed sql query.
+            default:
+                $slug = 'Moldable uknown error, ';
+                $backtrace = debug_backtrace();
+                $offset = 0;
+                break;
+        }
 
-        Functions::throwException('Moldable error, ', $message, $backtrace, 1);
+        Functions::throwException($slug, $exception, $backtrace, $offset);
     }
 }
