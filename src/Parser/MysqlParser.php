@@ -9,6 +9,8 @@
 
 namespace Javanile\Moldable\Parser;
 
+use Javanile\Moldable\Exception;
+
 class MysqlParser implements Parser
 {
     use Mysql\KeyTrait;
@@ -29,6 +31,7 @@ class MysqlParser implements Parser
         'class',
         'vector',
         'matchs',
+        'text',
         'array',
         'timestamp',
         'schema',
@@ -68,14 +71,14 @@ class MysqlParser implements Parser
      *
      * @return type
      */
-    public function parseTable(&$table)
+    public function parseTable(&$table, &$errors)
     {
         // for first field no have before
         $before = false;
 
         // loop throuh fields on table
         foreach ($table as $field => &$notation) {
-            $notation = static::getNotationAspects($notation, $field, $before);
+            $notation = static::getNotationAspects($notation, $field, $before, $errors);
             $before = $field;
         }
     }
@@ -92,13 +95,14 @@ class MysqlParser implements Parser
     public function getNotationAspects(
         $notation,
         $field = null,
-        $before = null
+        $before = null,
+        &$errors = null
     ) {
         $params = null;
-        $type = $this->getNotationType($notation, $params);
+        $type = $this->getNotationType($notation, $params, $errors);
         $aspects = $this->getNotationCommonAspects($field, $before);
 
-        // look-to type
+        // Looking type
         switch ($type) {
             case 'schema':
                 return $this->getNotationAspectsSchema($notation, $aspects);
@@ -137,11 +141,12 @@ class MysqlParser implements Parser
                 return static::getNotationAspectsVector($notation, $aspects, $params);
             case 'matchs':
                 return static::getNotationAspectsMatchs($notation, $aspects, $params);
-
-            //
-            default:
-                trigger_error('Error parse type: '.$field.' ('.$type.')');
         }
+
+        $errors[] = "No PSEUDOTYPE value for '{$type}' => '{$notation}'";
+
+        // called if detected type not is handled
+        //throw new Exception("No PSEUDOTYPE value for '{$type}' => '{$notation}'");
     }
 
     private function getNotationCommonAspects($field, $before)

@@ -19,7 +19,7 @@ trait TypeTrait
      *
      * @return string
      */
-    public function getNotationType($notation, &$params = null)
+    public function getNotationType($notation, &$params = null, &$errors = null)
     {
         $type = gettype($notation);
         $params = null;
@@ -38,6 +38,11 @@ trait TypeTrait
             case 'NULL':
                 return 'null';
         }
+
+        $errors[] = "No PSEUDOTYPE value for '{$type}' => '{$notation}'";
+
+        // called if detected type not is handled
+        //throw new Exception("No PSEUDOTYPE value for '{$type}' => '{$notation}'");
     }
 
     /**

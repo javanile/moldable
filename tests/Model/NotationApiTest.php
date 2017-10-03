@@ -7,6 +7,7 @@ use Javanile\Moldable\Readable;
 use Javanile\Moldable\Storable;
 use Javanile\Moldable\Tests\DefaultDatabaseTrait;
 use Javanile\Moldable\Tests\Sample\AllNotations;
+use Javanile\Moldable\Tests\Sample\UndefinedType;
 use Javanile\Producer;
 use PHPUnit\Framework\TestCase;
 
@@ -34,5 +35,11 @@ final class NotationApiTest extends TestCase
         //$this->assertEquals('0000-00-00 00:00:00', $object->datetime);
 
         //Producer::log($object->enumNotation);
+    }
+
+    public function testUndefinedType()
+    {
+        $object = new UndefinedType();
+
     }
 }

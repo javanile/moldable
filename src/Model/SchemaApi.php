@@ -9,6 +9,8 @@
 
 namespace Javanile\Moldable\Model;
 
+use Javanile\Moldable\Exception;
+
 trait SchemaApi
 {
     /**
@@ -35,11 +37,7 @@ trait SchemaApi
         $schema = static::getSchema();
 
         if (!$schema) {
-            $reflector = new \ReflectionClass(static::getClass());
-            static::error('model class without attributes', [[
-                'file' => $reflector->getFileName(),
-                'line' => $reflector->getStartLine(),
-            ]]);
+            static::error('empty class model');
         }
 
         $table = static::getTable();
@@ -62,6 +60,7 @@ trait SchemaApi
 
         if (!static::hasClassAttribute($attribute)) {
             $fields = static::getSchemaFieldsValues();
+            $parser = static::getDatabase()->getParser();
             $schema = [];
 
             if ($fields && count($fields) > 0) {
@@ -70,7 +69,11 @@ trait SchemaApi
                 }
             }
 
-            static::getDatabase()->getParser()->parseTable($schema);
+            $parser->parseTable($schema, $errors);
+
+            if ($errors) {
+                static::error('class', $errors[0]);
+            }
 
             static::setClassAttribute($attribute, $schema);
         }

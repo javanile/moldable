@@ -9,6 +9,8 @@
 
 namespace Javanile\Moldable\Parser\Mysql;
 
+use Javanile\Moldable\Exception;
+
 trait ValueTrait
 {
     /**
@@ -19,7 +21,7 @@ trait ValueTrait
      *
      * @return type
      */
-    public function getNotationValue($notation)
+    public function getNotationValue($notation, &$errors = null)
     {
         $type = $this->getNotationType($notation, $params);
 
@@ -34,8 +36,6 @@ trait ValueTrait
                 return (bool) $notation;
             case 'string':
                 return isset($params['Default']) ? $params['Default'] : (string) $notation;
-            case 'text':
-                return isset($params['Default']) ? $params['Default'] : '';
             case 'float':
                 return (float) $notation;
             case 'double':
@@ -50,30 +50,8 @@ trait ValueTrait
                 return static::parseDatetime($notation);
         }
 
+        $errors[] = "No PSEUDOTYPE value for '{$type}' => '{$notation}'";
         // called if detected type not is handled
-        trigger_error("No PSEUDOTYPE value for '{$type}' => '{$notation}'", E_USER_ERROR);
-    }
-
-    /**
-     * Strip notation if type string and get default value.
-     */
-    protected function getNotationValueString($notation)
-    {
-        if (preg_match('/<<@[a-z_]+>>/', $notation)) {
-            return '';
-        }
-
-        return $notation;
-    }
-
-    /**
-     * Parse Enum to get a default value.
-     */
-    protected function parseEnum($notation)
-    {
-        return !is_string($notation)
-            && isset($notation[0])
-            && !is_null($notation[0])
-            ? $notation[0] : null;
+        //throw new Exception("No PSEUDOTYPE value for '{$type}' => '{$notation}'");
     }
 }

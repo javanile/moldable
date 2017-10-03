@@ -127,10 +127,15 @@ class Functions
         $info = is_object($exception) ? $exception->getMessage() : $exception;
         //$code = is_object($exception) ? $exception->getCode() : 0;
 
-        $message = $slug.$info
-            .' in method '."'->".$trace[$offset]['function']."()'"
-            .' called at '.$trace[$offset]['file']
-            .' on line '.$trace[$offset]['line'];
+        $message = $slug . $info;
+        if (isset($trace[$offset]['function'])) {
+            $message .= ' in method '."'->".$trace[$offset]['function']."()'"
+                .' called at '.$trace[$offset]['file']
+                .' on line '.$trace[$offset]['line'];
+        } else {
+            $message .= ' defined at '.$trace[$offset]['file']
+                .' on line '.$trace[$offset]['line'];
+        }
 
         throw new Exception($message);
     }
