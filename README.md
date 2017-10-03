@@ -18,14 +18,14 @@ We are looking for contributors (PHP lovers) that are passioned by ORM and Datab
 *We guarantee all visibility and thanks for our contributors, many many stars and public reference in all blog posts and articles that talk about javanile/moldable*
 
 ## Install via composer
-
+We recommend installing via composer, to install otherwise you will write a issue.
 ```
 composer install javanile/moldable
 ```
 
 ## Get Started
- - [Moldable ORM: Manage persisent object in your web application](https://github.com/javanile/moldable/wiki/Moldable-ORM)
- - [DB Manipulation: Work with Database through advanced scripting tools](https://github.com/javanile/moldable/wiki/Work-with-Database)
+ - [Moldable ORM](https://github.com/javanile/moldable/wiki/Moldable-ORM): Manage persisent object in your web application
+ - [DB Manipulation](https://github.com/javanile/moldable/wiki/Work-with-Database): Work with Database through advanced scripting tools
 
 ## How to: Connect to database
 
