@@ -20,7 +20,7 @@ We are looking for contributors (PHP lovers) that are passioned by ORM and Datab
 ## Install via composer
 We recommend installing via composer, to install otherwise you will write a issue.
 ```
-composer install javanile/moldable
+composer require javanile/moldable
 ```
 
 ## Get Started
