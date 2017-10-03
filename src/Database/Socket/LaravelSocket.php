@@ -41,6 +41,11 @@ class LaravelSocket
     private $_args = null;
 
     /**
+     *
+     */
+    private $_prefix = null;
+
+    /**
      * Construct socket.
      *
      * @param mixed      $database
@@ -53,6 +58,7 @@ class LaravelSocket
         $this->_pdo = $this->_connection->getPdo();
         $this->_socket = new PdoSocket($this->_database, ['pdo' => $this->_pdo]);
         $this->_args = $args;
+        $this->_prefix = $this->_connection->getTablePrefix();
     }
 
     /**
@@ -129,7 +135,7 @@ class LaravelSocket
      */
     public function getPrefix($table = '')
     {
-        return $this->_connection->getTablePrefix().$table;
+        return $this->_prefix . $table;
     }
 
     /**
@@ -142,7 +148,7 @@ class LaravelSocket
     public function setPrefix($prefix)
     {
         //DB::setTablePrefix($prefix);
-        return $prefix;
+        $this->_prefix = $prefix;
     }
 
     /**

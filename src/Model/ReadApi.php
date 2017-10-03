@@ -131,8 +131,6 @@ trait ReadApi
         $where = $writer->whereByArray($whereArray);
         $sql = "SELECT {$selectFields} FROM `{$table}` AS {$class} {$where} {$order} LIMIT 1";
 
-        \Javanile\Producer::log($sql);
-
         $result = static::fetch(
             $sql,
             $valueArray,

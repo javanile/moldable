@@ -26,9 +26,9 @@ trait TypeTrait
 
         switch ($type) {
             case 'string':
-                return static::getNotationTypeString($notation, $params);
+                return $this->getNotationTypeString($notation, $params);
             case 'array':
-                return static::getNotationTypeArray($notation);
+                return $this->getNotationTypeArray($notation, $params);
             case 'integer':
                 return 'integer';
             case 'double':
@@ -43,7 +43,7 @@ trait TypeTrait
     /**
      * @param type $notation
      */
-    private static function getNotationTypeString($notation, &$params)
+    private function getNotationTypeString($notation, &$params)
     {
         $matchs = null;
         $params = null;
@@ -91,17 +91,27 @@ trait TypeTrait
             return 'json';
         }
 
+        // Parse enum
         if (preg_match('/^<<\[.*\]>>$/si', $notation)) {
+            $enum = $this->parseEnumNotation($notation);
+            $params['Default'] = isset($enum[0]) ? $enum[0] : null;
+
             return 'enum';
-        } elseif (preg_match('/^[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9] [0-9][0-9]:[0-9][0-9]:[0-9][0-9]$/', $notation)) {
-            return 'datetime';
-        } elseif (preg_match('/^[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]$/', $notation)) {
-            return 'date';
-        } elseif (preg_match('/^[0-9][0-9]:[0-9][0-9]:[0-9][0-9]$/', $notation)) {
-            return 'time';
-        } else {
-            return 'string';
         }
+
+        if (preg_match('/^[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9] [0-9][0-9]:[0-9][0-9]:[0-9][0-9]$/', $notation)) {
+            return 'datetime';
+        }
+
+        if (preg_match('/^[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]$/', $notation)) {
+            return 'date';
+        }
+
+        if (preg_match('/^[0-9][0-9]:[0-9][0-9]:[0-9][0-9]$/', $notation)) {
+            return 'time';
+        }
+
+        return 'string';
     }
 
     /**
@@ -109,9 +119,11 @@ trait TypeTrait
      *
      * @return string
      */
-    private static function getNotationTypeArray(&$notation)
+    private function getNotationTypeArray($notation, &$params)
     {
         if ($notation && $notation == array_values($notation)) {
+            $params['Default'] = isset($notation[0]) ? $notation[0] : null;
+
             return 'enum';
         }
 

@@ -22,6 +22,8 @@ final class AllNotations extends Storable
 
     public $enumWithNull = [null, 'A', 'B', 'C'];
 
+    public $enumNotation = '<<["a", "b", "c"]>>';
+
     public $enum = ['A', 'B', 'C'];
 
     public $time = self::TIME;

@@ -41,7 +41,7 @@ trait ValueTrait
             case 'double':
                 return (float) $notation;
             case 'enum':
-                return $this->parseEnum($notation);
+                return $params['Default'];
             case 'time':
                 return static::parseTime($notation);
             case 'date':

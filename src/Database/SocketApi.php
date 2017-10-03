@@ -42,6 +42,18 @@ trait SocketApi
     }
 
     /**
+     * Return current database prefix used.
+     *
+     * @param null|mixed $table
+     *
+     * @return type
+     */
+    public function setPrefix($prefix)
+    {
+        $this->_socket->setPrefix($prefix);
+    }
+
+    /**
      * Get latest insert ID or UUID generated.
      *
      * @return type
@@ -193,6 +205,42 @@ trait SocketApi
     public function setCharset($charset)
     {
         return $charset;
+    }
+
+    /**
+     * Get array with current tables on database.
+     *
+     * @param mixed $charset
+     *
+     * @return array
+     */
+    public function transact()
+    {
+        return $this->_socket->transact();
+    }
+
+    /**
+     * Get array with current tables on database.
+     *
+     * @param mixed $charset
+     *
+     * @return array
+     */
+    public function rollback()
+    {
+        return $this->_socket->rollback();
+    }
+
+    /**
+     * Get array with current tables on database.
+     *
+     * @param mixed $charset
+     *
+     * @return array
+     */
+    public function commit()
+    {
+        return $this->_socket->commit();
     }
 
     /**

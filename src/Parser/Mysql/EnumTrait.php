@@ -11,12 +11,15 @@ namespace Javanile\Moldable\Parser\Mysql;
 
 trait EnumTrait
 {
+    /**
+     * Get notation aspects for enum.
+     */
     private function getNotationAspectsEnum($notation, $aspects)
     {
         //
-        $enum = static::parseNotationEnum($notation);
+        $enum = $this->parseEnumNotation($notation);
         if (!$enum) {
-            return static::getNotationAttributes('', $field, $before);
+            return $this->getNotationAttributes('', $field, $before);
         }
 
         //
@@ -36,7 +39,10 @@ trait EnumTrait
         return $aspects;
     }
 
-    private static function parseNotationEnum($notation)
+    /**
+     * Parse enum if is inside a string.
+     */
+    private function parseEnumNotation($notation)
     {
         if (is_string($notation)) {
             $notation = json_decode(trim($notation, '<>'));

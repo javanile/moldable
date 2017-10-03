@@ -27,11 +27,12 @@ final class NotationApiTest extends TestCase
         $this->assertEquals('', $object->text);
         $this->assertEquals(3.14, $object->float);
         $this->assertEquals(null, $object->enumWithNull);
+        $this->assertEquals('a', $object->enumNotation);
         $this->assertEquals('A', $object->enum);
         //$this->assertEquals('00:00:00', $object->time);
         //$this->assertEquals('0000-00-00', $object->date);
         //$this->assertEquals('0000-00-00 00:00:00', $object->datetime);
 
-        //Producer::log($this->time);
+        //Producer::log($object->enumNotation);
     }
 }

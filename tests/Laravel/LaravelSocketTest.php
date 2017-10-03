@@ -14,11 +14,19 @@ final class LaravelSocketTest extends TestCase
 
     public function testLaravelInit()
     {
+        People::getDatabase()->setPrefix('prefix_');
+        $prefix = People::getDatabase()->getPrefix();
+        People::resetClass();
+
         $people = new People();
+
+        $table = People::getTable();
+
+        $desc = People::getDatabase()->getTables();
 
         $people->store(['name' => 'Frank']);
 
-        $sql = 'SELECT * FROM People WHERE id = 1';
+        $sql = 'SELECT * FROM prefix_People WHERE id = 1';
 
         $row = People::getDatabase()->getRow($sql);
 
@@ -74,6 +82,27 @@ final class LaravelSocketTest extends TestCase
 
         $value = People::getDatabase()->getValue($sql);
 
+        $this->assertEquals($value, 'Frank');
+    }
+
+    public function testTransact()
+    {
+        $people = new People();
+
+        People::getDatabase()->transact();
+        $people->store(['name' => 'Frank']);
+        People::getDatabase()->rollback();
+
+        $sql = 'SELECT name FROM People WHERE id = 1';
+        $value = People::getDatabase()->getValue($sql);
+        $this->assertEquals($value, 'Frank');
+
+        People::getDatabase()->transact();
+        $people->store(['name' => 'Frank']);
+        People::getDatabase()->commit();
+
+        $sql = 'SELECT name FROM People WHERE id = 1';
+        $value = People::getDatabase()->getValue($sql);
         $this->assertEquals($value, 'Frank');
     }
 }
