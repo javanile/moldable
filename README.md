@@ -24,7 +24,7 @@ composer install javanile/moldable
 ```
 
 ## Get Started
- - [Moldable ORM](https://github.com/javanile/moldable/wiki/Moldable-ORM): Manage persisent object in your web application
+ - [Moldable ORM](https://github.com/javanile/moldable/wiki/Moldable-ORM): Manage persistent object in your web application
  - [DB Manipulation](https://github.com/javanile/moldable/wiki/Work-with-Database): Work with Database through advanced scripting tools
 
 ## How to: Connect to database
