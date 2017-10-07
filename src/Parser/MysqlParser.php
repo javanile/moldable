@@ -71,7 +71,7 @@ class MysqlParser implements Parser
      *
      * @return type
      */
-    public function parseTable(&$table, &$errors)
+    public function parseTable(&$table, &$errors = null)
     {
         // for first field no have before
         $before = false;
@@ -143,12 +143,12 @@ class MysqlParser implements Parser
                 return static::getNotationAspectsMatchs($notation, $aspects, $params);
         }
 
-        $errors[] = "No PSEUDOTYPE value for '{$type}' => '{$notation}'";
-
-        // called if detected type not is handled
-        //throw new Exception("No PSEUDOTYPE value for '{$type}' => '{$notation}'");
+        $errors[] = "irrational notation '{$notation}' by type '{$type}'";
     }
 
+    /**
+     * Get common or default aspects.
+     */
     private function getNotationCommonAspects($field, $before)
     {
         $aspects = [

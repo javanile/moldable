@@ -156,22 +156,18 @@ trait LoadApi
     {
         //
         $table = static::getTable();
-
-        //
+        $writer = static::getDatabase()->getWriter();
         $alias = static::getClassName();
 
         //
         $join = null;
-
-        //
         $allFields = $fields ? $fields : static::getDefaultFields();
 
         // parse SQL select fields
-        $selectFields = static::getDatabase()
-                     ->getWriter()
-                     ->selectFields($allFields, $alias, $join);
+        $selectFields = $writer->selectFields($allFields, $alias, $join);
 
         //
+        $values = [];
         $whereConditions = [];
 
         //
@@ -183,11 +179,7 @@ trait LoadApi
         //
         foreach ($query as $field => $value) {
             $token = ':'.$field;
-
-            //
             $whereConditions[] = "{$field} = {$token}";
-
-            //
             $values[$field] = $value;
         }
 
@@ -196,9 +188,9 @@ trait LoadApi
 
         // prepare SQL query
         $sql = "SELECT {$selectFields} "
-             ."FROM {$table} AS {$alias} {$join} "
-             ."WHERE {$where} "
-             .'LIMIT 1';
+             . "FROM {$table} AS {$alias} {$join} "
+             . "WHERE {$where} "
+             . 'LIMIT 1';
 
         // fetch data on database and return it
         $result = static::fetch(

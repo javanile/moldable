@@ -129,7 +129,7 @@ trait ClassApi
      *
      * @param mixed $attribute
      */
-    protected static function getClassGlobal($attribute)
+    public static function getClassGlobal($attribute)
     {
         return static::$__global[$attribute];
     }
@@ -174,11 +174,11 @@ trait ClassApi
      * @param mixed $key
      * @param mixed $value
      */
-    protected static function setClassConfig($key, $value)
+    public static function setClassConfig($key, $value)
     {
-        $config = static::getClassConfigInherit();
+        static::$__config[$key] = $value;
 
-        $config[$key] = $value;
+        static::delClassConfigInherit();
     }
 
     /**
@@ -187,6 +187,16 @@ trait ClassApi
     protected static function getClassConfigArray()
     {
         return (array) static::$__config;
+    }
+
+    /**
+     * Get configuration array inherited.
+     */
+    public static function delClassConfigInherit()
+    {
+        $attribute = 'class-config-inherit';
+
+        static::delClassAttribute($attribute);
     }
 
     /**

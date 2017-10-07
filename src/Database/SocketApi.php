@@ -176,10 +176,15 @@ trait SocketApi
      *
      * @return array
      */
-    public function getTables()
+    public function getTables($matchPrefix = true)
     {
-        $prefix = str_replace('_', '\\_', $this->getPrefix());
-        $sql = "SHOW TABLES LIKE '{$prefix}%'";
+        if ($matchPrefix) {
+            $prefix = str_replace('_', '\\_', $this->getPrefix());
+            $sql = "SHOW TABLES LIKE '{$prefix}%'";
+        } else {
+            $sql = "SHOW TABLES";
+        }
+
         $tables = $this->getValues($sql);
 
         return $tables;

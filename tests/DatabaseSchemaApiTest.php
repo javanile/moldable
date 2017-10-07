@@ -15,12 +15,12 @@ final class DatabaseSchemaApiTest extends TestCase
     public function testDatabaseSchemaDesc()
     {
         $db = new Database([
-            'host'     => $GLOBALS['DB_HOST'],
-            'port'     => $GLOBALS['DB_PORT'],
-            'dbname'   => $GLOBALS['DB_NAME'],
+            'host' => $GLOBALS['DB_HOST'],
+            'port' => $GLOBALS['DB_PORT'],
+            'dbname' => $GLOBALS['DB_NAME'],
             'username' => $GLOBALS['DB_USER'],
             'password' => $GLOBALS['DB_PASS'],
-            'debug'    => true,
+            'debug' => true,
         ]);
 
         $db->apply([
@@ -35,26 +35,26 @@ final class DatabaseSchemaApiTest extends TestCase
         $this->assertEquals($db->desc(), [
             'test_table_1' => [
                 'test_field_1' => [
-                    'Field'    => 'test_field_1',
-                    'Type'     => 'int(11)',
-                    'Null'     => 'NO',
-                    'Key'      => '',
-                    'Default'  => '0',
-                    'Extra'    => '',
-                    'First'    => true,
-                    'Before'   => false,
+                    'Field' => 'test_field_1',
+                    'Type' => 'int(11)',
+                    'Null' => 'NO',
+                    'Key' => '',
+                    'Default' => '0',
+                    'Extra' => '',
+                    'First' => true,
+                    'Before' => false,
                 ],
             ],
             'test_table_2' => [
                 'test_field_2' => [
-                    'Field'    => 'test_field_2',
-                    'Type'     => 'int(11)',
-                    'Null'     => 'NO',
-                    'Key'      => '',
-                    'Default'  => '0',
-                    'Extra'    => '',
-                    'First'    => true,
-                    'Before'   => false,
+                    'Field' => 'test_field_2',
+                    'Type' => 'int(11)',
+                    'Null' => 'NO',
+                    'Key' => '',
+                    'Default' => '0',
+                    'Extra' => '',
+                    'First' => true,
+                    'Before' => false,
                 ],
             ],
         ]);
@@ -63,12 +63,12 @@ final class DatabaseSchemaApiTest extends TestCase
     public function testDatabaseSchemaAlter()
     {
         $db = new Database([
-            'host'     => $GLOBALS['DB_HOST'],
-            'port'     => $GLOBALS['DB_PORT'],
-            'dbname'   => $GLOBALS['DB_NAME'],
+            'host' => $GLOBALS['DB_HOST'],
+            'port' => $GLOBALS['DB_PORT'],
+            'dbname' => $GLOBALS['DB_NAME'],
             'username' => $GLOBALS['DB_USER'],
             'password' => $GLOBALS['DB_PASS'],
-            'debug'    => true,
+            'debug' => true,
         ]);
 
         $db->alter([
@@ -83,28 +83,58 @@ final class DatabaseSchemaApiTest extends TestCase
         $this->assertEquals($db->desc(), [
             'test_table_1' => [
                 'test_field_1' => [
-                    'Field'    => 'test_field_1',
-                    'Type'     => 'int(11)',
-                    'Null'     => 'NO',
-                    'Key'      => '',
-                    'Default'  => '0',
-                    'Extra'    => '',
-                    'First'    => true,
-                    'Before'   => false,
+                    'Field' => 'test_field_1',
+                    'Type' => 'int(11)',
+                    'Null' => 'NO',
+                    'Key' => '',
+                    'Default' => '0',
+                    'Extra' => '',
+                    'First' => true,
+                    'Before' => false,
                 ],
             ],
             'test_table_2' => [
                 'test_field_2' => [
-                    'Field'    => 'test_field_2',
-                    'Type'     => 'int(11)',
-                    'Null'     => 'NO',
-                    'Key'      => '',
-                    'Default'  => '0',
-                    'Extra'    => '',
-                    'First'    => true,
-                    'Before'   => false,
+                    'Field' => 'test_field_2',
+                    'Type' => 'int(11)',
+                    'Null' => 'NO',
+                    'Key' => '',
+                    'Default' => '0',
+                    'Extra' => '',
+                    'First' => true,
+                    'Before' => false,
                 ],
             ],
         ]);
+    }
+
+    public function testDatabasePrefix()
+    {
+        $db = new Database([
+            'host' => $GLOBALS['DB_HOST'],
+            'port' => $GLOBALS['DB_PORT'],
+            'dbname' => $GLOBALS['DB_NAME'],
+            'username' => $GLOBALS['DB_USER'],
+            'password' => $GLOBALS['DB_PASS'],
+            'debug' => true,
+        ]);
+
+        $db->apply([
+            'test_table_1' => [
+                'test_field_1' => 0,
+            ]
+        ]);
+
+        $db->setPrefix('prefix_');
+
+        $db->apply([
+            'test_table_1' => [
+                'test_field_1' => 0,
+            ]
+        ]);
+
+        $tables = $db->getTables(false);
+
+        $this->assertEquals($tables, ["prefix_test_table_1","test_table_1"]);
     }
 }

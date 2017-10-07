@@ -9,6 +9,7 @@
 
 namespace Javanile\Moldable\Model;
 
+use Javanile\Moldable\Database;
 use Javanile\Moldable\Exception;
 
 trait SchemaApi
@@ -158,5 +159,43 @@ trait SchemaApi
         $desc = static::getDatabase()->descTable($table);
 
         return $desc;
+    }
+
+    /**
+     * Retriece linked database or default.
+     *
+     * @return type
+     */
+    public static function getDatabase()
+    {
+        $attribute = 'database';
+
+        if (!static::hasClassAttribute($attribute)) {
+            $database = Database::getDefault();
+
+            if (!$database) {
+                static::error('database', 'database connection not found');
+            }
+
+            static::setClassAttribute($attribute, $database);
+        }
+
+        return static::getClassAttribute($attribute);
+    }
+
+    /**
+     * Link specific database to this table.
+     *
+     * @param mixed $database
+     *
+     * @return type
+     */
+    public static function setDatabase($database)
+    {
+        //
+        $attribute = 'database';
+
+        //
+        static::setClassAttribute($attribute, $database);
     }
 }

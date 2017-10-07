@@ -23,7 +23,7 @@ trait ValueTrait
      */
     public function getNotationValue($notation, &$errors = null)
     {
-        $type = $this->getNotationType($notation, $params);
+        $type = $this->getNotationType($notation, $params, $errors);
 
         if (in_array($type, static::TYPE_WITHOUT_VALUE)) {
             return;
@@ -50,7 +50,7 @@ trait ValueTrait
                 return static::parseDatetime($notation);
         }
 
-        $errors[] = "No PSEUDOTYPE value for '{$type}' => '{$notation}'";
+        $errors[] = "irrational value for '{$notation}' by type '{$type}'";
         // called if detected type not is handled
         //throw new Exception("No PSEUDOTYPE value for '{$type}' => '{$notation}'");
     }

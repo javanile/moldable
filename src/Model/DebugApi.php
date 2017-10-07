@@ -24,6 +24,12 @@ trait DebugApi
                 ]];
                 $offset = 0;
                 break;
+
+            case 'database':
+                $slug = 'Moldable database error, ';
+                $backtrace = debug_backtrace();
+                $offset = 0;
+                break;
         }
 
         Functions::throwException($slug, $exception, $backtrace, $offset);

@@ -39,7 +39,9 @@ final class NotationApiTest extends TestCase
 
     public function testUndefinedType()
     {
-        $object = new UndefinedType();
+        $this->expectException('Javanile\\Moldable\\Exception');
+        $this->expectExceptionMessageRegExp('/class model error/i');
 
+        $object = new UndefinedType();
     }
 }

@@ -133,8 +133,8 @@ class Functions
                 .' called at '.$trace[$offset]['file']
                 .' on line '.$trace[$offset]['line'];
         } else {
-            $message .= ' defined at '.$trace[$offset]['file']
-                .' on line '.$trace[$offset]['line'];
+            $message .= ' declared at '.$trace[$offset]['file'];
+                //.' on line '.$trace[$offset]['line'];
         }
 
         throw new Exception($message);

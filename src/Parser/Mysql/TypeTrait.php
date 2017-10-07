@@ -39,7 +39,7 @@ trait TypeTrait
                 return 'null';
         }
 
-        $errors[] = "No PSEUDOTYPE value for '{$type}' => '{$notation}'";
+        $errors[] = "irrational type for '{$notation}'";
 
         // called if detected type not is handled
         //throw new Exception("No PSEUDOTYPE value for '{$type}' => '{$notation}'");

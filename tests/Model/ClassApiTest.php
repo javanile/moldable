@@ -38,6 +38,17 @@ final class ClassApiTest extends TestCase
         $this->assertEquals($adamant, false);
     }
 
+    public function testClassGlobalApi()
+    {
+        $arrayOfExcludedFields = People::getClassGlobal('schema-excluded-fields');
+        $this->assertEquals(is_array($arrayOfExcludedFields), true);
+        $this->assertEquals(count($arrayOfExcludedFields) > 1, true);
+
+        People::setClassConfig('name-of-owner', 'Cesare');
+        $owner = People::getClassConfig('name-of-owner');
+        $this->assertEquals($owner, 'Cesare');
+    }
+
     public function testModelApi()
     {
         $model = People::getModel();

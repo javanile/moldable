@@ -25,7 +25,6 @@ class Readable implements Notations
     use Model\PublicApi;
     use Model\SchemaApi;
     use Model\FilterApi;
-    use Model\DatabaseApi;
     use Model\RawApi;
 
     /**

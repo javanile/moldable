@@ -3,7 +3,7 @@
 namespace Javanile\Moldable\Tests\Model;
 
 use Javanile\Moldable\Database;
-use Javanile\Moldable\Tests\DatabaseTrait;
+use Javanile\Moldable\Tests\DefaultDatabaseTrait;
 use Javanile\Moldable\Tests\Sample\Noindexmodel;
 use Javanile\Moldable\Tests\Sample\People;
 use Javanile\Producer;
@@ -13,19 +13,10 @@ Producer::addPsr4(['Javanile\\Moldable\\Tests\\' => __DIR__.'/../']);
 
 final class LoadApiTest extends TestCase
 {
-    use DatabaseTrait;
+    use DefaultDatabaseTrait;
 
     public function testLoadApi()
     {
-        $db = new Database([
-            'host'     => $GLOBALS['DB_HOST'],
-            'port'     => $GLOBALS['DB_PORT'],
-            'dbname'   => $GLOBALS['DB_NAME'],
-            'username' => $GLOBALS['DB_USER'],
-            'password' => $GLOBALS['DB_PASS'],
-            'prefix'   => 'prefix_',
-        ]);
-
         $known = new People();
 
         $known->store([
@@ -41,39 +32,34 @@ final class LoadApiTest extends TestCase
 
     public function testLoadByQuery()
     {
-        $db = new Database([
-            'host'     => $GLOBALS['DB_HOST'],
-            'port'     => $GLOBALS['DB_PORT'],
-            'dbname'   => $GLOBALS['DB_NAME'],
-            'username' => $GLOBALS['DB_USER'],
-            'password' => $GLOBALS['DB_PASS'],
-            'prefix'   => 'prefix_',
-        ]);
-
-        $known = new People();
-
-        $known->store([
+        $known1 = new People();
+        $known1->store([
             'name'    => 'Frank',
             'surname' => 'White',
             'age'     => 18,
         ]);
+        $known2 = new People();
+        $known2->store([
+            'name'    => 'Anand',
+            'surname' => 'Black',
+            'age'     => 20,
+        ]);
 
-        // load by id inline
-        $frank = People::load(['name' => 'Frank']);
+        $frank = People::load([
+            'name' => 'Frank'
+        ]);
+
         $this->assertEquals($frank->age, 18);
+
+        $anand = People::load([
+            'where' => "surname LIKE '%lac%'"
+        ]);
+
+        $this->assertEquals($anand->age, 20);
     }
 
     public function testLoadByMainField()
     {
-        $db = new Database([
-            'host'     => $GLOBALS['DB_HOST'],
-            'port'     => $GLOBALS['DB_PORT'],
-            'dbname'   => $GLOBALS['DB_NAME'],
-            'username' => $GLOBALS['DB_USER'],
-            'password' => $GLOBALS['DB_PASS'],
-            'prefix'   => 'prefix_',
-        ]);
-
         $known = new Noindexmodel();
 
         $known->store([

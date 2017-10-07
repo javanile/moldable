@@ -174,7 +174,7 @@ trait ReadApi
 
         if (!$query && !$fields) {
             $focus = $key;
-            $fields = '*';
+            $fields = [$key];
         } elseif (is_string($query) && !$fields) {
             $fields = explode(',', $query);
             $focus = $fields[0];
@@ -299,10 +299,13 @@ trait ReadApi
         return $row ? self::make($row) : false;
     }
 
-    public static function ping(&$query)
+    /**
+     * Historical version of ::exists().
+     */
+    public static function ping($query)
     {
         $exist = static::exists($query);
-        $query = $exist ? $exist : static::make($query);
+        //$query = $exist ? $exist : static::make($query);
 
         return $exist;
     }

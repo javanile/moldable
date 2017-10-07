@@ -38,6 +38,12 @@ final class ReadApiTest extends TestCase
 
         $exists = People::exists(['name' => 'FrankZZZ']);
         $this->assertEquals($exists, false);
+
+        $exists = People::exists(['where' => 'age < 20']);
+        $this->assertEquals($exists->age, 18);
+
+        $ping = People::ping(['surname' => 'White']);
+        $this->assertEquals(is_object($ping), true);
     }
 
     public function testAllApi()
@@ -80,6 +86,9 @@ final class ReadApiTest extends TestCase
             ['name' => 'Frank', 'surname' => 'White', 'age'=> 18],
             ['name' => 'React', 'surname' => 'Chess', 'age'=> 21],
         ]);
+
+        $min = People::min();
+        $this->assertEquals(1, $min);
 
         $min = People::min('age');
         $this->assertEquals(18, $min);
