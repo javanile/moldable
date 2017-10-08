@@ -1,7 +1,7 @@
 {
     "name": "javanile/moldable",
     "type": "library",
-    "version": "0.0.43",
+    "version": "0.0.44",
     "description": "Uknown PHP Database Abstraction Layer",
     "keywords": [
         "moldable",
