@@ -170,7 +170,7 @@ final class StorableTest extends TestCase
         ]);
 
         People::insert([
-            'name' => 'Frank'
+            'name' => 'Frank',
         ]);
 
         People::dump();

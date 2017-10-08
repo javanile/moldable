@@ -14,14 +14,14 @@ trait RawApi
     /**
      * Retrieve primary key name of specific model.
      *
-     * @param type $model
+     * @param type  $model
+     * @param mixed $sql
      *
      * @return type
      */
     public function raw($sql)
     {
         $results = $this->getResults($sql);
-
 
         return $results;
     }

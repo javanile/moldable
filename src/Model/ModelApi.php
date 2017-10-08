@@ -9,8 +9,6 @@
 
 namespace Javanile\Moldable\Model;
 
-use Javanile\Moldable\Functions;
-
 trait ModelApi
 {
     /**

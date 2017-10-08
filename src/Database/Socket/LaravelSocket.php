@@ -135,7 +135,7 @@ class LaravelSocket
      */
     public function getPrefix($table = '')
     {
-        return $this->_prefix . $table;
+        return $this->_prefix.$table;
     }
 
     /**

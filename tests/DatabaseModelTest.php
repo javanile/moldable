@@ -15,9 +15,9 @@ final class DatabaseModelTest extends TestCase
     public function testDatabaseModelAll()
     {
         $db = new Database([
-            'host' => $GLOBALS['DB_HOST'],
-            'port' => $GLOBALS['DB_PORT'],
-            'dbname' => $GLOBALS['DB_NAME'],
+            'host'     => $GLOBALS['DB_HOST'],
+            'port'     => $GLOBALS['DB_PORT'],
+            'dbname'   => $GLOBALS['DB_NAME'],
             'username' => $GLOBALS['DB_USER'],
             'password' => $GLOBALS['DB_PASS'],
         ]);
@@ -59,9 +59,9 @@ final class DatabaseModelTest extends TestCase
     public function testDatabaseModelSubmit()
     {
         $db = new Database([
-            'host' => $GLOBALS['DB_HOST'],
-            'port' => $GLOBALS['DB_PORT'],
-            'dbname' => $GLOBALS['DB_NAME'],
+            'host'     => $GLOBALS['DB_HOST'],
+            'port'     => $GLOBALS['DB_PORT'],
+            'dbname'   => $GLOBALS['DB_NAME'],
             'username' => $GLOBALS['DB_USER'],
             'password' => $GLOBALS['DB_PASS'],
         ]);
@@ -102,9 +102,9 @@ final class DatabaseModelTest extends TestCase
     public function testDatabaseModelExists()
     {
         $db = new Database([
-            'host' => $GLOBALS['DB_HOST'],
-            'port' => $GLOBALS['DB_PORT'],
-            'dbname' => $GLOBALS['DB_NAME'],
+            'host'     => $GLOBALS['DB_HOST'],
+            'port'     => $GLOBALS['DB_PORT'],
+            'dbname'   => $GLOBALS['DB_NAME'],
             'username' => $GLOBALS['DB_USER'],
             'password' => $GLOBALS['DB_PASS'],
         ]);
@@ -138,9 +138,9 @@ final class DatabaseModelTest extends TestCase
     public function testDatabaseModelImport()
     {
         $db = new Database([
-            'host' => $GLOBALS['DB_HOST'],
-            'port' => $GLOBALS['DB_PORT'],
-            'dbname' => $GLOBALS['DB_NAME'],
+            'host'     => $GLOBALS['DB_HOST'],
+            'port'     => $GLOBALS['DB_PORT'],
+            'dbname'   => $GLOBALS['DB_NAME'],
             'username' => $GLOBALS['DB_USER'],
             'password' => $GLOBALS['DB_PASS'],
         ]);
@@ -166,9 +166,9 @@ final class DatabaseModelTest extends TestCase
     public function testDatabaseModelDrop()
     {
         $db = new Database([
-            'host' => $GLOBALS['DB_HOST'],
-            'port' => $GLOBALS['DB_PORT'],
-            'dbname' => $GLOBALS['DB_NAME'],
+            'host'     => $GLOBALS['DB_HOST'],
+            'port'     => $GLOBALS['DB_PORT'],
+            'dbname'   => $GLOBALS['DB_NAME'],
             'username' => $GLOBALS['DB_USER'],
             'password' => $GLOBALS['DB_PASS'],
         ]);
@@ -192,14 +192,14 @@ final class DatabaseModelTest extends TestCase
         $this->assertEquals($schema, [
             'animal' => [
                 'field0' => [
-                    'Field' => 'field0',
-                    'Type' => 'varchar(255)',
-                    'Null' => 'YES',
-                    'Key' => '',
+                    'Field'   => 'field0',
+                    'Type'    => 'varchar(255)',
+                    'Null'    => 'YES',
+                    'Key'     => '',
                     'Default' => null,
-                    'Extra' => '',
-                    'First' => true,
-                    'Before' => false,
+                    'Extra'   => '',
+                    'First'   => true,
+                    'Before'  => false,
                 ],
             ],
         ]);
@@ -208,16 +208,16 @@ final class DatabaseModelTest extends TestCase
     public function testDatabaseModelFieldApi()
     {
         $db = new Database([
-            'host' => $GLOBALS['DB_HOST'],
-            'port' => $GLOBALS['DB_PORT'],
-            'dbname' => $GLOBALS['DB_NAME'],
+            'host'     => $GLOBALS['DB_HOST'],
+            'port'     => $GLOBALS['DB_PORT'],
+            'dbname'   => $GLOBALS['DB_NAME'],
             'username' => $GLOBALS['DB_USER'],
             'password' => $GLOBALS['DB_PASS'],
         ]);
 
         $db->apply([
             'albums' => [
-                'title' => '',
+                'title'  => '',
                 'author' => '',
             ],
         ]);
@@ -230,16 +230,16 @@ final class DatabaseModelTest extends TestCase
     public function testDatabaseGetModelsApi()
     {
         $db = new Database([
-            'host' => $GLOBALS['DB_HOST'],
-            'port' => $GLOBALS['DB_PORT'],
-            'dbname' => $GLOBALS['DB_NAME'],
+            'host'     => $GLOBALS['DB_HOST'],
+            'port'     => $GLOBALS['DB_PORT'],
+            'dbname'   => $GLOBALS['DB_NAME'],
             'username' => $GLOBALS['DB_USER'],
             'password' => $GLOBALS['DB_PASS'],
         ]);
 
         $db->apply([
             'albums' => [
-                'title' => '',
+                'title'  => '',
                 'author' => '',
             ],
         ]);
@@ -254,16 +254,16 @@ final class DatabaseModelTest extends TestCase
         $this->expectOutputRegex('/^<pre.+pre>$/s');
 
         $db = new Database([
-            'host' => $GLOBALS['DB_HOST'],
-            'port' => $GLOBALS['DB_PORT'],
-            'dbname' => $GLOBALS['DB_NAME'],
+            'host'     => $GLOBALS['DB_HOST'],
+            'port'     => $GLOBALS['DB_PORT'],
+            'dbname'   => $GLOBALS['DB_NAME'],
             'username' => $GLOBALS['DB_USER'],
             'password' => $GLOBALS['DB_PASS'],
         ]);
 
         $db->apply([
             'albums' => [
-                'title' => '',
+                'title'  => '',
                 'author' => '',
             ],
         ]);
@@ -276,16 +276,16 @@ final class DatabaseModelTest extends TestCase
         $this->expectOutputRegex('/^<pre.+pre>$/s');
 
         $db = new Database([
-            'host' => $GLOBALS['DB_HOST'],
-            'port' => $GLOBALS['DB_PORT'],
-            'dbname' => $GLOBALS['DB_NAME'],
+            'host'     => $GLOBALS['DB_HOST'],
+            'port'     => $GLOBALS['DB_PORT'],
+            'dbname'   => $GLOBALS['DB_NAME'],
             'username' => $GLOBALS['DB_USER'],
             'password' => $GLOBALS['DB_PASS'],
         ]);
 
         $db->apply([
             'albums' => [
-                'title' => '',
+                'title'  => '',
                 'author' => '',
             ],
         ]);

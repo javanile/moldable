@@ -2,8 +2,6 @@
 
 namespace Javanile\Moldable\Tests\Model;
 
-use Javanile\Moldable\Database;
-use Javanile\Moldable\Tests\DatabaseTrait;
 use Javanile\Moldable\Tests\DefaultDatabaseTrait;
 use Javanile\Moldable\Tests\Sample\People;
 use Javanile\Producer;
@@ -113,7 +111,7 @@ final class ManageApiTest extends TestCase
         $all = People::all(['order' => 'name']);
 
         $this->assertEquals($all, [
-            ['id' => '3', 'name' => 'Adami', 'surname' => '', 'select' => '','age' => '0', 'address' => '0'],
+            ['id' => '3', 'name' => 'Adami', 'surname' => '', 'select' => '', 'age' => '0', 'address' => '0'],
             ['id' => '2', 'name' => 'Alloy', 'surname' => '', 'select' => '', 'age' => '0', 'address' => '0'],
             ['id' => '1', 'name' => 'Frank', 'surname' => '', 'select' => '', 'age' => '0', 'address' => '0'],
         ]);
@@ -131,7 +129,7 @@ final class ManageApiTest extends TestCase
 
         $all = People::all([
             'order'  => 'name',
-            'fields' => ['id', 'name', 'surname', 'age']
+            'fields' => ['id', 'name', 'surname', 'age'],
         ]);
 
         $this->assertEquals($all, [
@@ -144,7 +142,7 @@ final class ManageApiTest extends TestCase
 
         $all = People::all([
             'order'  => ['id' => 'DESC'],
-            'fields' => ['id', 'name', 'surname', 'age']
+            'fields' => ['id', 'name', 'surname', 'age'],
         ]);
 
         $this->assertEquals($all, [
@@ -170,7 +168,7 @@ final class ManageApiTest extends TestCase
 
         $all = People::all([
             'order'  => 'name',
-            'fields' => ['id', 'name', 'surname', 'age']
+            'fields' => ['id', 'name', 'surname', 'age'],
         ]);
 
         $this->assertEquals($all, [
@@ -186,7 +184,7 @@ final class ManageApiTest extends TestCase
 
         $all = People::all([
             'order'  => ['id' => 'DESC'],
-            'fields' => ['id', 'name', 'surname', 'age']
+            'fields' => ['id', 'name', 'surname', 'age'],
         ]);
 
         $this->assertEquals($all, [

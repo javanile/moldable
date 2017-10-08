@@ -9,7 +9,7 @@ class UnderscoreTable extends Storable
     public static $__config = [
         'table-name-conventions' => 'underscore',
         'field-name-conventions' => 'underscore',
-        'exclude-fields' => ['escludedField1', 'escludedField2'],
+        'exclude-fields'         => ['escludedField1', 'escludedField2'],
     ];
 
     public $escludedField1;

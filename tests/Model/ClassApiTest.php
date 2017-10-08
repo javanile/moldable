@@ -7,8 +7,8 @@ use Javanile\Moldable\Database;
 use Javanile\Moldable\Readable;
 use Javanile\Moldable\Storable;
 use Javanile\Moldable\Tests\DatabaseTrait;
-use Javanile\Moldable\Tests\Sample\People;
 use Javanile\Moldable\Tests\Sample\EmptySchema;
+use Javanile\Moldable\Tests\Sample\People;
 use Javanile\Producer;
 use PHPUnit\Framework\TestCase;
 

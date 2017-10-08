@@ -16,12 +16,12 @@ final class DatabaseDebugTest extends TestCase
     public function testDatabaseSetDebug()
     {
         $db = new Database([
-            'host' => $GLOBALS['DB_HOST'],
-            'port' => $GLOBALS['DB_PORT'],
-            'dbname' => $GLOBALS['DB_NAME'],
+            'host'     => $GLOBALS['DB_HOST'],
+            'port'     => $GLOBALS['DB_PORT'],
+            'dbname'   => $GLOBALS['DB_NAME'],
             'username' => $GLOBALS['DB_USER'],
             'password' => $GLOBALS['DB_PASS'],
-            'debug' => true,
+            'debug'    => true,
         ]);
 
         $this->assertEquals($db->isDebug(), true);
@@ -57,18 +57,18 @@ final class DatabaseDebugTest extends TestCase
         $this->expectOutputRegex('/^<pre.+pre>$/s');
 
         $db = new Database([
-            'host' => $GLOBALS['DB_HOST'],
-            'port' => $GLOBALS['DB_PORT'],
-            'dbname' => $GLOBALS['DB_NAME'],
+            'host'     => $GLOBALS['DB_HOST'],
+            'port'     => $GLOBALS['DB_PORT'],
+            'dbname'   => $GLOBALS['DB_NAME'],
             'username' => $GLOBALS['DB_USER'],
             'password' => $GLOBALS['DB_PASS'],
-            'debug' => true,
+            'debug'    => true,
         ]);
 
         $db->apply([
             'table' => [
-                'field' => 1
-            ]
+                'field' => 1,
+            ],
         ]);
 
         $db->dumpSchema();

@@ -48,10 +48,10 @@ trait ReadApi
 
         //
         $sql = "SELECT {$selectFields} "
-             . "FROM {$table} AS {$class} "
-             . " {$join} "
-             . " {$order} "
-             . " {$limit} ";
+             ."FROM {$table} AS {$class} "
+             ." {$join} "
+             ." {$order} "
+             ." {$limit} ";
 
         $results = static::fetch(
             $sql,
@@ -67,6 +67,7 @@ trait ReadApi
     /**
      * @param null|mixed $query
      * @param null|mixed $fields
+     * @param mixed      $last
      *
      * @return type
      */
@@ -90,7 +91,7 @@ trait ReadApi
             $order = 'ORDER BY '.$query['order'];
             unset($query['order']);
         } else {
-            $order = 'ORDER BY '.'`'.$key.'`'.' '. ($last ? 'DESC' : 'ASC');
+            $order = 'ORDER BY '.'`'.$key.'`'.' '.($last ? 'DESC' : 'ASC');
         }
 
         if (!$fields && isset($query['fields'])) {
@@ -156,6 +157,7 @@ trait ReadApi
     /**
      * @param null|mixed $query
      * @param null|mixed $fields
+     * @param mixed      $max
      *
      * @return type
      */
@@ -191,7 +193,7 @@ trait ReadApi
             $fields[] = $query['order'];
             unset($query['order']);
         } else {
-            $order = 'ORDER BY '.'`'.$focus.'`'.' '. ($max ? 'DESC' : 'ASC');
+            $order = 'ORDER BY '.'`'.$focus.'`'.' '.($max ? 'DESC' : 'ASC');
         }
 
         $whereArray = [];
@@ -301,6 +303,8 @@ trait ReadApi
 
     /**
      * Historical version of ::exists().
+     *
+     * @param mixed $query
      */
     public static function ping($query)
     {

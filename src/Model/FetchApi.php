@@ -90,6 +90,7 @@ trait FetchApi
         } elseif ($singleRecord && $singleValue) {
             // requested a single value of a single record
             $value = static::getDatabase()->getValue($sql, $params);
+
             return $value;
         }
     }

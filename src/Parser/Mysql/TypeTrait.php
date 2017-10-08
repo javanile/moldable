@@ -14,8 +14,9 @@ trait TypeTrait
     /**
      * Get type of a notation.
      *
-     * @param type $notation
-     * @param type $params
+     * @param type       $notation
+     * @param type       $params
+     * @param null|mixed $namespace
      *
      * @return string
      */
@@ -47,7 +48,8 @@ trait TypeTrait
     }
 
     /**
-     * @param type $notation
+     * @param type       $notation
+     * @param null|mixed $namespace
      */
     private function getNotationTypeString(
         $notation,
@@ -145,6 +147,8 @@ trait TypeTrait
 
     /**
      * Check if notation is a class one-to-one relation.
+     *
+     * @param mixed $notation
      */
     public function isClass($notation, &$matchs)
     {
@@ -156,7 +160,7 @@ trait TypeTrait
     }
 
     /**
-     *
+     * @param mixed $notation
      */
     public static function pregMatchVector($notation, &$matchs)
     {
@@ -169,7 +173,7 @@ trait TypeTrait
     }
 
     /**
-     *
+     * @param mixed $notation
      */
     public static function pregMatchMatchs($notation, &$matchs)
     {
@@ -182,11 +186,14 @@ trait TypeTrait
 
     /**
      * Apply namespace to a class name.
+     *
+     * @param mixed $class
+     * @param mixed $namespace
      */
     private function applyNamespace($class, $namespace)
     {
         if ($class[0] != '\\' && $namespace) {
-            $class = ($namespace != '\\' ? $namespace . '\\' : '\\' ) . $class;
+            $class = ($namespace != '\\' ? $namespace.'\\' : '\\').$class;
         }
 
         return $class;

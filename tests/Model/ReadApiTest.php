@@ -2,7 +2,6 @@
 
 namespace Javanile\Moldable\Tests\Model;
 
-use Javanile\Moldable\Database;
 use Javanile\Moldable\Tests\DefaultDatabaseTrait;
 use Javanile\Moldable\Tests\Sample\People;
 use Javanile\Producer;

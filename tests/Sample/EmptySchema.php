@@ -6,5 +6,4 @@ use Javanile\Moldable\Storable;
 
 final class EmptySchema extends Storable
 {
-
 }

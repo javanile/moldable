@@ -9,8 +9,8 @@
 
 namespace Javanile\Moldable;
 
-use Monolog\Logger;
 use Monolog\Handler\StreamHandler;
+use Monolog\Logger;
 
 class Database implements Notations
 {
