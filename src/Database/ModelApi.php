@@ -9,7 +9,7 @@
 
 namespace Javanile\Moldable\Database;
 
-use Javanile\SchemaDB\Functions;
+use Javanile\Moldable\Functions;
 
 trait ModelApi
 {
@@ -242,12 +242,9 @@ trait ModelApi
      */
     public function dump($model = null)
     {
-        //
         if ($model) {
             $all = $this->all($model);
-
-            //
-            Functions::gridDump($model, $all);
+            Functions::dumpGrid($all, $model);
         } else {
             $this->dumpSchema();
         }

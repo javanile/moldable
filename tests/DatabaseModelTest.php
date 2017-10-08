@@ -15,9 +15,9 @@ final class DatabaseModelTest extends TestCase
     public function testDatabaseModelAll()
     {
         $db = new Database([
-            'host'     => $GLOBALS['DB_HOST'],
-            'port'     => $GLOBALS['DB_PORT'],
-            'dbname'   => $GLOBALS['DB_NAME'],
+            'host' => $GLOBALS['DB_HOST'],
+            'port' => $GLOBALS['DB_PORT'],
+            'dbname' => $GLOBALS['DB_NAME'],
             'username' => $GLOBALS['DB_USER'],
             'password' => $GLOBALS['DB_PASS'],
         ]);
@@ -59,9 +59,9 @@ final class DatabaseModelTest extends TestCase
     public function testDatabaseModelSubmit()
     {
         $db = new Database([
-            'host'     => $GLOBALS['DB_HOST'],
-            'port'     => $GLOBALS['DB_PORT'],
-            'dbname'   => $GLOBALS['DB_NAME'],
+            'host' => $GLOBALS['DB_HOST'],
+            'port' => $GLOBALS['DB_PORT'],
+            'dbname' => $GLOBALS['DB_NAME'],
             'username' => $GLOBALS['DB_USER'],
             'password' => $GLOBALS['DB_PASS'],
         ]);
@@ -102,9 +102,9 @@ final class DatabaseModelTest extends TestCase
     public function testDatabaseModelExists()
     {
         $db = new Database([
-            'host'     => $GLOBALS['DB_HOST'],
-            'port'     => $GLOBALS['DB_PORT'],
-            'dbname'   => $GLOBALS['DB_NAME'],
+            'host' => $GLOBALS['DB_HOST'],
+            'port' => $GLOBALS['DB_PORT'],
+            'dbname' => $GLOBALS['DB_NAME'],
             'username' => $GLOBALS['DB_USER'],
             'password' => $GLOBALS['DB_PASS'],
         ]);
@@ -127,17 +127,25 @@ final class DatabaseModelTest extends TestCase
             'name' => 'Frank',
             'hook' => 10,
         ]);
+
+        $exists = $db->exists('model', ['where' => "name LIKE 'Frank'"]);
+        $this->assertEquals($exists, [
+            'name' => 'Frank',
+            'hook' => 10,
+        ]);
     }
 
     public function testDatabaseModelImport()
     {
         $db = new Database([
-            'host'     => $GLOBALS['DB_HOST'],
-            'port'     => $GLOBALS['DB_PORT'],
-            'dbname'   => $GLOBALS['DB_NAME'],
+            'host' => $GLOBALS['DB_HOST'],
+            'port' => $GLOBALS['DB_PORT'],
+            'dbname' => $GLOBALS['DB_NAME'],
             'username' => $GLOBALS['DB_USER'],
             'password' => $GLOBALS['DB_PASS'],
         ]);
+
+        $db->import('model', []);
 
         $db->import('model', [
             ['name' => 'Frank', 'hook' => 10],
@@ -158,9 +166,9 @@ final class DatabaseModelTest extends TestCase
     public function testDatabaseModelDrop()
     {
         $db = new Database([
-            'host'     => $GLOBALS['DB_HOST'],
-            'port'     => $GLOBALS['DB_PORT'],
-            'dbname'   => $GLOBALS['DB_NAME'],
+            'host' => $GLOBALS['DB_HOST'],
+            'port' => $GLOBALS['DB_PORT'],
+            'dbname' => $GLOBALS['DB_NAME'],
             'username' => $GLOBALS['DB_USER'],
             'password' => $GLOBALS['DB_PASS'],
         ]);
@@ -173,6 +181,10 @@ final class DatabaseModelTest extends TestCase
             ['name' => 'Mike', 'hook' => 14],
         ]);
 
+        $db->drop('model', 'not confirm');
+        $models = $db->getModels();
+        $this->assertEquals($models, ['animal', 'model']);
+
         $db->drop('model', 'confirm');
 
         $schema = $db->desc();
@@ -180,14 +192,14 @@ final class DatabaseModelTest extends TestCase
         $this->assertEquals($schema, [
             'animal' => [
                 'field0' => [
-                    'Field'   => 'field0',
-                    'Type'    => 'varchar(255)',
-                    'Null'    => 'YES',
-                    'Key'     => '',
+                    'Field' => 'field0',
+                    'Type' => 'varchar(255)',
+                    'Null' => 'YES',
+                    'Key' => '',
                     'Default' => null,
-                    'Extra'   => '',
-                    'First'   => true,
-                    'Before'  => false,
+                    'Extra' => '',
+                    'First' => true,
+                    'Before' => false,
                 ],
             ],
         ]);
@@ -196,16 +208,16 @@ final class DatabaseModelTest extends TestCase
     public function testDatabaseModelFieldApi()
     {
         $db = new Database([
-            'host'     => $GLOBALS['DB_HOST'],
-            'port'     => $GLOBALS['DB_PORT'],
-            'dbname'   => $GLOBALS['DB_NAME'],
+            'host' => $GLOBALS['DB_HOST'],
+            'port' => $GLOBALS['DB_PORT'],
+            'dbname' => $GLOBALS['DB_NAME'],
             'username' => $GLOBALS['DB_USER'],
             'password' => $GLOBALS['DB_PASS'],
         ]);
 
         $db->apply([
             'albums' => [
-                'title'  => '',
+                'title' => '',
                 'author' => '',
             ],
         ]);
@@ -213,5 +225,71 @@ final class DatabaseModelTest extends TestCase
         $mainField = $db->getPrimaryKeyOrMainField('albums');
 
         $this->assertEquals($mainField, 'title');
+    }
+
+    public function testDatabaseGetModelsApi()
+    {
+        $db = new Database([
+            'host' => $GLOBALS['DB_HOST'],
+            'port' => $GLOBALS['DB_PORT'],
+            'dbname' => $GLOBALS['DB_NAME'],
+            'username' => $GLOBALS['DB_USER'],
+            'password' => $GLOBALS['DB_PASS'],
+        ]);
+
+        $db->apply([
+            'albums' => [
+                'title' => '',
+                'author' => '',
+            ],
+        ]);
+
+        $models = $db->getModels();
+
+        $this->assertEquals($models, ['albums']);
+    }
+
+    public function testDump()
+    {
+        $this->expectOutputRegex('/^<pre.+pre>$/s');
+
+        $db = new Database([
+            'host' => $GLOBALS['DB_HOST'],
+            'port' => $GLOBALS['DB_PORT'],
+            'dbname' => $GLOBALS['DB_NAME'],
+            'username' => $GLOBALS['DB_USER'],
+            'password' => $GLOBALS['DB_PASS'],
+        ]);
+
+        $db->apply([
+            'albums' => [
+                'title' => '',
+                'author' => '',
+            ],
+        ]);
+
+        $db->dump();
+    }
+
+    public function testDump2()
+    {
+        $this->expectOutputRegex('/^<pre.+pre>$/s');
+
+        $db = new Database([
+            'host' => $GLOBALS['DB_HOST'],
+            'port' => $GLOBALS['DB_PORT'],
+            'dbname' => $GLOBALS['DB_NAME'],
+            'username' => $GLOBALS['DB_USER'],
+            'password' => $GLOBALS['DB_PASS'],
+        ]);
+
+        $db->apply([
+            'albums' => [
+                'title' => '',
+                'author' => '',
+            ],
+        ]);
+
+        $db->dump('albums');
     }
 }

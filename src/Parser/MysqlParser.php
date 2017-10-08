@@ -71,14 +71,20 @@ class MysqlParser implements Parser
      *
      * @return type
      */
-    public function parseTable(&$table, &$errors = null)
+    public function parseTable(&$table, &$errors = null, $namespace = '\\')
     {
         // for first field no have before
         $before = false;
 
         // loop throuh fields on table
         foreach ($table as $field => &$notation) {
-            $notation = static::getNotationAspects($notation, $field, $before, $errors);
+            $notation = static::getNotationAspects(
+                $notation,
+                $field,
+                $before,
+                $errors,
+                $namespace
+            );
             $before = $field;
         }
     }
@@ -96,10 +102,11 @@ class MysqlParser implements Parser
         $notation,
         $field = null,
         $before = null,
-        &$errors = null
+        &$errors = null,
+        $namespace = null
     ) {
         $params = null;
-        $type = $this->getNotationType($notation, $params, $errors);
+        $type = $this->getNotationType($notation, $params, $errors, $namespace);
         $aspects = $this->getNotationCommonAspects($field, $before);
 
         // Looking type
@@ -136,11 +143,11 @@ class MysqlParser implements Parser
                 return $this->getNotationAspectsEnum($notation, $aspects);
 
             case 'class':
-                return static::getNotationAspectsClass($notation, $aspects, $params);
+                return static::getNotationAspectsClass($notation, $aspects, $params, $namespace);
             case 'vector':
-                return static::getNotationAspectsVector($notation, $aspects, $params);
+                return static::getNotationAspectsVector($notation, $aspects, $params, $namespace);
             case 'matchs':
-                return static::getNotationAspectsMatchs($notation, $aspects, $params);
+                return static::getNotationAspectsMatchs($notation, $aspects, $params, $namespace);
         }
 
         $errors[] = "irrational notation '{$notation}' by type '{$type}'";

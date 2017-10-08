@@ -191,7 +191,7 @@ trait SchemaApi
     {
         // parse input schema if required
         if ($parse) {
-            $this->getParser()->parseSchemaTable($schema);
+            $this->getParser()->parseTable($schema);
             $table = $this->getPrefix().$table;
         }
 
@@ -474,16 +474,9 @@ trait SchemaApi
      */
     public function info($model = null)
     {
-        //
         $debug = $this->isDebug();
-
-        //
         $this->setDebug(false);
 
-        //
-        $style = 'text-align:center;margin:10px 0;width:800px;';
-
-        //
         if (is_null($model)) {
             $this->info($this->getModels());
         } elseif (is_array($model) && count($model) > 0) {
@@ -496,46 +489,9 @@ trait SchemaApi
                .'</table></pre>';
         } else {
             $desc = $this->desc($model);
-
-            //
-            echo '<pre><table border="1" style="'.$style.'">'
-               .'<tr><th colspan="9">'.$model.'</th></tr>';
-
-            //
-            if (isset($desc[$model])) {
-                $first = key($desc[$model]);
-
-                //
-                echo '<tr><td>&nbsp;</td>';
-
-                //
-                foreach (array_keys($desc[$model][$first]) as $attributeName) {
-                    echo '<th>'.$attributeName.'</th>';
-                }
-
-                //
-                echo '</tr>';
-
-                foreach ($desc[$model] as $field => $attributes) {
-                    echo '<tr><th>'.$field.'</th>';
-
-                    //
-                    foreach ($attributes as $value) {
-                        echo '<td>'.$value.'</td>';
-                    }
-
-                    //
-                    echo '</tr>';
-                }
-            } else {
-                echo '<tr><td>model table not exists</td></tr>';
-            }
-
-            //
-            echo '</table></pre>';
+            Functions::dumpSchema($desc);
         }
 
-        //
         $this->setDebug($debug);
     }
 

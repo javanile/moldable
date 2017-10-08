@@ -19,14 +19,18 @@ trait TypeTrait
      *
      * @return string
      */
-    public function getNotationType($notation, &$params = null, &$errors = null)
-    {
+    public function getNotationType(
+        $notation,
+        &$params = null,
+        &$errors = null,
+        $namespace = null
+    ) {
         $type = gettype($notation);
         $params = null;
 
         switch ($type) {
             case 'string':
-                return $this->getNotationTypeString($notation, $params);
+                return $this->getNotationTypeString($notation, $params, $errors, $namespace);
             case 'array':
                 return $this->getNotationTypeArray($notation, $params);
             case 'integer':
@@ -40,16 +44,17 @@ trait TypeTrait
         }
 
         $errors[] = "irrational type for '{$notation}'";
-
-        // called if detected type not is handled
-        //throw new Exception("No PSEUDOTYPE value for '{$type}' => '{$notation}'");
     }
 
     /**
      * @param type $notation
      */
-    private function getNotationTypeString($notation, &$params)
-    {
+    private function getNotationTypeString(
+        $notation,
+        &$params,
+        &$errors,
+        $namespace = null
+    ) {
         $matchs = null;
         $params = null;
 
@@ -75,8 +80,11 @@ trait TypeTrait
         }
 
         // is class relation
-        if (static::isClass($notation, $matchs)) {
-            $params['Class'] = $matchs[1];
+        if ($this->isClass($notation, $matchs)) {
+            $params['Class'] = $this->applyNamespace($matchs[1], $namespace);
+            if (!class_exists($params['Class'])) {
+                $errors[] = "related class not found '{$params['Class']}' for notation '{$notation}'";
+            }
 
             return 'class';
         }
@@ -133,5 +141,54 @@ trait TypeTrait
         }
 
         return 'schema';
+    }
+
+    /**
+     * Check if notation is a class one-to-one relation.
+     */
+    public function isClass($notation, &$matchs)
+    {
+        return preg_match(
+            '/^<<[ \t]*'.static::REGEX_PHP_CLASS.'[ \t]*>>$/',
+            $notation,
+            $matchs
+        );
+    }
+
+    /**
+     *
+     */
+    public static function pregMatchVector($notation, &$matchs)
+    {
+        //
+        return preg_match(
+            '/^<<'.static::REGEX_PHP_CLASS.'\*>>$/',
+            $notation,
+            $matchs
+        );
+    }
+
+    /**
+     *
+     */
+    public static function pregMatchMatchs($notation, &$matchs)
+    {
+        return preg_match(
+            '/^<<'.static::REGEX_PHP_CLASS.'\*\*>>$/',
+            $notation,
+            $matchs
+        );
+    }
+
+    /**
+     * Apply namespace to a class name.
+     */
+    private function applyNamespace($class, $namespace)
+    {
+        if ($class[0] != '\\' && $namespace) {
+            $class = ($namespace != '\\' ? $namespace . '\\' : '\\' ) . $class;
+        }
+
+        return $class;
     }
 }

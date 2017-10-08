@@ -8,12 +8,12 @@ trait JoinApi
         $fieldFrom = '__FIELD__',
         $fieldTo = null
     ) {
-        //
+        /*
         if (!is_string($fieldFrom)) {
-            trigger_error('Required field to join', E_USER_ERROR);
+            static::error('class', 'required field to join');
         }
+        */
 
-        //
         return [
             'Table'     => static::getTable(),
             'Class'     => static::getClassName(),

@@ -2,11 +2,13 @@
 
 namespace Javanile\Moldable\Tests\Model;
 
+use Javanile\Moldable\Context;
 use Javanile\Moldable\Database;
 use Javanile\Moldable\Readable;
 use Javanile\Moldable\Storable;
 use Javanile\Moldable\Tests\DatabaseTrait;
 use Javanile\Moldable\Tests\Sample\People;
+use Javanile\Moldable\Tests\Sample\EmptySchema;
 use Javanile\Producer;
 use PHPUnit\Framework\TestCase;
 
@@ -54,5 +56,31 @@ final class ClassApiTest extends TestCase
         $model = People::getModel();
 
         $this->assertEquals($model, 'People');
+    }
+
+    public function testMissingDatabase()
+    {
+        $this->expectException('Javanile\\Moldable\\Exception');
+        $this->expectExceptionMessageRegExp('/connection not found/i');
+
+        Context::useLaravel(false);
+
+        $model = new People();
+    }
+
+    public function testMissingSchema()
+    {
+        $this->expectException('Javanile\\Moldable\\Exception');
+        $this->expectExceptionMessageRegExp('/empty schema not allowed/i');
+
+        $db = new Database([
+            'host'     => $GLOBALS['DB_HOST'],
+            'port'     => $GLOBALS['DB_PORT'],
+            'dbname'   => $GLOBALS['DB_NAME'],
+            'username' => $GLOBALS['DB_USER'],
+            'password' => $GLOBALS['DB_PASS'],
+        ]);
+
+        EmptySchema::applySchema();
     }
 }

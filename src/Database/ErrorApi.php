@@ -43,11 +43,12 @@ trait ErrorApi
                 break;
 
             // Trigger a error in executed sql query.
+            /*
             default:
                 $slug = 'Moldable uknown error, ';
                 $backtrace = debug_backtrace();
                 $offset = 0;
-                break;
+                break;*/
         }
 
         Functions::throwException($slug, $exception, $backtrace, $offset);

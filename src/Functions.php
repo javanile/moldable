@@ -44,7 +44,7 @@ class Functions
             echo '<tr><th colspan="' . $n . '">' . $title . '</th></tr>';
         }
 
-        if (is_array($grid[$key])) {
+        if (isset($grid[$key]) && is_array($grid[$key])) {
             echo '<tr>';
             foreach (array_keys($grid[$key]) as $field) {
                 echo '<th>' . $field . '</th>';

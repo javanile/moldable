@@ -56,6 +56,17 @@ trait ClassApi
     }
 
     /**
+     * @return type
+     */
+    protected static function getNamespace()
+    {
+        $class = trim(static::getClass(), '\\');
+        $slash = strrpos($class, '\\');
+
+        return $slash > 0 ? '\\'.substr($class, 0, $slash) : '\\';
+    }
+
+    /**
      * Retrieve static class name.
      *
      * @return type

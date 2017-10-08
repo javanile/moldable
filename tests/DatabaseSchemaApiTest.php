@@ -106,6 +106,10 @@ final class DatabaseSchemaApiTest extends TestCase
                 ],
             ],
         ]);
+
+        $db->alter("new_table", "new_field", "default_value");
+        $models = $db->getModels();
+        $this->assertEquals($models, ['new_table', 'test_table_1', 'test_table_2']);
     }
 
     public function testDatabasePrefix()
@@ -136,5 +140,51 @@ final class DatabaseSchemaApiTest extends TestCase
         $tables = $db->getTables(false);
 
         $this->assertEquals($tables, ["prefix_test_table_1","test_table_1"]);
+    }
+
+    public function testDiffTable()
+    {
+        $db = new Database([
+            'host' => $GLOBALS['DB_HOST'],
+            'port' => $GLOBALS['DB_PORT'],
+            'dbname' => $GLOBALS['DB_NAME'],
+            'username' => $GLOBALS['DB_USER'],
+            'password' => $GLOBALS['DB_PASS'],
+            'debug' => true,
+        ]);
+
+        $db->apply([
+            'test_table_1' => [
+                'test_field_1' => 0,
+            ]
+        ]);
+
+        $sql = $db->diffTable('test_table_1', [
+            'test_field_2' => 0,
+        ]);
+
+        $this->assertEquals(substr($sql[0], 0, 11), 'ALTER TABLE');
+    }
+
+    public function testInfo()
+    {
+        $this->expectOutputRegex('/^<pre.+pre>$/s');
+
+        $db = new Database([
+            'host' => $GLOBALS['DB_HOST'],
+            'port' => $GLOBALS['DB_PORT'],
+            'dbname' => $GLOBALS['DB_NAME'],
+            'username' => $GLOBALS['DB_USER'],
+            'password' => $GLOBALS['DB_PASS'],
+            'debug' => true,
+        ]);
+
+        $db->apply([
+            'test_table_1' => [
+                'test_field_1' => 0,
+            ]
+        ]);
+
+        $db->info(['test_table_1']);
     }
 }

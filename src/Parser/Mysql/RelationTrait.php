@@ -26,7 +26,7 @@ trait RelationTrait
     /**
      *
      */
-    private function getNotationAspectsVector($notation, $aspects, $params)
+    private function getNotationAspectsVector($notation, $aspects, $params, $namespace)
     {
         $aspects['Relation'] = '1:*';
 
@@ -36,47 +36,10 @@ trait RelationTrait
     /**
      *
      */
-    private static function getNotationAspectsMatchs($notation, $aspects, $params)
+    private static function getNotationAspectsMatchs($notation, $aspects, $params, $namespace)
     {
         $aspects['Relation'] = '*:*';
 
         return $aspects;
-    }
-
-    /**
-     *
-     */
-    public static function isClass($notation, &$matchs)
-    {
-        return preg_match(
-            '/^<<[ \t]*'.static::REGEX_PHP_CLASS.'[ \t]*>>$/',
-            $notation,
-            $matchs
-        );
-    }
-
-    /**
-     *
-     */
-    public static function pregMatchVector($notation, &$matchs)
-    {
-        //
-        return preg_match(
-            '/^<<'.static::REGEX_PHP_CLASS.'\*>>$/',
-            $notation,
-            $matchs
-        );
-    }
-
-    /**
-     *
-     */
-    public static function pregMatchMatchs($notation, &$matchs)
-    {
-        return preg_match(
-            '/^<<'.static::REGEX_PHP_CLASS.'\*\*>>$/',
-            $notation,
-            $matchs
-        );
     }
 }

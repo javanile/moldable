@@ -43,5 +43,8 @@ trait DefaultDatabaseTrait
     protected function tearDown()
     {
         $this->pdo = null;
+
+        Database::resetDefault();
+        Storable::resetAllClass();
     }
 }

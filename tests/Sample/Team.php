@@ -4,21 +4,13 @@ namespace Javanile\Moldable\Tests\Sample;
 
 use Javanile\Moldable\Storable;
 
-final class Player extends Storable
+final class Team extends Storable
 {
     public $id = self::PRIMARY_KEY;
 
     public $name = '';
 
-    public $surname = '';
-
-    public $age = 0;
-
-    public $leader = false;
+    public $position = 0;
 
     public $score = .0;
-
-    public $time = self::TIME;
-
-    public $date = self::DATE;
 }

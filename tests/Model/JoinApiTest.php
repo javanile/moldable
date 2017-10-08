@@ -3,7 +3,7 @@
 namespace Javanile\Moldable\Tests\Model;
 
 use Javanile\Moldable\Database;
-use Javanile\Moldable\Tests\DatabaseTrait;
+use Javanile\Moldable\Tests\DefaultDatabaseTrait;
 use Javanile\Moldable\Tests\Sample\Address;
 use Javanile\Moldable\Tests\Sample\People;
 use Javanile\Producer;
@@ -13,18 +13,11 @@ Producer::addPsr4(['Javanile\\Moldable\\Tests\\' => __DIR__.'/../']);
 
 final class JoinApiTest extends TestCase
 {
-    use DatabaseTrait;
+    use DefaultDatabaseTrait;
 
     public function testJoinApi()
     {
-        $db = new Database([
-            'host'     => $GLOBALS['DB_HOST'],
-            'port'     => $GLOBALS['DB_PORT'],
-            'dbname'   => $GLOBALS['DB_NAME'],
-            'username' => $GLOBALS['DB_USER'],
-            'password' => $GLOBALS['DB_PASS'],
-            'prefix'   => 'prefix_',
-        ]);
+        $this->db->setPrefix('prefix_');
 
         $address = new Address();
 
@@ -36,9 +29,9 @@ final class JoinApiTest extends TestCase
         $frank = new People();
 
         $frank->store([
-            'name'    => 'Frank',
+            'name' => 'Frank',
             'surname' => 'White',
-            'age'     => 18,
+            'age' => 18,
             'address' => $address->id,
         ]);
 
@@ -49,10 +42,10 @@ final class JoinApiTest extends TestCase
 
         $this->assertEquals($results, [
             0 => [
-                'name'              => 'Frank',
-                'address__id'       => '1',
-                'address__route'    => 'Rt. Cavallo',
-                'address__city'     => '',
+                'name' => 'Frank',
+                'address__id' => '1',
+                'address__route' => 'Rt. Cavallo',
+                'address__city' => '',
                 'address__zip_code' => '0',
             ],
         ]);

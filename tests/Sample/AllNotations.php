@@ -20,6 +20,8 @@ final class AllNotations extends Storable
 
     public $float = 3.14;
 
+    public $double = self::DOUBLE;
+
     public $enumWithNull = [null, 'A', 'B', 'C'];
 
     public $enumNotation = '<<["a", "b", "c"]>>';

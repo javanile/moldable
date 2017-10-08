@@ -38,7 +38,7 @@ trait SchemaApi
         $schema = static::getSchema();
 
         if (!$schema) {
-            static::error('empty class model');
+            static::error('class', 'empty schema not allowed');
         }
 
         $table = static::getTable();
@@ -70,7 +70,7 @@ trait SchemaApi
                 }
             }
 
-            $parser->parseTable($schema, $errors);
+            $parser->parseTable($schema, $errors, static::getNamespace());
 
             if ($errors) {
                 static::error('class', $errors[0]);

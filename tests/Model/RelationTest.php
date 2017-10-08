@@ -29,4 +29,16 @@ final class RelationTest extends TestCase
         $desc = Player::desc();
         $this->assertEquals($desc['team']['Type'], 'int(11)');
     }
+
+    public function testInsertRelation()
+    {
+        $player = new Player();
+        $player->team = [ 'name' => 'Juventus', 'score' => 5.5 ];
+        $player->store();
+
+        $team = Team::load(1);
+
+        $this->assertEquals($team->name, 'Juventus');
+        $this->assertEquals($team->score, 5.5);
+    }
 }

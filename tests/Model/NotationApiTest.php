@@ -27,6 +27,7 @@ final class NotationApiTest extends TestCase
         $this->assertEquals('', $object->varchar);
         $this->assertEquals('', $object->text);
         $this->assertEquals(3.14, $object->float);
+        $this->assertEquals(0, $object->double);
         $this->assertEquals(null, $object->enumWithNull);
         $this->assertEquals('a', $object->enumNotation);
         $this->assertEquals('A', $object->enum);
