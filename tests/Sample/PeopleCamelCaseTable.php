@@ -2,8 +2,6 @@
 
 namespace Javanile\Moldable\Tests\Sample;
 
-use Javanile\Moldable\Storable;
-
 final class PeopleCamelCaseTable extends CamelCaseTable
 {
     public static $table = 'People';

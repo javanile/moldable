@@ -2,8 +2,6 @@
 
 namespace Javanile\Moldable\Tests\Sample;
 
-use Javanile\Moldable\Storable;
-
 final class PeopleUnderscoreTable extends UnderscoreTable
 {
     public static $table = 'People';

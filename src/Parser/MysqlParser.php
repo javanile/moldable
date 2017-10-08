@@ -9,8 +9,6 @@
 
 namespace Javanile\Moldable\Parser;
 
-use Javanile\Moldable\Exception;
-
 class MysqlParser implements Parser
 {
     use Mysql\KeyTrait;
@@ -67,7 +65,8 @@ class MysqlParser implements Parser
     /**
      * Parse table schema to sanitize end explod implicit info.
      *
-     * @param type $schema
+     * @param type  $schema
+     * @param mixed $namespace
      *
      * @return type
      */
@@ -92,9 +91,10 @@ class MysqlParser implements Parser
     /**
      * Parse notation of a field.
      *
-     * @param type $notation
-     * @param type $field
-     * @param type $before
+     * @param type       $notation
+     * @param type       $field
+     * @param type       $before
+     * @param null|mixed $namespace
      *
      * @return string
      */
@@ -155,6 +155,9 @@ class MysqlParser implements Parser
 
     /**
      * Get common or default aspects.
+     *
+     * @param mixed $field
+     * @param mixed $before
      */
     private function getNotationCommonAspects($field, $before)
     {

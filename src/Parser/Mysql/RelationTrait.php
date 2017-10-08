@@ -13,6 +13,10 @@ trait RelationTrait
 {
     /**
      * Get notation aspects for class.
+     *
+     * @param mixed $notation
+     * @param mixed $aspects
+     * @param mixed $params
      */
     private function getNotationAspectsClass($notation, $aspects, $params)
     {
@@ -24,7 +28,10 @@ trait RelationTrait
     }
 
     /**
-     *
+     * @param mixed $notation
+     * @param mixed $aspects
+     * @param mixed $params
+     * @param mixed $namespace
      */
     private function getNotationAspectsVector($notation, $aspects, $params, $namespace)
     {
@@ -34,7 +41,10 @@ trait RelationTrait
     }
 
     /**
-     *
+     * @param mixed $notation
+     * @param mixed $aspects
+     * @param mixed $params
+     * @param mixed $namespace
      */
     private static function getNotationAspectsMatchs($notation, $aspects, $params, $namespace)
     {

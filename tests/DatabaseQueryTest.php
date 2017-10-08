@@ -14,7 +14,7 @@ final class DatabaseQueryTest extends TestCase
 
     public function testDatabaseRawQuery()
     {
-        if (file_exists($log = __DIR__ . '/database.log')) {
+        if (file_exists($log = __DIR__.'/database.log')) {
             unlink($log);
         }
 

@@ -10,6 +10,7 @@ trait DebugApi
      * @param type  $trace
      * @param type  $error
      * @param mixed $exception
+     * @param mixed $type
      */
     public static function error($type, $exception)
     {
@@ -37,6 +38,8 @@ trait DebugApi
 
     /**
      * Set debug mode for model class.
+     *
+     * @param mixed $flag
      */
     public static function setDebug($flag)
     {

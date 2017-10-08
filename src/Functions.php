@@ -31,23 +31,24 @@ class Functions
     }
 
     /**
-     * @param type $title
-     * @param type $content
+     * @param type  $title
+     * @param type  $content
+     * @param mixed $grid
      */
     public static function dumpGrid($grid, $title = null)
     {
         $key = key($grid);
-        $n = count($grid) > 0 ? count((array)$grid[$key]) : 1;
+        $n = count($grid) > 0 ? count((array) $grid[$key]) : 1;
 
         echo '<pre><table border="1" style="text-align:center;margin-bottom:1px;"><thead>';
         if ($title) {
-            echo '<tr><th colspan="' . $n . '">' . $title . '</th></tr>';
+            echo '<tr><th colspan="'.$n.'">'.$title.'</th></tr>';
         }
 
         if (isset($grid[$key]) && is_array($grid[$key])) {
             echo '<tr>';
             foreach (array_keys($grid[$key]) as $field) {
-                echo '<th>' . $field . '</th>';
+                echo '<th>'.$field.'</th>';
             }
             echo '</tr>';
         }
@@ -68,7 +69,7 @@ class Functions
     }
 
     /**
-     *
+     * @param mixed $schema
      */
     public static function dumpSchema($schema)
     {
@@ -127,14 +128,14 @@ class Functions
         $info = is_object($exception) ? $exception->getMessage() : $exception;
         //$code = is_object($exception) ? $exception->getCode() : 0;
 
-        $message = $slug . $info;
+        $message = $slug.$info;
         if (isset($trace[$offset]['function'])) {
             $message .= ' in method '."'->".$trace[$offset]['function']."()'"
                 .' called at '.$trace[$offset]['file']
                 .' on line '.$trace[$offset]['line'];
         } else {
             $message .= ' declared at '.$trace[$offset]['file'];
-                //.' on line '.$trace[$offset]['line'];
+            //.' on line '.$trace[$offset]['line'];
         }
 
         throw new Exception($message);

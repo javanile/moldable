@@ -45,6 +45,7 @@ trait SocketApi
      * Return current database prefix used.
      *
      * @param null|mixed $table
+     * @param mixed      $prefix
      *
      * @return type
      */
@@ -174,6 +175,8 @@ trait SocketApi
     /**
      * Get array with current tables on database.
      *
+     * @param mixed $matchPrefix
+     *
      * @return array
      */
     public function getTables($matchPrefix = true)
@@ -182,7 +185,7 @@ trait SocketApi
             $prefix = str_replace('_', '\\_', $this->getPrefix());
             $sql = "SHOW TABLES LIKE '{$prefix}%'";
         } else {
-            $sql = "SHOW TABLES";
+            $sql = 'SHOW TABLES';
         }
 
         $tables = $this->getValues($sql);

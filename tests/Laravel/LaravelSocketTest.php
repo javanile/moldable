@@ -108,7 +108,7 @@ final class LaravelSocketTest extends TestCase
 
     public function testOthers()
     {
-        $quotedString = People::getDatabase()->quote("Hello World!");
+        $quotedString = People::getDatabase()->quote('Hello World!');
         $this->assertEquals($quotedString, "'Hello World!'");
     }
 }

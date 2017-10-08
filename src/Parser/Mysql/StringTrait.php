@@ -13,6 +13,9 @@ trait StringTrait
 {
     /**
      * Get notaion aspect for string.
+     *
+     * @param mixed $notation
+     * @param mixed $aspects
      */
     private function getNotationAspectsString($notation, $aspects)
     {

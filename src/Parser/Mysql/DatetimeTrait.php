@@ -56,6 +56,7 @@ trait DatetimeTrait
      * printout database status/info.
      *
      * @param mixed $date
+     * @param mixed $time
      */
     public static function parseTime($time)
     {

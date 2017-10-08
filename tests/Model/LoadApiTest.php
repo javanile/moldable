@@ -2,7 +2,6 @@
 
 namespace Javanile\Moldable\Tests\Model;
 
-use Javanile\Moldable\Database;
 use Javanile\Moldable\Tests\DefaultDatabaseTrait;
 use Javanile\Moldable\Tests\Sample\Noindexmodel;
 use Javanile\Moldable\Tests\Sample\People;
@@ -46,13 +45,13 @@ final class LoadApiTest extends TestCase
         ]);
 
         $frank = People::load([
-            'name' => 'Frank'
+            'name' => 'Frank',
         ]);
 
         $this->assertEquals($frank->age, 18);
 
         $anand = People::load([
-            'where' => "surname LIKE '%lac%'"
+            'where' => "surname LIKE '%lac%'",
         ]);
 
         $this->assertEquals($anand->age, 20);

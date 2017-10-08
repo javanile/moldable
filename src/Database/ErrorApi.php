@@ -17,6 +17,7 @@ trait ErrorApi
      * Trigger a error.
      *
      * @param object $exception Exception catched with try-catch
+     * @param mixed  $type
      */
     public function error($type, $exception)
     {

@@ -13,6 +13,9 @@ trait EnumTrait
 {
     /**
      * Get notation aspects for enum.
+     *
+     * @param mixed $notation
+     * @param mixed $aspects
      */
     private function getNotationAspectsEnum($notation, $aspects)
     {
@@ -41,6 +44,8 @@ trait EnumTrait
 
     /**
      * Parse enum if is inside a string.
+     *
+     * @param mixed $notation
      */
     private function parseEnumNotation($notation)
     {

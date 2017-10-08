@@ -188,9 +188,9 @@ trait LoadApi
 
         // prepare SQL query
         $sql = "SELECT {$selectFields} "
-             . "FROM {$table} AS {$alias} {$join} "
-             . "WHERE {$where} "
-             . 'LIMIT 1';
+             ."FROM {$table} AS {$alias} {$join} "
+             ."WHERE {$where} "
+             .'LIMIT 1';
 
         // fetch data on database and return it
         $result = static::fetch(

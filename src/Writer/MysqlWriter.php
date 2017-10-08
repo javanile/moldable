@@ -259,7 +259,7 @@ class MysqlWriter implements Writer
     }
 
     /**
-     *
+     * @param mixed $whereArray
      */
     public function whereByArray($whereArray)
     {
@@ -269,7 +269,7 @@ class MysqlWriter implements Writer
     }
 
     /**
-     *
+     * @param mixed $order
      */
     public function orderBy($order)
     {
@@ -278,6 +278,7 @@ class MysqlWriter implements Writer
             foreach ($order as $field => $asc) {
                 $sql[] = '`'.$field.'`'.' '.$asc;
             }
+
             return implode(', ', $sql);
         }
 

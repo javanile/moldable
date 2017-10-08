@@ -10,7 +10,6 @@
 namespace Javanile\Moldable\Model;
 
 use Javanile\Moldable\Database;
-use Javanile\Moldable\Exception;
 
 trait SchemaApi
 {
