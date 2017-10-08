@@ -484,7 +484,7 @@ trait SchemaApi
                 $this->info($m);
             }
         } elseif (is_array($model) && count($model) == 0) {
-            echo '<pre><table border="1" style="'.$style.'">'
+            echo '<pre><table border="1">'
                .'<tr><th>No database tables</th></tr></table></pre>'
                .'</table></pre>';
         } else {

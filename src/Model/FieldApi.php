@@ -81,7 +81,7 @@ trait FieldApi
     /**
      * Retrieve primary key field name.
      *
-     * @return bool
+     * @return string
      */
     public static function getPrimaryKey()
     {
@@ -92,8 +92,8 @@ trait FieldApi
             $key = null;
             $schema = static::getSchema();
 
-            foreach ($schema as $field => &$attributes) {
-                if ($attributes['Key'] == 'PRI') {
+            foreach ($schema as $field => $aspects) {
+                if ($aspects['Key'] == 'PRI') {
                     $key = $field;
                     break;
                 }
@@ -123,7 +123,7 @@ trait FieldApi
     /**
      * Retrieve primary key field name.
      *
-     * @return bool
+     * @return string
      */
     public static function getMainField()
     {
@@ -158,6 +158,9 @@ trait FieldApi
         return static::getClassAttribute($attribute);
     }
 
+    /**
+     * @return mixed
+     */
     public function getMainFieldValue()
     {
         //
@@ -182,7 +185,7 @@ trait FieldApi
     /**
      * Retrieve primary key field name.
      *
-     * @return bool
+     * @return array
      */
     protected static function getDefaultFields()
     {
@@ -214,6 +217,9 @@ trait FieldApi
         return static::getClassAttribute($attribute);
     }
 
+    /**
+     *
+     */
     public static function getFieldValues($field)
     {
         //
@@ -251,6 +257,9 @@ trait FieldApi
         return static::getClassAttribute($attribute);
     }
 
+/**
+ *
+ */
     protected static function getAllFieldsValues()
     {
         $attribute = 'fields-values';
@@ -265,6 +274,9 @@ trait FieldApi
         return static::getClassAttribute($attribute);
     }
 
+    /**
+     *
+     */
     protected static function getAllFields()
     {
         return array_keys(get_class_vars(static::getClass()));

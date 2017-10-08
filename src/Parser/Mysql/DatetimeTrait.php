@@ -41,6 +41,9 @@ trait DatetimeTrait
         return $aspects;
     }
 
+    /**
+     *
+     */
     private static function getNotationAspectsTimestamp(
         $notation,
         $aspects

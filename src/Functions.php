@@ -38,11 +38,11 @@ class Functions
     public static function dumpGrid($grid, $title = null)
     {
         $key = key($grid);
-        $n = count($grid) > 0 ? count((array) $grid[$key]) : 1;
+        $colspan = count($grid) > 0 ? count((array) $grid[$key]) : 1;
 
         echo '<pre><table border="1" style="text-align:center;margin-bottom:1px;"><thead>';
         if ($title) {
-            echo '<tr><th colspan="'.$n.'">'.$title.'</th></tr>';
+            echo '<tr><th colspan="'.$colspan.'">'.$title.'</th></tr>';
         }
 
         if (isset($grid[$key]) && is_array($grid[$key])) {

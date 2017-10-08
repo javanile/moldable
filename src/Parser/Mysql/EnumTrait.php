@@ -22,7 +22,7 @@ trait EnumTrait
         //
         $enum = $this->parseEnumNotation($notation);
         if (!$enum) {
-            return $this->getNotationAttributes('', $field, $before);
+            return $aspects;
         }
 
         //

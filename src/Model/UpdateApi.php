@@ -41,7 +41,6 @@ trait UpdateApi
         $params = [];
         $setArray = [];
         $whereArray = [];
-        $valuesArray = [];
 
         foreach ($query as $field => $value) {
             $token = ':'.$field.'0';
