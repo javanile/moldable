@@ -102,7 +102,6 @@ $db->apply([
 
 ## Talk about
  - https://www.reddit.com/r/PHP/comments/6jsm2d/the_only_php_mysql_orm_for_continuous_delivery/
- - http://www.php-forum.com/phpforum/viewtopic.php?f=30&t=26732&p=4413131&hilit=schemadb#p4413131
  - https://www.reddit.com/r/PHP/comments/3okj7x/schemadb_a_modern_and_coincise_database/?ref=readnext_4
  - https://www.reddit.com/r/PHP/comments/427zvg/schemadb_adapt_schema_of_mysql_db_based_on_class/
  - http://fudforum.org/forum/index.php?S=Google%20%5BBot%5D&t=msg&th=123561
