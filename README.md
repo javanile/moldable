@@ -109,6 +109,7 @@ $db->apply([
  - http://forums.phpfreaks.com/topic/300920-manipulate-database-schema-with-orm/
  - http://www.giorgiotave.it/forum/php-mysql/241550-manipolare-lo-schema-del-database.html#post1205019
  - http://www.iprogrammatori.it/forum-programmazione/php/manipolare-schema-del-database-t27275.html
+ - http://ctolib.com/javanile-moldable.html
 
 ## Roadmap
  - Support to MongoDB for trasparent switch MySQL/MongoDB 
