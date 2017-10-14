@@ -38,7 +38,7 @@ use Javanile\Moldable\Database;
 $db = new Database([
     'host'     => 'localhost',
     'dbname'   => 'db_marketing',
-    'usernane' => 'root',
+    'username' => 'root',
     'password' => 'p4ssw0rd',
     'prefix'   => 'prefix_',
 ]);
@@ -97,7 +97,7 @@ $db->apply([
         'name'  => '',			// empty string define field as VARCHAR	
         'price' => .0,			// for float number init field with point-zero ".0"	
     ],
-));
+]);
 ```
 
 ## Talk about
