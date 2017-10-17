@@ -90,6 +90,7 @@ trait ClassApi
      * Class have attribute by name.
      *
      * @param mixed $attribute
+     *
      * @return bool
      */
     protected static function hasClassAttribute($attribute)
@@ -150,6 +151,7 @@ trait ClassApi
      * Check if have global attribute.
      *
      * @param mixed $attribute
+     *
      * @return bool
      */
     protected static function hasClassGlobal($attribute)
@@ -161,6 +163,7 @@ trait ClassApi
      * Check if called class have configuration value.
      *
      * @param mixed $key
+     *
      * @return bool
      */
     protected static function hasClassConfig($key)

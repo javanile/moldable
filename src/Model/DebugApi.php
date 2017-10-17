@@ -9,7 +9,9 @@ trait DebugApi
     /**
      * @param mixed $type
      * @param mixed $exception
+     *
      * @throws \Javanile\Moldable\Exception
+     *
      * @internal param type $trace
      * @internal param type $error
      */
