@@ -5,3 +5,4 @@ producer.log
 moldable.log
 composer.lock
 tests/database.log
+.idea/
