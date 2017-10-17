@@ -1,6 +1,6 @@
 <?php
 /**
- * Trait with utility methods to handle errors.
+ * Trait with utility methods to work on tables.
  *
  * PHP version 5.6
  *

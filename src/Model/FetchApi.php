@@ -1,6 +1,6 @@
 <?php
 /**
- * Trait with utility methods to handle errors.
+ * Trait to fetch database.
  *
  * PHP version 5.6
  *
@@ -14,12 +14,15 @@ trait FetchApi
     /**
      * Fetch data from db.
      *
-     * @param type       $array
      * @param mixed      $sql
      * @param null|mixed $params
      * @param mixed      $singleRecord
      * @param mixed      $singleValue
      * @param mixed      $casting
+     *
+     * @return null|void
+     *
+     * @internal param type $array
      */
     protected static function fetch(
         $sql,
@@ -42,12 +45,13 @@ trait FetchApi
     /**
      * Fetch data from db.
      *
-     * @param type       $array
      * @param mixed      $sql
      * @param null|mixed $params
      * @param mixed      $singleRecord
      * @param mixed      $singleValue
      * @param mixed      $casting
+     *
+     * @internal param type $array
      */
     protected static function unsafeFetch(
         $sql,

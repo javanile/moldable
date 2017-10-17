@@ -1,6 +1,6 @@
 <?php
 /**
- * Class that handle a connection with database.
+ * Trait that handle the delete operation.
  *
  * PHP version 5.6
  *
