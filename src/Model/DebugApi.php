@@ -7,10 +7,11 @@ use Javanile\Moldable\Functions;
 trait DebugApi
 {
     /**
-     * @param type  $trace
-     * @param type  $error
-     * @param mixed $exception
      * @param mixed $type
+     * @param mixed $exception
+     * @throws \Javanile\Moldable\Exception
+     * @internal param type $trace
+     * @internal param type $error
      */
     public static function error($type, $exception)
     {
@@ -57,7 +58,7 @@ trait DebugApi
     /**
      * Print-out list of element.
      *
-     * @param type $list
+     * @param string $list
      */
     public static function dump($list = 'all')
     {

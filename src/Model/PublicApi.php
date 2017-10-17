@@ -12,7 +12,7 @@ namespace Javanile\Moldable\Model;
 trait PublicApi
 {
     /**
-     * Connectio Model-Class to database.
+     * Connect Model-Class to database.
      *
      * @param type $database
      */
@@ -48,8 +48,6 @@ trait PublicApi
      * Encode/manipulate field on object
      * based on encode_ static method of class.
      *
-     * @param type $$values
-     *
      * @return type
      */
     public function encode()
@@ -58,8 +56,6 @@ trait PublicApi
     }
 
     /**
-     * @param type $values
-     *
      * @return type
      */
     public function decode()
