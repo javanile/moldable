@@ -19,7 +19,9 @@ trait FetchApi
      * @param mixed      $singleRecord
      * @param mixed      $singleValue
      * @param mixed      $casting
+     *
      * @return null|void
+     *
      * @internal param type $array
      */
     protected static function fetch(
@@ -48,6 +50,7 @@ trait FetchApi
      * @param mixed      $singleRecord
      * @param mixed      $singleValue
      * @param mixed      $casting
+     * 
      * @internal param type $array
      */
     protected static function unsafeFetch(
