@@ -102,6 +102,7 @@ $db->apply([
 
 ## Talk about
  - https://medium.com/@billmike1994/getting-started-with-moldable-an-orm-for-continuous-migration-d4be845b7c65
+ - https://github.com/nazneen1/follow/wiki/Utilize-Javanile--php-tool-to-connect-any-database
  - https://www.reddit.com/r/PHP/comments/6jsm2d/the_only_php_mysql_orm_for_continuous_delivery/
  - https://www.reddit.com/r/PHP/comments/3okj7x/schemadb_a_modern_and_coincise_database/?ref=readnext_4
  - https://www.reddit.com/r/PHP/comments/427zvg/schemadb_adapt_schema_of_mysql_db_based_on_class/
