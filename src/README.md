@@ -1,1 +1,1 @@
-## Package: \Javanile\Moldable
+## Package: Javanile\Moldable
