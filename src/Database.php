@@ -125,13 +125,13 @@ class Database implements Notations
         $this->_parser = new Parser\MysqlParser();
         $this->_writer = new Writer\MysqlWriter();
 
-        if (isset($args['debug'])) {
+        if (isset($args['debug']) && $args['debug']) {
             $this->setDebug($args['debug']);
         }
 
         // Logger
         $logFile = isset($args['log']) ? $args['log'] : getcwd().'/moldable.log';
-        $logFlag = isset($args['debug']) ? Logger::INFO : Logger::ERROR;
+        $logFlag = isset($args['debug']) && $args['debug'] ? Logger::INFO : Logger::ERROR;
         $this->_logger = new Logger('name');
         $this->_logger->pushHandler(new StreamHandler($logFile, $logFlag));
 
@@ -155,6 +155,11 @@ class Database implements Notations
             static::$_default = new self(['socket' => 'Laravel']);
 
             return static::$_default;
+        }
+
+        // check if registered container
+        if (Context::checkContainer()) {
+            return Context::getContainerDatabase();
         }
     }
 

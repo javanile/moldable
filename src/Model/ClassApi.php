@@ -17,7 +17,7 @@ trait ClassApi
      * @var type
      */
     protected static $__global = [
-        'schema-excluded-fields' => [
+        'exclude-fields' => [
             '__global',
             '__attrib',
             '__config',

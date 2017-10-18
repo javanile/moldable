@@ -173,6 +173,9 @@ trait FieldApi
             : null;
     }
 
+    /**
+     * Get PrimaryKey name or MainField name.
+     */
     protected static function getPrimaryKeyOrMainField()
     {
         //
@@ -180,6 +183,14 @@ trait FieldApi
 
         //
         return $key ? $key : static::getMainField();
+    }
+
+    /**
+     * Get list of Class-Model fields use to store or read data.
+     */
+    public static function getModelFields()
+    {
+        return static::getSchemaFields();
     }
 
     /**
@@ -275,6 +286,7 @@ trait FieldApi
     }
 
     /**
+     * Get all fields of called class.
      *
      */
     protected static function getAllFields()

@@ -18,6 +18,7 @@ trait DebugApi
     public static function error($type, $exception)
     {
         $reflector = new \ReflectionClass(static::getClass());
+        $offset = 0;
 
         switch ($type) {
             case 'class':
@@ -26,13 +27,11 @@ trait DebugApi
                     'file' => $reflector->getFileName(),
                     'line' => $reflector->getStartLine(),
                 ]];
-                $offset = 0;
                 break;
 
-            case 'database':
-                $slug = 'Moldable database error, ';
-                $backtrace = debug_backtrace();
-                $offset = 0;
+            case 'connection':
+                $slug = 'Moldable connection error, ';
+                $backtrace = null;
                 break;
         }
 

@@ -14,6 +14,8 @@ use Javanile\Moldable\Database;
 trait SchemaApi
 {
     /**
+     * Apply schema model related.
+     *
      * @return type
      */
     public static function applySchema()
@@ -29,10 +31,6 @@ trait SchemaApi
         }
 
         $database = static::getDatabase();
-
-        if (!$database) {
-            static::error('database not found', debug_backtrace(), 2);
-        }
 
         $schema = static::getSchema();
 
@@ -150,6 +148,9 @@ trait SchemaApi
         return static::getClassAttribute($attribute);
     }
 
+    /**
+     * Describe model.
+     */
     public static function desc()
     {
         static::applySchema();
@@ -173,7 +174,10 @@ trait SchemaApi
             $database = Database::getDefault();
 
             if (!$database) {
-                static::error('database', 'database connection not found');
+                static::error(
+                    'connection',
+                    'database not found, instantiate one or register a dependency injection container'
+                );
             }
 
             static::setClassAttribute($attribute, $database);
@@ -191,10 +195,8 @@ trait SchemaApi
      */
     public static function setDatabase($database)
     {
-        //
         $attribute = 'database';
 
-        //
         static::setClassAttribute($attribute, $database);
     }
 }
