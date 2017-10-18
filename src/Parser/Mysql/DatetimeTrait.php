@@ -42,7 +42,8 @@ trait DatetimeTrait
     }
 
     /**
-     *
+     * @param mixed $notation
+     * @param mixed $aspects
      */
     private static function getNotationAspectsTimestamp(
         $notation,

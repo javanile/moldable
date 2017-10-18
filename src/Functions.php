@@ -124,16 +124,15 @@ class Functions
         $exception,
         $trace = null,
         $offset = 0
-    )
-    {
+    ) {
         $info = is_object($exception) ? $exception->getMessage() : $exception;
         //$code = is_object($exception) ? $exception->getCode() : 0;
 
-        $message = $slug . $info;
+        $message = $slug.$info;
         if (isset($trace[$offset]['function'])) {
-            $message .= ' in method ' . "'->" . $trace[$offset]['function'] . "()'"
-                . ' called at ' . $trace[$offset]['file']
-                . ' on line ' . $trace[$offset]['line'];
+            $message .= ' in method '."'->".$trace[$offset]['function']."()'"
+                .' called at '.$trace[$offset]['file']
+                .' on line '.$trace[$offset]['line'];
         } elseif ($trace) {
             $message .= ' declared at '.$trace[$offset]['file'];
             //.' on line '.$trace[$offset]['line'];
