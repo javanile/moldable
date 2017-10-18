@@ -1,9 +1,9 @@
-# javanile/moldable
+# javanile/moldable [![SensioLabsInsight](https://insight.sensiolabs.com/projects/84ccbc03-57cc-4afb-9171-eefa7052cd77/mini.png)](https://insight.sensiolabs.com/projects/84ccbc03-57cc-4afb-9171-eefa7052cd77)
+
 [![StyleCI](https://styleci.io/repos/43810715/shield?branch=master)](https://styleci.io/repos/43810715)
 [![Code Climate](https://codeclimate.com/github/javanile-bot/moldable/badges/gpa.svg)](https://codeclimate.com/github/javanile-bot/moldable)
 [![Build Status](https://travis-ci.org/javanile-bot/moldable.svg?branch=master)](https://travis-ci.org/javanile-bot/moldable)
 [![Test Coverage](https://codeclimate.com/github/javanile-bot/moldable/badges/coverage.svg)](https://codeclimate.com/github/javanile-bot/moldable/coverage)
-[![SensioLabsInsight](https://insight.sensiolabs.com/projects/84ccbc03-57cc-4afb-9171-eefa7052cd77/mini.png)](https://insight.sensiolabs.com/projects/84ccbc03-57cc-4afb-9171-eefa7052cd77)
 
 Moldable is an abstraction layer to manage MySQL database 
 with improved function to alter-state and manipulate database schema.
