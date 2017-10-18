@@ -103,8 +103,8 @@ $db->apply([
 ## Setup for testing
 To test the library, follow these steps:
  1. Run a local MySQL database
- 2. Copy file `phpunit.xml.dist` to `phpunpit.xml`
- 3. Update `phpunpit.xml` with database connection paramiters
+ 2. Copy file `phpunit.xml.dist` to `phpunit.xml`
+ 3. Update `phpunit.xml` with database connection paramiters
  4. Run `./vendor/bin/phpunit` from project directory
 
 ## Talk about
