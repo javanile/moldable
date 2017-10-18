@@ -229,7 +229,7 @@ trait FieldApi
     }
 
     /**
-     *
+     * @param mixed $field
      */
     public static function getFieldValues($field)
     {
@@ -268,9 +268,9 @@ trait FieldApi
         return static::getClassAttribute($attribute);
     }
 
-/**
- *
- */
+    /**
+     *
+     */
     protected static function getAllFieldsValues()
     {
         $attribute = 'fields-values';
@@ -287,7 +287,6 @@ trait FieldApi
 
     /**
      * Get all fields of called class.
-     *
      */
     protected static function getAllFields()
     {

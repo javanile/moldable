@@ -45,6 +45,7 @@ final class Context
      * Apply use laravel flag.
      *
      * @param mixed $flag
+     * @param mixed $container
      */
     public static function registerContainer($container)
     {
@@ -67,4 +68,3 @@ final class Context
         return static::$_container->db;
     }
 }
-
