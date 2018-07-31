@@ -62,7 +62,7 @@ trait ManageApi
     public static function insert($values)
     {
         // Make object and insert into DB
-        $object = static::make($values);
+        $object = static::create($values);
         $object->storeInsert();
 
         return $object;
@@ -78,7 +78,7 @@ trait ManageApi
         $object = static::exists($query);
 
         if (!$object) {
-            $object = static::make($query);
+            $object = static::create($query);
             $object->store();
         }
 
@@ -96,7 +96,7 @@ trait ManageApi
         $object = static::exists($query);
 
         if (!$object) {
-            $object = static::make($query);
+            $object = static::create($query);
         }
 
         $object->store($values);

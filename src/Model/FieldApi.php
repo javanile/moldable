@@ -48,7 +48,7 @@ trait FieldApi
             if (isset($aspects['Class']) && $aspects['Relation'] == '1:1') {
                 $class = $aspects['Class'];
 
-                $this->{$field} = $class::make(
+                $this->{$field} = $class::create(
                     $values,
                     $map,
                     $prefix.$field.'__'

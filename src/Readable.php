@@ -33,6 +33,7 @@ class Readable implements Notations
     public static $__config = [
         'adamant'                => true,
         'table-name-conventions' => null,
+        'error-mode'             => 'fatal',
     ];
 
     public function __construct()

@@ -30,17 +30,13 @@ trait PublicApi
      *
      * @return \static
      */
-    public static function make($values = null, $map = null, $prefix = null)
+    public static function create($values = null, $map = null, $prefix = null)
     {
-        //
         $object = new static();
-
-        //
         if ($values) {
             $object->fillSchemaFields($values, $map, $prefix);
         }
 
-        //
         return $object;
     }
 

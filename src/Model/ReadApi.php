@@ -298,7 +298,7 @@ trait ReadApi
 
         $row = static::getDatabase()->getRow($sql, $valuesArray);
 
-        return $row ? self::make($row) : false;
+        return $row ? self::create($row) : false;
     }
 
     /**
@@ -309,7 +309,7 @@ trait ReadApi
     public static function ping($query)
     {
         $exist = static::exists($query);
-        //$query = $exist ? $exist : static::make($query);
+        //$query = $exist ? $exist : static::create($query);
 
         return $exist;
     }

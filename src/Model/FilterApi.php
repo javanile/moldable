@@ -21,7 +21,7 @@ trait FilterApi
     public static function filter($values, $filter, $map = null)
     {
         //
-        $object = is_array($values) ? static::make($values, $map) : $values;
+        $object = is_array($values) ? static::create($values, $map) : $values;
         $methods = static::getClassMethodsByPrefix($filter);
 
         //

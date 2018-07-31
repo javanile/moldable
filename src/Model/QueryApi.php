@@ -50,7 +50,7 @@ trait QueryApi
 
         //
         foreach ($results as &$record) {
-            $record = static::make($record);
+            $record = static::create($record);
         }
 
         return $results;

@@ -10,6 +10,7 @@
 namespace Javanile\Moldable\Model;
 
 use Javanile\Moldable\Database;
+use Javanile\Moldable\Exception;
 
 trait SchemaApi
 {
@@ -174,10 +175,12 @@ trait SchemaApi
             $database = Database::getDefault();
 
             if (!$database) {
-                static::error(
-                    'connection',
-                    'database not found, instantiate one or register a dependency injection container'
-                );
+                $error = static::error('connection', 'database not found', 'required-for', 6);
+                switch (static::getClassConfig('error-mode')) {
+                    case 'silent': break;
+                    case 'exception': throw new Exception($error);
+                    default: trigger_error($error, E_USER_ERROR);
+                }
             }
 
             static::setClassAttribute($attribute, $database);

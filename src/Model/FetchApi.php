@@ -72,7 +72,7 @@ trait FetchApi
         if ($singleRecord && !$singleValue) {
             $record = static::getDatabase()->getRow($sql, $params);
 
-            return $record ? ($casting ? static::make($record) : $record) : null;
+            return $record ? ($casting ? static::create($record) : $record) : null;
         }
 
         if (!$singleRecord && !$singleValue) {
@@ -86,7 +86,7 @@ trait FetchApi
             //
             if ($casting) {
                 foreach ($records as &$record) {
-                    $record = static::make($record);
+                    $record = static::create($record);
                 }
             }
 

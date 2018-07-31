@@ -15,14 +15,19 @@ trait DebugApi
      * @internal param type $trace
      * @internal param type $error
      */
-    public static function error($type, $exception)
+    public static function error($type, $exception, $template, $offset = 0)
     {
+        $errorMode = static::getClassConfig('error-mode');
+        if ($errorMode == 'silent') {
+            return;
+        }
+
         $reflector = new \ReflectionClass(static::getClass());
-        $offset = 0;
+        $exception = is_object($exception) ? $exception->getMessage() : $exception;
 
         switch ($type) {
             case 'class':
-                $slug = 'Moldable class model error, ';
+                $message = 'Moldable model class error, ' . $exception;
                 $backtrace = [[
                     'file' => $reflector->getFileName(),
                     'line' => $reflector->getStartLine(),
@@ -30,12 +35,16 @@ trait DebugApi
                 break;
 
             case 'connection':
-                $slug = 'Moldable connection error, ';
-                $backtrace = null;
+                $message = 'Moldable connection error, ' . $exception;
+                $backtrace = debug_backtrace();
                 break;
         }
 
-        Functions::throwException($slug, $exception, $backtrace, $offset);
+        if ($errorMode == 'exception') {
+            return Functions::applyExceptionTemplate($message, $template, $backtrace, $offset);
+        }
+
+        return Functions::applyErrorTemplate($message, $template, $backtrace, $offset);
     }
 
     /**

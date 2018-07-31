@@ -18,13 +18,11 @@ class Functions
      */
     public static function varDump($var)
     {
-        //
         $style = 'padding:4px 6px 2px 6px;'
-               .'background:#eee;'
-               .'border:1px solid #ccc;'
-               .'margin:0 0 1px 0;';
+           .'background:#eee;'
+           .'border:1px solid #ccc;'
+           .'margin:0 0 1px 0;';
 
-        //
         echo '<pre style="'.$style.'">';
         var_dump($var);
         echo '</pre>';
@@ -119,28 +117,61 @@ class Functions
      * @param mixed $exception
      * @param mixed $offset
      */
-    public static function throwException(
-        $slug,
-        $exception,
-        $trace = null,
+    public static function applyErrorTemplate(
+        $message,
+        $template,
+        $backtrace = null,
         $offset = 0
     ) {
-        $info = is_object($exception) ? $exception->getMessage() : $exception;
-        //$code = is_object($exception) ? $exception->getCode() : 0;
-
-        $message = $slug.$info;
-        if (isset($trace[$offset]['function'])) {
-            $message .= ' in method '."'->".$trace[$offset]['function']."()'"
-                .' called at '.$trace[$offset]['file']
-                .' on line '.$trace[$offset]['line'];
-        } elseif ($trace) {
-            $message .= ' declared at '.$trace[$offset]['file'];
-            //.' on line '.$trace[$offset]['line'];
-        } else {
-            $message .= '.';
+        switch ($template) {
+            case 'in-method':
+                $message .= ' in method '."'->".$backtrace[$offset]['function']."()'"
+                    .' called at <b>'.$backtrace[$offset]['file'].'</b>'
+                    .' on line <b>'.$backtrace[$offset]['line'].'</b>';
+                break;
+            case 'declared-at':
+                $message .= ' declared at <b>'.$backtrace[$offset]['file'].'</b>';
+                break;
+            case 'required-for':
+                $message .= ' required for file <b>'.$backtrace[$offset]['file'].'</b>'
+                    .' on line <b>'.$backtrace[$offset]['line'].'</b>';
+                break;
         }
 
-        throw new Exception($message);
+        return $message;
+    }
+
+    /**
+     * Throw new exception.
+     *
+     * @param type  $trace
+     * @param type  $error
+     * @param mixed $slug
+     * @param mixed $exception
+     * @param mixed $offset
+     */
+    public static function applyExceptionTemplate(
+        $message,
+        $template,
+        $backtrace = null,
+        $offset = 0
+    ) {
+        switch ($template) {
+            case 'in-method':
+                $message .= ' in method '."'->".$backtrace[$offset]['function']."()'"
+                    .' called at '.$backtrace[$offset]['file']
+                    .' on line '.$backtrace[$offset]['line'];
+                break;
+            case 'declared-at':
+                $message .= ' declared at '.$backtrace[$offset]['file'];
+                break;
+            case 'required-for':
+                $message .= ' required for file '.$backtrace[$offset]['file']
+                    .' on line '.$backtrace[$offset]['line'];
+                break;
+        }
+
+        return $message;
     }
 
     /**
