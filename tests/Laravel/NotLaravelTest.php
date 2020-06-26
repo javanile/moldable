@@ -3,7 +3,6 @@
 namespace Javanile\Moldable\Tests\Laravel;
 
 use Javanile\Moldable\Context;
-use Javanile\Moldable\Database;
 use Javanile\Moldable\Tests\Sample\People;
 use Javanile\Producer;
 use PHPUnit\Framework\TestCase;

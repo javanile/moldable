@@ -65,8 +65,10 @@ class MysqlParser implements Parser
     /**
      * Parse table schema to sanitize end explod implicit info.
      *
-     * @param type  $schema
-     * @param mixed $namespace
+     * @param type       $schema
+     * @param mixed      $namespace
+     * @param mixed      $table
+     * @param null|mixed $errors
      *
      * @return type
      */
@@ -95,6 +97,7 @@ class MysqlParser implements Parser
      * @param type       $field
      * @param type       $before
      * @param null|mixed $namespace
+     * @param null|mixed $errors
      *
      * @return string
      */

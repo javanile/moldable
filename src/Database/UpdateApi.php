@@ -62,6 +62,7 @@ trait UpdateApi
      * Build where conditions.
      *
      * @param mixed $query
+     * @param mixed $params
      */
     private function getUpdateWhere($query, &$params)
     {

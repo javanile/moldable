@@ -17,7 +17,8 @@ trait ValueTrait
      * Retrieve value of a parsable notation
      * Value rapresent ...
      *
-     * @param type $notation
+     * @param type       $notation
+     * @param null|mixed $errors
      *
      * @return type
      */

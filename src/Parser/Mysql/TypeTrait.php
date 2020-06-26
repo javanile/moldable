@@ -17,6 +17,7 @@ trait TypeTrait
      * @param type       $notation
      * @param type       $params
      * @param null|mixed $namespace
+     * @param null|mixed $errors
      *
      * @return string
      */
@@ -50,6 +51,8 @@ trait TypeTrait
     /**
      * @param type       $notation
      * @param null|mixed $namespace
+     * @param mixed      $params
+     * @param mixed      $errors
      */
     private function getNotationTypeString(
         $notation,
@@ -130,7 +133,8 @@ trait TypeTrait
     }
 
     /**
-     * @param type $notation
+     * @param type  $notation
+     * @param mixed $params
      *
      * @return string
      */
@@ -149,6 +153,7 @@ trait TypeTrait
      * Check if notation is a class one-to-one relation.
      *
      * @param mixed $notation
+     * @param mixed $matchs
      */
     public function isClass($notation, &$matchs)
     {
@@ -161,6 +166,7 @@ trait TypeTrait
 
     /**
      * @param mixed $notation
+     * @param mixed $matchs
      */
     public static function pregMatchVector($notation, &$matchs)
     {
@@ -174,6 +180,7 @@ trait TypeTrait
 
     /**
      * @param mixed $notation
+     * @param mixed $matchs
      */
     public static function pregMatchMatchs($notation, &$matchs)
     {
