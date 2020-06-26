@@ -111,11 +111,14 @@ class Functions
     /**
      * Throw new exception.
      *
-     * @param type  $trace
-     * @param type  $error
-     * @param mixed $slug
-     * @param mixed $exception
-     * @param mixed $offset
+     * @param type       $trace
+     * @param type       $error
+     * @param mixed      $slug
+     * @param mixed      $exception
+     * @param mixed      $offset
+     * @param mixed      $message
+     * @param mixed      $template
+     * @param null|mixed $backtrace
      */
     public static function applyErrorTemplate(
         $message,
@@ -144,11 +147,14 @@ class Functions
     /**
      * Throw new exception.
      *
-     * @param type  $trace
-     * @param type  $error
-     * @param mixed $slug
-     * @param mixed $exception
-     * @param mixed $offset
+     * @param type       $trace
+     * @param type       $error
+     * @param mixed      $slug
+     * @param mixed      $exception
+     * @param mixed      $offset
+     * @param mixed      $message
+     * @param mixed      $template
+     * @param null|mixed $backtrace
      */
     public static function applyExceptionTemplate(
         $message,

@@ -194,7 +194,8 @@ class Storable extends Readable
     }
 
     /**
-     * @param type $value
+     * @param type  $value
+     * @param mixed $column
      */
     private static function insertRelationBefore($value, &$column)
     {
@@ -228,7 +229,8 @@ class Storable extends Readable
     }
 
     /**
-     * @param type $value
+     * @param type  $value
+     * @param mixed $column
      */
     private static function insertRelationAfter($value, &$column)
     {

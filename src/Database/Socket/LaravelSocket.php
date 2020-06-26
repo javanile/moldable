@@ -11,7 +11,6 @@
 namespace Javanile\Moldable\Database\Socket;
 
 use Illuminate\Database\Capsule\Manager as Capsule;
-use PDO;
 
 class LaravelSocket
 {

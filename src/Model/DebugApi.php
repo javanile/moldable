@@ -9,6 +9,8 @@ trait DebugApi
     /**
      * @param mixed $type
      * @param mixed $exception
+     * @param mixed $template
+     * @param mixed $offset
      *
      * @throws \Javanile\Moldable\Exception
      *
@@ -27,7 +29,7 @@ trait DebugApi
 
         switch ($type) {
             case 'class':
-                $message = 'Moldable model class error, ' . $exception;
+                $message = 'Moldable model class error, '.$exception;
                 $backtrace = [[
                     'file' => $reflector->getFileName(),
                     'line' => $reflector->getStartLine(),
@@ -35,7 +37,7 @@ trait DebugApi
                 break;
 
             case 'connection':
-                $message = 'Moldable connection error, ' . $exception;
+                $message = 'Moldable connection error, '.$exception;
                 $backtrace = debug_backtrace();
                 break;
         }

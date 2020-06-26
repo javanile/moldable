@@ -251,6 +251,9 @@ trait SchemaApi
 
     /**
      * @param mixed $table
+     * @param mixed $fields
+     * @param mixed $foQueries
+     * @param mixed $soQueries
      *
      * @return type
      */

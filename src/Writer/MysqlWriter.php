@@ -151,6 +151,7 @@ class MysqlWriter implements Writer
      * @param type  $f
      * @param mixed $fields
      * @param mixed $tableAlias
+     * @param mixed $join
      *
      * @return string
      */
