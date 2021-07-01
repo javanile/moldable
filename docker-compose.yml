@@ -1,0 +1,20 @@
+version: '3.7'
+
+services:
+  php:
+    build: .
+    working_dir: /var/www
+    command: php -S 0.0.0.0:8080 -t handbook/public handbook/serve.php
+    ports:
+      - 8080:8080
+    volumes:
+      - .:/var/www
+    links:
+      - postgres
+
+  postgres:
+    image: postgres:12.2
+    environment:
+      - POSTGRES_DB=scacchieropoli
+      - POSTGRES_USER=scacchieropoli
+      - POSTGRES_PASSWORD=scacchieropoli

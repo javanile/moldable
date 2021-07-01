@@ -1,5 +1,6 @@
 trash/
 vendor/
+handbook/
 phpunit.xml
 producer.log
 moldable.log
