@@ -135,17 +135,12 @@ trait LoadApi
 
 
         // fetch data on database and return it
-        $object = static::fetch(
+        return static::fetch(
             $sql,
             $values,
             true,
             is_string($fields)
         );
-
-        var_dump($object);
-
-        //
-        return $object;
     }
 
     /**
