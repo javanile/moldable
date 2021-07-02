@@ -12,6 +12,7 @@
  */
 
 return [
+    'autoload' => __DIR__.'/docs',
     'source' => __DIR__.'/docs',
     'output' => 'docs',
     'pages' => [

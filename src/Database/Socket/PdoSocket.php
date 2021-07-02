@@ -47,6 +47,11 @@ class PdoSocket implements SocketInterface
             $database->error('connect', 'required connection arguments');
         }
 
+        // fix args
+        if (empty($args['type'])) {
+            $args['type'] = 'mysql';
+        }
+
         // init params
         $this->_args = $args;
         $this->_prefix = isset($args['prefix']) ? $args['prefix'] : '';
@@ -81,13 +86,17 @@ class PdoSocket implements SocketInterface
     private function connect()
     {
         $port = isset($this->_args['port']) && $this->_args['port'] ? $this->_args['port'] : 3306;
-        $dsn = "mysql:host={$this->_args['host']};port={$port};dbname={$this->_args['dbname']}";
+        $dsn = "{$this->_args['type']}:host={$this->_args['host']};port={$port};dbname={$this->_args['dbname']}";
         $username = $this->_args['username'];
         $password = $this->_args['password'];
 
+        $options = [];
+
         // TODO: Move to use the follow: PDO::ATTR_EMULATE_PREPARES to 'false'
-        // For security reason
-        $options = [PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8'];
+        if ($this->_args['type'] == 'mysql') {
+            // For security reason
+            $options[PDO::MYSQL_ATTR_INIT_COMMAND] = 'SET NAMES utf8';
+        }
 
         /*\
          * The latter can be fixed by turning off emulation
