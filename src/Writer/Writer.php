@@ -83,11 +83,7 @@ class Writer
         // implode
         $columns = implode(',', $columnsArray);
 
-        $sql = "CREATE TABLE {$quotedTable} ({$columns})";
-
-        var_dump(($sql));
-        // template sql to create table
-        return $sql;
+        return "CREATE TABLE {$quotedTable} ({$columns})";
     }
 
     /**

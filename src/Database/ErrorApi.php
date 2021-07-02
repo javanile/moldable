@@ -35,7 +35,6 @@ trait ErrorApi
                 $slug = 'Moldable query error, ';
                 $backtrace = debug_backtrace();
                 $offset = 2;
-                var_dump($sql);
                 break;
 
             // Trigger a error in executed sql query.

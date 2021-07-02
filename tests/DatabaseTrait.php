@@ -20,6 +20,7 @@ trait DatabaseTrait
             'dbname'   => getenv($envPrefix.'NAME'),
             'username' => getenv($envPrefix.'USER'),
             'password' => getenv($envPrefix.'PASS'),
+            'prefix'   => 'prefix_',
         ];
 
         return new Database($config);

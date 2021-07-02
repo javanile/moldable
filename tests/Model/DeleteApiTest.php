@@ -4,37 +4,27 @@ namespace Javanile\Moldable\Tests\Model;
 
 use Javanile\Moldable\Database;
 use Javanile\Moldable\Tests\DatabaseTrait;
+use Javanile\Moldable\Tests\DefaultDatabaseTrait;
 use Javanile\Moldable\Tests\Sample\People;
-use Javanile\Producer;
 use PHPUnit\Framework\TestCase;
-
-Producer::addPsr4(['Javanile\\Moldable\\Tests\\' => __DIR__.'/../']);
 
 final class DeleteApiTest extends TestCase
 {
-    use DatabaseTrait;
+    use DefaultDatabaseTrait;
 
-    public function testUpdateApi()
+    public function testDeleteApi()
     {
-        $db = new Database([
-            'host'     => $GLOBALS['DB_HOST'],
-            'port'     => $GLOBALS['DB_PORT'],
-            'dbname'   => $GLOBALS['DB_NAME'],
-            'username' => $GLOBALS['DB_USER'],
-            'password' => $GLOBALS['DB_PASS'],
-            'prefix'   => 'prefix_',
-        ]);
-
-        People::insert([
+        $id = People::insert([
             'name'    => 'Frank',
             'surname' => 'White',
             'age'     => 18,
-        ]);
+        ])->id;
 
-        $sql = 'SELECT age FROM prefix_People WHERE id = 1';
-        $this->assertEquals($db->getValue($sql), 18);
+        $table = $this->db->getWriter()->quote('prefix_People');
+        $sql = "SELECT age FROM {$table} WHERE id = {$id}";
+        $this->assertEquals(18, $this->db->getValue($sql));
 
-        People::delete(1);
-        $this->assertEquals($db->getValue($sql), null);
+        People::delete($id);
+        $this->assertEquals(null, $this->db->getValue($sql));
     }
 }
