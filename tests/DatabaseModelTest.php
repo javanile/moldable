@@ -17,22 +17,25 @@ final class DatabaseModelTest extends TestCase
             'name' => '',
             'hook' => 0,
         ]]);
+
         $db->submit('model', [
             'name' => 'Frank',
             'hook' => 10,
         ]);
+
         $db->submit('model', [
             'name' => 'Karl',
             'hook' => 12,
         ]);
+
         $db->submit('model', [
             'name' => 'Andy',
             'hook' => 11,
         ]);
+
         $results = $db->all('model', ['order' => 'name']);
 
-        //
-        $this->assertEquals($results, [
+        $this->assertEquals([
             0 => [
                 'name' => 'Andy',
                 'hook' => 11,
@@ -45,7 +48,7 @@ final class DatabaseModelTest extends TestCase
                 'name' => 'Karl',
                 'hook' => 12,
             ],
-        ]);
+        ], $results);
     }
 
     public function testDatabaseModelSubmit()
