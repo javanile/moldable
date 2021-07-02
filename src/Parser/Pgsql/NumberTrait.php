@@ -7,7 +7,7 @@
  * @author Francesco Bianco
  */
 
-namespace Javanile\Moldable\Parser\Mysql;
+namespace Javanile\Moldable\Parser\Pgsql;
 
 trait NumberTrait
 {
@@ -26,7 +26,7 @@ trait NumberTrait
         $notation,
         $aspects
     ) {
-        $aspects['Type'] = 'int(11)';
+        $aspects['Type'] = 'integer';
         $aspects['Default'] = (int) $notation;
         $aspects['Null'] = 'NO';
 

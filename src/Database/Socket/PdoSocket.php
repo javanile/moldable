@@ -224,7 +224,18 @@ class PdoSocket implements SocketInterface
      */
     public function lastInsertId()
     {
-        return $this->_pdo->lastInsertId();
+        $lastInsertId = null;
+
+        try {
+            $lastInsertId = $this->_pdo->lastInsertId();
+        } catch (PDOException $error) {
+            var_dump($error->getMessage());
+            var_dump($error->getCode());
+            debug_print_backtrace();
+            die();
+        }
+
+        return $lastInsertId;
     }
 
     /**

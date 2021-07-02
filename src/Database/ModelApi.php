@@ -58,24 +58,16 @@ trait ModelApi
      */
     public function getFields($model)
     {
-        //
         $table = $this->getTable($model);
-
-        //
-        $sql = "DESC `{$table}`";
-
-        //
+        $writer = $this->getWriter();
+        $sql = $writer->descTable($table);
         $results = $this->getResults($sql);
 
-        //
         $fields = [];
-
-        //
         foreach ($results as $field) {
             $fields[] = $field['Field'];
         }
 
-        //
         return $fields;
     }
 
@@ -97,13 +89,10 @@ trait ModelApi
             unset($fields['order']);
         }
 
-        //
-        $sql = "SELECT * FROM `{$table}` {$order}";
-
-        //
+        $quotedTable = $this->getWriter()->quote($table);
+        $sql = "SELECT * FROM {$quotedTable} {$order}";
         $results = $this->getResults($sql);
 
-        //
         return $results;
     }
 
@@ -115,21 +104,16 @@ trait ModelApi
      */
     public function exists($model, $query)
     {
-        //
         $params = [];
-
-        //
         $whereArray = [];
+        $writer = $this->getWriter();
 
-        //
         if (isset($query['where'])) {
             $whereArray[] = $query['where'];
             unset($query['where']);
         }
 
-        //
         $schema = $this->getFields($model);
-
         foreach ($schema as $field) {
             if (!isset($query[$field])) {
                 continue;
@@ -137,14 +121,18 @@ trait ModelApi
             $value = $query[$field];
             $token = ':'.$field;
             $params[$token] = $value;
-            $whereArray[] = "`{$field}` = {$token}";
+            $quotedField = $writer->quote($field);
+            $whereArray[] = "{$quotedField} = {$token}";
         }
 
         $where = count($whereArray) > 0
                ? 'WHERE '.implode(' AND ', $whereArray) : '';
 
         $table = $this->getPrefix($model);
-        $sql = "SELECT * FROM `{$table}` {$where} LIMIT 1";
+        $quotedTable = $writer->quote($table);
+
+        $sql = "SELECT * FROM {$quotedTable} {$where} LIMIT 1";
+
         $row = $this->getRow($sql, $params);
 
         return $row;

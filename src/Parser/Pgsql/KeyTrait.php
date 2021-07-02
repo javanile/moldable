@@ -7,14 +7,14 @@
  * @author Francesco Bianco
  */
 
-namespace Javanile\Moldable\Parser\Mysql;
+namespace Javanile\Moldable\Parser\Pgsql;
 
 trait KeyTrait
 {
     protected function getNotationAspectsPrimaryKey($notation, $aspects, $params)
     {
         //
-        $aspects['Type'] = isset($params[0]) ? 'int('.$params[0].')' : 'int(11)';
+        $aspects['Type'] = isset($params[0]) ? 'int('.$params[0].')' : 'integer';
         $aspects['Key'] = 'PRI';
         $aspects['Null'] = 'NO';
         $aspects['Default'] = '';

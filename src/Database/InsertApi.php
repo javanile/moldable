@@ -21,6 +21,8 @@ trait InsertApi
      */
     public function insert($model, $values, $map = null)
     {
+        $writer = $this->getWriter();
+
         if (is_string($values)) {
             $values = [
                 $values => $map,
@@ -37,7 +39,7 @@ trait InsertApi
         foreach ($values as $field => $value) {
             $field = isset($map[$field]) ? $map[$field] : $field;
             $token = ':'.$field;
-            $fieldsArray[] = '`'.$field.'`';
+            $fieldsArray[] = $writer->quote($field);
             $tokensArray[] = $token;
             $valuesArray[$token] = $value;
         }
@@ -45,7 +47,10 @@ trait InsertApi
         $fields = implode(',', $fieldsArray);
         $tokens = implode(',', $tokensArray);
         $table = $this->getPrefix($model);
-        $sql = "INSERT INTO `{$table}` ({$fields}) VALUES ({$tokens})";
+        $quotedTable = $writer->quote($table);
+
+        $sql = "INSERT INTO {$quotedTable} ({$fields}) VALUES ({$tokens})";
+
         $this->execute($sql, $valuesArray);
 
         return $this->getLastId();

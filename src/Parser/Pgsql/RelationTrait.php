@@ -7,7 +7,7 @@
  * @author Francesco Bianco
  */
 
-namespace Javanile\Moldable\Parser\Mysql;
+namespace Javanile\Moldable\Parser\Pgsql;
 
 trait RelationTrait
 {
@@ -20,7 +20,7 @@ trait RelationTrait
      */
     protected function getNotationAspectsClass($notation, $aspects, $params)
     {
-        $aspects['Type'] = 'int(11)';
+        $aspects['Type'] = 'integer';
         $aspects['Class'] = $params['Class'];
         $aspects['Relation'] = '1:1';
 

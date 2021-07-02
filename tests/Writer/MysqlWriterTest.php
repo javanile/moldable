@@ -20,8 +20,8 @@ final class MysqlWriterTest extends TestCase
 
         $writer = new MysqlWriter();
 
-        $column = $writer->columnDefinition(['Type' => 'int(11)']);
+        $column = $writer->columnDefinition('column', ['Type' => 'int(11)']);
 
-        $this->assertEquals($column, 'int(11) NULL');
+        $this->assertEquals($column, '`column` int(11) NULL');
     }
 }

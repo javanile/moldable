@@ -56,14 +56,13 @@ trait SchemaApi
      */
     public function descTable($table)
     {
-        //
-        $sql = "DESC `{$table}`";
+        $sql = $this->getWriter()->descTable($table);
         $fields = $this->getResults($sql);
+
         $desc = [];
         $count = 0;
         $before = false;
 
-        //
         foreach ($fields as $field) {
             $field['First'] = $count === 0;
             $field['Before'] = $before;
@@ -308,19 +307,16 @@ trait SchemaApi
                 // add normal column
                 $soQueries[] = $sql;
             }
-        } elseif ($this->diffTableFieldAttributes($field, $attributes, $fields)) {
+        } elseif ($diffAttributes = $this->diffTableFieldAttributes($field, $attributes, $fields)) {
             // check if column need to be updated
-            // compose alter table query with attributes
-            $sql = $this
-                ->getWriter()
-                ->alterTableChange($table, $field, $attributes);
+            // compose alter table queries with attributes
+            $sql = $this->getWriter()->alterTableChange($table, $field, $attributes, $diffAttributes);
 
             // alter column that lose primary key
-            if ($fields[$field]['Key'] == 'PRI' || $attributes['Key'] == 'PRI') {
-                $foQueries[] = $sql;
+            if (Functions::isPrimaryKey($fields[$field]['Key']) || Functions::isPrimaryKey($attributes['Key'])) {
+                $foQueries = array_merge($foQueries, $sql);
             } else {
-                // alter colum than not interact with primary key
-                $soQueries[] = $sql;
+                $soQueries = array_merge($soQueries, $sql);
             }
         }
     }
@@ -337,23 +333,22 @@ trait SchemaApi
      */
     private function diffTableFieldAttributes($field, &$attributes, &$fields)
     {
-        // loop throd current column property
+        $diffAttributes = [];
         foreach ($fields[$field] as $key => $value) {
-            // if have a difference
             if ($attributes[$key] == $value) {
                 continue;
             }
 
-            //
-            if ($this->isDebug()) {
-                //echo '<pre style="background:#E66;color:#000;margin:0 0 1px 0;padding:2px 6px 3px 6px;border:1px solid #000;">';
-                //echo '  difference: "'.$attributes[$key].'" != "'.$value.'" in '.$field.'['.$key.']</pre>';
-            }
+            $diffAttributes[] = $key;
 
-            return true;
+            if ($this->isDebug()) {
+                #echo '<pre style="background:#E66;color:#000;margin:0 0 1px 0;padding:2px 6px 3px 6px;border:1px solid #000;">';
+                echo 'difference: "'.$attributes[$key].'" != "'.$value.'" in '.$field.'['.$key.']'."\n";
+                #echo '</pre>';
+            }
         }
 
-        return false;
+        return $diffAttributes;
     }
 
     /**

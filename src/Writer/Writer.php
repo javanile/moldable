@@ -12,14 +12,14 @@ namespace Javanile\Moldable\Writer;
 class Writer
 {
     //
-    private static $defaults = [
+    protected static $defaults = [
         'Attributes' => [
             'Type' => 'int(11)',
         ],
     ];
 
     //
-    public function columnDefinition($aspects, $order = true)
+    public function columnDefinition($name, $aspects, $order = true)
     {
         $Key = isset($aspects['Key'])
         && $aspects['Key'] == 'PRI'
@@ -46,7 +46,7 @@ class Writer
             $Default = 'DEFAULT '."'".$aspects['Default']."'";
         }
 
-        $sql = $Type.' '.$Null.' '.$Default.' '.$Key.' '.$Extra;
+        $sql = $this->quote($name).' '.$Type.' '.$Null.' '.$Default.' '.$Key.' '.$Extra;
 
         if ($order) {
             $First = isset($aspects['First']) && $aspects['First'] ? 'FIRST' : '';
@@ -67,8 +67,8 @@ class Writer
      */
     public function createTable($table, $schema)
     {
-        //
         $columnsArray = [];
+        $quotedTable = $this->quote($table);
 
         // loop throut schema
         foreach ($schema as $field => $attributes) {
@@ -77,20 +77,16 @@ class Writer
                 $attributes = [];
             }
 
-            //
-            $column = $this->columnDefinition($attributes, false);
-
-            //
-            $columnsArray[] = "`{$field}` {$column}";
+            $columnsArray[] = $this->columnDefinition($field, $attributes, false);
         }
 
         // implode
         $columns = implode(',', $columnsArray);
 
-        // template sql to create table
-        $sql = "CREATE TABLE `{$table}` ({$columns})";
+        $sql = "CREATE TABLE {$quotedTable} ({$columns})";
 
-        // return the sql
+        var_dump(($sql));
+        // template sql to create table
         return $sql;
     }
 
@@ -103,38 +99,10 @@ class Writer
      */
     public function alterTableAdd($table, $field, $attributes)
     {
-        //
-        $column = $this->columnDefinition($attributes);
+        $quotedTable = $this->quote($table);
+        $column = $this->columnDefinition($field, $attributes);
 
-        //
-        $sql = "ALTER TABLE `{$table}` ADD COLUMN `{$field}` {$column}";
-
-        //
-        return $sql;
-    }
-
-    /**
-     * Retrieve sql to alter table definition.
-     *
-     * @param type  $t
-     * @param type  $f
-     * @param type  $d
-     * @param mixed $table
-     * @param mixed $field
-     * @param mixed $attributes
-     *
-     * @return type
-     */
-    public function alterTableChange($table, $field, $attributes)
-    {
-        //
-        $column = $this->columnDefinition($attributes);
-
-        //
-        $sql = "ALTER TABLE `{$table}` CHANGE COLUMN `{$field}` `{$field}` {$column}";
-
-        //
-        return $sql;
+        return "ALTER TABLE {$quotedTable} ADD COLUMN {$column}";
     }
 
     // retrive query to remove primary key
@@ -292,7 +260,7 @@ class Writer
      *
      * @param mixed $name
      */
-    private function quote($name)
+    public function quote($name)
     {
         return '`'.$name.'`';
     }

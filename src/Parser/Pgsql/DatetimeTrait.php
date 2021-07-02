@@ -7,7 +7,7 @@
  * @author Francesco Bianco
  */
 
-namespace Javanile\Moldable\Parser\Mysql;
+namespace Javanile\Moldable\Parser\Pgsql;
 
 trait DatetimeTrait
 {

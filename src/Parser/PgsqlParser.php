@@ -11,13 +11,13 @@ namespace Javanile\Moldable\Parser;
 
 class PgsqlParser extends Parser
 {
-    use Mysql\KeyTrait;
-    use Mysql\TypeTrait;
-    use Mysql\EnumTrait;
-    use Mysql\ValueTrait;
-    use Mysql\NumberTrait;
-    use Mysql\StringTrait;
-    use Mysql\CommonTrait;
-    use Mysql\RelationTrait;
-    use Mysql\DatetimeTrait;
+    use Pgsql\KeyTrait;
+    use Pgsql\TypeTrait;
+    use Pgsql\EnumTrait;
+    use Pgsql\ValueTrait;
+    use Pgsql\NumberTrait;
+    use Pgsql\StringTrait;
+    use Pgsql\CommonTrait;
+    use Pgsql\RelationTrait;
+    use Pgsql\DatetimeTrait;
 }

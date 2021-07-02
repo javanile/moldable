@@ -155,17 +155,12 @@ trait SocketApi
      */
     public function tableExists($table, $parse = true)
     {
-        // prepare
         if ($parse) {
             $table = $this->getPrefix($table);
         }
 
         $sql = $this->getWriter()->tableExists($table);
-
-        // execute test if table exists
         $exists = $this->getRow($sql);
-
-        var_dump($exists);
 
         return (bool) $exists;
     }
@@ -179,12 +174,7 @@ trait SocketApi
      */
     public function getTables($matchPrefix = true)
     {
-        if ($matchPrefix) {
-            $prefix = str_replace('_', '\\_', $this->getPrefix());
-            $sql = "SHOW TABLES LIKE '{$prefix}%'";
-        } else {
-            $sql = 'SHOW TABLES';
-        }
+        $sql = $this->getWriter()->getTables($matchPrefix ? $this->getPrefix() : null);
 
         $tables = $this->getValues($sql);
 
