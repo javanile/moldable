@@ -23,7 +23,7 @@ final class LoadApiTest extends TestCase
 
         // load by id inline
         $frank = People::load($id);
-        $this->assertEquals($frank->age, 18);
+        $this->assertEquals(18, $frank->age);
     }
 
     public function testLoadByQuery()
