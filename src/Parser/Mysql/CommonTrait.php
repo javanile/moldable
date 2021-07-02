@@ -28,7 +28,7 @@ trait CommonTrait
         return $aspects;
     }
 
-    private function getNotationAspectsSchema($notation, $aspects)
+    protected function getNotationAspectsSchema($notation, $aspects)
     {
         // override default notation schema passed
         foreach ($notation as $key => $value) {

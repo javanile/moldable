@@ -122,8 +122,8 @@ class Database implements Notations
         }
 
         $this->_socket = new $socketClass($this, $args);
-        $this->_parser = new Parser\MysqlParser();
-        $this->_writer = new Writer\MysqlWriter();
+        $this->_parser = $this->_socket->createParser();
+        $this->_writer = $this->_socket->createWriter();
 
         if (isset($args['debug']) && $args['debug']) {
             $this->setDebug($args['debug']);

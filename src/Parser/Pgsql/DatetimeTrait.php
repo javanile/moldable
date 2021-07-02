@@ -11,7 +11,7 @@ namespace Javanile\Moldable\Parser\Mysql;
 
 trait DatetimeTrait
 {
-    private function getNotationAspectsDate(
+    protected function getNotationAspectsDate(
         $notation,
         $aspects
     ) {
@@ -21,7 +21,7 @@ trait DatetimeTrait
         return $aspects;
     }
 
-    private function getNotationAspectsTime(
+    protected function getNotationAspectsTime(
         $notation,
         $aspects
     ) {
@@ -31,7 +31,7 @@ trait DatetimeTrait
         return $aspects;
     }
 
-    private function getNotationAspectsDatetime(
+    protected function getNotationAspectsDatetime(
         $notation,
         $aspects
     ) {

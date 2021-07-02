@@ -9,6 +9,7 @@
 
 namespace Javanile\Moldable\Database;
 
+use Javanile\Moldable\Exception;
 use Javanile\Moldable\Functions;
 
 trait ErrorApi
@@ -52,6 +53,11 @@ trait ErrorApi
                 break;*/
         }
 
-        Functions::throwException($slug, $exception, $backtrace, $offset);
+        $this->throwException($slug, $exception, $backtrace, $offset);
+    }
+
+    protected function throwException($slug, $exception, $backtrace, $offset)
+    {
+        throw new Exception($slug.' - '.$exception->getMessage());
     }
 }

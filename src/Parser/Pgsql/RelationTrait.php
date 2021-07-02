@@ -18,7 +18,7 @@ trait RelationTrait
      * @param mixed $aspects
      * @param mixed $params
      */
-    private function getNotationAspectsClass($notation, $aspects, $params)
+    protected function getNotationAspectsClass($notation, $aspects, $params)
     {
         $aspects['Type'] = 'int(11)';
         $aspects['Class'] = $params['Class'];
@@ -33,7 +33,7 @@ trait RelationTrait
      * @param mixed $params
      * @param mixed $namespace
      */
-    private function getNotationAspectsVector($notation, $aspects, $params, $namespace)
+    protected function getNotationAspectsVector($notation, $aspects, $params, $namespace)
     {
         $aspects['Relation'] = '1:*';
 

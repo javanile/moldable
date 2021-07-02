@@ -54,7 +54,7 @@ trait TypeTrait
      * @param mixed      $params
      * @param mixed      $errors
      */
-    private function getNotationTypeString(
+    protected function getNotationTypeString(
         $notation,
         &$params,
         &$errors,
@@ -138,7 +138,7 @@ trait TypeTrait
      *
      * @return string
      */
-    private function getNotationTypeArray($notation, &$params)
+    protected function getNotationTypeArray($notation, &$params)
     {
         if ($notation && $notation == array_values($notation)) {
             $params['Default'] = isset($notation[0]) ? $notation[0] : null;

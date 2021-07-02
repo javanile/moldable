@@ -85,8 +85,14 @@ class PdoSocket implements SocketInterface
      */
     private function connect()
     {
-        $port = isset($this->_args['port']) && $this->_args['port'] ? $this->_args['port'] : 3306;
-        $dsn = "{$this->_args['type']}:host={$this->_args['host']};port={$port};dbname={$this->_args['dbname']}";
+        if (empty($this->_args['port'])) {
+            switch ($this->_args['type']) {
+                case 'mysql': $this->_args['port'] = 3306; break;
+                case 'pgsql': $this->_args['port'] = 5432; break;
+            }
+        }
+
+        $dsn = "{$this->_args['type']}:host={$this->_args['host']};port={$this->_args['port']};dbname={$this->_args['dbname']}";
         $username = $this->_args['username'];
         $password = $this->_args['password'];
 
@@ -280,5 +286,27 @@ class PdoSocket implements SocketInterface
         }
 
         return $stmt;
+    }
+
+    /**
+     *
+     */
+    public function createWriter()
+    {
+        $type = ucfirst($this->_args['type']);
+        $writerClass = "\\Javanile\\Moldable\\Writer\\{$type}Writer";
+
+        return new $writerClass();
+    }
+
+    /**
+     *
+     */
+    public function createParser()
+    {
+        $type = ucfirst($this->_args['type']);
+        $parserClass = "\\Javanile\\Moldable\\Parser\\{$type}Parser";
+
+        return new $parserClass();
     }
 }

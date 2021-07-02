@@ -11,7 +11,7 @@ namespace Javanile\Moldable\Parser\Mysql;
 
 trait KeyTrait
 {
-    private function getNotationAspectsPrimaryKey($notation, $aspects, $params)
+    protected function getNotationAspectsPrimaryKey($notation, $aspects, $params)
     {
         //
         $aspects['Type'] = isset($params[0]) ? 'int('.$params[0].')' : 'int(11)';

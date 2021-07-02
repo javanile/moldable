@@ -17,7 +17,7 @@ trait StringTrait
      * @param mixed $notation
      * @param mixed $aspects
      */
-    private function getNotationAspectsString($notation, $aspects)
+    protected function getNotationAspectsString($notation, $aspects)
     {
         $aspects['Type'] = 'varchar(255)';
         $aspects['Null'] = 'NO';
@@ -26,7 +26,7 @@ trait StringTrait
         return $aspects;
     }
 
-    private function getNotationAspectsText($notation, $aspects)
+    protected function getNotationAspectsText($notation, $aspects)
     {
         $aspects['Type'] = 'text';
         $aspects['Null'] = 'NO';
@@ -35,7 +35,7 @@ trait StringTrait
         return $aspects;
     }
 
-    private function getNotationAspectsNull(
+    protected function getNotationAspectsNull(
         $notation,
         $aspects
     ) {

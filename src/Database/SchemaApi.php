@@ -197,16 +197,12 @@ trait SchemaApi
 
         // if table no exists return sql statament for creating this
         if (!$this->tableExists($table, false)) {
-            $sql = $this
-                ->getWriter()
-                ->createTable($table, $schema);
+            $sql = $this->getWriter()->createTable($table, $schema);
 
             return [$sql];
         }
 
-        $queries = $this->diffTableQueries($table, $schema);
-
-        return $queries;
+        return $this->diffTableQueries($table, $schema);
     }
 
     /**

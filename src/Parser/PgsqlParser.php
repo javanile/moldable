@@ -9,7 +9,7 @@
 
 namespace Javanile\Moldable\Parser;
 
-class MysqlParser extends Parser
+class PgsqlParser extends Parser
 {
     use Mysql\KeyTrait;
     use Mysql\TypeTrait;
@@ -20,6 +20,4 @@ class MysqlParser extends Parser
     use Mysql\CommonTrait;
     use Mysql\RelationTrait;
     use Mysql\DatetimeTrait;
-
-
 }

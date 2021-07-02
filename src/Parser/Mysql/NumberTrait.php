@@ -11,7 +11,7 @@ namespace Javanile\Moldable\Parser\Mysql;
 
 trait NumberTrait
 {
-    private function getNotationAspectsBoolean(
+    protected function getNotationAspectsBoolean(
         $notation,
         $aspects
     ) {
@@ -22,7 +22,7 @@ trait NumberTrait
         return $aspects;
     }
 
-    private function getNotationAspectsInteger(
+    protected function getNotationAspectsInteger(
         $notation,
         $aspects
     ) {
@@ -33,7 +33,7 @@ trait NumberTrait
         return $aspects;
     }
 
-    private function getNotationAspectsFloat(
+    protected function getNotationAspectsFloat(
         $notation,
         $aspects
     ) {
@@ -44,7 +44,7 @@ trait NumberTrait
         return $aspects;
     }
 
-    private function getNotationAspectsDouble(
+    protected function getNotationAspectsDouble(
         $notation,
         $aspects
     ) {

@@ -159,7 +159,7 @@ class Parser
      * @param mixed $field
      * @param mixed $before
      */
-    private function getNotationCommonAspects($field, $before)
+    protected function getNotationCommonAspects($field, $before)
     {
         $aspects = [
             'Field'    => null,

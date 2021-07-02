@@ -160,14 +160,12 @@ trait SocketApi
             $table = $this->getPrefix($table);
         }
 
-        // escape table name for query
-        $escapedTable = str_replace('_', '\\_', $table);
-
-        // sql query to test if table exists
-        $sql = "SHOW TABLES LIKE '{$escapedTable}'";
+        $sql = $this->getWriter()->tableExists($table);
 
         // execute test if table exists
         $exists = $this->getRow($sql);
+
+        var_dump($exists);
 
         return (bool) $exists;
     }

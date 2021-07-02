@@ -17,7 +17,7 @@ trait EnumTrait
      * @param mixed $notation
      * @param mixed $aspects
      */
-    private function getNotationAspectsEnum($notation, $aspects)
+    protected function getNotationAspectsEnum($notation, $aspects)
     {
         //
         $enum = $this->parseEnumNotation($notation);

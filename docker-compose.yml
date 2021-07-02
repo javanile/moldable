@@ -7,7 +7,10 @@ services:
     command: php -S 0.0.0.0:8080 -t handbook/public handbook/serve.php
     environment:
       - DB_TYPE=pgsql
-      - PGSQL_HOST=
+      - PGSQL_HOST=postgres
+      - PGSQL_NAME=postgres
+      - PGSQL_USER=postgres
+      - PGSQL_PASS=postgres
     ports:
       - 8080:8080
     volumes:
@@ -18,6 +21,11 @@ services:
   postgres:
     image: postgres:12.2
     environment:
-      - POSTGRES_DB=scacchieropoli
-      - POSTGRES_USER=scacchieropoli
-      - POSTGRES_PASSWORD=scacchieropoli
+      - POSTGRES_DB=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+
+  adminer:
+    image: adminer
+    ports:
+      - 8081:8080
