@@ -8,12 +8,15 @@ use PDO;
 
 trait DefaultDatabaseTrait
 {
+    use DatabaseTrait;
+
     protected $db = null;
 
     protected $log = null;
 
     protected function setUp()
     {
+        /*
         $dsn = "mysql:dbname={$GLOBALS['DB_NAME']};".
             "port={$GLOBALS['DB_PORT']};host={$GLOBALS['DB_HOST']}";
 
@@ -27,24 +30,17 @@ trait DefaultDatabaseTrait
         if (file_exists($this->log = __DIR__.'/database.log')) {
             unlink($this->log);
         }
-
-        $this->db = new Database([
-            'host'     => $GLOBALS['DB_HOST'],
-            'port'     => $GLOBALS['DB_PORT'],
-            'dbname'   => $GLOBALS['DB_NAME'],
-            'username' => $GLOBALS['DB_USER'],
-            'password' => $GLOBALS['DB_PASS'],
-            'prefix'   => 'prefix_',
-            'debug'    => true,
-            'log'      => $this->log,
-        ]);
+        */
+        $this->db = $this->getDatabaseInstance();
     }
 
     protected function tearDown()
     {
+        /*
         $this->pdo = null;
 
         Database::resetDefault();
         Storable::resetAllClass();
+        */
     }
 }

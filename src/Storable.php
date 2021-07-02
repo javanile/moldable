@@ -129,6 +129,9 @@ class Storable extends Readable
         // update table if needed
         static::applySchema();
 
+        $database = static::getDatabase();
+        $writer = $database->getWriter();
+
         // collect field names for sql query
         $fieldsArray = [];
 
@@ -152,27 +155,21 @@ class Storable extends Readable
             // get current value of attribute of object
             $value = static::insertRelationBefore($this->{$field}, $column);
             $token = ':'.$field;
-            $fieldsArray[] = '`'.$field.'`';
+            $fieldsArray[] = $writer->quote($field);
             $valuesArray[] = $token;
             $tokensArray[$token] = $value;
         }
 
-        //
         $fields = implode(',', $fieldsArray);
-
-        //
         $values = implode(',', $valuesArray);
 
-        //
         $table = static::getTable();
+        $quotedTable = $writer->quote($table);
 
-        //
-        $sql = "INSERT INTO {$table} ({$fields}) VALUES ({$values})";
+        $sql = "INSERT INTO {$quotedTable} ({$fields}) VALUES ({$values})";
 
-        //
-        static::getDatabase()->execute($sql, $tokensArray);
+        $database->execute($sql, $tokensArray);
 
-        //
         foreach ($schema as $field => &$column) {
             if (!$force && $field == $key) {
                 continue;
@@ -181,15 +178,13 @@ class Storable extends Readable
             static::insertRelationAfter($this->{$field}, $column);
         }
 
-        //
         if ($key) {
-            $index = static::getDatabase()->getLastId();
+            $index = $database->getLastId();
             $this->{$key} = $index;
         } else {
             $index = static::getMainFieldValue();
         }
 
-        //
         return $index;
     }
 

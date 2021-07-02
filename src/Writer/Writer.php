@@ -9,6 +9,8 @@
 
 namespace Javanile\Moldable\Writer;
 
+use Javanile\Moldable\Functions;
+
 class Writer
 {
     //
@@ -21,9 +23,7 @@ class Writer
     //
     public function columnDefinition($name, $aspects, $order = true)
     {
-        $Key = isset($aspects['Key'])
-        && $aspects['Key'] == 'PRI'
-            ? 'PRIMARY KEY' : '';
+        $Key = isset($aspects['Key']) && Functions::isPrimaryKey($aspects['Key']) ? 'PRIMARY KEY' : '';
 
         $Type = isset($aspects['Type'])
             ? strtolower($aspects['Type'])

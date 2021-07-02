@@ -100,13 +100,11 @@ trait LoadApi
      */
     protected static function loadByMainField($value, $fields = null)
     {
-        //
+        $database = static::getDatabase();
+        $writer = $database->getWriter();
+
         $table = static::getTable();
-
-        // get main field
         $field = static::getMainField();
-
-        //
         $alias = static::getClassName();
 
         //
@@ -116,9 +114,7 @@ trait LoadApi
         $allFields = $fields ? $fields : static::getDefaultFields();
 
         // parse SQL select fields
-        $selectFields = static::getDatabase()
-                     ->getWriter()
-                     ->selectFields($allFields, $alias, $join);
+        $selectFields = $writer->selectFields($allFields, $alias, $join);
 
         //
         $token = ':'.$field;
@@ -127,9 +123,12 @@ trait LoadApi
         $values = [$token => $value];
 
         // prepare SQL query
+        $quotedTable = $writer->quote($table);
+        $quotedField = $writer->quote($field);
+
         $sql = " SELECT {$selectFields}"
-             ."   FROM {$table} AS {$alias} {$join}"
-             ."  WHERE {$field} = {$token}"
+             ."   FROM {$quotedTable} AS {$alias} {$join}"
+             ."  WHERE {$quotedField} = {$token}"
              .'  LIMIT 1';
 
         // fetch data on database and return it

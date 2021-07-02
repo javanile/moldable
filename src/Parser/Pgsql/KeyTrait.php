@@ -13,12 +13,16 @@ trait KeyTrait
 {
     protected function getNotationAspectsPrimaryKey($notation, $aspects, $params)
     {
-        //
+        var_dump($aspects);
+        die();
+        $table = $aspects['Table'];
+        $field = $aspects['Field'];
+
         $aspects['Type'] = isset($params[0]) ? 'int('.$params[0].')' : 'integer';
-        $aspects['Key'] = 'PRI';
+        $aspects['Key'] = 'PRIMARY KEY';
         $aspects['Null'] = 'NO';
-        $aspects['Default'] = '';
-        $aspects['Extra'] = 'auto_increment';
+        $aspects['Default'] = "nextval('public.{$table}_{$field}_seq'::regclass)";
+        $aspects['Extra'] = '';
 
         return $aspects;
     }

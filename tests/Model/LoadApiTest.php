@@ -5,10 +5,7 @@ namespace Javanile\Moldable\Tests\Model;
 use Javanile\Moldable\Tests\DefaultDatabaseTrait;
 use Javanile\Moldable\Tests\Sample\Noindexmodel;
 use Javanile\Moldable\Tests\Sample\People;
-use Javanile\Producer;
 use PHPUnit\Framework\TestCase;
-
-Producer::addPsr4(['Javanile\\Moldable\\Tests\\' => __DIR__.'/../']);
 
 final class LoadApiTest extends TestCase
 {

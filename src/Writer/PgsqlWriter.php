@@ -9,6 +9,8 @@
 
 namespace Javanile\Moldable\Writer;
 
+use Javanile\Moldable\Functions;
+
 class PgsqlWriter extends Writer
 {
     //
@@ -51,8 +53,10 @@ class PgsqlWriter extends Writer
      */
     public function descTable($table)
     {
-        return "SELECT c.column_name AS \"Field\"
+        return "SELECT c.table_name AS \"Table\"
+                     , c.column_name AS \"Field\"
                      , CONCAT(c.data_type, '(', c.character_maximum_length, ')') AS \"Type\"
+                     , c.column_default AS \"Default\"
                      , tc.constraint_type AS \"Key\"
                   FROM information_schema.columns AS c
              LEFT JOIN information_schema.key_column_usage AS kcu
@@ -88,6 +92,48 @@ class PgsqlWriter extends Writer
         }
 
         return $sql;
+    }
+
+    //
+    public function columnDefinition($name, $aspects, $order = true)
+    {
+        $key = '';
+
+        $Type = isset($aspects['Type'])
+            ? strtolower($aspects['Type'])
+            : static::$defaults['Attributes']['Type'];
+
+        if (isset($aspects['Key']) && Functions::isPrimaryKey($aspects['Key'])) {
+            $Type = 'SERIAL';
+            $Key = 'PRIMARY KEY';
+        }
+
+        $Null = isset($aspects['Null'])
+            && ($aspects['Null'] == 'NO' || !$aspects['Null'])
+            ? 'NOT NULL' : 'NULL';
+
+        $Extra = isset($aspects['Extra']) ? $aspects['Extra'] : '';
+
+        if (!isset($aspects['Default'])
+            || $aspects['Default'] === 'NO'
+            || $aspects['Default'] === ''
+            || $aspects['Key']) {
+            $Default = '';
+        } elseif ($aspects['Default'] === 'CURRENT_TIMESTAMP') {
+            $Default = 'DEFAULT CURRENT_TIMESTAMP';
+        } else {
+            $Default = 'DEFAULT '."'".$aspects['Default']."'";
+        }
+
+        $sql = $this->quote($name).' '.$Type.' '.$Null.' '.$Default.' '.$Key.' '.$Extra;
+
+        if ($order) {
+            $First = isset($aspects['First']) && $aspects['First'] ? 'FIRST' : '';
+            $Before = isset($aspects['Before']) && $aspects['Before'] ? 'AFTER '.$aspects['Before'] : '';
+            $sql .= ' '.$First.' '.$Before;
+        }
+
+        return trim($sql);
     }
 
     /**

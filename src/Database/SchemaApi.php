@@ -11,6 +11,7 @@
 namespace Javanile\Moldable\Database;
 
 use Javanile\Moldable\Functions;
+use phpDocumentor\Reflection\Utils;
 
 trait SchemaApi
 {
@@ -341,9 +342,9 @@ trait SchemaApi
 
             $diffAttributes[] = $key;
 
-            if ($this->isDebug()) {
+            if (true || $this->isDebug()) {
                 #echo '<pre style="background:#E66;color:#000;margin:0 0 1px 0;padding:2px 6px 3px 6px;border:1px solid #000;">';
-                echo 'difference: "'.$attributes[$key].'" != "'.$value.'" in '.$field.'['.$key.']'."\n";
+                echo '--->Difference: "'.$attributes[$key].'" != "'.$value.'" in '.$field.'['.$key.']'."\n";
                 #echo '</pre>';
             }
         }

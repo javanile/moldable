@@ -9,6 +9,8 @@
 
 namespace Javanile\Moldable\Model;
 
+use Javanile\Moldable\Functions;
+
 trait FieldApi
 {
     /**
@@ -93,7 +95,7 @@ trait FieldApi
             $schema = static::getSchema();
 
             foreach ($schema as $field => $aspects) {
-                if ($aspects['Key'] == 'PRI') {
+                if (Functions::isPrimaryKey($aspects['Key'])) {
                     $key = $field;
                     break;
                 }
