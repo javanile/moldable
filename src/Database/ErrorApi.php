@@ -20,7 +20,7 @@ trait ErrorApi
      * @param object $exception Exception catched with try-catch
      * @param mixed  $type
      */
-    public function error($type, $exception)
+    public function error($type, $exception, $sql = null)
     {
         switch ($type) {
             // Trigger a connection-with-database error.
@@ -35,6 +35,7 @@ trait ErrorApi
                 $slug = 'Moldable query error, ';
                 $backtrace = debug_backtrace();
                 $offset = 2;
+                var_dump($sql);
                 break;
 
             // Trigger a error in executed sql query.

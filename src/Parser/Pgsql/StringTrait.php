@@ -19,7 +19,7 @@ trait StringTrait
      */
     protected function getNotationAspectsString($notation, $aspects)
     {
-        $aspects['Type'] = 'varchar(255)';
+        $aspects['Type'] = 'character varying(255)';
         $aspects['Null'] = 'NO';
         $aspects['Default'] = $this->getNotationValue($notation);
 
@@ -29,7 +29,7 @@ trait StringTrait
     protected function getNotationAspectsText($notation, $aspects)
     {
         $aspects['Type'] = 'text';
-        $aspects['Null'] = 'NO';
+        $aspects['Null'] = 'YES';
         $aspects['Default'] = $this->getNotationValue($notation);
 
         return $aspects;
@@ -39,7 +39,7 @@ trait StringTrait
         $notation,
         $aspects
     ) {
-        $aspects['Type'] = 'varchar(255)';
+        $aspects['Type'] = 'character varying(255)';
         $aspects['Default'] = $notation;
 
         return $aspects;

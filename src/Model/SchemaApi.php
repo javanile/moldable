@@ -39,6 +39,7 @@ trait SchemaApi
             static::error('class', 'empty schema not allowed');
         }
 
+        var_dump($schema);
         $table = static::getTable();
 
         $queries = $database->applyTable($table, $schema, false);
@@ -59,6 +60,7 @@ trait SchemaApi
 
         if (!static::hasClassAttribute($attribute)) {
             $fields = static::getSchemaFieldsValues();
+            var_dump($fields);
             $parser = static::getDatabase()->getParser();
             $schema = [];
 
@@ -68,7 +70,8 @@ trait SchemaApi
                 }
             }
 
-            $parser->parseTable($schema, $errors, static::getNamespace());
+            $table = static::getTable();
+            $parser->parseTable($schema, $table, $errors, static::getNamespace());
 
             if ($errors) {
                 static::error('class', $errors[0]);

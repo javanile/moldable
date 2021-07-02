@@ -49,6 +49,7 @@ trait LoadApi
      */
     protected static function loadByPrimaryKey($index, $fields = null)
     {
+        $writer = static::getDatabase()->getWriter();
         //
         $table = static::getTable();
 
@@ -70,8 +71,9 @@ trait LoadApi
             ->selectFields($requestedFields, $alias, $join);
 
         // prepare SQL query
+        $quotedTable = $writer->quote($table);
         $sql = " SELECT {$selectFields} "
-             ."   FROM {$table} AS {$alias} {$join} "
+             ."   FROM {$quotedTable} AS {$alias} {$join} "
              ."  WHERE {$alias}.{$key}=:index "
              .'  LIMIT 1';
 
@@ -131,6 +133,7 @@ trait LoadApi
              ."  WHERE {$quotedField} = {$token}"
              .'  LIMIT 1';
 
+
         // fetch data on database and return it
         $object = static::fetch(
             $sql,
@@ -138,6 +141,8 @@ trait LoadApi
             true,
             is_string($fields)
         );
+
+        var_dump($object);
 
         //
         return $object;
@@ -186,8 +191,9 @@ trait LoadApi
         $where = implode(' AND ', $whereConditions);
 
         // prepare SQL query
+        $quotedTable = $writer->quote($table);
         $sql = "SELECT {$selectFields} "
-             ."FROM {$table} AS {$alias} {$join} "
+             ."FROM {$quotedTable} AS {$alias} {$join} "
              ."WHERE {$where} "
              .'LIMIT 1';
 

@@ -191,8 +191,8 @@ trait SchemaApi
     {
         // parse input schema if required
         if ($parse) {
-            $this->getParser()->parseTable($schema);
             $table = $this->getPrefix().$table;
+            $this->getParser()->parseTable($schema, $table);
         }
 
         // if table no exists return sql statament for creating this

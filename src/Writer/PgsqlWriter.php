@@ -55,7 +55,7 @@ class PgsqlWriter extends Writer
     {
         return "SELECT c.table_name AS \"Table\"
                      , c.column_name AS \"Field\"
-                     , CONCAT(c.data_type, '(', c.character_maximum_length, ')') AS \"Type\"
+                     , REPLACE(CONCAT(c.data_type, '(', c.character_maximum_length, ')'), '()', '') AS \"Type\"
                      , c.column_default AS \"Default\"
                      , tc.constraint_type AS \"Key\"
                   FROM information_schema.columns AS c
@@ -83,12 +83,19 @@ class PgsqlWriter extends Writer
     public function alterTableChange($table, $field, $attributes, $diffAttributes)
     {
         $type = $attributes['Type'];
+        $default = $attributes['Default'];
         $quotedTable = $this->quote($table);
         $quotedField = $this->quote($field);
 
         $sql = [];
         if (in_array('Type', $diffAttributes)) {
             $sql[] = "ALTER TABLE {$quotedTable} ALTER COLUMN {$quotedField} TYPE {$type}";
+        }
+        if (in_array('Default', $diffAttributes)) {
+            if (substr($default, 0, 8) == 'nextval(') {
+                $sql[] = "CREATE SEQUENCE IF NOT EXISTS \"{$table}_{$field}_seq\"";
+            }
+            $sql[] = "ALTER TABLE {$quotedTable} ALTER COLUMN {$quotedField} SET DEFAULT {$default}";
         }
 
         return $sql;
@@ -97,7 +104,7 @@ class PgsqlWriter extends Writer
     //
     public function columnDefinition($name, $aspects, $order = true)
     {
-        $key = '';
+        $Key = '';
 
         $Type = isset($aspects['Type'])
             ? strtolower($aspects['Type'])
@@ -127,11 +134,13 @@ class PgsqlWriter extends Writer
 
         $sql = $this->quote($name).' '.$Type.' '.$Null.' '.$Default.' '.$Key.' '.$Extra;
 
+        /*
         if ($order) {
             $First = isset($aspects['First']) && $aspects['First'] ? 'FIRST' : '';
             $Before = isset($aspects['Before']) && $aspects['Before'] ? 'AFTER '.$aspects['Before'] : '';
             $sql .= ' '.$First.' '.$Before;
         }
+        */
 
         return trim($sql);
     }

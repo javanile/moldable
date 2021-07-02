@@ -33,8 +33,6 @@ class Parser
         'null',
     ];
 
-
-
     /**
      * parse a multi-table schema to sanitize end explode implicit info.
      *
@@ -45,8 +43,8 @@ class Parser
     public function parse(&$schema)
     {
         // loop throh tables on the schema
-        foreach ($schema as &$table) {
-            static::parseTable($table);
+        foreach ($schema as $tableName => &$table) {
+            static::parseTable($table, $tableName);
         }
 
         // loop throh tables on the schema
@@ -69,15 +67,16 @@ class Parser
      *
      * @return type
      */
-    public function parseTable(&$table, &$errors = null, $namespace = '\\')
+    public function parseTable(&$schema, $table, &$errors = null, $namespace = '\\')
     {
         // for first field no have before
         $before = false;
 
-        // loop throuh fields on table
-        foreach ($table as $field => &$notation) {
+        // loop fields on table
+        foreach ($schema as $field => &$notation) {
             $notation = static::getNotationAspects(
                 $notation,
+                $table,
                 $field,
                 $before,
                 $errors,
@@ -90,16 +89,18 @@ class Parser
     /**
      * Parse notation of a field.
      *
-     * @param type       $notation
-     * @param type       $field
-     * @param type       $before
-     * @param null|mixed $namespace
+     * @param type $notation
+     * @param null $table
+     * @param type $field
+     * @param type $before
      * @param null|mixed $errors
      *
+     * @param null|mixed $namespace
      * @return string
      */
     public function getNotationAspects(
         $notation,
+        $table = null,
         $field = null,
         $before = null,
         &$errors = null,
@@ -107,7 +108,7 @@ class Parser
     ) {
         $params = null;
         $type = $this->getNotationType($notation, $params, $errors, $namespace);
-        $aspects = $this->getNotationCommonAspects($field, $before);
+        $aspects = $this->getNotationCommonAspects($table, $field, $before);
 
         // Looking type
         switch ($type) {
@@ -141,7 +142,6 @@ class Parser
                 return $this->getNotationAspectsDouble($notation, $aspects);
             case 'enum':
                 return $this->getNotationAspectsEnum($notation, $aspects);
-
             case 'class':
                 return static::getNotationAspectsClass($notation, $aspects, $params, $namespace);
             case 'vector':
@@ -159,9 +159,10 @@ class Parser
      * @param mixed $field
      * @param mixed $before
      */
-    protected function getNotationCommonAspects($field, $before)
+    protected function getNotationCommonAspects($table, $field, $before)
     {
         $aspects = [
+            'Table'    => null,
             'Field'    => null,
             'Key'      => '',
             'Type'     => '',
@@ -170,6 +171,10 @@ class Parser
             'Default'  => '',
             'Relation' => null,
         ];
+
+        if (!is_null($table)) {
+            $aspects['Table'] = $table;
+        }
 
         if (!is_null($field)) {
             $aspects['Field'] = $field;

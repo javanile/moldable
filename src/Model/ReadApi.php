@@ -227,7 +227,8 @@ trait ReadApi
         $class = static::getClassName();
         $selectFields = $writer->selectFields($fields, $class, $join);
         $where = $writer->whereByArray($whereArray);
-        $sql = "SELECT {$selectFields} FROM {$table} AS {$class} {$where} {$order} LIMIT 1";
+        $quotedTable = $writer->quote($table);
+        $sql = "SELECT {$selectFields} FROM {$quotedTable} AS {$class} {$where} {$order} LIMIT 1";
 
         $result = static::fetch(
             $sql,

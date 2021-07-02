@@ -13,8 +13,6 @@ trait KeyTrait
 {
     protected function getNotationAspectsPrimaryKey($notation, $aspects, $params)
     {
-        var_dump($aspects);
-        die();
         $table = $aspects['Table'];
         $field = $aspects['Field'];
 

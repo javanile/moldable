@@ -15,14 +15,14 @@ final class LoadApiTest extends TestCase
     {
         $known = new People();
 
-        $known->store([
+        $id = $known->store([
             'name'    => 'Frank',
             'surname' => 'White',
             'age'     => 18,
         ]);
 
         // load by id inline
-        $frank = People::load(1);
+        $frank = People::load($id);
         $this->assertEquals($frank->age, 18);
     }
 
