@@ -14,9 +14,9 @@ class Insert extends Page
         $database = new Database([
             'type'     => 'pgsql',
             'host'     => 'postgres',
-            'dbname'   => 'moldable',
-            'username' => 'moldable',
-            'password' => 'moldable',
+            'dbname'   => 'postgres',
+            'username' => 'postgres',
+            'password' => 'postgres',
             'prefix'   => 'prefix_',
         ]);
 
