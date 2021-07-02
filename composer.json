@@ -2,7 +2,7 @@
     "name": "javanile/moldable",
     "type": "library",
     "version": "0.0.52",
-    "description": "Uknown PHP Database Abstraction Layer",
+    "description": "Migration-less Database Abstraction Layer",
     "keywords": [
         "moldable",
         "schemadb",
