@@ -24,12 +24,10 @@ class PgsqlWriter extends Writer
      */
     public function tableExists($table)
     {
-        return "
-            SELECT table_name 
-              FROM information_schema.tables 
-             WHERE table_schema = 'public'
-               AND table_name = '{$table}'
-        ";
+        return "SELECT table_name 
+                  FROM information_schema.tables 
+                 WHERE table_schema = 'public'
+                   AND table_name = '{$table}'";
     }
 
     /**
