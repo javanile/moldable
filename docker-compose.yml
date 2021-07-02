@@ -5,6 +5,9 @@ services:
     build: .
     working_dir: /var/www
     command: php -S 0.0.0.0:8080 -t handbook/public handbook/serve.php
+    environment:
+      - DB_TYPE=pgsql
+      - PGSQL_HOST=
     ports:
       - 8080:8080
     volumes:

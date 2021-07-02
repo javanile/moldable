@@ -11,16 +11,8 @@ final class DatabaseModelTest extends TestCase
 
     public function testDatabaseModelAll()
     {
-        foreach (['pgsql'] as $type) {
+        $db = $this->getDatabaseInstance();
 
-        }
-        $db = new Database([
-            'host'     => $GLOBALS['DB_HOST'],
-            'port'     => $GLOBALS['DB_PORT'],
-            'dbname'   => $GLOBALS['DB_NAME'],
-            'username' => $GLOBALS['DB_USER'],
-            'password' => $GLOBALS['DB_PASS'],
-        ]);
         $db->apply(['model' => [
             'name' => '',
             'hook' => 0,

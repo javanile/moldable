@@ -8,8 +8,26 @@ use PDO;
 
 trait DatabaseTrait
 {
+    protected function getDatabaseInstance()
+    {
+        $type = getenv('DB_TYPE');
+        $envPrefix = strtoupper($type).'_';
+
+        $config = [
+            'type'     => $type,
+            'host'     => getenv($envPrefix.'HOST'),
+            'port'     => getenv($envPrefix.'PORT'),
+            'dbname'   => getenv($envPrefix.'NAME'),
+            'username' => getenv($envPrefix.'USER'),
+            'password' => getenv($envPrefix.'PASS'),
+        ];
+
+        return new Database($config);
+    }
+
     protected function setUp()
     {
+        /*
         $dsn = "mysql:dbname={$GLOBALS['DB_NAME']};".
             "port={$GLOBALS['DB_PORT']};host={$GLOBALS['DB_HOST']}";
 
@@ -19,13 +37,16 @@ trait DatabaseTrait
 
         Database::resetDefault();
         Storable::resetAllClass();
+        */
     }
 
     protected function tearDown()
     {
+        /*
         $this->pdo = null;
 
         Database::resetDefault();
         Storable::resetAllClass();
+        */
     }
 }
