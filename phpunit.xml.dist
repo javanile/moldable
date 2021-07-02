@@ -1,12 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <phpunit colors="true">
-    <php>
-        <var name="DB_HOST" value="localhost" />
-        <var name="DB_PORT" value="3306" />
-        <var name="DB_NAME" value="database" />
-        <var name="DB_USER" value="root" />
-        <var name="DB_PASS" value="root" />
-    </php>
     <filter>
         <whitelist>
             <directory>./src</directory>

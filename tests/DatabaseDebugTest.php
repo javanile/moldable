@@ -7,8 +7,6 @@ use Javanile\Moldable\Functions;
 use Javanile\Producer;
 use PHPUnit\Framework\TestCase;
 
-Producer::addPsr4(['Javanile\\Moldable\\Tests\\' => __DIR__]);
-
 final class DatabaseDebugTest extends TestCase
 {
     use DatabaseTrait;

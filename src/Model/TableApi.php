@@ -48,12 +48,11 @@ trait TableApi
         // retrieve value from class setting definition
         if (!static::hasClassAttribute($attribute)) {
             $adamant = isset(static::$__adamant__)
-                 ? static::$__adamant__
-                 : isset(static::$adamant)
-                 ? static::$adamant
-                 : isset(static::$__adamant)
-                 ? static::$__adamant
-                 : false;
+                ? static::$__adamant__
+                : (isset(static::$adamant)
+                    ? static::$adamant
+                    : (isset(static::$__adamant) ? static::$__adamant : false)
+                );
 
             // store as setting for future request
             static::setClassAttribute($attribute, $adamant);

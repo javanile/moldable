@@ -3,10 +3,7 @@
 namespace Javanile\Moldable\Tests;
 
 use Javanile\Moldable\Database;
-use Javanile\Producer;
 use PHPUnit\Framework\TestCase;
-
-Producer::addPsr4(['Javanile\\Moldable\\Tests\\' => __DIR__]);
 
 final class DatabaseModelTest extends TestCase
 {
@@ -14,6 +11,9 @@ final class DatabaseModelTest extends TestCase
 
     public function testDatabaseModelAll()
     {
+        foreach (['pgsql'] as $type) {
+
+        }
         $db = new Database([
             'host'     => $GLOBALS['DB_HOST'],
             'port'     => $GLOBALS['DB_PORT'],
