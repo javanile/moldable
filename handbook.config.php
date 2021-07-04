@@ -17,7 +17,7 @@ return [
     'source' => __DIR__.'/docs',
     'output' => 'docs',
     'pages' => [
-        'index' => '*.json',
-        'insert' => 'Insert.php',
+        'index' => 'home.yml',
+        'ORM' => 'ORM/*.php',
     ],
 ];
