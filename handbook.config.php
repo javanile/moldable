@@ -1,6 +1,6 @@
 <?php
 /**
- * DocForge Config File.
+ * Handbook Config File.
  *
  * PHP version 7
  *
@@ -8,7 +8,7 @@
  *
  * @author     Francesco Bianco <bianco@javanile.org>
  * @license    https://goo.gl/KPZ2qI  MIT License
- * @copyright  2015-2020 Javanile
+ * @copyright  2015-2021 Javanile
  */
 
 return [
