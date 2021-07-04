@@ -20,6 +20,8 @@ trait DeleteApi
     {
         static::applySchema();
 
+        $writer = static::getDatabase()->getWriter();
+
         $key = static::getPrimaryKeyOrMainField();
 
         if ($key && !is_array($query)) {
@@ -36,7 +38,8 @@ trait DeleteApi
 
         foreach ($query as $field => $value) {
             $token = ':'.$field;
-            $whereArray[] = "`{$field}` = {$token}";
+            $quotedField = $writer->quote($field);
+            $whereArray[] = "{$quotedField} = {$token}";
             $params[$token] = $value;
         }
 
@@ -45,7 +48,8 @@ trait DeleteApi
                : '';
 
         $table = static::getTable();
-        $sql = "DELETE FROM {$table} {$where}";
+        $quotedTable = $writer->quote($table);
+        $sql = "DELETE FROM {$quotedTable} {$where}";
 
         static::getDatabase()->execute($sql, $params);
     }

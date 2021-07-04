@@ -19,7 +19,7 @@ trait KeyTrait
         $aspects['Type'] = isset($params[0]) ? 'int('.$params[0].')' : 'integer';
         $aspects['Key'] = 'PRIMARY KEY';
         $aspects['Null'] = 'NO';
-        $aspects['Default'] = "nextval('public.{$table}_{$field}_seq'::regclass)";
+        $aspects['Default'] = "nextval('public.\"{$table}_{$field}_seq\"'::regclass)";
         $aspects['Extra'] = '';
 
         return $aspects;
