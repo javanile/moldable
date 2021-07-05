@@ -1,5 +1,7 @@
 <?php
 
+namespace Javanile\Moldable\Docs\ORM;
+
 use Javanile\Handbook\Page;
 use Javanile\Moldable\Database;
 
