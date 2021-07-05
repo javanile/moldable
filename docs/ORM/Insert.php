@@ -12,7 +12,6 @@ class Insert extends Page
      */
     public function content()
     {
-        echo 'TEST';
         $database = new Database([
             'type'     => 'pgsql',
             'host'     => 'postgres',
@@ -23,5 +22,10 @@ class Insert extends Page
         ]);
 
         $database->insert('');
+    }
+
+    public function before()
+    {
+        return 'delete';
     }
 }
