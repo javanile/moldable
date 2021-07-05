@@ -20,5 +20,5 @@ return [
     'pages' => [
         'index' => 'home.yml',
         'ORM' => 'ORM/*.php',
-    ],
+    ]
 ];
