@@ -18,6 +18,6 @@ return [
     'output' => 'docs',
     'pages' => [
         'index' => 'home.yml',
-        'ORM' => 'ORM/*.php',
+        'orm' => ['ORM/index.md', 'ORM/*.php'],
     ]
 ];
