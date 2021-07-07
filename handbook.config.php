@@ -14,6 +14,7 @@
 return [
     'name' => 'Moldable',
     'autoload' => __DIR__.'/docs',
+    'namespace' => 'Javanile\\Moldable\\Docs',
     'source' => __DIR__.'/docs',
     'output' => 'docs',
     'pages' => [
