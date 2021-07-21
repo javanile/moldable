@@ -1,10 +1,23 @@
 
+.PHONY: docs
+
 start:
-	@docker-compose up -d
+	@docker-compose up -d --force-recreate
 	@docker-compose logs -f php
+
+dev:
+	@docker-compose up -d --force-recreate
+	@docker-compose logs -f php
+
+docs:
+	@docker-compose run --rm php ./handbook/bin/handbook
 
 handbook:
 	@git clone https://github.com/javanile/handbook
+
+pull:
+	@git pull
+	@cd handbook && git pull
 
 test-model-load-api:
 	@docker-compose run --rm php ./vendor/bin/phpunit tests/Model/LoadApiTest.php

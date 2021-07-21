@@ -22,9 +22,6 @@ class Delete extends Page
             'prefix'   => 'prefix_',
         ]);
 
-        $database->insert('my_test_table', [
-            'id' => 1,
-            'name' => 'Mark'
-        ]);
+        $database->insert('');
     }
 }

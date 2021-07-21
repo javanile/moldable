@@ -5,14 +5,13 @@ namespace Javanile\Moldable\Docs\ORM;
 use Javanile\Handbook\Page;
 use Javanile\Moldable\Database;
 
-class Delete extends Page
+class Insert extends Page
 {
     /**
      *
      */
     public function content()
     {
-        echo 'TEST';
         $database = new Database([
             'type'     => 'pgsql',
             'host'     => 'postgres',
@@ -22,9 +21,11 @@ class Delete extends Page
             'prefix'   => 'prefix_',
         ]);
 
-        $database->insert('my_test_table', [
-            'id' => 1,
-            'name' => 'Mark'
-        ]);
+        $database->insert('');
+    }
+
+    public function before()
+    {
+        return 'delete';
     }
 }
