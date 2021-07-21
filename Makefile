@@ -11,6 +11,7 @@ dev:
 
 docs:
 	@docker-compose run --rm php ./handbook/bin/handbook
+	@git add .
 
 handbook:
 	@git clone https://github.com/javanile/handbook
